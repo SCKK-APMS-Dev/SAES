@@ -4,5 +4,10 @@ export default {
 	theme: {
 		extend: {}
 	},
-	plugins: []
+	plugins: [
+		({ addVariant }) => {
+			addVariant('child', '& > *');
+			addVariant('child-hover', '& > *:hover');
+		}
+	]
 };
