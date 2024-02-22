@@ -1,7 +1,8 @@
 import type { PageServerLoad } from './$types';
-import { prisma } from '$lib/server/prisma';
 
 import { oauth } from '$lib/server/discord';
+
+import { getTag } from '$lib/server/google';
 
 export const load = (async ({ cookies }) => {
 	// if (cookies.get('dc-auth')) {
@@ -12,16 +13,12 @@ export const load = (async ({ cookies }) => {
 	if (dcauth) {
 		const user = await oauth.getUser(dcauth);
 		if (user) {
-			const dev = await prisma.users.findUnique({
-				where: {
-					discordid: user.id
-				}
-			});
+			const dev = await getTag(user.id);
 			if (dev) {
 				return {
 					dc: {
 						name: dev.name,
-						role: dev.role
+						role: dev.rang
 					}
 				};
 			}

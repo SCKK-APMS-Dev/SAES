@@ -12,19 +12,17 @@
 			<table class="table-auto p-10">
 				<thead class="bg-red-700">
 					<tr class="child:p-2">
-						<th>ID</th>
 						<th>Discord ID</th>
 						<th>IG Név</th>
 						<th>Rang</th>
 					</tr>
 				</thead>
 				<tbody>
-					{#each data?.admin.tagok as tag}
+					{#each data?.admin.users as tag}
 						<tr>
-							<td>{tag.id}</td>
 							<td>{tag.discordid}</td>
 							<td>{tag.name}</td>
-							<td>{tag.role}</td>
+							<td>{tag.rang}</td>
 						</tr>
 					{/each}
 				</tbody>
