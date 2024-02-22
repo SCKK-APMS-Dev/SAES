@@ -8,7 +8,7 @@ const serviceAccountAuth = new JWT({
 	key:
 		process.env.NODE_ENV === 'development'
 			? process.env.PRIVATE_KEY
-			: atob(process.env.PRIVATE_KEY as string),
+			: process.env.PRIVATE_KEY?.split(String.raw`\n`).join('\n'),
 	scopes: ['https://www.googleapis.com/auth/spreadsheets']
 });
 
