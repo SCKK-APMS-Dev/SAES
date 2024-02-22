@@ -8,13 +8,13 @@ datasource db {
 }
 
 model leintesek {
-  id   Int      @id
+  id   Int      @id @default(autoincrement())
   kep  Bytes
   date DateTime @default(now()) @db.Timestamp(0)
 }
 
 model users {
-  id        Int    @id
-  discordid String @db.Text
+  id        Int    @id @default(autoincrement())
+  discordid String @unique(map: "discordid") @default("") @db.VarChar(255)
   name      String @db.Text
 }
