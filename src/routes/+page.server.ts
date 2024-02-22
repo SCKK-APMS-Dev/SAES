@@ -22,7 +22,8 @@ export const load = (async ({ cookies }) => {
 			if (dev) {
 				return {
 					dc: {
-						name: dev.name
+						name: dev.name,
+						role: dev.role
 					}
 				};
 			}
