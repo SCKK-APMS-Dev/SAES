@@ -31,6 +31,6 @@ export const load = (async ({ cookies }) => {
 			};
 		}
 	} else {
-		throw redirect(302, '/');
+		throw redirect(302, '/auth');
 	}
 }) satisfies PageServerLoad;

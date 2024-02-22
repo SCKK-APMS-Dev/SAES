@@ -1,0 +1,19 @@
+{
+	"short_name": "SCKK",
+	"name": "SCKK A műszak",
+	"icons": [
+		{
+			"src": "favicon.png",
+			"type": "image/png",
+			"sizes": "144x144"
+		}
+	],
+	"id": "/?source=pwa",
+	"start_url": "/?source=pwa",
+	"background_color": "#0f172a",
+	"display": "standalone",
+	"scope": "/",
+	"orientation": "portrait",
+	"theme_color": "#0f172a",
+	"description": "SCKK A műszak"
+}

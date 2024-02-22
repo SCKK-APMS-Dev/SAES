@@ -1,8 +1,6 @@
 import type { PageServerLoad } from './$types';
 import { prisma } from '$lib/server/prisma';
 
-import { redirect } from '@sveltejs/kit';
-
 import { oauth } from '$lib/server/discord';
 
 export const load = (async ({ cookies }) => {
@@ -34,11 +32,8 @@ export const load = (async ({ cookies }) => {
 			};
 		}
 	} else {
-		throw redirect(
-			302,
-			oauth.generateAuthUrl({
-				scope: 'identify'
-			})
-		);
+		return {
+			noauth: true
+		};
 	}
 }) satisfies PageServerLoad;
