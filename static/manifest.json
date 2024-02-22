@@ -13,6 +13,7 @@
 	"background_color": "#0f172a",
 	"display": "standalone",
 	"scope": "/",
+	"orientation": "any",
 	"theme_color": "#0f172a",
 	"description": "SCKK A műszak"
 }
