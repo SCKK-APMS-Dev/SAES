@@ -38,11 +38,7 @@ export const load = (async ({ cookies }) => {
 					}
 				};
 			}
-			return {
-				error: {
-					msg: 'Nincs hozzáférésed!'
-				}
-			};
+			throw redirect(302, '/user');
 		}
 	} else {
 		throw redirect(302, '/auth');

@@ -1,3 +1,5 @@
+import 'dotenv/config';
+
 import { GoogleSpreadsheet } from 'google-spreadsheet';
 import { JWT } from 'google-auth-library';
 
@@ -30,7 +32,8 @@ export async function getTag(discordid: string) {
 				return {
 					name: cell.value,
 					discordid: cell.note.split('\n')[0],
-					rang: cell.note.split('\n')[1] ? cell.note.split('\n')[1] : 'tag'
+					rang: cell.note.split('\n')[1] ? cell.note.split('\n')[1] : 'tag',
+					row: i
 				};
 			}
 		}

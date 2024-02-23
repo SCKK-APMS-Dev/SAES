@@ -2,11 +2,8 @@
 	export let data;
 </script>
 
-<div class="h-screen flex">
+<div class="flex">
 	<div class="m-auto text-center text-white">
-		{#if data?.error}
-			<h1 class="text-3xl text-red-600 font-bold">{data.error.msg}</h1>
-		{/if}
 		{#if data?.admin}
 			<h1>Tagok</h1>
 			<table class="table-auto p-10">
