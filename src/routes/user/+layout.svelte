@@ -7,7 +7,9 @@
 		<img src="/favicon.png" class="pointer-events-none" width="40" height="40" alt="SCKK Logó" />
 		<h1 class="font-bold text-3xl">SCKK</h1>
 	</div>
-	<div class="flex gap-2 text-xl flex-col text-center md:flex-row md:gap-10">
+	<div
+		class="flex gap-2 text-xl flex-col text-center md:flex-row md:gap-10 child:w-screen child:md:w-auto child:border-y-2 child:md:border-none"
+	>
 		<a href="/user" class="hover:font-bold duration-200 transition-all">Kezdőlap</a>
 		<a href="/user" class="hover:font-bold duration-200 transition-all">Pótlékok</a>
 		<a href="/user" class="hover:font-bold duration-200 transition-all">Leintések</a>
