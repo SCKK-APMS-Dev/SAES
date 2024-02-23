@@ -3,7 +3,7 @@
 </script>
 
 <head>
-	<title>SCKK</title>
+	<title>SCKK A műszak</title>
 	<meta name="description" content="SCKK A műszak" />
 </head>
 
