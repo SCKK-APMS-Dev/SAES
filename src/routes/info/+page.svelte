@@ -6,7 +6,7 @@
 			megkönnyíti a műszak mögötti papírmunkát a sofőrök és a vezetés részére is egyaránt.
 		</h2>
 		<h2 class="text-gray-300 font-bold">
-			Ennek sem a SeeMTA sem az SCKK vezetőségének nincsen köze.
+			Ennek sem a SeeMTA, sem az SCKK vezetőségének nincsen köze.
 		</h2>
 	</div>
 </div>
