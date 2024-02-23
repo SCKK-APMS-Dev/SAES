@@ -4,6 +4,7 @@
 
 <head>
 	<title>SCKK</title>
+	<meta name="description" content="SCKK A műszak" />
 </head>
 
 <body class="bg-slate-900">
