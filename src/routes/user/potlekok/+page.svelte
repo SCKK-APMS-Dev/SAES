@@ -23,7 +23,7 @@
 	<h1 class="text-5xl font-bold mb-3 drop-shadow-xl">Pótlékaid:</h1>
 	<div class="flex flex-auto flex-wrap align-middle items-center justify-center gap-3">
 		{#if loada}
-			<h2>Betöltés...</h2>
+			<span class="loader"></span>
 		{/if}
 		{#if cuccok}
 			{#each cuccok as potle}
