@@ -3,23 +3,22 @@ import { getTag } from '$lib/server/google';
 import { prisma } from '$lib/server/prisma';
 import type { RequestHandler } from './$types';
 
-export const POST: RequestHandler = async ({ request, cookies }) => {
-	const body = await request.text();
+export const GET: RequestHandler = async ({ cookies }) => {
 	const dcauth = cookies.get('dc-auth');
 	if (dcauth) {
 		const user = await oauth.getUser(dcauth);
 		if (user) {
 			const doksi = await getTag(user.id);
 			if (doksi) {
-				await prisma.data.create({
-					data: {
-						owner: doksi.name as string,
-						type: 'délelőtti',
-						kep: body
+				const potlekok = await prisma.data.findMany({
+					where: {
+						type: { in: ['délelőtti', 'éjszakai'] },
+						owner: doksi.name as string
 					}
 				});
+				return new Response(JSON.stringify(potlekok));
 			}
 		}
 	}
-	return new Response(body);
+	return new Response('404');
 };

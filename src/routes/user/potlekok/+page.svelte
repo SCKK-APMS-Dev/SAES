@@ -1,5 +1,19 @@
 <script lang="ts">
-	export let data;
+	import { onMount } from 'svelte';
+	let loada = true;
+	let cuccok: any[] = [];
+
+	async function loader() {
+		const fatcs = await fetch('/api/potlekok', {
+			mode: 'no-cors'
+		});
+		cuccok = await fatcs.json();
+		cuccok = cuccok;
+		loada = false;
+	}
+	onMount(() => {
+		loader();
+	});
 </script>
 
 <div class="text-center text-white grid grid-cols-1">
@@ -8,8 +22,11 @@
 	>
 	<h1 class="text-5xl font-bold mb-3 drop-shadow-xl">Pótlékaid:</h1>
 	<div class="flex flex-auto flex-wrap align-middle items-center justify-center gap-3">
-		{#if data.potlekok}
-			{#each data.potlekok as potle}
+		{#if loada}
+			<h2>Betöltés...</h2>
+		{/if}
+		{#if cuccok}
+			{#each cuccok as potle}
 				<div
 					class="rounded-xl p-2 drop-shadow-xl"
 					class:bg-green-600={potle.status === 'elfogadva'}
