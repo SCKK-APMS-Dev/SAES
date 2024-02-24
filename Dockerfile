@@ -5,6 +5,6 @@ COPY pnpm-lock.yaml ./
 RUN npm install -g pnpm
 RUN pnpm install -P
 COPY . .
-RUN pnpm build
+RUN pnpm run build
 EXPOSE 3000
 CMD ["node","build"]
