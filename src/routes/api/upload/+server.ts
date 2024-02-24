@@ -20,5 +20,5 @@ export const POST = async ({ request, cookies }) => {
 			}
 		}
 	}
-	return new Response();
+	return new Response(body);
 };

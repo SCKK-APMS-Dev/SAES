@@ -19,6 +19,6 @@ model data {
   type   String   @db.VarChar(50)
   owner  String   @db.VarChar(255)
   kep    String   @db.LongText
-  status String   @default("created") @db.VarChar(50)
+  status String   @default("feltöltve") @db.VarChar(50)
   date   DateTime @default(now()) @db.Timestamp(0)
 }
