@@ -42,8 +42,8 @@
 		</form>
 		<h2>Egyszerre feltölthetsz többet, csak figyelj oda, hogy a megfelelő pótlékhoz töltöd fel!</h2>
 	</div>
-	<div class="bg-yellow-400 flex-row align-middle items-center justify-center">
-		<h2>Ha sikeresen feltöltötted őket akkor itt fognak megjelenni:</h2>
+	<div class="flex-row align-middle items-center justify-center">
+		<h2 class="font-bold">Ha sikeresen feltöltötted őket akkor itt fognak megjelenni:</h2>
 		{#each fileas as nyam}
 			<img src={nyam} alt="" class="max-w-5xl max-h-5xl m-auto py-3" />
 		{/each}
