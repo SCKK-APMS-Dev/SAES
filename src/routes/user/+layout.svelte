@@ -17,7 +17,7 @@
 		class="flex gap-2 text-xl flex-col text-center md:flex-row md:gap-10 child:w-screen child:md:w-auto child:border-y-2 child:md:border-none child:drop-shadow-xl"
 	>
 		<a href="/user" class="hover:font-bold duration-200 transition-all">Kezdőlap</a>
-		<a href="/user" class="hover:font-bold duration-200 transition-all">Pótlékok</a>
+		<a href="/user/potlekok" class="hover:font-bold duration-200 transition-all">Pótlékok</a>
 		<a href="/user" class="hover:font-bold duration-200 transition-all">Leintések</a>
 		<a href="/user" class="hover:font-bold duration-200 transition-all">Szereltetési számlák</a>
 		{#if data.layout?.doksi.rang === 'admin'}

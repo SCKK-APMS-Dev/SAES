@@ -21,7 +21,7 @@ export const load = (async ({ cookies }) => {
 					if (sheet.getCellByA1(`A${i}`).value === 'Összesen') {
 						break;
 					}
-					if (sheet.getCellByA1(`A${i}`).value) {
+					if (sheet.getCellByA1(`A${i}`).value && sheet.getCellByA1(`A${i}`).note) {
 						const sanyi = {
 							name: sheet.getCellByA1(`A${i}`).value as string,
 							discordid: sheet.getCellByA1(`A${i}`).note.split('\n')[0] as string,

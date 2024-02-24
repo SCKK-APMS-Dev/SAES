@@ -1,5 +1,6 @@
 import { oauth } from '$lib/server/discord';
 import { getTag, sheet } from '$lib/server/google';
+import { prisma } from '$lib/server/prisma';
 import type { PageServerLoad } from './$types';
 
 export const load = (async ({ cookies }) => {
@@ -14,6 +15,20 @@ export const load = (async ({ cookies }) => {
 			const all_calls = sheet.getCell(doksi?.row, 3);
 			const délelőtti = sheet.getCell(doksi?.row, 4);
 			const éjszakai = sheet.getCell(doksi?.row, 5);
+			const delelott_elfogadott = await prisma.data.findMany({
+				where: {
+					type: 'délelőtti',
+					owner: doksi.name as string,
+					status: 'elfogadott'
+				}
+			});
+			const ejszakai_elfogadott = await prisma.data.findMany({
+				where: {
+					type: 'éjszakai',
+					owner: doksi.name as string,
+					status: 'elfogadott'
+				}
+			});
 			return {
 				page: {
 					calls: {
@@ -22,8 +37,14 @@ export const load = (async ({ cookies }) => {
 						all: all_calls.value === null ? 0 : all_calls.value
 					},
 					potlek: {
-						délelőtti: délelőtti.value === null ? 'nincs' : délelőtti.value,
-						éjszakai: éjszakai.value === null ? 'nincs' : éjszakai.value
+						délelőtti: {
+							all: délelőtti.value === null ? 0 : délelőtti.value,
+							elfogadott: delelott_elfogadott.length > 0 ? delelott_elfogadott.length : 0
+						},
+						éjszakai: {
+							all: éjszakai.value === null ? 0 : éjszakai.value,
+							elfogadott: ejszakai_elfogadott.length > 0 ? ejszakai_elfogadott.length : 0
+						}
 					}
 				}
 			};
