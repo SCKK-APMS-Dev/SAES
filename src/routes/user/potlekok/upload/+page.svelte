@@ -2,7 +2,6 @@
 	import { onMount } from 'svelte';
 
 	export let data;
-	let teszt: string;
 	onMount(() => {
 		let file = document.getElementById('file') as HTMLInputElement;
 		file.onchange = async function () {
@@ -11,8 +10,7 @@
 				const reader = new FileReader();
 
 				reader.onloadend = async () => {
-					teszt = reader.result as string;
-					const csa = await fetch('/api/upload', {
+					await fetch('/api/upload', {
 						method: 'POST',
 						mode: 'no-cors',
 						headers: {
@@ -20,7 +18,6 @@
 						},
 						body: reader.result
 					});
-					console.log(await csa.text());
 				};
 				reader.readAsDataURL(fsa);
 			}
@@ -41,5 +38,4 @@
 		<h2>(Pótlékonként 1 db kép a nyugtáról)</h2>
 		<button type="submit">Feltöltés</button>
 	</form>
-	<img src={teszt} alt="" />
 </div>

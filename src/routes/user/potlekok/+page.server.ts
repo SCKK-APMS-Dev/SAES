@@ -17,7 +17,7 @@ export const load = (async ({ cookies }) => {
 					}
 				});
 				return {
-					potlek: URL.createObjectURL(new Blob([Buffer.from(potlekok[0].kep, 'utf8')]))
+					potlekok
 				};
 			}
 		}

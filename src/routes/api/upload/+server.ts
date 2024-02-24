@@ -1,4 +1,24 @@
-export const POST = async ({ request }) => {
-	// const body = await request.text();
-	return new Response(request.headers.get('cookies'));
+import { oauth } from '$lib/server/discord';
+import { getTag } from '$lib/server/google';
+import { prisma } from '$lib/server/prisma';
+
+export const POST = async ({ request, cookies }) => {
+	const body = await request.text();
+	const dcauth = cookies.get('dc-auth');
+	if (dcauth) {
+		const user = await oauth.getUser(dcauth);
+		if (user) {
+			const doksi = await getTag(user.id);
+			if (doksi) {
+				await prisma.data.create({
+					data: {
+						owner: doksi.name as string,
+						type: 'délelőtti',
+						kep: body
+					}
+				});
+			}
+		}
+	}
+	return new Response();
 };
