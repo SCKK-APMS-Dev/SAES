@@ -4,6 +4,10 @@
 
 	import { loading } from '$lib/loading';
 
+	import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
+
+	injectSpeedInsights();
+
 	$: $loading = !!$navigating;
 </script>
 

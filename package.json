@@ -39,6 +39,7 @@
 	"type": "module",
 	"dependencies": {
 		"@prisma/client": "5.10.2",
+		"@vercel/speed-insights": "^1.0.10",
 		"discord-oauth2": "^2.12.1",
 		"dotenv": "^16.4.5",
 		"google-auth-library": "^9.6.3",
