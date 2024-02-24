@@ -1,30 +1,35 @@
-import { oauth } from '$lib/server/discord';
-import { getTag } from '$lib/server/google';
+import { redirect } from '@sveltejs/kit';
 import type { LayoutServerLoad } from './$types';
 
-import { redirect } from '@sveltejs/kit';
-
 export const load = (async ({ cookies }) => {
-	const dcauth = cookies.get('dc-auth');
-	if (dcauth) {
-		const user = await oauth.getUser(dcauth);
-		if (user) {
-			const doksi = await getTag(user.id);
-			if (doksi) {
-				return {
-					layout: {
-						doksi
-					}
-				};
+	try {
+		const aha = await fetch('http://localhost:3000/user', {
+			mode: 'no-cors',
+			headers: {
+				cookie: JSON.stringify(cookies.getAll())
 			}
+		});
+		if (aha.status === 404) {
+			throw redirect(
+				302,
+				process.env.NODE_ENV === 'production'
+					? 'https://sckk-api.ampix.hu/user/auth'
+					: 'http://localhost:3000/user/auth'
+			);
+		}
+		if (aha.status === 401) {
 			throw redirect(302, 'noaccess');
 		}
-	} else {
-		throw redirect(
-			302,
-			oauth.generateAuthUrl({
-				scope: 'identify'
-			})
-		);
+		if (aha.status === 200) {
+			return {
+				layout: {
+					doksi: await aha.json()
+				}
+			};
+		}
+	} catch {
+		return {
+			error: true
+		};
 	}
 }) satisfies LayoutServerLoad;

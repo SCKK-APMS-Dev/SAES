@@ -1,0 +1,31 @@
+{
+	"name": "api",
+	"version": "1.0.0",
+	"description": "",
+	"main": "src/main.ts",
+	"type": "module",
+	"scripts": {
+		"dev": "set NODE_DEV=true && tsx watch src/main.ts",
+		"pr": "prisma db pull && prisma generate"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"devDependencies": {
+		"@types/express": "^4.17.21",
+		"@types/node": "^20.11.20"
+	},
+	"dependencies": {
+		"@prisma/client": "5.10.2",
+		"@types/cookie-parser": "^1.4.6",
+		"cookie-parser": "^1.4.6",
+		"discord-oauth2": "^2.12.1",
+		"dotenv": "^16.4.5",
+		"express": "^4.18.2",
+		"google-auth-library": "^9.6.3",
+		"google-spreadsheet": "^4.1.1",
+		"prisma": "^5.10.2",
+		"tsx": "^4.7.1",
+		"typescript": "^5.0.0"
+	}
+}

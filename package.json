@@ -1,12 +1,14 @@
 {
-  "name": "SCKK",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+	"name": "sckk",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"dev:web": "pnpm --filter ./web run dev",
+		"dev:api": "pnpm --filter ./api run dev",
+		"pr": "pnpm --filter ./api run pr"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC"
 }
