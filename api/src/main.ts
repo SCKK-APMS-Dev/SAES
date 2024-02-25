@@ -36,7 +36,7 @@ app.get('/cb', async (req, res) => {
 			});
 			res.cookie('sckk-dc-auth', dcode.access_token, {
 				maxAge: dcode.expires_in * 1000,
-				domain: 'localhost'
+				domain: 'ampix.hu'
 			});
 		} finally {
 			res.redirect(
