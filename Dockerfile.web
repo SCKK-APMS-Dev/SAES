@@ -6,7 +6,7 @@ WORKDIR /web
 
 COPY ./web/package.json ./
 
-ENV BODY_SIZE_LIMIT=Infinity
+ENV BODY_SIZE_LIMIT="Infinity"
 
 RUN npm install
 

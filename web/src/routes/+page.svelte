@@ -9,7 +9,7 @@
 			<a
 				href="user"
 				class="text-white bg-green-500 text-2xl font-bold px-3 rounded-xl mt-2 hover:bg-green-800 transition-all duration-200"
-				>Discord</a
+				>Belépés Discordal</a
 			>
 		{/if}
 	</div>
