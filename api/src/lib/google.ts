@@ -24,7 +24,7 @@ export const sheet = doc.sheetsByIndex[0];
 
 const rowes = (await loadRowes()) as number;
 
-async function loadRowes() {
+export async function loadRowes() {
 	await sheet.loadCells();
 	for (let i = 1; i < sheet.rowCount; i++) {
 		const cell = sheet.getCellByA1(`A${i}`);

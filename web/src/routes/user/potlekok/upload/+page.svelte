@@ -11,13 +11,20 @@
 					const reader = new FileReader();
 
 					reader.onloadend = async () => {
+						var e = document.getElementById('type') as HTMLSelectElement;
+
+						var value = e.options[e.selectedIndex].value;
 						const fatcs = await fetch('/api/upload', {
 							method: 'POST',
 							mode: 'no-cors',
 							headers: {
-								'Content-Type': 'text/plain'
+								'Content-Type': 'application/json'
 							},
-							body: reader.result
+							body: JSON.stringify({
+								img: reader.result,
+								createdAt: filj.lastModified,
+								selected: value
+							})
 						});
 						fileas.push(await fatcs.text());
 						fileas = fileas;
@@ -45,7 +52,11 @@
 	<div class="flex-row align-middle items-center justify-center">
 		<h2 class="font-bold">Ha sikeresen feltöltötted őket akkor itt fognak megjelenni:</h2>
 		{#each fileas as nyam}
-			<img src={nyam} alt="" class="max-w-5xl max-h-5xl m-auto py-3" />
+			<img
+				src={`https://sckk-api.ampix.hu/img/data/${nyam}`}
+				alt=""
+				class="max-w-5xl max-h-5xl m-auto py-3"
+			/>
 		{/each}
 	</div>
 </div>

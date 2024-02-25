@@ -1,19 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	let loada = true;
-	let cuccok: any[] = [];
-
-	async function loader() {
-		const fatcs = await fetch('/api/potlekok', {
-			mode: 'no-cors'
-		});
-		cuccok = await fatcs.json();
-		cuccok = cuccok;
-		loada = false;
-	}
-	onMount(() => {
-		loader();
-	});
+	export let data;
 </script>
 
 <div class="text-center text-white grid grid-cols-1">
@@ -22,11 +8,8 @@
 	>
 	<h1 class="text-5xl font-bold mb-3 drop-shadow-xl">Pótlékaid:</h1>
 	<div class="flex flex-auto flex-wrap align-middle items-center justify-center gap-3">
-		{#if loada}
-			<span class="loader"></span>
-		{/if}
-		{#if cuccok}
-			{#each cuccok as potle}
+		{#if data.potlekok}
+			{#each data.potlekok as potle}
 				<div
 					class="rounded-xl p-2 drop-shadow-xl"
 					class:bg-green-600={potle.status === 'elfogadva'}
@@ -39,7 +22,11 @@
 						).getDate()}. {new Date(potle.date).getHours()}:{new Date(potle.date).getMinutes()}
 					</h1>
 					<h1 class="font-bold drop-shadow-xl">Státusz: {potle.status}</h1>
-					<img src={potle.kep} alt="" class="m-auto py-2 max-w-xl max-h-xl drop-shadow-xl" />
+					<img
+						src={`https://sckk-api.ampix.hu/img/data/${potle.id}`}
+						alt=""
+						class="m-auto py-2 max-w-xl max-h-xl drop-shadow-xl"
+					/>
 				</div>
 			{/each}
 		{/if}

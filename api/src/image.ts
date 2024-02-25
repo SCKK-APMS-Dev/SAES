@@ -7,7 +7,7 @@ router.get('/data/:name', async (req, res) => {
 	const param = req.params.name.split('.')[0];
 	const file = await prisma.data.findUnique({
 		where: {
-			id: Number(param)
+			id: Number(param) ? Number(param) : 0
 		}
 	});
 	if (file) {
