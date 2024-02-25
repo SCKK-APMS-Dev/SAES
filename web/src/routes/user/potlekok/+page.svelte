@@ -23,7 +23,7 @@
 					</h1>
 					<h1 class="font-bold drop-shadow-xl">Státusz: {potle.status}</h1>
 					{#if potle.reason}
-						<h1 class="font-bold drop-shadow-xl">Indok: {potle.reason}</h1>
+						<h1 class="font-bold drop-shadow-xl">Megjegyzés: {potle.reason}</h1>
 					{/if}
 					<img
 						src={`https://sckk-api.ampix.hu/img/data/${potle.id}`}
