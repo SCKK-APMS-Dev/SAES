@@ -25,7 +25,7 @@
 					{#if potle.reason}
 						<h1 class="font-bold drop-shadow-xl">Indok: {potle.reason}</h1>
 					{/if}
-					<div class="flex">
+					<div class="flex flex-col xl:flex-row">
 						<img
 							src={`https://sckk-api.ampix.hu/img/data/${potle.id}/1`}
 							alt=""
