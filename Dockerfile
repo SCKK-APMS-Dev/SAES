@@ -13,4 +13,4 @@ COPY ./api .
 # run the app
 USER root
 EXPOSE 3000
-ENTRYPOINT [ "pnpm", "start"]
+ENTRYPOINT [ "npm", "start"]

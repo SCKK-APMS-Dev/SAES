@@ -30,6 +30,8 @@ router.get('/', async (req, res) => {
 			});
 			if (cuccok[0]) {
 				res.send(cuccok);
+			} else {
+				res.sendStatus(204);
 			}
 		} else {
 			res.sendStatus(401);
@@ -52,7 +54,8 @@ router.post('/upload', async (req, res) => {
 				data: {
 					owner: doksi.name as string,
 					kep: body.img,
-					type: body.selected
+					type: body.selected,
+					date: new Date(body.createdAt)
 				}
 			});
 			if (kep) {

@@ -29,6 +29,8 @@
 					/>
 				</div>
 			{/each}
+		{:else}
+			<h2>Még nem töltöttél fel pótlékokat!</h2>
 		{/if}
 	</div>
 </div>

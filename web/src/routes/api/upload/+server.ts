@@ -4,7 +4,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 	const body = await request.json();
 	const dcauth = cookies.get('sckk-dc-auth');
 	if (dcauth) {
-		await fetch('http://localhost:3000/potlek/upload', {
+		const mama = await fetch('http://localhost:3000/potlek/upload', {
 			mode: 'no-cors',
 			headers: {
 				cookie: cookies.get('sckk-dc-auth') as string,
@@ -17,6 +17,9 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 				selected: body.selected
 			})
 		});
+		if (mama.ok) {
+			return new Response(await mama.text());
+		}
 	}
 	return new Response(body);
 };
