@@ -1,10 +1,11 @@
+import { apiUrl } from '$lib/api';
 import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async ({ request, cookies }) => {
 	const body = await request.json();
 	const dcauth = cookies.get('sckk-dc-auth');
 	if (dcauth) {
-		const mama = await fetch('https://sckk-api.ampix.hu/potlek/upload', {
+		const mama = await fetch(`${apiUrl}/${body.type}/upload`, {
 			mode: 'no-cors',
 			headers: {
 				cookie: cookies.get('sckk-dc-auth') as string,

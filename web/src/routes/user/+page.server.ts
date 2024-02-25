@@ -2,11 +2,12 @@
 // import { prisma } from '$lib/server/prisma';
 import { redirect, type Redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
+import { apiUrl } from '$lib/api';
 
 export const load = (async ({ parent, cookies }) => {
 	await parent();
 	try {
-		const aha = await fetch('https://sckk-api.ampix.hu/user/doksi', {
+		const aha = await fetch(`${apiUrl}/user/doksi`, {
 			mode: 'no-cors',
 			headers: {
 				cookie: JSON.stringify(cookies.getAll())

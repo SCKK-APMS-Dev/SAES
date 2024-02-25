@@ -3,10 +3,10 @@
 </script>
 
 <div class="text-center text-white grid grid-cols-1">
-	<a href="/user/potlekok/upload" class="bg-green-500 text-2xl p-2 drop-shadow-xl font-bold"
+	<a href="/user/leintesek/upload" class="bg-green-500 text-2xl p-2 drop-shadow-xl font-bold"
 		>Feltöltés</a
 	>
-	<h1 class="text-5xl font-bold mb-3 drop-shadow-xl">Pótlékaid:</h1>
+	<h1 class="text-5xl font-bold mb-3 drop-shadow-xl">Leintéseid:</h1>
 	<div class="flex flex-auto flex-wrap align-middle items-center justify-center gap-3">
 		{#if data.potlekok}
 			{#each data.potlekok as potle}
@@ -25,15 +25,22 @@
 					{#if potle.reason}
 						<h1 class="font-bold drop-shadow-xl">Indok: {potle.reason}</h1>
 					{/if}
-					<img
-						src={`https://sckk-api.ampix.hu/img/data/${potle.id}`}
-						alt=""
-						class="m-auto py-2 max-w-xl max-h-xl drop-shadow-xl"
-					/>
+					<div class="flex">
+						<img
+							src={`https://sckk-api.ampix.hu/img/data/${potle.id}/1`}
+							alt=""
+							class="m-auto py-2 max-w-xl max-h-xl drop-shadow-xl"
+						/>
+						<img
+							src={`https://sckk-api.ampix.hu/img/data/${potle.id}/2`}
+							alt=""
+							class="m-auto py-2 max-w-xl max-h-xl drop-shadow-xl"
+						/>
+					</div>
 				</div>
 			{/each}
 		{:else}
-			<h2>Még nem töltöttél fel pótlékokat!</h2>
+			<h2>Még nem töltöttél fel leintéseket!</h2>
 		{/if}
 	</div>
 </div>

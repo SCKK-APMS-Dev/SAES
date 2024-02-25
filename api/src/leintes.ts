@@ -20,10 +20,8 @@ router.get('/', async (req, res) => {
 		if (doksi) {
 			const cuccok = await prisma.data.findMany({
 				where: {
-					OR: [
-						{ type: 'délelőtti', owner: doksi.name as string },
-						{ type: 'éjszakai', owner: doksi.name as string }
-					]
+					owner: doksi.name as string,
+					type: 'leintés'
 				},
 				select: {
 					date: true,
@@ -56,8 +54,8 @@ router.post('/upload', async (req, res) => {
 			const kep = await prisma.data.create({
 				data: {
 					owner: doksi.name as string,
-					kep: body.img,
-					type: body.selected,
+					kep: JSON.stringify(body.img),
+					type: 'leintés',
 					date: new Date(body.createdAt)
 				}
 			});

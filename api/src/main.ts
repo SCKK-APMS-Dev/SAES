@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser';
 import * as user from './user/main.ts';
 import * as image from './image.ts';
 import * as potlek from './potlek.ts';
+import * as leintes from './leintes.ts';
 import { oauth } from './lib/discord.ts';
 
 const app = express();
@@ -19,6 +20,7 @@ app.use(
 app.use('/user', user.router);
 app.use('/img', image.router);
 app.use('/potlek', potlek.router);
+app.use('/leintes', leintes.router);
 
 app.use(cookieParser(process.env.COOKIE_SECRET));
 

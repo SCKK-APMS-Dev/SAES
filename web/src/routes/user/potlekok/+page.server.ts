@@ -1,10 +1,11 @@
 import { redirect, type Redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
+import { apiUrl } from '$lib/api';
 
 export const load = (async ({ parent, cookies }) => {
 	await parent();
 	try {
-		const aha = await fetch('https://sckk-api.ampix.hu/potlek', {
+		const aha = await fetch(`${apiUrl}/potlek`, {
 			mode: 'no-cors',
 			headers: {
 				cookie: JSON.stringify(cookies.getAll())

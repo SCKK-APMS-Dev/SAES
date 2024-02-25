@@ -1,9 +1,10 @@
 import { redirect, type Redirect } from '@sveltejs/kit';
 import type { LayoutServerLoad } from './$types';
+import { apiUrl } from '$lib/api';
 
 export const load = (async ({ cookies }) => {
 	try {
-		const aha = await fetch('https://sckk-api.ampix.hu/user', {
+		const aha = await fetch(`${apiUrl}/user`, {
 			mode: 'no-cors',
 			headers: {
 				cookie: JSON.stringify(cookies.getAll())

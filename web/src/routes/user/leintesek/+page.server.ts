@@ -1,16 +1,14 @@
-import type { PageServerLoad } from './$types';
-
-import 'dotenv/config';
 import { redirect, type Redirect } from '@sveltejs/kit';
+import type { PageServerLoad } from './$types';
 import { apiUrl } from '$lib/api';
 
 export const load = (async ({ parent, cookies }) => {
 	await parent();
 	try {
-		const aha = await fetch(`${apiUrl}/user/admin`, {
+		const aha = await fetch(`${apiUrl}/leintes`, {
 			mode: 'no-cors',
 			headers: {
-				cookie: cookies.get('sckk-dc-auth') as string
+				cookie: JSON.stringify(cookies.getAll())
 			}
 		});
 		if (aha.status === 404) {
@@ -27,7 +25,7 @@ export const load = (async ({ parent, cookies }) => {
 
 		if (aha.ok) {
 			return {
-				admin: await aha.json()
+				potlekok: await aha.json()
 			};
 		}
 	} catch (err) {
