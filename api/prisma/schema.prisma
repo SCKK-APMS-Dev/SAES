@@ -23,3 +23,13 @@ model data {
   reason String?  @db.VarChar(50)
   date   DateTime @default(now()) @db.Timestamp(0)
 }
+
+model leintesek {
+  id     Int      @id @default(autoincrement())
+  img1   String   @db.LongText
+  img2   String   @db.LongText
+  owner  String   @db.VarChar(50)
+  status String   @default("feltöltve") @db.VarChar(50)
+  reason String?  @db.VarChar(50)
+  date   DateTime @default(now()) @db.Timestamp(0)
+}

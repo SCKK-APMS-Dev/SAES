@@ -35,7 +35,7 @@
 								$loading = false;
 							}
 						};
-						reader2.readAsDataURL(filj);
+						reader2.readAsDataURL(filj2);
 					};
 					reader.readAsDataURL(filj);
 				}
@@ -66,12 +66,12 @@
 		{#each fileas as nyam}
 			<div class="flex flex-col">
 				<img
-					src={`https://sckk-api.ampix.hu/img/data/${nyam}/1`}
+					src={`https://sckk-api.ampix.hu/img/leintesek/${nyam}/1`}
 					alt=""
 					class="max-w-5xl max-h-5xl m-auto py-3"
 				/>
 				<img
-					src={`https://sckk-api.ampix.hu/img/data/${nyam}/2`}
+					src={`https://sckk-api.ampix.hu/img/leintesek/${nyam}/2`}
 					alt=""
 					class="max-w-5xl max-h-5xl m-auto py-3"
 				/>

@@ -18,10 +18,9 @@ router.get('/', async (req, res) => {
 	if (user) {
 		const doksi = await getTag(user.id);
 		if (doksi) {
-			const cuccok = await prisma.data.findMany({
+			const cuccok = await prisma.leintesek.findMany({
 				where: {
-					owner: doksi.name as string,
-					type: 'leintés'
+					owner: doksi.name as string
 				},
 				select: {
 					date: true,
@@ -51,11 +50,12 @@ router.post('/upload', async (req, res) => {
 	if (user) {
 		const doksi = await getTag(user.id);
 		if (doksi) {
-			const kep = await prisma.data.create({
+			console.log(body.img[0] === body.img[1]);
+			const kep = await prisma.leintesek.create({
 				data: {
 					owner: doksi.name as string,
-					kep: JSON.stringify(body.img),
-					type: 'leintés',
+					img1: body.img[0],
+					img2: body.img[1],
 					date: new Date(body.createdAt)
 				}
 			});
