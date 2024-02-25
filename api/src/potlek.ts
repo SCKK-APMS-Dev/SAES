@@ -44,7 +44,6 @@ router.get('/', async (req, res) => {
 router.post('/upload', async (req, res) => {
 	if (!req.headers.cookie) return res.sendStatus(404);
 	const body = await req.body;
-	if (!req.headers.cookie) return res.sendStatus(404);
 	if (!body) return res.sendStatus(400);
 	const user = await oauth.getUser(req.headers.cookie);
 	if (user) {

@@ -6,7 +6,7 @@ import type { PageServerLoad } from './$types';
 export const load = (async ({ parent, cookies }) => {
 	await parent();
 	try {
-		const aha = await fetch('http://localhost:3000/user/doksi', {
+		const aha = await fetch('https://sckk-api.ampix.hu/user/doksi', {
 			mode: 'no-cors',
 			headers: {
 				cookie: JSON.stringify(cookies.getAll())

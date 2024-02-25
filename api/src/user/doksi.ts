@@ -6,10 +6,6 @@ import { prisma } from '../lib/prisma.ts';
 export const router = express.Router();
 
 router.get('/', async (req, res) => {
-	const startT: number[] = [];
-	const endT: number[] = [];
-	const calcT: number[] = [];
-	startT.push(performance.now());
 	if (!req.headers.cookie) return res.sendStatus(404);
 	let cookie: string | undefined = undefined;
 	for (const kuki of JSON.parse(req.headers.cookie)) {
@@ -19,8 +15,6 @@ router.get('/', async (req, res) => {
 	}
 	if (!cookie) return res.sendStatus(404);
 	const user = await oauth.getUser(cookie);
-	endT.push(performance.now());
-	calcT.push(endT[0] - startT[0]);
 	if (user) {
 		const doksi = await getTag(user.id);
 		if (doksi) {

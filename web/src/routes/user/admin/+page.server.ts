@@ -1,38 +1,40 @@
 import type { PageServerLoad } from './$types';
 
 import 'dotenv/config';
-import { redirect } from '@sveltejs/kit';
+import { redirect, type Redirect } from '@sveltejs/kit';
 
-import { sheet } from '$lib/server/google';
-
-export const load = (async ({ parent }) => {
-	const par = await parent();
-	if (par.layout?.doksi) {
-		await sheet.loadCells();
-		if (par.layout.doksi.rang === 'admin') {
-			const users: { name: string; discordid: string; rang: string }[] = [];
-			for (let i = 4; i < sheet.columnCount; i++) {
-				if (sheet.getCellByA1(`A${i}`).value === 'Összesen') {
-					break;
-				}
-				if (sheet.getCellByA1(`A${i}`).value && sheet.getCellByA1(`A${i}`).note) {
-					const sanyi = {
-						name: sheet.getCellByA1(`A${i}`).value as string,
-						discordid: sheet.getCellByA1(`A${i}`).note.split('\n')[0] as string,
-						rang: sheet.getCellByA1(`A${i}`).note.split('\n')[1]
-							? sheet.getCellByA1(`A${i}`).note.split('\n')[1]
-							: 'tag'
-					};
-					users.push(sanyi);
-				}
+export const load = (async ({ parent, cookies }) => {
+	await parent();
+	try {
+		const aha = await fetch('https://sckk-api.ampix.hu/user/admin', {
+			mode: 'no-cors',
+			headers: {
+				cookie: cookies.get('sckk-dc-auth') as string
 			}
+		});
+		if (aha.status === 404) {
+			throw redirect(
+				302,
+				process.env.NODE_ENV === 'production'
+					? 'https://sckk-api.ampix.hu/user/auth'
+					: 'http://localhost:3000/user/auth'
+			);
+		}
+		if (aha.status === 401) {
+			throw redirect(302, 'noaccess');
+		}
+
+		if (aha.ok) {
 			return {
-				admin: {
-					users
-				}
+				admin: await aha.json()
 			};
 		}
-		throw redirect(302, '/user');
+	} catch (err) {
+		if ((err as Redirect).status) {
+			throw redirect((err as Redirect).status, (err as Redirect).location);
+		}
+		return {
+			error: true
+		};
 	}
-	throw redirect(302, '/auth');
 }) satisfies PageServerLoad;

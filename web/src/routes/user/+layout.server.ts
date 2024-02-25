@@ -3,7 +3,7 @@ import type { LayoutServerLoad } from './$types';
 
 export const load = (async ({ cookies }) => {
 	try {
-		const aha = await fetch('http://localhost:3000/user', {
+		const aha = await fetch('https://sckk-api.ampix.hu/user', {
 			mode: 'no-cors',
 			headers: {
 				cookie: JSON.stringify(cookies.getAll())

@@ -4,7 +4,7 @@ import type { PageServerLoad } from './$types';
 export const load = (async ({ parent, cookies }) => {
 	await parent();
 	try {
-		const aha = await fetch('http://localhost:3000/potlek', {
+		const aha = await fetch('https://sckk-api.ampix.hu/potlek', {
 			mode: 'no-cors',
 			headers: {
 				cookie: JSON.stringify(cookies.getAll())

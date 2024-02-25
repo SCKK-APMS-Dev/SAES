@@ -15,7 +15,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					{#each data?.admin.users as tag}
+					{#each data?.admin as tag}
 						<tr>
 							<td>{tag.discordid}</td>
 							<td>{tag.name}</td>
