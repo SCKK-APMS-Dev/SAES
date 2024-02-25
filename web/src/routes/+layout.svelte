@@ -17,9 +17,6 @@
 </head>
 
 <slot />
-<h2 class="sticky float-right text-red-600 text-center w-screen font-bold">
-	Jelenleg az oldal még fejlesztés alatt áll, nem minden funkció elérhető.
-</h2>
 
 {#if $loading}
 	<div
