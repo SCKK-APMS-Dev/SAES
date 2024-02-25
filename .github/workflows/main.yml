@@ -9,13 +9,13 @@ on:
   schedule:
     - cron: '30 23 * * *'
   push:
-    branches: [ "main" ]
+    branches: ['main']
     paths:
-      - "api/**"
+      - 'api/**'
     # Publish semver tags as releases.
-    tags: [ 'v*.*.*' ]
+    tags: ['v*.*.*']
   pull_request:
-    branches: [ "main" ]
+    branches: ['main']
 
 env:
   # Use docker.io for Docker Hub if empty
@@ -24,10 +24,9 @@ env:
   # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ github.repository }}
 
-
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     defaults:
       run:
         working-directory: ./api
