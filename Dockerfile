@@ -6,8 +6,7 @@ WORKDIR /api
 
 COPY ./api/package.json ./
 
-RUN npm install pnpm -g
-RUN pnpm install --no-link
+RUN npm install
 
 COPY ./api .
 
