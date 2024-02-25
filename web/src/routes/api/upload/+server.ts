@@ -14,8 +14,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 			method: 'post',
 			body: JSON.stringify({
 				img: body.img,
-				createdAt: body.createdAt,
-				selected: body.selected
+				createdAt: body.createdAt
 			})
 		});
 		if (mama.ok) {

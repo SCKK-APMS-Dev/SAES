@@ -11,9 +11,6 @@
 				const reader = new FileReader();
 
 				reader.onloadend = async () => {
-					var e = document.getElementById('type') as HTMLSelectElement;
-
-					var value = e.options[e.selectedIndex].value;
 					const fatcs = await fetch('/api/upload', {
 						method: 'POST',
 						mode: 'no-cors',
@@ -23,7 +20,6 @@
 						body: JSON.stringify({
 							img: reader.result,
 							createdAt: filj.lastModified,
-							selected: value,
 							type: 'potlek'
 						})
 					});
@@ -43,10 +39,6 @@
 	<div class="bg-green-500 p-2">
 		<h1 class="text-3xl font-bold">Pótlék feltöltés</h1>
 		<form on:submit|preventDefault={() => upload()} enctype="multipart/form-data">
-			<select name="type" id="type" class="bg-green-800 text-xl p-2">
-				<option value="délelőtti">Délelőtti</option>
-				<option value="éjszakai">Éjszakai</option>
-			</select>
 			<input type="text" class="hidden" name="name" value={data.layout?.doksi.name} />
 			<input type="file" name="file" id="file" accept="image/*" required multiple />
 			<button type="submit" class="bg-red-600 font-bold text-xl px-2 rounded-xl">Feltöltés</button>

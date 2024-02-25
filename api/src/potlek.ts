@@ -19,17 +19,14 @@ router.get('/', async (req, res) => {
 		const doksi = await getTag(user.id);
 		if (doksi) {
 			const cuccok = await prisma.data.findMany({
-				where: {
-					OR: [
-						{ type: 'délelőtti', owner: doksi.name as string },
-						{ type: 'éjszakai', owner: doksi.name as string }
-					]
-				},
+				where: { type: 'pótlék', owner: doksi.name as string },
+
 				select: {
 					date: true,
 					id: true,
 					status: true,
-					reason: true
+					reason: true,
+					type: true
 				}
 			});
 			if (cuccok[0]) {
@@ -57,7 +54,7 @@ router.post('/upload', async (req, res) => {
 				data: {
 					owner: doksi.name as string,
 					kep: body.img,
-					type: body.selected,
+					type: 'pótlék',
 					date: new Date(body.createdAt)
 				}
 			});
