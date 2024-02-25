@@ -25,7 +25,7 @@ app.use('/leintes', leintes.router);
 app.use(cookieParser(process.env.COOKIE_SECRET));
 
 app.get('/', (req, res) => {
-	res.send('SCKK API Szerver alpha');
+	res.send('SCKK API Szerver v0.0.1');
 });
 
 app.get('/cb', async (req, res) => {
