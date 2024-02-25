@@ -3,8 +3,8 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
-		"dev": "vite dev",
-		"build": "prisma generate && vite build",
+		"dev": "set DEV=true && vite dev",
+		"build": "vite build",
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
@@ -12,7 +12,7 @@
 		"format": "prettier --write ."
 	},
 	"devDependencies": {
-		"@sveltejs/adapter-auto": "^3.1.1",
+		"@sveltejs/adapter-node": "^4.0.1",
 		"@sveltejs/kit": "^2.0.0",
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
 		"@types/eslint": "^8.56.0",
@@ -26,7 +26,6 @@
 		"postcss": "^8.4.35",
 		"prettier": "^3.1.1",
 		"prettier-plugin-svelte": "^3.1.2",
-		"prisma": "^5.10.2",
 		"svelte": "^4.2.7",
 		"svelte-adapter-bun": "^0.5.2",
 		"svelte-check": "^3.6.0",
@@ -37,11 +36,6 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@prisma/client": "5.10.2",
-		"@vercel/speed-insights": "^1.0.10",
-		"discord-oauth2": "^2.12.1",
-		"dotenv": "^16.4.5",
-		"google-auth-library": "^9.6.3",
-		"google-spreadsheet": "^4.1.1"
+		"@vercel/speed-insights": "^1.0.10"
 	}
 }

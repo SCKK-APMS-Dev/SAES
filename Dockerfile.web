@@ -1,16 +1,18 @@
 FROM node:18
-WORKDIR /api
+WORKDIR /web
 
 # install dependencies into temp directory
 # this will cache them and speed up future builds
 
-COPY ./api/package.json ./
+COPY ./web/package.json ./
 
 RUN npm install
 
-COPY ./api .
+COPY ./web ./
+
+RUN npm run build
 
 # run the app
 USER root
 EXPOSE 3000
-ENTRYPOINT [ "npm", "start"]
+ENTRYPOINT [ "node", "build"]

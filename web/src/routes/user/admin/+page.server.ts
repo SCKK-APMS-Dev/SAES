@@ -1,6 +1,5 @@
 import type { PageServerLoad } from './$types';
 
-import 'dotenv/config';
 import { redirect, type Redirect } from '@sveltejs/kit';
 import { apiUrl } from '$lib/api';
 
