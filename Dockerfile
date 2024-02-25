@@ -1,17 +1,17 @@
-FROM oven/bun:1 as base
-WORKDIR /app
+FROM node:18
+WORKDIR /api
 
 # install dependencies into temp directory
 # this will cache them and speed up future builds
 
 COPY ./api/package.json ./
-COPY ./api/bun.lockb ./
 
-RUN bun install
+RUN npm install pnpm -g
+RUN pnpm install --no-link
 
 COPY ./api .
 
 # run the app
 USER root
-EXPOSE 8080
-ENTRYPOINT [ "bun", "start"]
+EXPOSE 3000
+ENTRYPOINT [ "pnpm", "start"]
