@@ -56,9 +56,9 @@
 			<input type="file" name="file" id="file" accept="image/*" required multiple />
 			<button type="submit" class="bg-red-600 font-bold text-xl px-2 rounded-xl">Feltöltés</button>
 		</form>
-		<h2>
-			FONTOS! Bármennyit feltölthetsz csak a sorrend legyen meg! (Pótlékonként 2 kép egymás után
-			kiválasztva)
+		<h2 class="bg-red-600 font-bold text-xl px-2 rounded-xl">
+			FONTOS! Bármennyit feltölthetsz csak a sorrend legyen meg! (Leintésenként 2 kép egymás után
+			kiválasztva, a fájlkezelőben visszafelé kell kijelölni, hogy a sorrent megmaradjon)
 		</h2>
 	</div>
 	<div class="flex-row align-middle items-center justify-center">
