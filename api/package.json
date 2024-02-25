@@ -6,7 +6,7 @@
 	"type": "module",
 	"scripts": {
 		"dev": "set NODE_DEV=true && tsx watch src/main.ts",
-		"start": "pnpm pr && tsx src/main.ts",
+		"start": "npm pr && tsx src/main.ts",
 		"pr": "prisma db pull && prisma generate"
 	},
 	"keywords": [],
