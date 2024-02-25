@@ -23,7 +23,7 @@ app.use('/potlek', potlek.router);
 app.use(cookieParser(process.env.COOKIE_SECRET));
 
 app.get('/', (req, res) => {
-	res.send('SCKK API Szerver');
+	res.send('SCKK API Szerver alpha');
 });
 
 app.get('/cb', async (req, res) => {
