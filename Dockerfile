@@ -4,12 +4,12 @@ WORKDIR /app
 # install dependencies into temp directory
 # this will cache them and speed up future builds
 
-COPY package.json ./
-COPY bun.lockb ./
+COPY ./api/package.json ./
+COPY ./api/bun.lockb ./
 
 RUN bun install
 
-COPY . .
+COPY ./api .
 
 # run the app
 USER root
