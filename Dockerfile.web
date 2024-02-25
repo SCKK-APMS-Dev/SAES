@@ -6,6 +6,8 @@ WORKDIR /web
 
 COPY ./web/package.json ./
 
+ENV BODY_SIZE_LIMIT=0
+
 RUN npm install
 
 COPY ./web ./
