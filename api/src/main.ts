@@ -1,7 +1,8 @@
 import 'dotenv/config';
 import express from 'express';
 import cookieParser from 'cookie-parser';
-import { router } from './user/main.ts';
+import * as user from './user/main.ts';
+import * as image from './image.ts';
 import { oauth } from './lib/discord.ts';
 
 const app = express();
@@ -13,7 +14,8 @@ app.use(
 		extended: true
 	})
 );
-app.use('/user', router);
+app.use('/user', user.router);
+app.use('/img', image.router);
 
 app.use(cookieParser(process.env.COOKIE_SECRET));
 
