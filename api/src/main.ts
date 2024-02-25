@@ -30,7 +30,7 @@ app.get('/cb', async (req, res) => {
 				grantType: 'authorization_code'
 			});
 			res.cookie('sckk-dc-auth', dcode.access_token, {
-				maxAge: dcode.expires_in,
+				maxAge: dcode.expires_in * 1000,
 				domain: 'localhost'
 			});
 		} finally {

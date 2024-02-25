@@ -1,8 +1,11 @@
 import express from 'express';
 import { oauth } from '../lib/discord.ts';
 import { getTag } from '../lib/google.ts';
+import * as doksi from './doksi.ts';
 
 export const router = express.Router();
+
+router.use('/doksi', doksi.router);
 
 router.get('/', async (req, res) => {
 	if (!req.headers.cookie) return res.sendStatus(404);

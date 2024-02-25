@@ -22,10 +22,22 @@ await doc.loadInfo();
 
 export const sheet = doc.sheetsByIndex[0];
 
-export async function getTag(discordid: string) {
+const rowes = (await loadRowes()) as number;
+
+async function loadRowes() {
 	await sheet.loadCells();
-	for (let i = 3; i < sheet.rowCount; i++) {
-		const cell = sheet.getCell(i, 0);
+	for (let i = 1; i < sheet.rowCount; i++) {
+		const cell = sheet.getCellByA1(`A${i}`);
+		if (cell.value === 'Összesen') {
+			return i - 1;
+		}
+	}
+}
+
+export async function getTag(discordid: string) {
+	await sheet.loadCells(`A3:A${rowes}`);
+	for (let i = 4; i < rowes; i++) {
+		const cell = sheet.getCellByA1(`A${i}`);
 		if (cell.note) {
 			if (cell.note.split('\n')[0] === discordid) {
 				return {

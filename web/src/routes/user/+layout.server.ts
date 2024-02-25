@@ -1,4 +1,4 @@
-import { redirect } from '@sveltejs/kit';
+import { redirect, type Redirect } from '@sveltejs/kit';
 import type { LayoutServerLoad } from './$types';
 
 export const load = (async ({ cookies }) => {
@@ -20,14 +20,18 @@ export const load = (async ({ cookies }) => {
 		if (aha.status === 401) {
 			throw redirect(302, 'noaccess');
 		}
-		if (aha.status === 200) {
+
+		if (aha.ok) {
 			return {
 				layout: {
 					doksi: await aha.json()
 				}
 			};
 		}
-	} catch {
+	} catch (err) {
+		if ((err as Redirect).status) {
+			throw redirect((err as Redirect).status, (err as Redirect).location);
+		}
 		return {
 			error: true
 		};
