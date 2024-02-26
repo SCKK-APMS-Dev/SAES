@@ -16,9 +16,8 @@ export const load = (async ({ parent, cookies }) => {
 		if (aha.status === 404) {
 			throw redirect(
 				302,
-				process.env.NODE_ENV === 'production'
-					? 'https://sckk-api.ampix.hu/user/auth'
-					: 'http://localhost:3000/user/auth'
+
+				`${apiUrl}/user/auth`
 			);
 		}
 		if (aha.status === 401) {
