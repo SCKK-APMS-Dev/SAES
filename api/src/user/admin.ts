@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
 		if (doksi) {
 			if (doksi.rang === 'admin') {
 				const users: { name: string; discordid: string; rang: string }[] = [];
-				sheet.loadCells(`A4:A${rowes}`);
+				await sheet.loadCells(`A4:A${rowes}`);
 				for (let i = 4; i < rowes; i++) {
 					if (sheet.getCellByA1(`A${i}`).value === 'Összesen') {
 						break;
