@@ -6,8 +6,6 @@ name: Docker API
 # documentation.
 
 on:
-  schedule:
-    - cron: '30 23 * * *'
   push:
     branches: ['main']
     paths:
