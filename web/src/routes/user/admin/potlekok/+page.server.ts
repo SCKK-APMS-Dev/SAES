@@ -1,14 +1,14 @@
+import { apiUrl } from '$lib/api';
 import { redirect, type Redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import { apiUrl } from '$lib/api';
 
 export const load = (async ({ parent, cookies }) => {
 	await parent();
 	try {
-		const aha = await fetch(`${apiUrl}/szamla`, {
+		const aha = await fetch(`${apiUrl}/user/admin/potlekok`, {
 			mode: 'no-cors',
 			headers: {
-				cookie: JSON.stringify(cookies.getAll())
+				cookie: cookies.get('sckk-dc-auth') as string
 			}
 		});
 		if (aha.status === 401) {

@@ -11,7 +11,6 @@ export const load = (async ({ parent, cookies }) => {
 				cookie: cookies.get('sckk-dc-auth') as string
 			}
 		});
-		console.log(aha.status);
 		if (aha.status === 404) {
 			throw redirect(
 				302,

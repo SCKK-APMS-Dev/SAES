@@ -1,6 +1,7 @@
 import express from 'express';
 import { getTag, loadRowes, sheet } from '../lib/google.ts';
 import { oauth } from '../lib/discord.ts';
+import { prisma } from '../lib/prisma.ts';
 
 export const router = express.Router();
 
@@ -30,6 +31,40 @@ router.get('/', async (req, res) => {
 					}
 				}
 				res.send(JSON.stringify(users));
+			} else {
+				res.sendStatus(401);
+			}
+		} else {
+			res.sendStatus(401);
+		}
+	} else {
+		res.sendStatus(404);
+	}
+});
+
+router.get('/potlekok', async (req, res) => {
+	if (!req.headers.cookie) return res.sendStatus(404);
+	const user = await oauth.getUser(req.headers.cookie);
+	if (user) {
+		const doksi = await getTag(user.id);
+		if (doksi) {
+			if (doksi.rang === 'admin') {
+				const potlekok = await prisma.data.findMany({
+					where: {
+						type: 'pótlék'
+					},
+					select: {
+						date: true,
+						id: true,
+						owner: true,
+						status: true,
+						reason: true
+					},
+					orderBy: {
+						date: 'desc'
+					}
+				});
+				res.send(potlekok);
 			} else {
 				res.sendStatus(401);
 			}
