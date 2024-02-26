@@ -12,6 +12,7 @@ on:
     branches: ['main']
     paths:
       - 'api/**'
+      - ".github/**"
     # Publish semver tags as releases.
     tags: ['v*.*.*']
   pull_request:
