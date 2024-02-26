@@ -30,6 +30,8 @@ router.get('/', async (req, res) => {
 					}
 				}
 				res.send(JSON.stringify(users));
+			} else {
+				res.sendStatus(401);
 			}
 		} else {
 			res.sendStatus(401);

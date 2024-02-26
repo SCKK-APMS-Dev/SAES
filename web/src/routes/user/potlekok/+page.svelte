@@ -17,9 +17,10 @@
 					class:bg-yellow-600={potle.status === 'feltöltve'}
 				>
 					<h1 class="font-bold drop-shadow-xl">
-						{new Date(potle.date).getFullYear()}.{new Date(potle.date).getMonth()}.{new Date(
+						{new Date(potle.date).getUTCFullYear()}.{new Date(potle.date).getUTCMonth() +
+							1}.{new Date(potle.date).getUTCDate()}. {new Date(
 							potle.date
-						).getDate()}. {new Date(potle.date).getHours()}:{new Date(potle.date).getMinutes()}
+						).getUTCHours()}:{new Date(potle.date).getUTCMinutes()}
 					</h1>
 					<h1 class="font-bold drop-shadow-xl">Státusz: {potle.status}</h1>
 					{#if potle.reason}

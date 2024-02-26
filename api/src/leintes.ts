@@ -28,6 +28,9 @@ router.get('/', async (req, res) => {
 					id: true,
 					status: true,
 					reason: true
+				},
+				orderBy: {
+					date: 'desc'
 				}
 			});
 			if (cuccok[0]) {
