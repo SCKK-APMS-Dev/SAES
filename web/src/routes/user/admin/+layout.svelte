@@ -1,6 +1,6 @@
 <nav class="bg-blue-700 flex text-white justify-around items-center flex-col md:flex-row">
 	<div class="flex items-center gap-2">
-		<a href="info" class="font-bold text-3xl drop-shadow-xl">Műszakvezetés a</a>
+		<a href="info" class="font-bold text-3xl drop-shadow-xl">Műszakvezetés</a>
 	</div>
 	<div
 		class="flex gap-2 text-xl flex-col text-center md:flex-row md:gap-10 child:w-screen child:md:w-auto child:border-y-2 child:md:border-none child:drop-shadow-xl"
