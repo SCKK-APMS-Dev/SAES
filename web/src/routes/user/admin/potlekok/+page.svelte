@@ -1,25 +1,39 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	let modal: HTMLDialogElement;
-	export let data;
+	let potleks: any[] = [];
 	let jona = 'feltöltve';
-	let bindEdit: typeof data.potlekok = {};
+	let bindEdit: any = {};
+	async function getPotleks(status: string) {
+		const fatcs = await fetch('/api/admin', {
+			headers: {
+				status,
+				type: 'potlekok'
+			}
+		});
+		if (fatcs.ok) {
+			return await fatcs.json();
+		}
+	}
+	onMount(async () => {
+		potleks = await getPotleks('feltöltve');
+	});
 	function edit(id: number) {
-		bindEdit = data.potlekok[id];
 		modal.showModal();
+		bindEdit = potleks[id];
+	}
+	async function rerun() {
+		potleks = await getPotleks(jona);
 	}
 </script>
 
-<dialog
-	bind:this={modal}
-	class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[40vw] h-[20vh] bg-gray-500 rounded-3xl text-white text-center"
->
-	<div>
-		<h1 class="text-3xl font-bold">{bindEdit.owner} pótlékának szerkesztése</h1>
-		<button
-			class="text-red-600 text-3xl font-bold absolute top-2 right-4 duration-150 hover:text-red-400"
-			on:click={() => modal.close()}>X</button
-		>
+<dialog bind:this={modal} class="w-[50%] h-[50%] bg-gray-500 rounded-3xl text-white text-center">
+	<h1 class="text-3xl font-bold mx-2">{bindEdit.owner} pótlékának szerkesztése</h1>
+	<button
+		class="text-red-600 text-3xl font-bold absolute top-2 right-4 duration-150 hover:text-red-400"
+		on:click={() => modal.close()}>X</button
+	>
+	<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
 		<form>
 			<label for="type">Státusz átállítása</label>
 			<select name="type" class="bg-green-800" bind:value={bindEdit.status}>
@@ -37,9 +51,9 @@
 
 <div class="flex">
 	<div class="m-auto text-center text-white">
-		{#if data?.potlekok}
+		{#if potleks}
 			<h1 class="text-2xl font-bold">Pótlékok</h1>
-			<select id="potlek-type" class="bg-green-800" bind:value={jona}>
+			<select id="potlek-type" class="bg-green-800" bind:value={jona} on:change={() => rerun()}>
 				<option value="feltöltve">Feltöltve</option>
 				<option value="elfogadva">Elfogadva</option>
 				<option value="elutasítva">Elutasítva</option>
@@ -56,35 +70,33 @@
 					</tr>
 				</thead>
 				<tbody>
-					{#each data?.potlekok as potle}
-						{#if potle.status === jona}
-							<tr class="bg-slate-800">
-								<td
-									>{new Date(potle.date).getUTCFullYear()}.{new Date(potle.date).getUTCMonth() +
-										1}.{new Date(potle.date).getUTCDate()}. {new Date(
-										potle.date
-									).getUTCHours()}:{new Date(potle.date).getUTCMinutes()}</td
-								>
-								<td>{potle.owner}</td>
-								<td
-									><a href={`https://sckk-api.ampix.hu/img/data/${potle.id}`} target="”_blank”"
-										><img
-											src={`https://sckk-api.ampix.hu/img/data/${potle.id}`}
-											alt=""
-											class="max-w-52"
-										/></a
-									></td
-								>
-								<td>{potle.status}</td>
-								<td>{potle.reason ? potle.reason : 'nincs'}</td>
-								<td
-									><button
-										class="bg-green-800 font-bold px-2 py-1 rounded-xl hover:bg-green-600 transition-all duration-150"
-										on:click={() => edit(data.potlekok.indexOf(potle))}>Szerkesztés</button
-									></td
-								>
-							</tr>
-						{/if}
+					{#each potleks as potle}
+						<tr class="bg-slate-800">
+							<td
+								>{new Date(potle.date).getUTCFullYear()}.{new Date(potle.date).getUTCMonth() +
+									1}.{new Date(potle.date).getUTCDate()}. {new Date(
+									potle.date
+								).getUTCHours()}:{new Date(potle.date).getUTCMinutes()}</td
+							>
+							<td>{potle.owner}</td>
+							<td
+								><a href={`https://sckk-api.ampix.hu/img/data/${potle.id}`} target="”_blank”"
+									><img
+										src={`https://sckk-api.ampix.hu/img/data/${potle.id}`}
+										alt=""
+										class="max-w-52"
+									/></a
+								></td
+							>
+							<td>{potle.status}</td>
+							<td>{potle.reason ? potle.reason : 'nincs'}</td>
+							<td
+								><button
+									class="bg-green-800 font-bold px-2 py-1 rounded-xl hover:bg-green-600 transition-all duration-150"
+									on:click={() => edit(potleks.indexOf(potle))}>Szerkesztés</button
+								></td
+							>
+						</tr>
 					{/each}
 				</tbody>
 			</table>
