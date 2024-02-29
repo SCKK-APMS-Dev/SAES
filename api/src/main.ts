@@ -7,6 +7,7 @@ import * as potlek from './potlek.ts';
 import * as leintes from './leintes.ts';
 import * as szamla from './szamla.ts';
 import { oauth } from './lib/discord.ts';
+import { sheet } from './lib/google.ts';
 
 const app = express();
 const port = 3000;
@@ -50,6 +51,7 @@ app.get('/cb', async (req, res) => {
 	}
 });
 
-app.listen(port, () => {
+app.listen(port, async () => {
+	await sheet.loadCells();
 	console.log('http://localhost:3000');
 });
