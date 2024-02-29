@@ -20,7 +20,7 @@ model data {
   owner  String   @db.VarChar(255)
   kep    String   @db.LongText
   status String   @default("feltöltve") @db.VarChar(50)
-  reason String?  @db.VarChar(50)
+  reason String?  @db.VarChar(255)
   date   DateTime @default(now()) @db.Timestamp(0)
 }
 
