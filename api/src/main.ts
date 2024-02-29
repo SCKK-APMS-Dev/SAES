@@ -39,6 +39,7 @@ app.get('/cb', async (req, res) => {
 				scope: 'identify',
 				grantType: 'authorization_code'
 			});
+			console.log(dcode.expires_in);
 			res.cookie('sckk-dc-auth', dcode.access_token, {
 				maxAge: dcode.expires_in * 1000,
 				domain: 'ampix.hu'

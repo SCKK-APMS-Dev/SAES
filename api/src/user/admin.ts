@@ -2,7 +2,6 @@ import express from 'express';
 import { getTag, loadRowes, sheet } from '../lib/google.ts';
 import { oauth } from '../lib/discord.ts';
 import { prisma } from '../lib/prisma.ts';
-import OAuth from 'discord-oauth2';
 
 export const router = express.Router();
 
