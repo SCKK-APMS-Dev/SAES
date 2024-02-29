@@ -3,7 +3,7 @@ import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = async ({ request, cookies }) => {
 	const dcauth = cookies.get('sckk-dc-auth');
-	if (!dcauth) {
+	if (dcauth) {
 		const mama = await fetch(`${apiUrl}/user/admin/get/${request.headers.get('type')}`, {
 			headers: {
 				cookie: cookies.get('sckk-dc-auth') as string,
