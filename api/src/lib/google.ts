@@ -29,7 +29,7 @@ export async function loadRowes() {
 	for (let i = 1; i < sheet.rowCount; i++) {
 		const cell = sheet.getCellByA1(`A${i}`);
 		if (cell.value === 'Összesen') {
-			return i - 1;
+			return i;
 		}
 	}
 }
