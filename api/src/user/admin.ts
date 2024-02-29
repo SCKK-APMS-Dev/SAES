@@ -47,7 +47,7 @@ router.get('/', async (req, res) => {
 	}
 });
 
-router.get('/potlekok', async (req, res) => {
+router.get('/get/:type', async (req, res) => {
 	if (!req.headers.cookie) return res.sendStatus(404);
 	const user = await oauth.getUser(req.headers.cookie);
 	if (user) {
@@ -56,8 +56,8 @@ router.get('/potlekok', async (req, res) => {
 			if (doksi.rang === 'admin') {
 				const potlekok = await prisma.data.findMany({
 					where: {
-						type: 'pótlék',
-						status: req.headers.status ? req.headers.status : 'feltöltve'
+						type: req.params.type,
+						status: req.headers.status ? (req.headers.status as string) : 'feltöltve'
 					},
 					select: {
 						date: true,
@@ -79,5 +79,35 @@ router.get('/potlekok', async (req, res) => {
 		}
 	} else {
 		res.sendStatus(404);
+	}
+});
+
+router.post('/post', async (req, res) => {
+	const body = await req.body;
+	if (!req.headers.cookie) return res.sendStatus(404);
+	const user = await oauth.getUser(req.headers.cookie);
+	if (user) {
+		const doksi = await getTag(user.id);
+		if (doksi) {
+			if (doksi.rang === 'admin') {
+				const upload = await prisma.data.update({
+					where: {
+						id: body.id
+					},
+					data: {
+						status: body.status,
+						reason: body.reason === '' ? null : body.reason
+					},
+					select: {
+						date: true,
+						id: true,
+						owner: true,
+						status: true,
+						reason: true
+					}
+				});
+				res.send(upload);
+			}
+		}
 	}
 });
