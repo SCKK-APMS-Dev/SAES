@@ -168,6 +168,9 @@
 					{/each}
 				</tbody>
 			</table>
+			{#if potleks.length === 0}
+				<h2>Nincs ilyen elem az adatbázisban!</h2>
+			{/if}
 		{:else}
 			<h2>Sikertelen lekérdezés</h2>
 		{/if}

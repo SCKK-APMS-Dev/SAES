@@ -28,6 +28,6 @@
 	</div>
 </nav>
 <slot />
-<h2 class="sticky float-right text-red-600 text-center w-screen font-bold">
+<h2 class="fixed bottom-0 bg-red-600 text-center w-screen font-bold text-white">
 	Jelenleg az oldal még fejlesztés alatt áll, nem minden funkció elérhető.
 </h2>
