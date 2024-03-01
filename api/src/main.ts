@@ -41,12 +41,10 @@ app.get('/cb', async (req, res) => {
 			});
 			res.cookie('sckk-dc-auth', dcode.access_token, {
 				maxAge: dcode.expires_in * 1000,
-				domain: 'ampix.hu'
+				domain: 'sckk.hu'
 			});
 		} finally {
-			res.redirect(
-				process.env.NODE_DEV ? 'http://localhost:5173/user' : 'https://sckk.ampix.hu/user'
-			);
+			res.redirect(process.env.NODE_DEV ? 'http://localhost:5173/user' : 'https://sckk.hu/user');
 		}
 	}
 });
