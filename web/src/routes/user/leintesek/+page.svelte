@@ -28,12 +28,12 @@
 					{/if}
 					<div class="flex flex-col xl:flex-row">
 						<img
-							src={`https://sckk-api.ampix.hu/img/data/${potle.id}/1`}
+							src={`https://api.sckk.hu/img/data/${potle.id}/1`}
 							alt=""
 							class="m-auto py-2 max-w-xl max-h-xl drop-shadow-xl"
 						/>
 						<img
-							src={`https://sckk-api.ampix.hu/img/data/${potle.id}/2`}
+							src={`https://api.sckk.hu/img/data/${potle.id}/2`}
 							alt=""
 							class="m-auto py-2 max-w-xl max-h-xl drop-shadow-xl"
 						/>

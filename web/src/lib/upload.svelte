@@ -98,19 +98,19 @@
 			{#if underhood === 'leintes'}
 				<div class="flex flex-col">
 					<img
-						src={`https://sckk-api.ampix.hu/img/data/${nyam}/1`}
+						src={`https://api.sckk.hu/img/data/${nyam}/1`}
 						alt=""
 						class="max-w-5xl max-h-5xl m-auto py-3"
 					/>
 					<img
-						src={`https://sckk-api.ampix.hu/img/data/${nyam}/2`}
+						src={`https://api.sckk.hu/img/data/${nyam}/2`}
 						alt=""
 						class="max-w-5xl max-h-5xl m-auto py-3"
 					/>
 				</div>
 			{:else}
 				<img
-					src={`https://sckk-api.ampix.hu/img/data/${nyam}`}
+					src={`https://api.sckk.hu/img/data/${nyam}`}
 					alt=""
 					class="max-w-5xl max-h-5xl m-auto py-3"
 				/>

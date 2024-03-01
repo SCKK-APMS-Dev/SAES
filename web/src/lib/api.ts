@@ -1,1 +1,1 @@
-export const apiUrl = process.env.DEV ? 'http://localhost:3000' : 'https://sckk-api.ampix.hu';
+export const apiUrl = process.env.DEV ? 'http://localhost:3000' : 'https://api.sckk.hu';

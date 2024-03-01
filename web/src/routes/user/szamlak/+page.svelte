@@ -27,7 +27,7 @@
 						<h1 class="font-bold drop-shadow-xl">Megjegyzés: {potle.reason}</h1>
 					{/if}
 					<img
-						src={`https://sckk-api.ampix.hu/img/data/${potle.id}`}
+						src={`https://api.sckk.hu/img/data/${potle.id}`}
 						alt=""
 						class="m-auto py-2 max-w-xl max-h-xl drop-shadow-xl"
 					/>

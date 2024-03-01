@@ -130,25 +130,25 @@
 							<td>{potle.owner}</td>
 							<td>
 								{#if type !== 'leintés'}
-									<a href={`https://sckk-api.ampix.hu/img/data/${potle.id}`} target="”_blank”"
+									<a href={`https://api.sckk.hu/img/data/${potle.id}`} target="”_blank”"
 										><img
-											src={`https://sckk-api.ampix.hu/img/data/${potle.id}`}
+											src={`https://api.sckk.hu/img/data/${potle.id}`}
 											alt=""
 											class="max-w-52"
 										/></a
 									>
 								{:else}
 									<div class="flex flex-col xl:flex-row">
-										<a href={`https://sckk-api.ampix.hu/img/data/${potle.id}/1`} target="”_blank”"
+										<a href={`https://api.sckk.hu/img/data/${potle.id}/1`} target="”_blank”"
 											><img
-												src={`https://sckk-api.ampix.hu/img/data/${potle.id}/1`}
+												src={`https://api.sckk.hu/img/data/${potle.id}/1`}
 												alt=""
 												class="max-w-52"
 											/></a
 										>
-										<a href={`https://sckk-api.ampix.hu/img/data/${potle.id}/2`} target="”_blank”"
+										<a href={`https://api.sckk.hu/img/data/${potle.id}/2`} target="”_blank”"
 											><img
-												src={`https://sckk-api.ampix.hu/img/data/${potle.id}/2`}
+												src={`https://api.sckk.hu/img/data/${potle.id}/2`}
 												alt=""
 												class="max-w-52"
 											/></a
