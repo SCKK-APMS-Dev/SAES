@@ -7,8 +7,8 @@
 </script>
 
 <head>
-	<title>SCKK A műszak</title>
-	<meta name="description" content="SCKK A műszak" />
+	<title>SCKK Weboldal</title>
+	<meta name="description" content="SCKK a legjobbaknak" />
 </head>
 
 <slot />
