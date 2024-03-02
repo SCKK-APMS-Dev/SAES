@@ -111,7 +111,14 @@
 				{#each Object.entries(aha) as [key, value]}
 					<h1 class="text-xl font-bold">{key}</h1>
 					{#each Object.entries(value) as [key2, value2]}
-						<h2>{key2}: {key === 'számla' ? value2 + '$' : value2 + ' db'}</h2>
+						<div class="flex gap-2">
+							<h2>{key2}: {key === 'számla' ? value2 + '$' : value2 + ' db'}</h2>
+							<a
+								href={`https://sckk.hu/list/${key2.replace(' ', '_')}/${key.split('_')[0]}`}
+								class="bg-blue-900 px-2 rounded-xl"
+								target="_blank">Link</a
+							>
+						</div>
 					{/each}
 				{/each}
 			</div>
