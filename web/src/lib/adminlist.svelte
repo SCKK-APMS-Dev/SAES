@@ -75,11 +75,12 @@
 		<form on:submit|preventDefault={() => editDone()}>
 			<label for="type" class="text-xl">Státusz átállítása</label>
 			<select name="type" class="bg-green-800 text-xl" bind:value={bindEdit.status}>
-				<option value="feltöltve">Feltöltve</option>
-				<option value="elfogadva">Elfogadva</option>
-				<option value="elutasítva">Elutasítva</option>
+				<option value="feltöltve">feltöltve</option>
+				<option value="elfogadva">elfogadva</option>
+				<option value="elutasítva">elutasítva</option>
 			</select>
 			<label for="reason" class="text-xl">Megjegyzés</label>
+
 			<input
 				type="text"
 				name="reason"
@@ -94,6 +95,9 @@
 				class="bg-orange-500 hover:bg-orange-700 transition-all duration-200 text-2xl px-2 py-1 rounded-xl"
 				>Mentés</button
 			>
+			<h2 class="text-gray-300">
+				Pótléknál (délelőtti/éjszakai)-t írj, számláknál a számla összegét $ jel nélkül
+			</h2>
 		</form>
 	</div>
 </dialog>
