@@ -7,7 +7,7 @@
 </script>
 
 <head>
-	<title>SCKK Weboldal</title>
+	<title>SCKK</title>
 	<meta name="description" content="SCKK a legjobbaknak" />
 </head>
 

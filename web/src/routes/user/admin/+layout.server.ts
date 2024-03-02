@@ -22,10 +22,6 @@ export const load = (async ({ parent, cookies }) => {
 			throw redirect(302, '/user');
 		}
 
-		if (aha.status === 401) {
-			throw redirect(302, '/noaccess');
-		}
-
 		if (aha.ok) {
 			return {
 				admin: await aha.json()

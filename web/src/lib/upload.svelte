@@ -83,7 +83,7 @@
 		<h2 class="font-bold text-red-800 drop-shadow-xl">{formerror ? formerror : ''}</h2>
 		<h1 class="text-3xl font-bold">{title} feltöltése</h1>
 		<form on:submit|preventDefault={() => upload()} enctype="multipart/form-data">
-			<input type="text" class="hidden" name="name" value={adat.layout?.doksi.name} />
+			<input type="text" class="hidden" name="name" value={adat.layout?.name} />
 			<input type="file" name="file" id="file" accept="image/*" required multiple />
 			<button type="submit" class="bg-red-600 font-bold text-xl px-2 rounded-xl">Feltöltés</button>
 			<h2>{desc}</h2>

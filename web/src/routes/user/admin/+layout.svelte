@@ -5,7 +5,8 @@
 	<div
 		class="flex gap-2 text-xl flex-col text-center md:flex-row md:gap-10 child:w-screen child:md:w-auto child:border-y-2 child:md:border-none child:drop-shadow-xl"
 	>
-		<a href="/user/admin" class="hover:font-bold duration-200 transition-all">Tagok</a>
+		<a href="/user/admin" class="hover:font-bold duration-200 transition-all">Jelenlegi hét</a>
+		<a href="/user/admin/prev" class="hover:font-bold duration-200 transition-all">Előző hét</a>
 		<a href="/user/admin/potlekok" class="hover:font-bold duration-200 transition-all">Pótlékok</a>
 		<a href="/user/admin/leintesek" class="hover:font-bold duration-200 transition-all">Leintések</a
 		>

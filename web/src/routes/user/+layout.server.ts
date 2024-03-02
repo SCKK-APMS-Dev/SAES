@@ -23,9 +23,7 @@ export const load = (async ({ cookies }) => {
 
 		if (aha.ok) {
 			return {
-				layout: {
-					doksi: await aha.json()
-				}
+				layout: await aha.json()
 			};
 		}
 	} catch (err) {

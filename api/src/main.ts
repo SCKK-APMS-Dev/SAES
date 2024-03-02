@@ -6,8 +6,8 @@ import * as image from './image.ts';
 import * as potlek from './potlek.ts';
 import * as leintes from './leintes.ts';
 import * as szamla from './szamla.ts';
+import * as list from './list.ts';
 import { oauth } from './lib/discord.ts';
-import { sheet } from './lib/google.ts';
 
 const app = express();
 const port = 3000;
@@ -24,6 +24,7 @@ app.use('/img', image.router);
 app.use('/potlek', potlek.router);
 app.use('/leintes', leintes.router);
 app.use('/szamla', szamla.router);
+app.use('/list', list.router);
 
 app.use(cookieParser(process.env.COOKIE_SECRET));
 
@@ -41,7 +42,7 @@ app.get('/cb', async (req, res) => {
 			});
 			res.cookie('sckk-dc-auth', dcode.access_token, {
 				maxAge: dcode.expires_in * 1000,
-				domain: 'sckk.hu'
+				domain: process.env.NODE_DEV ? 'localhost' : 'sckk.hu'
 			});
 		} finally {
 			res.redirect(process.env.NODE_DEV ? 'http://localhost:5173/user' : 'https://sckk.hu/user');
@@ -50,6 +51,5 @@ app.get('/cb', async (req, res) => {
 });
 
 app.listen(port, async () => {
-	await sheet.loadCells();
 	console.log('http://localhost:3000');
 });

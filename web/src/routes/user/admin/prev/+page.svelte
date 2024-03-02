@@ -106,7 +106,7 @@
 		{#if data.date}
 			<div>
 				<h1 class="text-3xl font-bold">
-					Jelenlegi hét ({`${data.date?.prev.getUTCMonth() + 1}.${data.date?.prev.getUTCDate()}. - ${data.date?.next.getUTCMonth() + 1}.${data.date?.next.getUTCDate()}`})
+					Előző hét ({`${data.date?.prev.getUTCMonth() + 1}.${data.date?.prev.getUTCDate()}. - ${data.date?.next.getUTCMonth() + 1}.${data.date?.next.getUTCDate()}`})
 				</h1>
 				{#each Object.entries(aha) as [key, value]}
 					<h1 class="text-xl font-bold">{key}</h1>

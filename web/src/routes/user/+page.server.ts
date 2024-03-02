@@ -7,31 +7,22 @@ import { apiUrl } from '$lib/api';
 export const load = (async ({ parent, cookies }) => {
 	await parent();
 	try {
-		const aha = await fetch(`${apiUrl}/user/doksi`, {
+		const aha = await fetch(`${apiUrl}/user/calls`, {
 			mode: 'no-cors',
 			headers: {
-				cookie: JSON.stringify(cookies.getAll())
+				cookie: cookies.get('sckk-dc-auth') as string
 			}
 		});
-		if (aha.status === 404) {
-			throw redirect(
-				302,
-
-				`${apiUrl}/user/auth`
-			);
-		}
 		if (aha.status === 401) {
 			throw redirect(302, 'noaccess');
 		}
-
 		if (aha.ok) {
-			const text = await aha.json();
+			const text = await aha.text();
 			return {
-				page: text.page
+				calls: text
 			};
 		}
 	} catch (err) {
-		console.log(err);
 		if ((err as Redirect).status) {
 			throw redirect((err as Redirect).status, (err as Redirect).location);
 		}

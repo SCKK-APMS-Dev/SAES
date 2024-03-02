@@ -1,13 +1,12 @@
 import express from 'express';
-import { oauth } from '../lib/discord.ts';
-import { getTag } from '../lib/google.ts';
-import * as doksi from './doksi.ts';
+import { getTag, oauth } from '../lib/discord.ts';
 import * as admin from './admin.ts';
+import * as calls from './calls.ts';
 
 export const router = express.Router();
 
-router.use('/doksi', doksi.router);
 router.use('/admin', admin.router);
+router.use('/calls', calls.router);
 
 router.get('/', async (req, res) => {
 	if (!req.headers.cookie) return res.sendStatus(404);

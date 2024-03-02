@@ -1,6 +1,6 @@
 {
 	"short_name": "SCKK",
-	"name": "SCKK A műszak",
+	"name": "SCKK",
 	"icons": [
 		{
 			"src": "icons/manifest-icon-192.maskable.png",
@@ -39,5 +39,5 @@
 	"scope": "/",
 	"orientation": "any",
 	"theme_color": "#b91c1c",
-	"description": "SCKK A műszak"
+	"description": "SCKK Weboldal"
 }

@@ -1,6 +1,5 @@
 import express from 'express';
-import { getTag, loadRowes, sheet } from '../lib/google.ts';
-import { oauth } from '../lib/discord.ts';
+import { getTag, oauth } from '../lib/discord.ts';
 import { prisma } from '../lib/prisma.ts';
 
 export const router = express.Router();
@@ -11,27 +10,9 @@ router.get('/', async (req, res) => {
 		const user = await oauth.getUser(req.headers.cookie);
 		if (user) {
 			const doksi = await getTag(user.id);
-			const rowes = (await loadRowes()) as number;
 			if (doksi) {
-				if (doksi.rang === 'admin') {
-					const users: { name: string; discordid: string; rang: string }[] = [];
-					await sheet.loadCells(`A4:A${rowes}`);
-					for (let i = 4; i < rowes; i++) {
-						if (sheet.getCellByA1(`A${i}`).value === 'Összesen') {
-							break;
-						}
-						if (sheet.getCellByA1(`A${i}`).value && sheet.getCellByA1(`A${i}`).note) {
-							const sanyi = {
-								name: sheet.getCellByA1(`A${i}`).value as string,
-								discordid: sheet.getCellByA1(`A${i}`).note.split('\n')[0] as string,
-								rang: sheet.getCellByA1(`A${i}`).note.split('\n')[1]
-									? sheet.getCellByA1(`A${i}`).note.split('\n')[1]
-									: 'tag'
-							};
-							users.push(sanyi);
-						}
-					}
-					res.send(JSON.stringify(users));
+				if (doksi.admin) {
+					res.send(true);
 				} else {
 					res.sendStatus(401);
 				}
@@ -52,7 +33,7 @@ router.get('/get/:type', async (req, res) => {
 	if (user) {
 		const doksi = await getTag(user.id);
 		if (doksi) {
-			if (doksi.rang === 'admin') {
+			if (doksi.admin) {
 				const potlekok = await prisma.data.findMany({
 					where: {
 						type: req.params.type,
@@ -81,6 +62,41 @@ router.get('/get/:type', async (req, res) => {
 	}
 });
 
+router.get('/getall', async (req, res) => {
+	if (!req.headers.cookie) return res.sendStatus(404);
+	const user = await oauth.getUser(req.headers.cookie);
+	if (user) {
+		const doksi = await getTag(user.id);
+		if (doksi) {
+			if (doksi.admin) {
+				const potlekok = await prisma.data.findMany({
+					where: {
+						status: req.headers.status ? (req.headers.status as string) : 'feltöltve'
+					},
+					select: {
+						date: true,
+						id: true,
+						owner: true,
+						status: true,
+						reason: true,
+						type: true
+					},
+					orderBy: {
+						date: 'desc'
+					}
+				});
+				res.send(potlekok);
+			} else {
+				res.sendStatus(401);
+			}
+		} else {
+			res.sendStatus(401);
+		}
+	} else {
+		res.sendStatus(404);
+	}
+});
+
 router.post('/post', async (req, res) => {
 	const body = await req.body;
 	if (!req.headers.cookie) return res.sendStatus(404);
@@ -88,7 +104,7 @@ router.post('/post', async (req, res) => {
 	if (user) {
 		const doksi = await getTag(user.id);
 		if (doksi) {
-			if (doksi.rang === 'admin') {
+			if (doksi.admin) {
 				const upload = await prisma.data.update({
 					where: {
 						id: body.id
