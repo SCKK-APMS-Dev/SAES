@@ -127,9 +127,8 @@
 						<tr class="bg-slate-800">
 							<td
 								>{new Date(potle.date).getUTCFullYear()}.{new Date(potle.date).getUTCMonth() +
-									1}.{new Date(potle.date).getUTCDate()}. {new Date(
-									potle.date
-								).getUTCHours()}:{new Date(potle.date).getUTCMinutes()}</td
+									1}.{new Date(potle.date).getUTCDate()}. {new Date(potle.date).getUTCHours() +
+									1}:{new Date(potle.date).getUTCMinutes()}</td
 							>
 							<td>{potle.owner}</td>
 							<td>

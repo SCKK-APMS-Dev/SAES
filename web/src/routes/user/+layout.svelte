@@ -3,7 +3,7 @@
 </script>
 
 <h2 class="text-center bg-blue-400 text-white text-xl font-bold">
-	Jelenleg a Kezdőlapon nem minden működik!
+	Nem vagy biztos valamiben? Nézd meg a <a href="/user/help" class="text-yellow-300">segédletet</a>!
 </h2>
 <nav class="bg-red-700 flex text-white justify-around items-center py-2 flex-col md:flex-row">
 	<div class="flex items-center gap-2">

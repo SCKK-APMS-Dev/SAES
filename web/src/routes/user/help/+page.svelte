@@ -6,9 +6,7 @@
 	</ul>
 	<h2 class="text-2xl font-bold mt-3">Pótlékok</h2>
 	<ul class="list-disc list-inside pl-[revert]">
-		<li>
-			Ne aggódj, a fotózás időpontjából megállapítjuk milyen típusú! (délelőtti, vagy éjszakai)
-		</li>
+		<li>Csak töltsd fel a képet a nyugtáról!</li>
 	</ul>
 	<h2 class="text-2xl font-bold mt-3">Leintések</h2>
 	<ul class="list-disc list-inside pl-[revert]">
@@ -28,7 +26,7 @@
 		<li>Csak fel kell tölteni, elfogadás után a megjegyzésben tároljuk a számlád értékét.</li>
 	</ul>
 	<h2 class="text-2xl font-bold mt-9">Az oldallal kapcsolatos tervek:</h2>
-	<h2 class="mb-2 text-gray-400">(ezeket fogjuk berakni a következő időszakban)</h2>
+	<h2 class="mb-2 text-gray-400">(ezek várhatóak a következő időszakban)</h2>
 	<ul class="list-disc list-inside pl-[revert]">
 		<li>
 			Leintésnél a párok kiválaszthatóak, tehát nem kell sorrendben feltölteni (március 2-3. hete)

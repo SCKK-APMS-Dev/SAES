@@ -17,7 +17,7 @@ export const load = (async ({ parent, cookies }) => {
 			throw redirect(302, 'noaccess');
 		}
 		if (aha.ok) {
-			const text = await aha.text();
+			const text = await aha.json();
 			return {
 				calls: text
 			};

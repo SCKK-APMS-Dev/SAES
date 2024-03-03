@@ -13,9 +13,63 @@ router.get('/', async (req, res) => {
 			const fatcs = await fetch('https://thfsystem.com/api/log/status/current');
 			if (fatcs.ok) {
 				const eredmeny = await fatcs.json();
+				const leintes = await prisma.data.findMany({
+					where: {
+						type: 'leintés',
+						owner: doksi.name,
+						status: {
+							not: 'elutasítva'
+						}
+					},
+					select: {
+						id: true
+					}
+				});
+				const elfogadott_leintes = await prisma.data.findMany({
+					where: {
+						type: 'leintés',
+						owner: doksi.name,
+						status: 'elfogadva'
+					},
+					select: {
+						id: true
+					}
+				});
+				const dél = await prisma.data.findMany({
+					where: {
+						type: 'pótlék',
+						reason: 'délelőtti',
+						owner: doksi.name,
+						status: 'elfogadva'
+					},
+					select: {
+						id: true
+					}
+				});
+				const éjsz = await prisma.data.findMany({
+					where: {
+						type: 'pótlék',
+						reason: 'éjszakai',
+						owner: doksi.name,
+						status: 'elfogadva'
+					},
+					select: {
+						id: true
+					}
+				});
 				for (const call of eredmeny) {
 					if (call.driver === doksi.name) {
-						res.send(call.count.toString());
+						res.send({
+							app: call.count.toString(),
+							leintes: {
+								all: leintes.length,
+								elfogadott: elfogadott_leintes.length
+							},
+							potlek: {
+								de: dél.length,
+								éj: éjsz.length
+							}
+						});
 						break;
 					}
 				}
