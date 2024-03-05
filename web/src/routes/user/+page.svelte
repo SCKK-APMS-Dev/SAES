@@ -14,6 +14,9 @@
 			<h2 class="text-xl md:text-2xl">
 				Elfogadott pótlékaid (délelőtti+éjszakai): {data.calls?.potlek.de}+{data.calls?.potlek.éj}
 			</h2>
+			<h2 class="text-xl md:text-2xl">
+				Elfogadott számláid: {data.calls?.potlek.de}+{data.calls?.potlek.éj}
+			</h2>
 		</div>
 	{/if}
 </div>
