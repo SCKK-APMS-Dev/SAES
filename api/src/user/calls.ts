@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
 	if (user) {
 		const doksi = await getTag(user.id);
 		if (doksi) {
-			const fatcs = await fetch('https://thfsystem.com/api/log/status/current');
+			const fatcs = await fetch('https://app.sckk.hu/api/log/status/current');
 			if (fatcs.ok) {
 				const eredmeny = await fatcs.json();
 				const leintes = await prisma.data.findMany({
