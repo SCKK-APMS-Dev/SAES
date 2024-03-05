@@ -7,14 +7,12 @@ name: Docker Web
 
 on:
   push:
-    branches: ['main']
     paths:
       - 'web/**/*'
       - '.github/workflows/web.yml'
     # Publish semver tags as releases.
-    tags: ['v*.*.*']
-  pull_request:
-    branches: ['main']
+    tags:
+      - 'v*'
 
 env:
   # Use docker.io for Docker Hub if empty
@@ -26,6 +24,7 @@ env:
 jobs:
   build:
     runs-on: self-hosted
+    if: github.event_name == 'push' && github.event.ref_type == 'tag' && contains(github.event.ref, 'refs/tags/') && (github.event_name == 'push' && contains(github.event.ref, 'refs/tags/')) && (startsWith(github.event.head_commit.id, github.event.before))
     permissions:
       contents: read
       packages: write
