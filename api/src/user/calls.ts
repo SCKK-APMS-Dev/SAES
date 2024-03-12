@@ -74,7 +74,7 @@ router.get('/', async (req, res) => {
 					}
 				}
 				if (!res.headersSent) {
-					res.send('nincs');
+					res.send({app: 0,leintes: {áll: leintes.length,elfogadott:elfogadott_leintes.length},potlek: {de: dél.length,éj: éjsz.length}});
 				}
 			} else {
 				res.sendStatus(401);
