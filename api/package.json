@@ -2,12 +2,13 @@
 	"name": "api",
 	"version": "1.0.0",
 	"description": "",
-	"main": "src/main.ts",
+	"main": "out/main.js",
 	"type": "module",
 	"scripts": {
 		"dev": "set NODE_DEV=true && tsx watch src/main.ts",
 		"start": "npm run pr && tsx src/main.ts",
-		"pr": "prisma db pull && prisma generate"
+		"pr": "prisma db pull && prisma generate",
+		"build": "tsc"
 	},
 	"keywords": [],
 	"author": "",

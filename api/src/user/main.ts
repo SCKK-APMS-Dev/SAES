@@ -1,7 +1,7 @@
 import express from 'express';
-import { getTag, oauth } from '../lib/discord.ts';
-import * as admin from './admin.ts';
-import * as calls from './calls.ts';
+import { getTag, oauth } from '../lib/discord.js';
+import * as admin from './admin.js';
+import * as calls from './calls.js';
 
 export const router = express.Router();
 

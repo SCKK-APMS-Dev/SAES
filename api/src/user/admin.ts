@@ -1,6 +1,6 @@
 import express from 'express';
-import { getTag, oauth } from '../lib/discord.ts';
-import { prisma } from '../lib/prisma.ts';
+import { getTag, oauth } from '../lib/discord.js';
+import { prisma } from '../lib/prisma.js';
 
 export const router = express.Router();
 

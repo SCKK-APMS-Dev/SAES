@@ -1,13 +1,13 @@
 import 'dotenv/config';
 import express from 'express';
 import cookieParser from 'cookie-parser';
-import * as user from './user/main.ts';
-import * as image from './image.ts';
-import * as potlek from './potlek.ts';
-import * as leintes from './leintes.ts';
-import * as szamla from './szamla.ts';
-import * as list from './list.ts';
-import { oauth } from './lib/discord.ts';
+import * as user from './user/main.js';
+import * as image from './image.js';
+import * as potlek from './potlek.js';
+import * as leintes from './leintes.js';
+import * as szamla from './szamla.js';
+import * as list from './list.js';
+import { oauth } from './lib/discord.js';
 
 const app = express();
 const port = 3000;
