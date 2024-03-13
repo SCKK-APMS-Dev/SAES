@@ -1,16 +1,41 @@
-<nav class="bg-blue-700 flex text-white justify-around items-center flex-col md:flex-row">
-	<div class="flex items-center gap-2">
-		<a href="info" class="font-bold text-3xl drop-shadow-xl">Műszakvezetés</a>
+<script lang="ts">
+	import MaterialSymbolsMenu from '~icons/material-symbols/menu';
+	let nav: HTMLDivElement;
+	const tognav = () => {
+		if (nav.classList.contains('hidden')) {
+			nav.classList.remove('hidden');
+			nav.classList.add('flex');
+		} else {
+			nav.classList.add('hidden');
+			nav.classList.remove('flex');
+		}
+	};
+</script>
+
+<nav class="bg-green-700 grid grid-cols-2 lg:flex text-white justify-between items-center">
+	<div class="flex items-center gap-2 ml-[10vw]">
+		<h1 class="font-bold text-3xl drop-shadow-xl">Műszakvezetés</h1>
 	</div>
-	<div
-		class="flex gap-2 text-xl flex-col text-center md:flex-row md:gap-10 child:w-screen child:md:w-auto child:border-y-2 child:md:border-none child:drop-shadow-xl"
+	<button
+		class="cursor-pointer self-center justify-self-end text-3xl font-semibold hover:text-green-500 duration-200 transition-all lg:hidden mr-[10vw]"
+		on:click={tognav}
 	>
-		<a href="/user/admin" class="hover:font-bold duration-200 transition-all">Jelenlegi hét</a>
-		<a href="/user/admin/prev" class="hover:font-bold duration-200 transition-all">Előző hét</a>
-		<a href="/user/admin/potlekok" class="hover:font-bold duration-200 transition-all">Pótlékok</a>
-		<a href="/user/admin/leintesek" class="hover:font-bold duration-200 transition-all">Leintések</a
+		<MaterialSymbolsMenu />
+	</button>
+	<div
+		bind:this={nav}
+		class="gap-2 text-xl col-span-2 lg:col-span-1 flex-col lg:!flex items-center hidden text-center lg:mr-[10vw] lg:flex-row lg:gap-5 xl:gap-10 2xl:gap-20 lg:z-auto child:drop-shadow-xl"
+	>
+		<a href="/user/admin" class="hover:text-green-500 duration-200 transition-all">Jelenlegi hét</a>
+		<a href="/user/admin/prev" class="hover:text-green-500 duration-200 transition-all">Előző hét</a
 		>
-		<a href="/user/admin/szamlak" class="hover:font-bold duration-200 transition-all"
+		<a href="/user/admin/potlekok" class="hover:text-green-500 duration-200 transition-all"
+			>Pótlékok</a
+		>
+		<a href="/user/admin/leintesek" class="hover:text-green-500 duration-200 transition-all"
+			>Leintések</a
+		>
+		<a href="/user/admin/szamlak" class="hover:text-green-500 duration-200 transition-all"
 			>Szereltetési számlák</a
 		>
 	</div>

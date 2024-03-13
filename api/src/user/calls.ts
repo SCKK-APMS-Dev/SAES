@@ -7,6 +7,11 @@ export const router = express.Router();
 router.get('/', async (req, res) => {
 	if (!req.headers.cookie) return res.sendStatus(404);
 	const user = await oauth.getUser(req.headers.cookie);
+	const prevPentek = new Date();
+	prevPentek.setDate(prevPentek.getDate() + ((5 - 7 - prevPentek.getDay()) % 7));
+	const nextPentek = new Date(prevPentek.getTime() + 7 * 1000 * 60 * 60 * 24);
+	prevPentek.setHours(22, 0, 0, 0);
+	nextPentek.setHours(22, 0, 0, 0);
 	if (user) {
 		const doksi = await getTag(user.id);
 		if (doksi) {
@@ -19,6 +24,10 @@ router.get('/', async (req, res) => {
 						owner: doksi.name,
 						status: {
 							not: 'elutasítva'
+						},
+						date: {
+							lte: prevPentek.toISOString(),
+							gte: nextPentek.toISOString()
 						}
 					},
 					select: {
@@ -29,7 +38,11 @@ router.get('/', async (req, res) => {
 					where: {
 						type: 'leintés',
 						owner: doksi.name,
-						status: 'elfogadva'
+						status: 'elfogadva',
+						date: {
+							lte: prevPentek.toISOString(),
+							gte: nextPentek.toISOString()
+						}
 					},
 					select: {
 						id: true
@@ -40,7 +53,11 @@ router.get('/', async (req, res) => {
 						type: 'pótlék',
 						reason: 'délelőtti',
 						owner: doksi.name,
-						status: 'elfogadva'
+						status: 'elfogadva',
+						date: {
+							lte: prevPentek.toISOString(),
+							gte: nextPentek.toISOString()
+						}
 					},
 					select: {
 						id: true
@@ -51,7 +68,11 @@ router.get('/', async (req, res) => {
 						type: 'pótlék',
 						reason: 'éjszakai',
 						owner: doksi.name,
-						status: 'elfogadva'
+						status: 'elfogadva',
+						date: {
+							lte: prevPentek.toISOString(),
+							gte: nextPentek.toISOString()
+						}
 					},
 					select: {
 						id: true
@@ -74,7 +95,11 @@ router.get('/', async (req, res) => {
 					}
 				}
 				if (!res.headersSent) {
-					res.send({app: 0,leintes: {áll: leintes.length,elfogadott:elfogadott_leintes.length},potlek: {de: dél.length,éj: éjsz.length}});
+					res.send({
+						app: 0,
+						leintes: { áll: leintes.length, elfogadott: elfogadott_leintes.length },
+						potlek: { de: dél.length, éj: éjsz.length }
+					});
 				}
 			} else {
 				res.sendStatus(401);
