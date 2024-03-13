@@ -3,7 +3,7 @@ name: Hiba jelentés
 about: Hibák jelentése az oldallal kapcsolatban
 title: "[HIBA]"
 labels: ''
-assignees: ''
+assignees: 'hvcsano'
 
 ---
 
