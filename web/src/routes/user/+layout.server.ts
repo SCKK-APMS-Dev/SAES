@@ -31,7 +31,7 @@ export const load = (async ({ cookies }) => {
 			throw redirect((err as Redirect).status, (err as Redirect).location);
 		}
 		return {
-			error: true
+			error: 'Weboldal API szerverét nem sikerült elérni'
 		};
 	}
 }) satisfies LayoutServerLoad;

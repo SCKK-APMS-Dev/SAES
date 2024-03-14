@@ -15,94 +15,98 @@ router.get('/', async (req, res) => {
 	if (user) {
 		const doksi = await getTag(user.id);
 		if (doksi) {
-			const fatcs = await fetch('https://thfsystem.com/api/log/status/current');
-			if (fatcs.ok) {
-				const eredmeny = await fatcs.json();
-				const leintes = await prisma.data.findMany({
-					where: {
-						type: 'leintés',
-						owner: doksi.name,
-						status: {
-							not: 'elutasítva'
-						},
-						date: {
-							lte: prevPentek.toISOString(),
-							gte: nextPentek.toISOString()
-						}
-					},
-					select: {
-						id: true
-					}
-				});
-				const elfogadott_leintes = await prisma.data.findMany({
-					where: {
-						type: 'leintés',
-						owner: doksi.name,
-						status: 'elfogadva',
-						date: {
-							lte: prevPentek.toISOString(),
-							gte: nextPentek.toISOString()
-						}
-					},
-					select: {
-						id: true
-					}
-				});
-				const dél = await prisma.data.findMany({
-					where: {
-						type: 'pótlék',
-						reason: 'délelőtti',
-						owner: doksi.name,
-						status: 'elfogadva',
-						date: {
-							lte: prevPentek.toISOString(),
-							gte: nextPentek.toISOString()
-						}
-					},
-					select: {
-						id: true
-					}
-				});
-				const éjsz = await prisma.data.findMany({
-					where: {
-						type: 'pótlék',
-						reason: 'éjszakai',
-						owner: doksi.name,
-						status: 'elfogadva',
-						date: {
-							lte: prevPentek.toISOString(),
-							gte: nextPentek.toISOString()
-						}
-					},
-					select: {
-						id: true
-					}
-				});
-				for (const call of eredmeny) {
-					if (call.driver === doksi.name) {
-						res.send({
-							app: call.count.toString(),
-							leintes: {
-								all: leintes.length,
-								elfogadott: elfogadott_leintes.length
+			try {
+				const fatcs = await fetch('https://thfsystem.com/api/log/status/current');
+				if (fatcs.ok) {
+					const eredmeny = await fatcs.json();
+					const leintes = await prisma.data.findMany({
+						where: {
+							type: 'leintés',
+							owner: doksi.name,
+							status: {
+								not: 'elutasítva'
 							},
-							potlek: {
-								de: dél.length,
-								éj: éjsz.length
+							date: {
+								lte: prevPentek.toISOString(),
+								gte: nextPentek.toISOString()
 							}
-						});
-						break;
-					}
-				}
-				if (!res.headersSent) {
-					res.send({
-						app: 0,
-						leintes: { áll: leintes.length, elfogadott: elfogadott_leintes.length },
-						potlek: { de: dél.length, éj: éjsz.length }
+						},
+						select: {
+							id: true
+						}
 					});
+					const elfogadott_leintes = await prisma.data.findMany({
+						where: {
+							type: 'leintés',
+							owner: doksi.name,
+							status: 'elfogadva',
+							date: {
+								lte: prevPentek.toISOString(),
+								gte: nextPentek.toISOString()
+							}
+						},
+						select: {
+							id: true
+						}
+					});
+					const dél = await prisma.data.findMany({
+						where: {
+							type: 'pótlék',
+							reason: 'délelőtti',
+							owner: doksi.name,
+							status: 'elfogadva',
+							date: {
+								lte: prevPentek.toISOString(),
+								gte: nextPentek.toISOString()
+							}
+						},
+						select: {
+							id: true
+						}
+					});
+					const éjsz = await prisma.data.findMany({
+						where: {
+							type: 'pótlék',
+							reason: 'éjszakai',
+							owner: doksi.name,
+							status: 'elfogadva',
+							date: {
+								lte: prevPentek.toISOString(),
+								gte: nextPentek.toISOString()
+							}
+						},
+						select: {
+							id: true
+						}
+					});
+					for (const call of eredmeny) {
+						if (call.driver === doksi.name) {
+							res.send({
+								app: call.count.toString(),
+								leintes: {
+									all: leintes.length,
+									elfogadott: elfogadott_leintes.length
+								},
+								potlek: {
+									de: dél.length,
+									éj: éjsz.length
+								}
+							});
+							break;
+						}
+					}
+					if (!res.headersSent) {
+						res.send({
+							app: 0,
+							leintes: { áll: leintes.length, elfogadott: elfogadott_leintes.length },
+							potlek: { de: dél.length, éj: éjsz.length }
+						});
+					}
+				} else {
+					res.sendStatus(400);
 				}
-			} else {
-				res.sendStatus(401);
+			} catch (err) {
+				res.sendStatus(400);
 			}
 		} else {
 			res.sendStatus(401);

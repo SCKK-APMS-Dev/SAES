@@ -1,6 +1,6 @@
 // import { sheet } from '$lib/server/google';
 // import { prisma } from '$lib/server/prisma';
-import { redirect, type Redirect } from '@sveltejs/kit';
+import { redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { apiUrl } from '$lib/api';
 
@@ -16,18 +16,20 @@ export const load = (async ({ parent, cookies }) => {
 		if (aha.status === 401) {
 			throw redirect(302, 'noaccess');
 		}
+		if (aha.status === 400) {
+			return {
+				error: 'Központi API szerver elérése sikertelen'
+			};
+		}
 		if (aha.ok) {
 			const text = await aha.json();
 			return {
 				calls: text
 			};
 		}
-	} catch (err) {
-		if ((err as Redirect).status) {
-			throw redirect((err as Redirect).status, (err as Redirect).location);
-		}
+	} catch {
 		return {
-			error: true
+			error: 'Weboldal API szervere elérése sikertelen'
 		};
 	}
 }) satisfies PageServerLoad;

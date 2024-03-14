@@ -10,16 +10,19 @@ export const oauth = new DiscordOauth2({
 export async function getTag(
 	discordid: string
 ): Promise<{ id: string; admin: string; name: string } | undefined> {
-	const fatch = await fetch(`http://api.scms.hanrickio.com:5002/discord/player/${discordid}`);
-	if (fatch.ok) {
-		const ret = await fatch.json();
-		if (!ret.error) {
-			return {
-				id: ret.Id,
-				admin: ret.PermissionGroup,
-				name: ret.PlayerName
-			};
+	try {
+		const fatch = await fetch(`http://api.scms.hanrickio.com:5002/discord/player/${discordid}`);
+		if (fatch.ok) {
+			const ret = await fatch.json();
+			if (!ret.error) {
+				return {
+					id: ret.Id,
+					admin: ret.PermissionGroup,
+					name: ret.PlayerName
+				};
+			}
 		}
+	} catch {
+		return undefined;
 	}
-	return undefined;
 }

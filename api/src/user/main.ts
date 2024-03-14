@@ -23,7 +23,7 @@ router.get('/', async (req, res) => {
 		if (doksi) {
 			res.send(doksi);
 		} else {
-			res.sendStatus(401);
+			res.sendStatus(400);
 		}
 	} else {
 		res.sendStatus(404);

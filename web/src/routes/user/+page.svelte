@@ -19,4 +19,5 @@
 </div>
 {#if data.error}
 	<h2 class="text-center text-white font-bold text-3xl">Sikertelen API lekérdezés</h2>
+	<h2 class="text-center text-gray-300 text-xl">{data.error}</h2>
 {/if}
