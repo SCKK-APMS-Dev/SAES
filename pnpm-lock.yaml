@@ -56,6 +56,9 @@ importers:
       '@iconify/json':
         specifier: ^2.2.191
         version: 2.2.191
+      '@iconify/tailwind':
+        specifier: ^0.1.4
+        version: 0.1.4
       '@sveltejs/adapter-node':
         specifier: ^4.0.1
         version: 4.0.1(@sveltejs/kit@2.5.1)
@@ -406,6 +409,12 @@ packages:
     dependencies:
       '@iconify/types': 2.0.0
       pathe: 1.1.2
+    dev: true
+
+  /@iconify/tailwind@0.1.4:
+    resolution: {integrity: sha512-U7RzcU2fkwOfMDsGQ3mtpLIaApSnqb+vgcJJknPPbg8/NF5s7tI1o5otEMfcpnLGk4PbYB8bxmKTz7IJVUlU2Q==}
+    dependencies:
+      '@iconify/types': 2.0.0
     dev: true
 
   /@iconify/types@2.0.0:

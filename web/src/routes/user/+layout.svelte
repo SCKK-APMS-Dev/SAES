@@ -1,6 +1,7 @@
 <script lang="ts">
 	export let data;
 	import MaterialSymbolsMenu from '~icons/material-symbols/menu';
+	import MaterialSymbolsLogout from '~icons/material-symbols/logout';
 	let nav: HTMLDivElement;
 	const tognav = () => {
 		if (nav.classList.contains('hidden')) {
@@ -19,7 +20,7 @@
 	>!
 </h2>
 <nav class="bg-gray-700 grid grid-cols-2 lg:flex text-white justify-between items-center py-2">
-	<div class="flex items-center gap-2 ml-[10vw]">
+	<div class="flex items-center gap-2 ml-[10vw] align-middle content-center">
 		<img
 			src="/favicon.png"
 			class="pointer-events-none drop-shadow-xl"
