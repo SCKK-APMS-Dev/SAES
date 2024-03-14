@@ -1,5 +1,6 @@
 import DiscordOauth2 from 'discord-oauth2';
 import 'dotenv/config';
+import type { RequestHandler } from 'express';
 
 export const oauth = new DiscordOauth2({
 	clientId: process.env.DISCORD_ID,
@@ -9,7 +10,7 @@ export const oauth = new DiscordOauth2({
 
 export async function getTag(
 	discordid: string
-): Promise<{ id: string; admin: string; name: string } | undefined> {
+): Promise<{ id: number; admin: boolean; name: string } | undefined> {
 	try {
 		const fatch = await fetch(`http://api.scms.hanrickio.com:5002/discord/player/${discordid}`);
 		if (fatch.ok) {
@@ -17,7 +18,7 @@ export async function getTag(
 			if (!ret.error) {
 				return {
 					id: ret.Id,
-					admin: ret.PermissionGroup,
+					admin: ret.PermissionGroup === 1 ? true : false,
 					name: ret.PlayerName
 				};
 			}
@@ -26,3 +27,40 @@ export async function getTag(
 		return undefined;
 	}
 }
+
+declare global {
+	namespace Express {
+		// Inject additional properties on express.Request
+		interface Request {
+			/**
+			 * This request's secret.
+			 * Optionally set by cookie-parser if secret(s) are provided.  Can be used by other middleware.
+			 * [Declaration merging](https://www.typescriptlang.org/docs/handbook/declaration-merging.html) can be used to add your own properties.
+			 */
+			admin?: boolean;
+			doksi?: {
+				id: number;
+				admin: boolean;
+				name: string;
+			};
+		}
+	}
+}
+
+export const adminAuth: RequestHandler = async (req, res, next) => {
+	if (!req.headers.cookie) return res.sendStatus(404);
+	try {
+		const user = await oauth.getUser(req.headers.cookie);
+		if (!user) return res.sendStatus(404);
+		const doksi = await getTag(user.id);
+		if (!doksi) return res.sendStatus(401);
+		if (doksi.admin) {
+			req.doksi = doksi;
+			req.admin = true;
+			return next();
+		}
+		res.sendStatus(401);
+	} catch {
+		res.sendStatus(400);
+	}
+};
