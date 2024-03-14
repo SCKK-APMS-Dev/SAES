@@ -1,16 +1,19 @@
 FROM node:18
-WORKDIR /api
+WORKDIR /usr/src/app
 
 # install dependencies into temp directory
 # this will cache them and speed up future builds
 
-COPY ./api/package.json ./
+COPY ./package.json ./
 
-RUN npm install
+RUN npm install -g pnpm
+RUN pnpm install
 
-COPY ./api .
+COPY ./ ./
+
+RUN pnpm build
 
 # run the app
 USER root
 EXPOSE 3000
-ENTRYPOINT [ "npm", "start"]
+CMD [ "node", "." ]

@@ -1,20 +1,21 @@
 FROM node:18
-WORKDIR /web
+WORKDIR /usr/src/app
 
 # install dependencies into temp directory
 # this will cache them and speed up future builds
 
-COPY ./web/package.json ./
+COPY ./package.json ./
 
 ENV BODY_SIZE_LIMIT="Infinity"
 
-RUN npm install
+RUN npm install -g pnpm
+RUN pnpm install
 
-COPY ./web ./
+COPY ./ ./
 
-RUN npm run build
+RUN pnpm build
 
 # run the app
 USER root
 EXPOSE 3000
-ENTRYPOINT [ "node", "build"]
+CMD [ "node", "build" ]
