@@ -26,6 +26,9 @@
 	onMount(async () => {
 		potleks = await getPotleks('feltöltve');
 	});
+
+	const potlekas = {};
+
 	function edit(id: number) {
 		modal.showModal();
 		bindEdit = potleks[id];
@@ -133,29 +136,46 @@
 							<td>{potle.owner}</td>
 							<td>
 								{#if type !== 'leintés'}
-									<a href={`https://api.sckk.hu/img/data/${potle.id}`} target="”_blank”"
-										><img
-											src={`https://api.sckk.hu/img/data/${potle.id}`}
-											alt=""
-											class="max-w-52"
-										/></a
-									>
+									{#if potlekas[potle.id]}
+										<a href={`https://api.sckk.hu/img/data/${potle.id}`} target="”_blank”"
+											><img
+												src={`https://api.sckk.hu/img/data/${potle.id}`}
+												alt=""
+												class="max-w-52"
+											/></a
+										>
+									{:else}
+										<button
+											class="bg-green-600 font-bold px-2 rounded-lg hover:bg-green-700 transition-all duration-200"
+											on:click={() => {
+												potlekas[potle.id] = true;
+											}}>Mutasd</button
+										>
+									{/if}
 								{:else}
 									<div class="flex flex-col xl:flex-row">
-										<a href={`https://api.sckk.hu/img/data/${potle.id}/1`} target="”_blank”"
-											><img
-												src={`https://api.sckk.hu/img/data/${potle.id}/1`}
-												alt=""
-												class="max-w-52"
-											/></a
-										>
-										<a href={`https://api.sckk.hu/img/data/${potle.id}/2`} target="”_blank”"
-											><img
-												src={`https://api.sckk.hu/img/data/${potle.id}/2`}
-												alt=""
-												class="max-w-52"
-											/></a
-										>
+										{#if potlekas[potle]}
+											<a href={`https://api.sckk.hu/img/data/${potle.id}/1`} target="”_blank”"
+												><img
+													src={`https://api.sckk.hu/img/data/${potle.id}/1`}
+													alt=""
+													class="max-w-52"
+												/></a
+											>
+											<a href={`https://api.sckk.hu/img/data/${potle.id}/2`} target="”_blank”"
+												><img
+													src={`https://api.sckk.hu/img/data/${potle.id}/2`}
+													alt=""
+													class="max-w-52"
+												/></a
+											>
+										{:else}
+											<button
+												on:click={() => {
+													potlekas[potle] = true;
+												}}>Mutasd</button
+											>
+										{/if}
 									</div>
 								{/if}
 							</td>
