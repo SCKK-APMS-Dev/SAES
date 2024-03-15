@@ -28,6 +28,35 @@ router.get('/get/:type', adminAuth, async (req, res) => {
 	res.send(potlekok);
 });
 
+router.get('/get/current/:type', adminAuth, async (req, res) => {
+	const prevPentek = new Date();
+	prevPentek.setDate(prevPentek.getDate() + ((5 - 7 - prevPentek.getDay()) % 7));
+	const nextPentek = new Date(prevPentek.getTime() + 7 * 1000 * 60 * 60 * 24);
+	prevPentek.setHours(22, 0, 0, 0);
+	nextPentek.setHours(22, 0, 0, 0);
+	const potlekok = await prisma.data.findMany({
+		where: {
+			type: req.params.type,
+			status: req.headers.status ? (req.headers.status as string) : 'feltöltve',
+			date: {
+				lte: nextPentek.toISOString(),
+				gte: prevPentek.toISOString()
+			}
+		},
+		select: {
+			date: true,
+			id: true,
+			owner: true,
+			status: true,
+			reason: true
+		},
+		orderBy: {
+			date: 'desc'
+		}
+	});
+	res.send(potlekok);
+});
+
 router.get('/getall', adminAuth, async (req, res) => {
 	const potlekok = await prisma.data.findMany({
 		where: {

@@ -27,8 +27,8 @@ router.get('/', async (req, res) => {
 								not: 'elutasítva'
 							},
 							date: {
-								lte: prevPentek.toISOString(),
-								gte: nextPentek.toISOString()
+								lte: nextPentek.toISOString(),
+								gte: prevPentek.toISOString()
 							}
 						},
 						select: {
@@ -41,8 +41,8 @@ router.get('/', async (req, res) => {
 							owner: doksi.name,
 							status: 'elfogadva',
 							date: {
-								lte: prevPentek.toISOString(),
-								gte: nextPentek.toISOString()
+								lte: nextPentek.toISOString(),
+								gte: prevPentek.toISOString()
 							}
 						},
 						select: {
@@ -56,8 +56,8 @@ router.get('/', async (req, res) => {
 							owner: doksi.name,
 							status: 'elfogadva',
 							date: {
-								lte: prevPentek.toISOString(),
-								gte: nextPentek.toISOString()
+								lte: nextPentek.toISOString(),
+								gte: prevPentek.toISOString()
 							}
 						},
 						select: {
@@ -71,8 +71,8 @@ router.get('/', async (req, res) => {
 							owner: doksi.name,
 							status: 'elfogadva',
 							date: {
-								lte: prevPentek.toISOString(),
-								gte: nextPentek.toISOString()
+								lte: nextPentek.toISOString(),
+								gte: prevPentek.toISOString()
 							}
 						},
 						select: {

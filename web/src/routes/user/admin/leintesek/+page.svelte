@@ -2,4 +2,4 @@
 	import Adminlist from '$lib/adminlist.svelte';
 </script>
 
-<Adminlist title="Leintések" type="leintés" editdes="leintésének szerkesztése" />
+<Adminlist title="Leintések" type="leintés" editdes="leintésének" />

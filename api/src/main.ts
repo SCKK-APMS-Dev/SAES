@@ -51,5 +51,12 @@ app.get('/cb', async (req, res) => {
 });
 
 app.listen(port, async () => {
+	const prevPentek = new Date();
+	prevPentek.setDate(prevPentek.getDate() + ((5 - 7 - prevPentek.getDay()) % 7));
+	const nextPentek = new Date(prevPentek.getTime() + 7 * 1000 * 60 * 60 * 24);
+	prevPentek.setHours(22, 0, 0, 0);
+	nextPentek.setHours(22, 0, 0, 0);
+	console.log(prevPentek);
+	console.log(nextPentek);
 	console.log('http://localhost:3000');
 });

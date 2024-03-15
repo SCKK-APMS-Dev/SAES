@@ -8,14 +8,16 @@
 	let bindbtn: HTMLButtonElement;
 	let potleks: any[] = [];
 	let jona = 'feltöltve';
+	let current = true;
 	let bindEdit: any = {};
 	let editid = 0;
-	async function getPotleks(status: string) {
+	async function getPotleks(status: string, current: boolean) {
 		$loading = true;
 		const fatcs = await fetch('/api/admin', {
 			headers: {
 				status,
-				type: type
+				type: type,
+				current: current.toString()
 			}
 		});
 		$loading = false;
@@ -24,10 +26,10 @@
 		}
 	}
 	onMount(async () => {
-		potleks = await getPotleks('feltöltve');
+		potleks = await getPotleks('feltöltve', true);
 	});
 
-	const potlekas = {};
+	const potlekas: { [key: string]: boolean } = {};
 
 	function edit(id: number) {
 		modal.showModal();
@@ -35,7 +37,7 @@
 		editid = id;
 	}
 	async function rerun() {
-		potleks = await getPotleks(jona);
+		potleks = await getPotleks(jona, current);
 	}
 	async function editDone() {
 		bindbtn.classList.add('cursor-not-allowed');
@@ -59,7 +61,7 @@
 			if (jona === cucc.status) {
 				potleks[editid] = cucc;
 			} else {
-				potleks = await getPotleks('feltöltve');
+				potleks = await getPotleks('feltöltve', current);
 			}
 		}
 		bindbtn.classList.remove('cursor-not-allowed');
@@ -69,7 +71,7 @@
 </script>
 
 <dialog bind:this={modal} class="w-[50%] h-[50%] bg-gray-500 rounded-3xl text-white text-center">
-	<h1 class="text-3xl font-bold mx-2">{bindEdit.owner} {editdes}</h1>
+	<h1 class="text-3xl font-bold mx-2">{bindEdit.owner} {editdes} szerkesztése</h1>
 	<button
 		class="text-red-600 text-3xl font-bold absolute top-2 right-4 duration-150 hover:text-red-400"
 		on:click={() => modal.close()}>X</button
@@ -109,11 +111,16 @@
 	<div class="m-auto text-center text-white">
 		{#if potleks}
 			<h1 class="text-2xl font-bold">{title}</h1>
-			<select id="potlek-type" class="bg-green-800" bind:value={jona} on:change={() => rerun()}>
-				<option value="feltöltve">Feltöltve</option>
-				<option value="elfogadva">Elfogadva</option>
-				<option value="elutasítva">Elutasítva</option>
-			</select>
+			<div class="flex justify-center gap-2">
+				<h2>Filter</h2>
+				<select id="potlek-type" class="bg-green-800" bind:value={jona} on:change={() => rerun()}>
+					<option value="feltöltve">Feltöltve</option>
+					<option value="elfogadva">Elfogadva</option>
+					<option value="elutasítva">Elutasítva</option>
+				</select>
+				<h2>Aktuális hét</h2>
+				<input type="checkbox" name="csekd" bind:checked={current} on:change={() => rerun()} />
+			</div>
 			<table class="table-auto p-10 rounded-2xl">
 				<thead class="bg-red-700 rounded-2xl">
 					<tr class="child:p-2">

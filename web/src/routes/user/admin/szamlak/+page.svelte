@@ -2,4 +2,4 @@
 	import Adminlist from '$lib/adminlist.svelte';
 </script>
 
-<Adminlist title="Számlák" type="számla" editdes="számlájának szerkesztése" />
+<Adminlist title="Számlák" type="számla" editdes="számlájának" />
