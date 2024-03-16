@@ -159,31 +159,30 @@
 											}}>Mutasd</button
 										>
 									{/if}
-								{:else}
+								{:else if potlekas[potle.id]}
 									<div class="flex flex-col xl:flex-row">
-										{#if potlekas[potle]}
-											<a href={`https://api.sckk.hu/img/data/${potle.id}/1`} target="”_blank”"
-												><img
-													src={`https://api.sckk.hu/img/data/${potle.id}/1`}
-													alt=""
-													class="max-w-52"
-												/></a
-											>
-											<a href={`https://api.sckk.hu/img/data/${potle.id}/2`} target="”_blank”"
-												><img
-													src={`https://api.sckk.hu/img/data/${potle.id}/2`}
-													alt=""
-													class="max-w-52"
-												/></a
-											>
-										{:else}
-											<button
-												on:click={() => {
-													potlekas[potle] = true;
-												}}>Mutasd</button
-											>
-										{/if}
+										<a href={`https://api.sckk.hu/img/data/${potle.id}/1`} target="”_blank”"
+											><img
+												src={`https://api.sckk.hu/img/data/${potle.id}/1`}
+												alt=""
+												class="max-w-52"
+											/></a
+										>
+										<a href={`https://api.sckk.hu/img/data/${potle.id}/2`} target="”_blank”"
+											><img
+												src={`https://api.sckk.hu/img/data/${potle.id}/2`}
+												alt=""
+												class="max-w-52"
+											/></a
+										>
 									</div>
+								{:else}
+									<button
+										class="bg-green-600 font-bold px-2 rounded-lg hover:bg-green-700 transition-all duration-200"
+										on:click={() => {
+											potlekas[potle.id] = true;
+										}}>Mutasd</button
+									>
 								{/if}
 							</td>
 							<td>{potle.status}</td>
