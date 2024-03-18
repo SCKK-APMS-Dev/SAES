@@ -3,12 +3,12 @@ import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async ({ request, cookies }) => {
 	const body = await request.json();
-	const dcauth = cookies.get('sckk-dc-auth');
+	const dcauth = cookies.get('sckk-dc-auth') as string;
 	if (dcauth) {
 		const mama = await fetch(`${apiUrl}/${body.type}/upload`, {
 			mode: 'no-cors',
 			headers: {
-				cookie: cookies.get('sckk-dc-auth') as string,
+				cookie: dcauth,
 				'Content-Type': 'application/json'
 			},
 			method: 'post',

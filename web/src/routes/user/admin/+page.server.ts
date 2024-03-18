@@ -12,7 +12,7 @@ export const load = (async ({ parent, cookies }) => {
 	if (dcauth) {
 		const mama = await fetch(`${apiUrl}/user/admin/getall`, {
 			headers: {
-				cookie: cookies.get('sckk-dc-auth') as string,
+				cookie: dcauth,
 				status: 'elfogadva'
 			}
 		});

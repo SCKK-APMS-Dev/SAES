@@ -4,6 +4,7 @@
 	export let title = '';
 	export let type = '';
 	export let editdes = '';
+	export let extraText = '';
 	let modal: HTMLDialogElement;
 	let bindbtn: HTMLButtonElement;
 	let potleks: any[] = [];
@@ -129,7 +130,10 @@
 						<th>Kép (Kattints rá)</th>
 						<th>Státusz</th>
 						<th>Megjegyzés</th>
-						<th>Szerkesztés</th>
+						{#if extraText}
+							<th>{extraText}</th>
+						{/if}
+						<th>Műveletek</th>
 					</tr>
 				</thead>
 				<tbody>

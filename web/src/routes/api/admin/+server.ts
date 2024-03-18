@@ -2,12 +2,12 @@ import { apiUrl } from '$lib/api';
 import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = async ({ request, cookies }) => {
-	const dcauth = cookies.get('sckk-dc-auth');
+	const dcauth = cookies.get('sckk-dc-auth') as string;
 	if (dcauth) {
 		if (request.headers.get('current') === 'false') {
 			const mama = await fetch(`${apiUrl}/user/admin/get/${request.headers.get('type')}`, {
 				headers: {
-					cookie: cookies.get('sckk-dc-auth') as string,
+					cookie: dcauth,
 					status: request.headers.get('status') as string
 				}
 			});
@@ -17,7 +17,7 @@ export const GET: RequestHandler = async ({ request, cookies }) => {
 		} else {
 			const mama = await fetch(`${apiUrl}/user/admin/get/current/${request.headers.get('type')}`, {
 				headers: {
-					cookie: cookies.get('sckk-dc-auth') as string,
+					cookie: dcauth,
 					status: request.headers.get('status') as string
 				}
 			});
@@ -32,12 +32,12 @@ export const GET: RequestHandler = async ({ request, cookies }) => {
 export const POST: RequestHandler = async ({ request, cookies }) => {
 	const body = await request.json();
 	if (!body) return new Response(null, { status: 404 });
-	const dcauth = cookies.get('sckk-dc-auth');
+	const dcauth = cookies.get('sckk-dc-auth') as string;
 	if (dcauth) {
 		const mama = await fetch(`${apiUrl}/user/admin/post`, {
 			method: 'post',
 			headers: {
-				cookie: cookies.get('sckk-dc-auth') as string,
+				cookie: dcauth,
 				'Content-Type': 'application/json'
 			},
 			mode: 'no-cors',

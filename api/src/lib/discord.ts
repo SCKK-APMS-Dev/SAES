@@ -37,8 +37,8 @@ declare global {
 			 * Optionally set by cookie-parser if secret(s) are provided.  Can be used by other middleware.
 			 * [Declaration merging](https://www.typescriptlang.org/docs/handbook/declaration-merging.html) can be used to add your own properties.
 			 */
-			admin?: boolean;
-			doksi?: {
+			admin: boolean;
+			doksi: {
 				id: number;
 				admin: boolean;
 				name: string;
@@ -47,20 +47,25 @@ declare global {
 	}
 }
 
-export const adminAuth: RequestHandler = async (req, res, next) => {
+export const basicAuth: RequestHandler = async (req, res, next) => {
 	if (!req.headers.cookie) return res.sendStatus(404);
 	try {
 		const user = await oauth.getUser(req.headers.cookie);
 		if (!user) return res.sendStatus(404);
 		const doksi = await getTag(user.id);
 		if (!doksi) return res.sendStatus(401);
-		if (doksi.admin) {
-			req.doksi = doksi;
-			req.admin = true;
-			return next();
-		}
-		res.sendStatus(401);
+		req.doksi = doksi;
+		req.admin = false;
+		return next();
 	} catch {
 		res.sendStatus(400);
 	}
+};
+
+export const adminAuth: RequestHandler = async (req, res, next) => {
+	if (req.doksi.admin) {
+		req.admin = true;
+		return next();
+	}
+	res.sendStatus(401);
 };

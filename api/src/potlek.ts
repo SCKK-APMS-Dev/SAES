@@ -1,74 +1,46 @@
 import express from 'express';
-import { getTag, oauth } from './lib/discord.js';
+import { basicAuth, getTag, oauth } from './lib/discord.js';
 import { prisma } from './lib/db.js';
 
 export const router = express.Router();
 
-router.get('/', async (req, res) => {
-	if (!req.headers.cookie) return res.sendStatus(404);
-	let cookie: string | undefined = undefined;
-	for (const kuki of JSON.parse(req.headers.cookie)) {
-		if (kuki.name === 'sckk-dc-auth') {
-			cookie = kuki.value;
-		}
-	}
-	if (!cookie) return res.sendStatus(404);
-	const user = await oauth.getUser(cookie);
-	if (user) {
-		const doksi = await getTag(user.id);
-		if (doksi) {
-			const cuccok = await prisma.data.findMany({
-				where: { type: 'pótlék', owner: doksi.name as string },
+router.get('/', basicAuth, async (req, res) => {
+	const cuccok = await prisma.data.findMany({
+		where: { type: 'pótlék', owner: req.doksi.name as string },
 
-				select: {
-					date: true,
-					id: true,
-					status: true,
-					reason: true,
-					type: true
-				},
-				orderBy: {
-					date: 'desc'
-				}
-			});
-			if (cuccok[0]) {
-				res.send(cuccok);
-			} else {
-				res.sendStatus(204);
-			}
-		} else {
-			res.sendStatus(401);
+		select: {
+			date: true,
+			id: true,
+			status: true,
+			reason: true,
+			type: true
+		},
+		orderBy: {
+			date: 'desc'
 		}
+	});
+	if (cuccok[0]) {
+		res.send(cuccok);
 	} else {
-		res.sendStatus(404);
+		res.sendStatus(204);
 	}
 });
 
-router.post('/upload', async (req, res) => {
-	if (!req.headers.cookie) return res.sendStatus(404);
+router.post('/upload', basicAuth, async (req, res) => {
 	const body = await req.body;
 	if (!body) return res.sendStatus(400);
-	const user = await oauth.getUser(req.headers.cookie);
-	if (user) {
-		const doksi = await getTag(user.id);
-		if (doksi) {
-			const kep = await prisma.data.create({
-				data: {
-					owner: doksi.name as string,
-					kep: body.img,
-					type: 'pótlék',
-					date: new Date(body.createdAt)
-				}
-			});
-			if (kep) {
-				res.send(kep.id.toString());
-			} else {
-				res.sendStatus(400);
-			}
-		} else {
-			res.sendStatus(401);
+	const kep = await prisma.data.create({
+		data: {
+			owner: req.doksi.name as string,
+			kep: body.img,
+			type: 'pótlék',
+			date: new Date(body.createdAt)
 		}
+	});
+	if (kep) {
+		res.send(kep.id.toString());
 	} else {
-		res.sendStatus(404);
+		res.sendStatus(400);
 	}
+	res.sendStatus(404);
 });

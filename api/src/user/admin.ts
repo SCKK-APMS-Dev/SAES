@@ -1,14 +1,14 @@
 import express from 'express';
-import { adminAuth, getTag, oauth } from '../lib/discord.js';
+import { adminAuth, basicAuth, getTag, oauth } from '../lib/discord.js';
 import { prisma } from '../lib/db.js';
 
 export const router = express.Router();
 
-router.get('/', adminAuth, async (req, res) => {
+router.get('/', basicAuth, adminAuth, async (req, res) => {
 	res.send(true);
 });
 
-router.get('/get/:type', adminAuth, async (req, res) => {
+router.get('/get/:type', basicAuth, adminAuth, async (req, res) => {
 	const potlekok = await prisma.data.findMany({
 		where: {
 			type: req.params.type,
@@ -28,7 +28,7 @@ router.get('/get/:type', adminAuth, async (req, res) => {
 	res.send(potlekok);
 });
 
-router.get('/get/current/:type', adminAuth, async (req, res) => {
+router.get('/get/current/:type', basicAuth, adminAuth, async (req, res) => {
 	const prevPentek = new Date();
 	prevPentek.setDate(prevPentek.getDate() + ((5 - 7 - prevPentek.getDay()) % 7));
 	const nextPentek = new Date(prevPentek.getTime() + 7 * 1000 * 60 * 60 * 24);
@@ -57,7 +57,7 @@ router.get('/get/current/:type', adminAuth, async (req, res) => {
 	res.send(potlekok);
 });
 
-router.get('/getall', adminAuth, async (req, res) => {
+router.get('/getall', basicAuth, adminAuth, async (req, res) => {
 	const potlekok = await prisma.data.findMany({
 		where: {
 			status: req.headers.status ? (req.headers.status as string) : 'feltöltve'
@@ -77,7 +77,7 @@ router.get('/getall', adminAuth, async (req, res) => {
 	res.send(potlekok);
 });
 
-router.post('/post', adminAuth, async (req, res) => {
+router.post('/post', basicAuth, adminAuth, async (req, res) => {
 	const body = await req.body;
 	const upload = await prisma.data.update({
 		where: {
