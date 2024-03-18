@@ -5,10 +5,12 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 	const body = await request.json();
 	const dcauth = cookies.get('sckk-dc-auth') as string;
 	if (dcauth) {
-		const mama = await fetch(`${apiUrl}/${body.type}/upload`, {
+		const mama = await fetch(`${apiUrl}/user/upload`, {
 			mode: 'no-cors',
 			headers: {
 				cookie: dcauth,
+				type: body.type,
+				extra: body.extra,
 				'Content-Type': 'application/json'
 			},
 			method: 'post',

@@ -5,9 +5,10 @@ import { apiUrl } from '$lib/api';
 export const load = (async ({ parent, cookies }) => {
 	await parent();
 	try {
-		const aha = await fetch(`${apiUrl}/szamla`, {
+		const aha = await fetch(`${apiUrl}/user/get`, {
 			mode: 'no-cors',
 			headers: {
+				type: 'számla',
 				cookie: cookies.get('sckk-dc-auth') as string
 			}
 		});

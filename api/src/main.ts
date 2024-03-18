@@ -3,9 +3,6 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import * as user from './user/main.js';
 import * as image from './image.js';
-import * as potlek from './potlek.js';
-import * as leintes from './leintes.js';
-import * as szamla from './szamla.js';
 import * as list from './list.js';
 import { oauth } from './lib/discord.js';
 
@@ -21,9 +18,6 @@ app.use(
 );
 app.use('/user', user.router);
 app.use('/img', image.router);
-app.use('/potlek', potlek.router);
-app.use('/leintes', leintes.router);
-app.use('/szamla', szamla.router);
 app.use('/list', list.router);
 
 app.use(cookieParser(process.env.COOKIE_SECRET));
