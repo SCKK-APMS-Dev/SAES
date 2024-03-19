@@ -48,18 +48,14 @@ declare global {
 }
 
 export const basicAuth: RequestHandler = async (req, res, next) => {
-	if (!req.headers.cookie) return res.sendStatus(404);
-	try {
-		const user = await oauth.getUser(req.headers.cookie);
-		if (!user) return res.sendStatus(404);
-		const doksi = await getTag(user.id);
-		if (!doksi) return res.sendStatus(401);
-		req.doksi = doksi;
-		req.admin = false;
-		return next();
-	} catch {
-		res.sendStatus(400);
-	}
+	if (req.headers.cookie === 'undefined' || !req.headers.cookie) return res.sendStatus(404);
+	const user = await oauth.getUser(req.headers.cookie);
+	if (!user) return res.sendStatus(404);
+	const doksi = await getTag(user.id);
+	if (!doksi) return res.sendStatus(401);
+	req.doksi = doksi;
+	req.admin = false;
+	return next();
 };
 
 export const adminAuth: RequestHandler = async (req, res, next) => {
