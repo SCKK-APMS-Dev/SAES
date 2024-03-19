@@ -13,7 +13,7 @@
 		$loading = true;
 		let file = document.getElementById('file') as HTMLInputElement;
 		if (file && file.files) {
-			if (underhood === 'leintes') {
+			if (underhood === 'leintés') {
 				if (file.files.length % 2 == 0) {
 					for (let i = 0; i < file.files.length / 2; i++) {
 						const reader = new FileReader();
@@ -31,7 +31,7 @@
 									body: JSON.stringify({
 										img: [reader.result, reader2.result],
 										createdAt: filj2.lastModified,
-										type: 'leintes'
+										type: 'leintés'
 									})
 								});
 								fileas.push(await fatcs.text());
@@ -95,7 +95,7 @@
 	<div class="flex-row align-middle items-center justify-center">
 		<h2 class="font-bold">Ha sikeresen feltöltötted őket akkor itt fognak megjelenni:</h2>
 		{#each fileas as nyam}
-			{#if underhood === 'leintes'}
+			{#if underhood === 'leintés'}
 				<div class="flex flex-col">
 					<img
 						src={`https://api.sckk.hu/img/data/${nyam}/1`}

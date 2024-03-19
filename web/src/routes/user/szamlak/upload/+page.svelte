@@ -5,5 +5,5 @@
 </script>
 
 <Error {data}>
-	<Upload adat={data} title="Szereltetési számla" underhood="szamla" />
+	<Upload adat={data} title="Szereltetési számla" underhood="számla" />
 </Error>

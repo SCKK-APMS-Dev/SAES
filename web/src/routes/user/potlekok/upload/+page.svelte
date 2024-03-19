@@ -8,7 +8,7 @@
 	<Upload
 		adat={data}
 		title="Pótlék"
-		underhood="potlek"
+		underhood="potlék"
 		desc="Egyszerre feltölthetsz többet, csak figyelj oda, hogy a megfelelő pótlékhoz töltöd fel!"
 	/>
 </Error>
