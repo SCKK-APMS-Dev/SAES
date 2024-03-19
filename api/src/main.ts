@@ -34,7 +34,7 @@ app.get('/cb', async (req, res) => {
 				scope: 'identify',
 				grantType: 'authorization_code'
 			});
-			res.cookie('sckk-dc-auth', dcode.access_token, {
+			res.cookie('dc-auth', dcode.access_token, {
 				maxAge: dcode.expires_in * 1000,
 				domain: process.env.NODE_DEV ? 'localhost' : 'sckk.hu'
 			});

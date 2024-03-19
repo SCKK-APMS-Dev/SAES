@@ -1,7 +1,9 @@
 <script lang="ts">
 	import Upload from '$lib/upload.svelte';
-
+	import Error from '$lib/error.svelte';
 	export let data;
 </script>
 
-<Upload adat={data} title="Szereltetési számla" underhood="szamla" />
+<Error {data}>
+	<Upload adat={data} title="Szereltetési számla" underhood="szamla" />
+</Error>

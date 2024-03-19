@@ -9,7 +9,7 @@ export const load = (async ({ parent, cookies }) => {
 			mode: 'no-cors',
 			headers: {
 				type: 'leintés',
-				cookie: cookies.get('sckk-dc-auth') as string
+				cookie: cookies.get('dc-auth') as string
 			}
 		});
 		if (aha.status === 401) {
@@ -17,16 +17,22 @@ export const load = (async ({ parent, cookies }) => {
 		}
 
 		if (aha.ok) {
-			return {
-				potlekok: await aha.json()
-			};
+			try {
+				return {
+					potlekok: await aha.json()
+				};
+			} catch {
+				return {
+					potlekok: undefined
+				};
+			}
 		}
 	} catch (err) {
 		if ((err as Redirect).status) {
 			throw redirect((err as Redirect).status, (err as Redirect).location);
 		}
 		return {
-			error: true
+			error: 'Leintéseid lekérése sikertelen'
 		};
 	}
 }) satisfies PageServerLoad;

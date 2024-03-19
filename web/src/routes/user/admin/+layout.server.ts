@@ -8,7 +8,7 @@ export const load = (async ({ parent, cookies }) => {
 		const aha = await fetch(`${apiUrl}/user/admin`, {
 			mode: 'no-cors',
 			headers: {
-				cookie: cookies.get('sckk-dc-auth') as string
+				cookie: cookies.get('dc-auth') as string
 			}
 		});
 		if (aha.status === 404) {
