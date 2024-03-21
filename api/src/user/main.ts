@@ -64,7 +64,7 @@ router.post('/upload', basicAuth, async (req, res) => {
 	const kep = await prisma.data.create({
 		data: {
 			owner: req.doksi.name as string,
-			kep: req.headers.type === 'leintés' ? JSON.stringify([body.img[0], body.img[1]]) : body.asd,
+			kep: req.headers.type === 'leintés' ? JSON.stringify([body.img[0], body.img[1]]) : body.img,
 			type: req.headers.type as string,
 			date: new Date(body.createdAt),
 			extra: req.headers.extra ? (req.headers.extra as string) : null
