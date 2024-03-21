@@ -1,7 +1,6 @@
 <script lang="ts">
 	export let data;
 	import MaterialSymbolsMenu from '~icons/material-symbols/menu';
-	import MaterialSymbolsLogout from '~icons/material-symbols/logout';
 	let nav: HTMLDivElement;
 	const tognav = () => {
 		if (nav.classList.contains('hidden')) {
@@ -62,10 +61,3 @@
 </nav>
 
 <slot />
-<h2 class="fixed bottom-0 bg-red-600 text-center w-[100vw] font-bold text-white">
-	Jelenleg az oldal még fejlesztés alatt áll, nem minden funkció elérhető. Ha hibát tapasztalsz <a
-		target="_blank"
-		href="https://github.com/SCKK-APMS-Dev/TaxiWeb/issues/new/choose"
-		class="text-yellow-400">itt</a
-	> jelentheted
-</h2>
