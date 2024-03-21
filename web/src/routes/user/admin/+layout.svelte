@@ -24,21 +24,18 @@
 	</button>
 	<div
 		bind:this={nav}
-		class="gap-2 text-xl col-span-2 lg:col-span-1 flex-col lg:!flex items-center hidden text-center lg:mr-[10vw] lg:flex-row lg:gap-5 xl:gap-10 2xl:gap-20 lg:z-auto child:drop-shadow-xl"
+		class="text-xl col-span-2 lg:col-span-1 child:px-2 child:rounded-lg flex-col lg:!flex items-center justify-center hidden text-center lg:mr-[10vw] md:flex-row lg:z-auto child:drop-shadow-xl"
 	>
-		<a href="/user/admin" class="hover:text-emerald-500 duration-200 transition-all"
-			>Jelenlegi hét</a
+		<a href="/user/admin" class="hover:bg-emerald-600 duration-200 transition-all">Jelenlegi hét</a>
+		<a href="/user/admin/prev" class="hover:bg-emerald-600 duration-200 transition-all">Előző hét</a
 		>
-		<a href="/user/admin/prev" class="hover:text-emerald-500 duration-200 transition-all"
-			>Előző hét</a
-		>
-		<a href="/user/admin/potlekok" class="hover:text-emerald-500 duration-200 transition-all"
+		<a href="/user/admin/potlekok" class="hover:bg-emerald-600 duration-200 transition-all"
 			>Pótlékok</a
 		>
-		<a href="/user/admin/leintesek" class="hover:text-emerald-500 duration-200 transition-all"
+		<a href="/user/admin/leintesek" class="hover:bg-emerald-600 duration-200 transition-all"
 			>Leintések</a
 		>
-		<a href="/user/admin/szamlak" class="hover:text-emerald-500 duration-200 transition-all"
+		<a href="/user/admin/szamlak" class="hover:bg-emerald-600 duration-200 transition-all"
 			>Szereltetési számlák</a
 		>
 	</div>

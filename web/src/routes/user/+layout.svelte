@@ -37,24 +37,18 @@
 	</button>
 	<div
 		bind:this={nav}
-		class="gap-2 z-10 text-xl hidden col-span-2 flex-row lg:flex items-center text-center lg:mr-[10vw] lg:flex-row lg:gap-5 xl:gap-10 2xl:gap-20 lg:z-auto child:drop-shadow-xl"
+		class="z-10 text-xl hidden col-span-2 flex-col lg:flex child:px-2 child:rounded-lg justify-center items-center text-center lg:mr-[10vw] md:flex-row lg:z-auto child:drop-shadow-xl"
 	>
-		<div
-			class="relative items-center w-full group z-10 child:bg-gray-700 child:px-2 child:rounded-lg"
+		<a href="/user" class="hover:bg-slate-600 duration-200 transition-all">Kezdőlap</a>
+		<a href="/user/help" class="hover:bg-slate-600 duration-200 transition-all">Segédlet</a>
+		<a href="/user/potlekok" class="hover:bg-slate-600 duration-200 transition-all">Pótlékok</a>
+		<a href="/user/leintesek" class="hover:bg-slate-600 duration-200 transition-all">Leintések</a>
+		<a href="/user/szamlak" class="hover:bg-slate-600 duration-200 transition-all"
+			>Szereltetési számlák</a
 		>
-			<a href="/user" class="hover:bg-slate-600 duration-200 transition-all">Kezdőlap</a>
-			<a href="/user/help" class="hover:bg-slate-600 duration-200 transition-all">Segédlet</a>
-			<a href="/user/potlekok" class="hover:bg-slate-600 duration-200 transition-all">Pótlékok</a>
-			<a href="/user/leintesek" class="hover:bg-slate-600 duration-200 transition-all">Leintések</a>
-			<a href="/user/szamlak" class="hover:bg-slate-600 duration-200 transition-all"
-				>Szereltetési számlák</a
-			>
-			{#if data.layout?.admin}
-				<a href="/user/admin" class="hover:bg-slate-600 duration-200 transition-all"
-					>Műszakvezetés</a
-				>
-			{/if}
-		</div>
+		{#if data.layout?.admin}
+			<a href="/user/admin" class="hover:bg-slate-600 duration-200 transition-all">Műszakvezetés</a>
+		{/if}
 	</div>
 </nav>
 
