@@ -93,19 +93,21 @@ router.post('/upload', basicAuth, upload.array('files'), async (req, res) => {
 		});
 	} else {
 		for (let i = 0; i < (req.files?.length as number) / 2; i++) {
-			const kep = await prisma.data.create({
-				data: {
-					owner: req.doksi.name as string,
-					kep: JSON.stringify([req.files[i * 2].filename, req.files[i * 2 + 1].filename]),
-					type: req.headers.type as string,
-					date: new Date(Number(JSON.parse(req.headers.dates as string)[i])).toISOString(),
-					extra: req.headers.extra ? (req.headers.extra as string) : null
-				}
-			});
-			if (kep) {
-				files.push(kep.id.toString());
-				if (i === (req.files?.length as number) / 2 - 1) {
-					res.send(JSON.stringify(files));
+			if (Array.isArray(req.files)) {
+				const kep = await prisma.data.create({
+					data: {
+						owner: req.doksi.name as string,
+						kep: JSON.stringify([req.files[i * 2].filename, req.files[i * 2 + 1].filename]),
+						type: req.headers.type as string,
+						date: new Date(Number(JSON.parse(req.headers.dates as string)[i])).toISOString(),
+						extra: req.headers.extra ? (req.headers.extra as string) : null
+					}
+				});
+				if (kep) {
+					files.push(kep.id.toString());
+					if (i === (req.files?.length as number) / 2 - 1) {
+						res.send(JSON.stringify(files));
+					}
 				}
 			}
 		}
