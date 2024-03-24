@@ -11,7 +11,7 @@ router.get('/', basicAuth, async (req, res) => {
 	prevPentek.setHours(22, 0, 0, 0);
 	nextPentek.setHours(22, 0, 0, 0);
 	try {
-		const fatcs = await fetch('https://thfsystem.com/api/log/status/current');
+		const fatcs = await fetch('https://app.sckk.hu/api/log/status/current');
 		if (fatcs.ok) {
 			const eredmeny = await fatcs.json();
 			const leintes = await prisma.data.findMany({
