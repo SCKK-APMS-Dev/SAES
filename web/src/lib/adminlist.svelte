@@ -165,16 +165,16 @@
 									{/if}
 								{:else if potlekas[potle.id]}
 									<div class="flex flex-col xl:flex-row">
-										<a href={`https://api.sckk.hu/img/data/${potle.id}/1`} target="”_blank”"
+										<a href={`https://api.sckk.hu/img/data/${potle.id}/0`} target="”_blank”"
 											><img
-												src={`https://api.sckk.hu/img/data/${potle.id}/1`}
+												src={`https://api.sckk.hu/img/data/${potle.id}/0`}
 												alt=""
 												class="max-w-52"
 											/></a
 										>
-										<a href={`https://api.sckk.hu/img/data/${potle.id}/2`} target="”_blank”"
+										<a href={`https://api.sckk.hu/img/data/${potle.id}/1`} target="”_blank”"
 											><img
-												src={`https://api.sckk.hu/img/data/${potle.id}/2`}
+												src={`https://api.sckk.hu/img/data/${potle.id}/1`}
 												alt=""
 												class="max-w-52"
 											/></a

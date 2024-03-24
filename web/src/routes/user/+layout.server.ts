@@ -23,7 +23,8 @@ export const load = (async ({ cookies }) => {
 
 		if (aha.ok) {
 			return {
-				layout: await aha.json()
+				layout: await aha.json(),
+				api: apiUrl
 			};
 		}
 	} catch (err) {

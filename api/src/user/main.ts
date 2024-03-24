@@ -7,7 +7,7 @@ import multer from 'multer';
 
 const storage = multer.diskStorage({
 	destination: (req, file, cb) => {
-		cb(null, 'data');
+		cb(null, process.env.NODE_DEV ? 'data' : '/data');
 	},
 	filename: (req, file, cb) => {
 		const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
@@ -71,21 +71,43 @@ router.get('/get', basicAuth, async (req, res) => {
 
 router.post('/upload', basicAuth, upload.array('files'), async (req, res) => {
 	if (!req.headers.type) return res.sendStatus(404);
-	console.log(req.body);
-	console.log(req.files);
-
-	// const kep = await prisma.data.create({
-	// 	data: {
-	// 		owner: req.doksi.name as string,
-	// 		kep: req.headers.type === 'leintés' ? JSON.stringify([body.img[0], body.img[1]]) : body.img,
-	// 		type: req.headers.type as string,
-	// 		date: new Date(body.createdAt),
-	// 		extra: req.headers.extra ? (req.headers.extra as string) : null
-	// 	}
-	// });
-	// if (kep) {
-	// 	res.send(kep.id.toString());
-	// } else {
-	// 	res.sendStatus(400);
-	// }
+	if (!req.headers.dates) return res.sendStatus(404);
+	const files: string[] = [];
+	if (req.headers.type !== 'leintés') {
+		(req.files as Express.Multer.File[]).forEach(async (val, i) => {
+			const kep = await prisma.data.create({
+				data: {
+					owner: req.doksi.name as string,
+					kep: val.filename,
+					type: req.headers.type as string,
+					date: new Date(Number(JSON.parse(req.headers.dates as string)[i])).toISOString(),
+					extra: req.headers.extra ? (req.headers.extra as string) : null
+				}
+			});
+			if (kep) {
+				files.push(kep.id.toString());
+				if (i === (req.files?.length as number) - 1) {
+					res.send(JSON.stringify(files));
+				}
+			}
+		});
+	} else {
+		for (let i = 0; i < (req.files?.length as number) / 2; i++) {
+			const kep = await prisma.data.create({
+				data: {
+					owner: req.doksi.name as string,
+					kep: JSON.stringify([req.files[i * 2].filename, req.files[i * 2 + 1].filename]),
+					type: req.headers.type as string,
+					date: new Date(Number(JSON.parse(req.headers.dates as string)[i])).toISOString(),
+					extra: req.headers.extra ? (req.headers.extra as string) : null
+				}
+			});
+			if (kep) {
+				files.push(kep.id.toString());
+				if (i === (req.files?.length as number) / 2 - 1) {
+					res.send(JSON.stringify(files));
+				}
+			}
+		}
+	}
 });
