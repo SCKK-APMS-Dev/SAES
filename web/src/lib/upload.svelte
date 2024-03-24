@@ -3,77 +3,28 @@
 
 	export let title = '';
 	export let underhood = '';
-	export let adat;
+	export let adat: { layout: any };
 	export let desc = '';
 	export let warning = '';
 	let formerror = '';
 
 	let fileas: string[] = [];
-	function upload() {
+	async function upload() {
 		$loading = true;
-		let file = document.getElementById('file') as HTMLInputElement;
-		if (file && file.files) {
-			if (underhood === 'leintés') {
-				if (file.files.length % 2 == 0) {
-					for (let i = 0; i < file.files.length / 2; i++) {
-						const reader = new FileReader();
-						const filj = file.files[i * 2];
-						reader.onloadend = async () => {
-							const reader2 = new FileReader();
-							const filj2 = file.files![i * 2 + 1];
-							reader2.onloadend = async () => {
-								const fatcs = await fetch('/api/upload', {
-									method: 'POST',
-									mode: 'no-cors',
-									headers: {
-										'Content-Type': 'application/json'
-									},
-									body: JSON.stringify({
-										img: [reader.result, reader2.result],
-										createdAt: filj2.lastModified,
-										type: 'leintés'
-									})
-								});
-								fileas.push(await fatcs.text());
-								fileas = fileas;
-								if (file.files?.item(file.files.length - 1) === filj2) {
-									$loading = false;
-								}
-							};
-							reader2.readAsDataURL(filj2);
-						};
-						reader.readAsDataURL(filj);
-					}
-				} else {
-					$loading = false;
-					formerror = 'Kérlek kettesével töltsd fel a képeket!';
-				}
-			} else {
-				for (const filj of file.files) {
-					const reader = new FileReader();
-
-					reader.onloadend = async () => {
-						const fatcs = await fetch('/api/upload', {
-							method: 'POST',
-							mode: 'no-cors',
-							headers: {
-								'Content-Type': 'application/json'
-							},
-							body: JSON.stringify({
-								img: reader.result,
-								createdAt: filj.lastModified,
-								type: underhood
-							})
-						});
-						fileas.push(await fatcs.text());
-						fileas = fileas;
-						if (file.files?.item(file.files.length - 1) === filj) {
-							$loading = false;
-						}
-					};
-					reader.readAsDataURL(filj);
-				}
+		let files = document.getElementById('file') as HTMLInputElement;
+		if (files.files) {
+			const formData = new FormData();
+			for (let i = 0; i < files.files.length; i++) {
+				formData.append('files', files.files[i]);
 			}
+			await fetch('/api/upload', {
+				method: 'POST',
+				mode: 'no-cors',
+				headers: {
+					type: underhood
+				},
+				body: formData
+			});
 		}
 	}
 </script>
