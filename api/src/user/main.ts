@@ -99,7 +99,7 @@ router.post('/upload', basicAuth, upload.array('files'), async (req, res) => {
 						owner: req.doksi.name as string,
 						kep: JSON.stringify([req.files[i * 2].filename, req.files[i * 2 + 1].filename]),
 						type: req.headers.type as string,
-						date: new Date(Number(JSON.parse(req.headers.dates as string)[i])).toISOString(),
+						date: new Date(Number(JSON.parse(req.headers.dates as string)[i * 2])).toISOString(),
 						extra: req.headers.extra ? (req.headers.extra as string) : null
 					}
 				});
