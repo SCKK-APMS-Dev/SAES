@@ -191,6 +191,9 @@
 							</td>
 							<td>{potle.status}</td>
 							<td>{potle.reason ? potle.reason : 'nincs'}</td>
+							{#if extraText}
+								<td>{potle.extra}</td>
+							{/if}
 							<td
 								><button
 									class="bg-green-800 font-bold px-2 py-1 rounded-xl hover:bg-green-600 transition-all duration-150"

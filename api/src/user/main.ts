@@ -69,25 +69,61 @@ router.get('/get', basicAuth, async (req, res) => {
 	}
 });
 
+import { createWorker } from 'tesseract.js';
+
 router.post('/upload', basicAuth, upload.array('files'), async (req, res) => {
 	if (!req.headers.type) return res.sendStatus(404);
 	if (!req.headers.dates) return res.sendStatus(404);
 	const files: string[] = [];
 	if (req.headers.type !== 'leintés') {
 		(req.files as Express.Multer.File[]).forEach(async (val, i) => {
-			const kep = await prisma.data.create({
-				data: {
-					owner: req.doksi.name as string,
-					kep: val.filename,
-					type: req.headers.type as string,
-					date: new Date(Number(JSON.parse(req.headers.dates as string)[i])).toISOString(),
-					extra: req.headers.extra ? (req.headers.extra as string) : null
+			if (req.headers.type === 'számla') {
+				const worker = await createWorker('hun');
+				const ret = await worker.recognize(
+					process.env.NODE_DEV ? `data/${val.filename}` : `/data/${val.filename}`
+				);
+				const moni = ret.data.text
+					.split('\n')
+					.findLastIndex((el) => el.includes('Végösszeg:') && el.endsWith('$'));
+				await worker.terminate();
+				const kep = await prisma.data.create({
+					data: {
+						owner: req.doksi.name as string,
+						kep: val.filename,
+						type: req.headers.type as string,
+						date: new Date(Number(JSON.parse(req.headers.dates as string)[i])).toISOString(),
+						extra:
+							moni === -1
+								? null
+								: ret.data.text
+										.split('\n')
+										[moni].split(':')[1]
+										.trim()
+										.replace(' ', '')
+										.slice(undefined, -2)
+					}
+				});
+				if (kep) {
+					files.push(kep.id.toString());
+					if (i === (req.files?.length as number) - 1) {
+						res.send(JSON.stringify(files));
+					}
 				}
-			});
-			if (kep) {
-				files.push(kep.id.toString());
-				if (i === (req.files?.length as number) - 1) {
-					res.send(JSON.stringify(files));
+			} else {
+				const kep = await prisma.data.create({
+					data: {
+						owner: req.doksi.name as string,
+						kep: val.filename,
+						type: req.headers.type as string,
+						date: new Date(Number(JSON.parse(req.headers.dates as string)[i])).toISOString(),
+						extra: req.headers.extra ? (req.headers.extra as string) : null
+					}
+				});
+				if (kep) {
+					files.push(kep.id.toString());
+					if (i === (req.files?.length as number) - 1) {
+						res.send(JSON.stringify(files));
+					}
 				}
 			}
 		});
