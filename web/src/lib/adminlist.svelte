@@ -111,50 +111,76 @@
 <div class="flex">
 	<div class="m-auto text-center text-white">
 		{#if potleks}
-			<h1 class="text-2xl font-bold">{title}</h1>
-			<div class="flex justify-center gap-2">
-				<h2>Filter</h2>
-				<select id="potlek-type" class="bg-green-800" bind:value={jona} on:change={() => rerun()}>
-					<option value="feltöltve">Feltöltve</option>
-					<option value="elfogadva">Elfogadva</option>
-					<option value="elutasítva">Elutasítva</option>
-				</select>
-				<h2>Aktuális hét</h2>
-				<input type="checkbox" name="csekd" bind:checked={current} on:change={() => rerun()} />
-			</div>
-			<table class="table-auto p-10 rounded-2xl">
-				<thead class="bg-red-700 rounded-2xl">
-					<tr class="child:p-2">
-						<th>Dátum</th>
-						<th>IG Név</th>
-						<th>Kép (Kattints rá)</th>
-						<th>Státusz</th>
-						<th>Megjegyzés</th>
-						{#if extraText}
-							<th>{extraText}</th>
-						{/if}
-						<th>Műveletek</th>
-					</tr>
-				</thead>
-				<tbody>
-					{#each potleks as potle}
-						<tr class="bg-slate-800">
-							<td
-								>{new Date(potle.date).getUTCFullYear()}.{new Date(potle.date).getUTCMonth() +
-									1}.{new Date(potle.date).getUTCDate()}. {new Date(potle.date).getUTCHours() +
-									1}:{new Date(potle.date).getUTCMinutes()}</td
-							>
-							<td>{potle.owner}</td>
-							<td>
-								{#if type !== 'leintés'}
-									{#if potlekas[potle.id]}
-										<a href={`https://api.sckk.hu/img/data/${potle.id}`} target="”_blank”"
-											><img
-												src={`https://api.sckk.hu/img/data/${potle.id}`}
-												alt=""
-												class="max-w-52"
-											/></a
-										>
+			{#if potleks.data}
+				<h1 class="text-2xl font-bold">{title}</h1>
+				<div class="flex justify-center gap-2">
+					<h2>Filter</h2>
+					<select id="potlek-type" class="bg-green-800" bind:value={jona} on:change={() => rerun()}>
+						<option value="feltöltve">Feltöltve</option>
+						<option value="elfogadva">Elfogadva</option>
+						<option value="elutasítva">Elutasítva</option>
+					</select>
+					<h2>Aktuális hét</h2>
+					<input type="checkbox" name="csekd" bind:checked={current} on:change={() => rerun()} />
+				</div>
+				<table class="table-auto p-10 rounded-2xl">
+					<thead class="bg-red-700 rounded-2xl">
+						<tr class="child:p-2">
+							<th>Dátum</th>
+							<th>IG Név</th>
+							<th>Kép (Kattints rá)</th>
+							<th>Státusz</th>
+							<th>Megjegyzés</th>
+							{#if extraText}
+								<th>{extraText}</th>
+							{/if}
+							<th>Műveletek</th>
+						</tr>
+					</thead>
+					<tbody>
+						{#each potleks.data as potle}
+							<tr class="bg-slate-800">
+								<td
+									>{new Date(potle.date).getUTCFullYear()}.{new Date(potle.date).getUTCMonth() +
+										1}.{new Date(potle.date).getUTCDate()}. {new Date(potle.date).getUTCHours() +
+										1}:{new Date(potle.date).getUTCMinutes()}</td
+								>
+								<td>{potle.owner}</td>
+								<td>
+									{#if type !== 'leintés'}
+										{#if potlekas[potle.id]}
+											<a href={`${potleks.api}/img/data/${potle.id}`} target="”_blank”"
+												><img
+													src={`${potleks.api}/img/data/${potle.id}`}
+													alt=""
+													class="max-w-52"
+												/></a
+											>
+										{:else}
+											<button
+												class="bg-green-600 font-bold px-2 rounded-lg hover:bg-green-700 transition-all duration-200"
+												on:click={() => {
+													potlekas[potle.id] = true;
+												}}>Mutasd</button
+											>
+										{/if}
+									{:else if potlekas[potle.id]}
+										<div class="flex flex-col xl:flex-row">
+											<a href={`${potleks.api}/img/data/${potle.id}/0`} target="”_blank”"
+												><img
+													src={`${potleks.api}/img/data/${potle.id}/0`}
+													alt=""
+													class="max-w-52"
+												/></a
+											>
+											<a href={`${potleks.api}/img/data/${potle.id}/1`} target="”_blank”"
+												><img
+													src={`${potleks.api}/img/data/${potle.id}/1`}
+													alt=""
+													class="max-w-52"
+												/></a
+											>
+										</div>
 									{:else}
 										<button
 											class="bg-green-600 font-bold px-2 rounded-lg hover:bg-green-700 transition-all duration-200"
@@ -163,49 +189,25 @@
 											}}>Mutasd</button
 										>
 									{/if}
-								{:else if potlekas[potle.id]}
-									<div class="flex flex-col xl:flex-row">
-										<a href={`https://api.sckk.hu/img/data/${potle.id}/0`} target="”_blank”"
-											><img
-												src={`https://api.sckk.hu/img/data/${potle.id}/0`}
-												alt=""
-												class="max-w-52"
-											/></a
-										>
-										<a href={`https://api.sckk.hu/img/data/${potle.id}/1`} target="”_blank”"
-											><img
-												src={`https://api.sckk.hu/img/data/${potle.id}/1`}
-												alt=""
-												class="max-w-52"
-											/></a
-										>
-									</div>
-								{:else}
-									<button
-										class="bg-green-600 font-bold px-2 rounded-lg hover:bg-green-700 transition-all duration-200"
-										on:click={() => {
-											potlekas[potle.id] = true;
-										}}>Mutasd</button
-									>
+								</td>
+								<td>{potle.status}</td>
+								<td>{potle.reason ? potle.reason : 'nincs'}</td>
+								{#if extraText}
+									<td>{potle.extra}</td>
 								{/if}
-							</td>
-							<td>{potle.status}</td>
-							<td>{potle.reason ? potle.reason : 'nincs'}</td>
-							{#if extraText}
-								<td>{potle.extra}</td>
-							{/if}
-							<td
-								><button
-									class="bg-green-800 font-bold px-2 py-1 rounded-xl hover:bg-green-600 transition-all duration-150"
-									on:click={() => edit(potleks.indexOf(potle))}>Szerkesztés</button
-								></td
-							>
-						</tr>
-					{/each}
-				</tbody>
-			</table>
-			{#if potleks.length === 0}
-				<h2>Nincs ilyen elem az adatbázisban!</h2>
+								<td
+									><button
+										class="bg-green-800 font-bold px-2 py-1 rounded-xl hover:bg-green-600 transition-all duration-150"
+										on:click={() => edit(potleks.indexOf(potle))}>Szerkesztés</button
+									></td
+								>
+							</tr>
+						{/each}
+					</tbody>
+				</table>
+				{#if potleks.length === 0}
+					<h2>Nincs ilyen elem az adatbázisban!</h2>
+				{/if}
 			{/if}
 		{:else}
 			<h2>Sikertelen lekérdezés</h2>
