@@ -49,7 +49,8 @@ router.get('/get/current/:type', basicAuth, adminAuth, async (req, res) => {
 			id: true,
 			owner: true,
 			status: true,
-			reason: true
+			reason: true,
+			extra: true
 		},
 		orderBy: {
 			date: 'desc'
