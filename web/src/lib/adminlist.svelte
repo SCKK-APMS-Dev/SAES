@@ -1,10 +1,12 @@
 <script lang="ts">
 	import { loading } from '$lib/loading';
 	import { onMount } from 'svelte';
+	import { Tooltip, Button, Select, Checkbox } from 'flowbite-svelte';
 	export let title = '';
 	export let type = '';
 	export let editdes = '';
 	export let extraText = '';
+	export let tools: string[] = [];
 	let modal: HTMLDialogElement;
 	let bindbtn: HTMLButtonElement;
 	let potleks: {
@@ -38,10 +40,7 @@
 	}
 	onMount(async () => {
 		potleks = await getPotleks('feltöltve', true);
-		console.log(potleks);
 	});
-
-	const potlekas: { [key: string]: boolean } = {};
 
 	function edit(id: number) {
 		modal.showModal();
@@ -89,14 +88,19 @@
 	>
 	<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
 		<form on:submit|preventDefault={() => editDone()}>
-			<div class="grid grid-cols-2 gap-3">
+			<div class="grid grid-cols-2 gap-3 items-center">
 				<h1 class=" col-span-2 text-3xl font-bold mx-2">{bindEdit.owner} {editdes} szerkesztése</h1>
 				<label for="type" class="text-xl">Státusz átállítása</label>
-				<select name="type" class="bg-green-800 text-xl" bind:value={bindEdit.status}>
+				<Select
+					placeholder="Kérlek válassz"
+					name="type"
+					class="bg-emerald-600 text-xl text-white"
+					bind:value={bindEdit.status}
+				>
 					<option value="feltöltve">feltöltve</option>
 					<option value="elfogadva">elfogadva</option>
 					<option value="elutasítva">elutasítva</option>
-				</select>
+				</Select>
 
 				<label for="reason" class="text-xl">Megjegyzés</label>
 				<input
@@ -118,7 +122,7 @@
 					type="submit"
 					bind:this={bindbtn}
 					id="dialogbtn"
-					class="bg-orange-500 col-span-2 hover:bg-orange-700 transition-all duration-200 text-2xl px-2 py-1 rounded-xl"
+					class="bg-emerald-500 col-span-2 hover:bg-emerald-700 transition-all duration-200 text-2xl px-2 py-1 rounded-xl"
 					>Mentés</button
 				>
 			</div>
@@ -131,18 +135,24 @@
 		{#if potleks}
 			{#if potleks.data}
 				<h1 class="text-2xl font-bold">{title}</h1>
-				<div class="flex justify-center gap-2">
-					<h2>Filter</h2>
-					<select id="potlek-type" class="bg-green-800" bind:value={jona} on:change={() => rerun()}>
-						<option value="feltöltve">Feltöltve</option>
-						<option value="elfogadva">Elfogadva</option>
-						<option value="elutasítva">Elutasítva</option>
-					</select>
-					<h2>Aktuális hét</h2>
-					<input type="checkbox" name="csekd" bind:checked={current} on:change={() => rerun()} />
+				<div class="flex justify-center text-center items-center gap-2">
+					<h2 class="text-xl font-bold">Filter</h2>
+					<Select
+						placeholder="Kérlek válassz"
+						id="potlek-type"
+						class="bg-emerald-600 text-white font-bold"
+						bind:value={jona}
+						on:change={() => rerun()}
+					>
+						<option value="feltöltve" class="font-bold">Feltöltve</option>
+						<option value="elfogadva" class="font-bold">Elfogadva</option>
+						<option value="elutasítva" class="font-bold">Elutasítva</option>
+					</Select>
+					<h2 class="text-xl font-bold">Aktuális hét</h2>
+					<Checkbox name="csekd" bind:checked={current} on:change={() => rerun()} />
 				</div>
-				<table class="table-auto p-10 rounded-2xl">
-					<thead class="bg-red-700 rounded-2xl">
+				<table class="table-auto p-10 mt-5 rounded-2xl">
+					<thead class="bg-green-700 rounded-2xl">
 						<tr class="child:p-2">
 							<th>Dátum</th>
 							<th>IG Név</th>
@@ -152,7 +162,9 @@
 							{#if extraText}
 								<th>{extraText}</th>
 							{/if}
-							<th>Műveletek</th>
+							{#if tools.length > 0}
+								<th>Műveletek</th>
+							{/if}
 						</tr>
 					</thead>
 					<tbody>
@@ -165,24 +177,7 @@
 								>
 								<td>{potle.owner}</td>
 								<td>
-									{#if type !== 'leintés'}
-										{#if potlekas[potle.id]}
-											<a href={`${potleks.api}/img/data/${potle.id}`} target="”_blank”"
-												><img
-													src={`${potleks.api}/img/data/${potle.id}`}
-													alt=""
-													class="max-w-52"
-												/></a
-											>
-										{:else}
-											<button
-												class="bg-green-600 font-bold px-2 rounded-lg hover:bg-green-700 transition-all duration-200"
-												on:click={() => {
-													potlekas[potle.id] = true;
-												}}>Mutasd</button
-											>
-										{/if}
-									{:else if potlekas[potle.id]}
+									{#if type == 'leintés'}
 										<div class="flex flex-col xl:flex-row">
 											<a href={`${potleks.api}/img/data/${potle.id}/0`} target="”_blank”"
 												><img
@@ -200,11 +195,12 @@
 											>
 										</div>
 									{:else}
-										<button
-											class="bg-green-600 font-bold px-2 rounded-lg hover:bg-green-700 transition-all duration-200"
-											on:click={() => {
-												potlekas[potle.id] = true;
-											}}>Mutasd</button
+										<a href={`${potleks.api}/img/data/${potle.id}`} target="”_blank”"
+											><img
+												src={`${potleks.api}/img/data/${potle.id}`}
+												alt=""
+												class="max-w-52"
+											/></a
 										>
 									{/if}
 								</td>
@@ -213,12 +209,45 @@
 								{#if extraText}
 									<td>{potle.extra}</td>
 								{/if}
-								<td
-									><button
-										class="icon-[lucide--edit] bg-green-600 w-6 h-6 font-bold px-2 py-1 rounded-xl hover:bg-green-500 transition-all duration-150"
-										on:click={() => edit(potleks.data.indexOf(potle))}
-									></button></td
-								>
+								{#if tools.length > 0}
+									<td>
+										{#if tools.includes('délelőtti')}
+											<Button
+												class="icon-[lucide--sun] bg-white w-6 h-6 font-bold rounded-xl hover:bg-yellow-300 transition-all duration-150"
+												on:click={() => edit(potleks.data.indexOf(potle))}
+											></Button>
+											<Tooltip class="bg-slate-500">{type} elfogadása délelőttiként</Tooltip>
+										{/if}
+										{#if tools.includes('éjszakai')}
+											<Button
+												class="icon-[lucide--moon] bg-white w-6 h-6 font-bold rounded-xl hover:bg-blue-800 transition-all duration-150"
+												on:click={() => edit(potleks.data.indexOf(potle))}
+											></Button>
+											<Tooltip class="bg-slate-500">{type} elfogadása éjszakaiként</Tooltip>
+										{/if}
+										{#if tools.includes('accept')}
+											<Button
+												class="icon-[lucide--check] bg-white w-6 h-6 font-bold rounded-xl hover:bg-green-500 transition-all duration-150"
+												on:click={() => edit(potleks.data.indexOf(potle))}
+											></Button>
+											<Tooltip class="bg-slate-500">{type} elfogadása</Tooltip>
+										{/if}
+										{#if tools.includes('decline')}
+											<Button
+												class="icon-[lucide--x] bg-white w-6 h-6 font-bold rounded-xl hover:bg-red-600 transition-all duration-150"
+												on:click={() => edit(potleks.data.indexOf(potle))}
+											></Button>
+											<Tooltip class="bg-slate-500">{type} elutasítása</Tooltip>
+										{/if}
+										{#if tools.includes('edit')}
+											<Button
+												class="icon-[lucide--edit] bg-white w-6 h-6 font-bold rounded-xl hover:bg-slate-500 transition-all duration-150"
+												on:click={() => edit(potleks.data.indexOf(potle))}
+											></Button>
+											<Tooltip class="bg-slate-500">{type} szerkesztése</Tooltip>
+										{/if}
+									</td>
+								{/if}
 							</tr>
 						{/each}
 					</tbody>

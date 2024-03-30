@@ -2,4 +2,10 @@
 	import Adminlist from '$lib/adminlist.svelte';
 </script>
 
-<Adminlist title="Számlák" type="számla" editdes="számlájának" extraText="Összeg" />
+<Adminlist
+	title="Számlák"
+	type="számla"
+	editdes="számlájának"
+	extraText="Összeg"
+	tools={['accept', 'decline', 'edit']}
+/>
