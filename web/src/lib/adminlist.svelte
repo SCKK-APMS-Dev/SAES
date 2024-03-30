@@ -7,7 +7,17 @@
 	export let extraText = '';
 	let modal: HTMLDialogElement;
 	let bindbtn: HTMLButtonElement;
-	let potleks: any[] = [];
+	let potleks: {
+		data: {
+			date: Date;
+			id: number;
+			owner: string;
+			reason: string | null;
+			status: string;
+			extra: string | null;
+		}[];
+		api: string;
+	};
 	let jona = 'feltöltve';
 	let current = true;
 	let bindEdit: any = {};
@@ -28,13 +38,14 @@
 	}
 	onMount(async () => {
 		potleks = await getPotleks('feltöltve', true);
+		console.log(potleks);
 	});
 
 	const potlekas: { [key: string]: boolean } = {};
 
 	function edit(id: number) {
 		modal.showModal();
-		bindEdit = potleks[id];
+		bindEdit = potleks.data[id];
 		editid = id;
 	}
 	async function rerun() {
@@ -60,7 +71,7 @@
 			const cucc = await fatcs.json();
 			modal.close();
 			if (jona === cucc.status) {
-				potleks[editid] = cucc;
+				potleks.data[editid] = cucc;
 			} else {
 				potleks = await getPotleks('feltöltve', current);
 			}
@@ -71,39 +82,46 @@
 	}
 </script>
 
-<dialog bind:this={modal} class="w-[50%] h-[50%] bg-gray-500 rounded-3xl text-white text-center">
-	<h1 class="text-3xl font-bold mx-2">{bindEdit.owner} {editdes} szerkesztése</h1>
+<dialog bind:this={modal} class="bg-gray-500 w-[60%] h-[60%] rounded-3xl text-white text-center">
 	<button
 		class="text-red-600 text-3xl font-bold absolute top-2 right-4 duration-150 hover:text-red-400"
 		on:click={() => modal.close()}>X</button
 	>
 	<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
 		<form on:submit|preventDefault={() => editDone()}>
-			<label for="type" class="text-xl">Státusz átállítása</label>
-			<select name="type" class="bg-green-800 text-xl" bind:value={bindEdit.status}>
-				<option value="feltöltve">feltöltve</option>
-				<option value="elfogadva">elfogadva</option>
-				<option value="elutasítva">elutasítva</option>
-			</select>
-			<label for="reason" class="text-xl">Megjegyzés</label>
+			<div class="grid grid-cols-2 gap-3">
+				<h1 class=" col-span-2 text-3xl font-bold mx-2">{bindEdit.owner} {editdes} szerkesztése</h1>
+				<label for="type" class="text-xl">Státusz átállítása</label>
+				<select name="type" class="bg-green-800 text-xl" bind:value={bindEdit.status}>
+					<option value="feltöltve">feltöltve</option>
+					<option value="elfogadva">elfogadva</option>
+					<option value="elutasítva">elutasítva</option>
+				</select>
 
-			<input
-				type="text"
-				name="reason"
-				id="reason"
-				class="text-black text-xl"
-				bind:value={bindEdit.reason}
-			/>
-			<button
-				type="submit"
-				bind:this={bindbtn}
-				id="dialogbtn"
-				class="bg-orange-500 hover:bg-orange-700 transition-all duration-200 text-2xl px-2 py-1 rounded-xl"
-				>Mentés</button
-			>
-			<h2 class="text-gray-300">
-				Pótléknál (délelőtti/éjszakai)-t írj, számláknál a számla összegét $ jel nélkül
-			</h2>
+				<label for="reason" class="text-xl">Megjegyzés</label>
+				<input
+					type="text"
+					name="reason"
+					id="reason"
+					class="text-black text-xl"
+					bind:value={bindEdit.reason}
+				/>
+				<label for="extra" class="text-xl">{extraText}</label>
+				<input
+					type="text"
+					name="extra"
+					id="extra"
+					class="text-black text-xl"
+					bind:value={bindEdit.extra}
+				/>
+				<button
+					type="submit"
+					bind:this={bindbtn}
+					id="dialogbtn"
+					class="bg-orange-500 col-span-2 hover:bg-orange-700 transition-all duration-200 text-2xl px-2 py-1 rounded-xl"
+					>Mentés</button
+				>
+			</div>
 		</form>
 	</div>
 </dialog>
@@ -197,15 +215,15 @@
 								{/if}
 								<td
 									><button
-										class="bg-green-800 font-bold px-2 py-1 rounded-xl hover:bg-green-600 transition-all duration-150"
-										on:click={() => edit(potleks.indexOf(potle))}>Szerkesztés</button
-									></td
+										class="icon-[lucide--edit] bg-green-600 w-6 h-6 font-bold px-2 py-1 rounded-xl hover:bg-green-500 transition-all duration-150"
+										on:click={() => edit(potleks.data.indexOf(potle))}
+									></button></td
 								>
 							</tr>
 						{/each}
 					</tbody>
 				</table>
-				{#if potleks.length === 0}
+				{#if potleks.data.length === 0}
 					<h2>Nincs ilyen elem az adatbázisban!</h2>
 				{/if}
 			{/if}
