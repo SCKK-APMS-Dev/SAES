@@ -46,7 +46,9 @@
 		<a href="/user" class="hover:bg-slate-600 duration-200 transition-all">Kezdőlap</a>
 		<a href="/user/help" class="hover:bg-slate-600 duration-200 transition-all">Segédlet</a>
 		<a href="/user/potlekok" class="hover:bg-slate-600 duration-200 transition-all">Pótlékok</a>
-		<a href="/user/leintesek" class="hover:bg-slate-600 duration-200 transition-all">Leintések</a>
+		<a href="/user/leintesek" class="hover:bg-slate-600 duration-200 transition-all"
+			>Leintések {#if data.layout.am}/ Bejelentések{/if}</a
+		>
 		<a href="/user/szamlak" class="hover:bg-slate-600 duration-200 transition-all"
 			>Szereltetési számlák</a
 		>
