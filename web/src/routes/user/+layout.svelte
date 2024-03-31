@@ -14,7 +14,7 @@
 </script>
 
 <h2 class="text-center bg-blue-600 text-white py-1 text-xl">
-	Nem vagy biztos valamiben? Nézd meg a <a href="/user/help" class="text-yellow-400 font-bold"
+	Nem vagy biztos valamiben? Nézd meg a <a href="/user/help" class="text-yellow-300 font-bold"
 		>segédletet</a
 	>!
 </h2>

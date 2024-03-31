@@ -70,7 +70,8 @@ router.get('/getall', basicAuth, adminAuth, async (req, res) => {
 			owner: true,
 			status: true,
 			reason: true,
-			type: true
+			type: true,
+			extra: true
 		},
 		orderBy: {
 			date: 'desc'
@@ -87,14 +88,16 @@ router.post('/post', basicAuth, adminAuth, async (req, res) => {
 		},
 		data: {
 			status: body.status,
-			reason: body.reason === '' ? null : body.reason
+			reason: body.reason === '' ? null : body.reason,
+			extra: body.extra === '' ? null : body.extra
 		},
 		select: {
 			date: true,
 			id: true,
 			owner: true,
 			status: true,
-			reason: true
+			reason: true,
+			extra: true
 		}
 	});
 	res.send(upload);

@@ -46,6 +46,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 		if (mama.ok) {
 			return new Response(JSON.stringify(await mama.json()));
 		}
+		return new Response(JSON.stringify({ error: true }));
 	}
 	return new Response(null, { status: 400 });
 };

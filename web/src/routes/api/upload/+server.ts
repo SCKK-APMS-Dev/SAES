@@ -10,8 +10,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 			headers: {
 				cookie: dcauth,
 				type: request.headers.get('type') as string,
-				dates: request.headers.get('dates') as string,
-				extra: request.headers.get('extra') as string
+				dates: request.headers.get('dates') as string
 			},
 			body
 		});

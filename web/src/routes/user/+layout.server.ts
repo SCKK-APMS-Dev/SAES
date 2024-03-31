@@ -18,7 +18,7 @@ export const load = (async ({ cookies }) => {
 			);
 		}
 		if (aha.status === 401) {
-			throw redirect(302, 'noaccess');
+			throw redirect(302, '/noaccess');
 		}
 
 		if (aha.ok) {
