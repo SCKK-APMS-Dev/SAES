@@ -27,7 +27,11 @@
 			height="40"
 			alt="SCKK Logó"
 		/>
-		<h1 class="font-bold text-3xl drop-shadow-xl">SCKK</h1>
+		<h1 class="font-bold text-3xl drop-shadow-xl">
+			SCKK {#if data.layout.am}
+				Autómentés
+			{/if}
+		</h1>
 	</div>
 	<button
 		class="cursor-pointer self-center justify-self-end text-3xl font-semibold hover:text-blue-500 duration-200 transition-all lg:hidden mr-[10vw]"

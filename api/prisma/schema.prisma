@@ -15,15 +15,15 @@ model users {
 }
 
 model data {
-  id      Int      @id @default(autoincrement())
-  type    String   @db.VarChar(50)
-  owner   String   @db.VarChar(255)
-  kep     String   @db.LongText
-  status  String   @default("feltöltve") @db.VarChar(50)
-  extra   String?  @db.VarChar(255)
-  reason  String?  @db.VarChar(255)
-  checked Boolean  @default(false)
-  date    DateTime @default(now()) @db.Timestamp(0)
+  id     Int      @id @default(autoincrement())
+  type   String   @db.VarChar(50)
+  owner  String   @db.VarChar(255)
+  kep    String   @db.LongText
+  status String   @default("feltöltve") @db.VarChar(50)
+  extra  String?  @db.VarChar(255)
+  reason String?  @db.VarChar(255)
+  am     Boolean  @default(false)
+  date   DateTime @default(now()) @db.Timestamp(0)
 }
 
 model leintesek {

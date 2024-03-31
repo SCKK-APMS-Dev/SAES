@@ -5,9 +5,9 @@ import type { PageServerLoad } from './$types';
 import { apiUrl } from '$lib/api';
 
 export const load = (async ({ parent, cookies }) => {
-	await parent();
+	const par = await parent();
 	try {
-		const aha = await fetch(`${apiUrl}/user/calls`, {
+		const aha = await fetch(par.layout.am ? `${apiUrl}/user/calls/am` : `${apiUrl}/user/calls`, {
 			mode: 'no-cors',
 			headers: {
 				cookie: cookies.get('dc-auth') as string

@@ -2,7 +2,7 @@ import { apiUrl } from '$lib/api';
 import type { PageServerLoad } from './$types';
 
 export const load = (async ({ parent, cookies }) => {
-	await parent();
+	const par = await parent();
 	const dcauth = cookies.get('dc-auth');
 	const prevPentek = new Date();
 	prevPentek.setDate(prevPentek.getDate() + ((5 - 7 - prevPentek.getDay()) % 7) - 7);
@@ -10,12 +10,15 @@ export const load = (async ({ parent, cookies }) => {
 	prevPentek.setHours(22, 0, 0, 0);
 	nextPentek.setHours(22, 0, 0, 0);
 	if (dcauth) {
-		const mama = await fetch(`${apiUrl}/user/admin/getall`, {
-			headers: {
-				cookie: dcauth,
-				status: 'elfogadva'
+		const mama = await fetch(
+			par.layout.am ? `${apiUrl}/user/admin/am/getall` : `${apiUrl}/user/admin/getall`,
+			{
+				headers: {
+					cookie: dcauth,
+					status: 'elfogadva'
+				}
 			}
-		});
+		);
 		if (mama.ok) {
 			return {
 				stats: await mama.json(),
