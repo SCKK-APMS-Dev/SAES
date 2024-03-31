@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { getRealText } from '$lib/public';
 	import { onMount } from 'svelte';
 	interface calls {
 		[key: string]: number;
@@ -7,6 +8,7 @@
 		[key: string]: calls;
 	}
 	export let data;
+
 	let aha: tipus = {};
 	onMount(() => {
 		if (data.date) {
@@ -14,7 +16,7 @@
 				if (new Date(jana.date) > data.date?.prev && new Date(jana.date) < data.date?.next) {
 					if (jana.type !== 'számla') {
 						if (jana.type === 'pótlék') {
-							if (jana.reason === 'éjszakai') {
+							if (jana.extra === 'éjszakai') {
 								if (aha['pótlék_éjszakai']) {
 									if (aha['pótlék_éjszakai'][jana.owner]) {
 										aha['pótlék_éjszakai'][jana.owner]++;
@@ -26,7 +28,7 @@
 									aha['pótlék_éjszakai'][jana.owner] = 1;
 								}
 							}
-							if (jana.reason === 'délelőtti') {
+							if (jana.extra === 'délelőtti') {
 								if (aha['pótlék_délelőtti']) {
 									if (aha['pótlék_délelőtti'][jana.owner]) {
 										aha['pótlék_délelőtti'][jana.owner]++;
@@ -53,15 +55,17 @@
 					} else {
 						if (aha[jana.type]) {
 							if (aha[jana.type][jana.owner]) {
-								aha[jana.type][jana.owner] += Number(jana.reason);
+								aha[jana.type][jana.owner] += Number(jana.extra);
 							} else {
-								aha[jana.type][jana.owner] = Number(jana.reason);
+								aha[jana.type][jana.owner] = Number(jana.extra);
 							}
 						} else {
 							aha[jana.type] = {};
-							aha[jana.type][jana.owner] = Number(jana.reason);
+							aha[jana.type][jana.owner] = Number(jana.extra);
 						}
 					}
+				} else {
+					console.log('rossz dátum');
 				}
 			}
 		}
@@ -70,27 +74,6 @@
 
 <div class="flex">
 	<div class="m-auto text-center text-white">
-		{#if false}
-			<h1>Tagok</h1>
-			<table class="table-auto p-10">
-				<thead class="bg-red-700">
-					<tr class="child:p-2">
-						<th>Discord ID</th>
-						<th>IG Név</th>
-						<th>Rang</th>
-					</tr>
-				</thead>
-				<tbody>
-					{#each data?.admin as tag}
-						<tr>
-							<td>{tag.discordid}</td>
-							<td>{tag.name}</td>
-							<td>{tag.rang}</td>
-						</tr>
-					{/each}
-				</tbody>
-			</table>
-		{/if}
 		{#if data.date}
 			<div>
 				<h1 class="text-3xl font-bold">
@@ -101,7 +84,7 @@
 					mutatni
 				</h2>
 				{#each Object.entries(aha) as [key, value]}
-					<h1 class="text-xl font-bold">{key}</h1>
+					<h1 class="text-xl font-bold">{getRealText(key)}</h1>
 					{#each Object.entries(value) as [key2, value2]}
 						<h2>{key2}: {key === 'számla' ? value2 + '$' : value2 + ' db'}</h2>
 					{/each}
