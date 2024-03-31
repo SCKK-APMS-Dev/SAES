@@ -2,26 +2,19 @@ import { apiUrl } from '$lib/api';
 import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async ({ request, cookies }) => {
-	const body = await request.json();
+	const body = await request.formData();
 	const dcauth = cookies.get('dc-auth') as string;
 	if (dcauth) {
 		const mama = await fetch(`${apiUrl}/user/upload`, {
-			mode: 'no-cors',
+			method: 'post',
 			headers: {
 				cookie: dcauth,
-				type: body.type,
-				extra: body.extra,
-				'Content-Type': 'application/json'
+				type: request.headers.get('type') as string,
+				dates: request.headers.get('dates') as string
 			},
-			method: 'post',
-			body: JSON.stringify({
-				img: body.img,
-				createdAt: body.createdAt
-			})
+			body
 		});
-		if (mama.ok) {
-			return new Response(await mama.text());
-		}
+		return new Response(await mama.text());
 	}
 	return new Response(body);
 };

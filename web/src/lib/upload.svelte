@@ -3,79 +3,49 @@
 
 	export let title = '';
 	export let underhood = '';
-	export let adat;
+	export let adat: { layout?: any; api?: any };
 	export let desc = '';
 	export let warning = '';
 	let formerror = '';
-
+	let seli: string[][] = [];
 	let fileas: string[] = [];
-	function upload() {
+	let tope = 'col';
+	async function upload() {
 		$loading = true;
-		let file = document.getElementById('file') as HTMLInputElement;
-		if (file && file.files) {
-			if (underhood === 'leintés') {
-				if (file.files.length % 2 == 0) {
-					for (let i = 0; i < file.files.length / 2; i++) {
-						const reader = new FileReader();
-						const filj = file.files[i * 2];
-						reader.onloadend = async () => {
-							const reader2 = new FileReader();
-							const filj2 = file.files![i * 2 + 1];
-							reader2.onloadend = async () => {
-								const fatcs = await fetch('/api/upload', {
-									method: 'POST',
-									mode: 'no-cors',
-									headers: {
-										'Content-Type': 'application/json'
-									},
-									body: JSON.stringify({
-										img: [reader.result, reader2.result],
-										createdAt: filj2.lastModified,
-										type: 'leintés'
-									})
-								});
-								fileas.push(await fatcs.text());
-								fileas = fileas;
-								if (file.files?.item(file.files.length - 1) === filj2) {
-									$loading = false;
-								}
-							};
-							reader2.readAsDataURL(filj2);
-						};
-						reader.readAsDataURL(filj);
-					}
-				} else {
-					$loading = false;
-					formerror = 'Kérlek kettesével töltsd fel a képeket!';
-				}
-			} else {
-				for (const filj of file.files) {
-					const reader = new FileReader();
-
-					reader.onloadend = async () => {
-						const fatcs = await fetch('/api/upload', {
-							method: 'POST',
-							mode: 'no-cors',
-							headers: {
-								'Content-Type': 'application/json'
-							},
-							body: JSON.stringify({
-								img: reader.result,
-								createdAt: filj.lastModified,
-								type: underhood
-							})
-						});
-						fileas.push(await fatcs.text());
-						fileas = fileas;
-						if (file.files?.item(file.files.length - 1) === filj) {
-							$loading = false;
-						}
-					};
-					reader.readAsDataURL(filj);
-				}
+		let files = document.getElementById('file') as HTMLInputElement;
+		if (files.files) {
+			const formData = new FormData();
+			let dates: string[] = [];
+			for (let i = 0; i < files.files.length; i++) {
+				formData.append('files', files.files[i]);
+				dates.push(files.files[i].lastModified.toString());
 			}
+			const mama = await fetch('/api/upload', {
+				method: 'POST',
+				headers: {
+					type: underhood,
+					dates: JSON.stringify(dates)
+				},
+				body: formData
+			});
+			$loading = false;
+			fileas = JSON.parse(await mama.text());
+			// for (let i = 0; i < files.files.length / 2; i++) {
+			// 	seli.push([]);
+			// 	seli[i].push(URL.createObjectURL(files.files[i]));
+			// 	seli[i].push(URL.createObjectURL(files.files[i + 1]));
+			// 	seli = seli;
+			// }
+			// $loading = false;
 		}
 	}
+	const switchTope = () => {
+		if (tope === 'col') {
+			tope = 'row';
+		} else {
+			tope = 'col';
+		}
+	};
 </script>
 
 <div class="text-center text-white">
@@ -94,26 +64,52 @@
 	</div>
 	<div class="flex-row align-middle items-center justify-center">
 		<h2 class="font-bold">Ha sikeresen feltöltötted őket akkor itt fognak megjelenni:</h2>
+		<button
+			class="bg-red-600 hidden px-2 mb-2 rounded-lg transition-all hover:bg-red-800 duration-200"
+			on:click={switchTope}
+			>{#if tope === 'row'}
+				Sorban
+			{:else}
+				Oszlopban
+			{/if}</button
+		>
+		{#each seli as asd}
+			<div
+				class="flex bg-slate-500 py-4 align-middle items-center justify-center"
+				class:flex-col={tope === 'col'}
+				class:flex-row={tope === 'row'}
+			>
+				<div>
+					<button class="p-2 bg-slate-900">
+						<img src={asd[0]} alt="asd" class="max-w-5xl max-h-5xl m-auto" />
+					</button>
+					<h2>Kép a 10-12-ről</h2>
+				</div>
+				<h1 class="text-5xl font-bold">+</h1>
+				<div>
+					<button class="p-2 bg-slate-900">
+						<img src={asd[1]} alt="asd" class="max-w-5xl max-h-5xl m-auto" />
+					</button>
+					<h2>Kép a "xy kifizette az utazást"-ról</h2>
+				</div>
+			</div>
+		{/each}
 		{#each fileas as nyam}
 			{#if underhood === 'leintés'}
 				<div class="flex flex-col">
 					<img
-						src={`https://api.sckk.hu/img/data/${nyam}/1`}
+						src={`${adat.api}/img/data/${nyam}/0`}
 						alt=""
 						class="max-w-5xl max-h-5xl m-auto py-3"
 					/>
 					<img
-						src={`https://api.sckk.hu/img/data/${nyam}/2`}
+						src={`${adat.api}/img/data/${nyam}/1`}
 						alt=""
 						class="max-w-5xl max-h-5xl m-auto py-3"
 					/>
 				</div>
 			{:else}
-				<img
-					src={`https://api.sckk.hu/img/data/${nyam}`}
-					alt=""
-					class="max-w-5xl max-h-5xl m-auto py-3"
-				/>
+				<img src={`${adat.api}/img/data/${nyam}`} alt="" class="max-w-5xl max-h-5xl m-auto py-3" />
 			{/if}
 		{/each}
 	</div>

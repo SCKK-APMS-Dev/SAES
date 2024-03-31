@@ -18,12 +18,13 @@ export const load = (async ({ cookies }) => {
 			);
 		}
 		if (aha.status === 401) {
-			throw redirect(302, 'noaccess');
+			throw redirect(302, '/noaccess');
 		}
 
 		if (aha.ok) {
 			return {
-				layout: await aha.json()
+				layout: await aha.json(),
+				api: apiUrl
 			};
 		}
 	} catch (err) {

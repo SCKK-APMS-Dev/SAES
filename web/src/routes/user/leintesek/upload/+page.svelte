@@ -5,11 +5,5 @@
 </script>
 
 <Error {data}>
-	<Upload
-		adat={data}
-		title="Leintés"
-		underhood="leintés"
-		warning="FONTOS! Bármennyit feltölthetsz csak a sorrend legyen meg! (Leintésenként 2 kép egymás után
-	kiválasztva, a fájlkezelőben visszafelé kell kijelölni, hogy a sorrent megmaradjon)"
-	/>
+	<Upload adat={data} title="Leintés" underhood="leintés" />
 </Error>

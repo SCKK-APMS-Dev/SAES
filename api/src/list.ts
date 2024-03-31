@@ -32,7 +32,7 @@ router.get('/:name/:type', async (req, res) => {
 				owner: req.params.name.replace('_', ' '),
 				type: req.params.type.split('_')[0],
 				status: 'elfogadva',
-				reason: req.params.type.split('_')[1],
+				extra: req.params.type.split('_')[1],
 				date: {
 					lte: nextPentek.toISOString(),
 					gte: prevPentek.toISOString()

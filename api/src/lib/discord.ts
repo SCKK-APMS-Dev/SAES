@@ -1,6 +1,7 @@
 import DiscordOauth2 from 'discord-oauth2';
 import 'dotenv/config';
 import type { RequestHandler } from 'express';
+import { getApiUrl } from './apis.js';
 
 export const oauth = new DiscordOauth2({
 	clientId: process.env.DISCORD_ID,
@@ -12,7 +13,7 @@ export async function getTag(
 	discordid: string
 ): Promise<{ id: number; admin: boolean; name: string } | undefined> {
 	try {
-		const fatch = await fetch(`http://api.scms.hanrickio.com:5002/discord/player/${discordid}`);
+		const fatch = await fetch(`${getApiUrl('patrik')}/discord/player/${discordid}`);
 		if (fatch.ok) {
 			const ret = await fatch.json();
 			if (!ret.error) {

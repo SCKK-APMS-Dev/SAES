@@ -1,4 +1,5 @@
 import { addDynamicIconSelectors } from '@iconify/tailwind';
+import flowbite from 'flowbite/plugin';
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -15,6 +16,7 @@ export default {
 			addVariant('child', '& > *');
 			addVariant('child-hover', '& > *:hover');
 		},
-		addDynamicIconSelectors()
+		addDynamicIconSelectors(),
+		flowbite
 	]
 };

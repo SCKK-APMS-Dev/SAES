@@ -1,5 +1,5 @@
 import express from 'express';
-import { adminAuth, basicAuth, getTag, oauth } from '../lib/discord.js';
+import { adminAuth, basicAuth } from '../lib/discord.js';
 import { prisma } from '../lib/db.js';
 
 export const router = express.Router();
@@ -19,7 +19,8 @@ router.get('/get/:type', basicAuth, adminAuth, async (req, res) => {
 			id: true,
 			owner: true,
 			status: true,
-			reason: true
+			reason: true,
+			extra: true
 		},
 		orderBy: {
 			date: 'desc'
@@ -48,7 +49,8 @@ router.get('/get/current/:type', basicAuth, adminAuth, async (req, res) => {
 			id: true,
 			owner: true,
 			status: true,
-			reason: true
+			reason: true,
+			extra: true
 		},
 		orderBy: {
 			date: 'desc'
@@ -68,7 +70,8 @@ router.get('/getall', basicAuth, adminAuth, async (req, res) => {
 			owner: true,
 			status: true,
 			reason: true,
-			type: true
+			type: true,
+			extra: true
 		},
 		orderBy: {
 			date: 'desc'
@@ -85,14 +88,16 @@ router.post('/post', basicAuth, adminAuth, async (req, res) => {
 		},
 		data: {
 			status: body.status,
-			reason: body.reason === '' ? null : body.reason
+			reason: body.reason === '' ? null : body.reason,
+			extra: body.extra === '' ? null : body.extra
 		},
 		select: {
 			date: true,
 			id: true,
 			owner: true,
 			status: true,
-			reason: true
+			reason: true,
+			extra: true
 		}
 	});
 	res.send(upload);

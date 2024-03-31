@@ -12,7 +12,7 @@ export const GET: RequestHandler = async ({ request, cookies }) => {
 				}
 			});
 			if (mama.ok) {
-				return new Response(JSON.stringify(await mama.json()));
+				return new Response(JSON.stringify({ data: await mama.json(), api: apiUrl }));
 			}
 		} else {
 			const mama = await fetch(`${apiUrl}/user/admin/get/current/${request.headers.get('type')}`, {
@@ -22,7 +22,7 @@ export const GET: RequestHandler = async ({ request, cookies }) => {
 				}
 			});
 			if (mama.ok) {
-				return new Response(JSON.stringify(await mama.json()));
+				return new Response(JSON.stringify({ data: await mama.json(), api: apiUrl }));
 			}
 		}
 	}
@@ -46,6 +46,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 		if (mama.ok) {
 			return new Response(JSON.stringify(await mama.json()));
 		}
+		return new Response(JSON.stringify({ error: true }));
 	}
 	return new Response(null, { status: 400 });
 };

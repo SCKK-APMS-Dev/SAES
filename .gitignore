@@ -9,3 +9,4 @@ api/out
 !.env.example
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+api/data
