@@ -143,7 +143,7 @@
 					class="text-black text-xl"
 					bind:value={bindEdit.reason}
 				/>
-				{#if bindEdit.extra}
+				{#if extraText}
 					<label for="extra" class="text-xl">{extraText}</label>
 					<input
 						type="text"
