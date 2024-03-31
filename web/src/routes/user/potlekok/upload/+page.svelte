@@ -9,6 +9,6 @@
 		adat={data}
 		title="Pótlék"
 		underhood="pótlék"
-		desc="Egyszerre feltölthetsz többet, csak figyelj oda, hogy a megfelelő pótlékhoz töltöd fel!"
+		desc="8:00-15:00: Délelőtti pótlék, 22:00-4:00: Éjszakai pótlék"
 	/>
 </Error>
