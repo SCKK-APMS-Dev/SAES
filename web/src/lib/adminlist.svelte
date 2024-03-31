@@ -173,7 +173,7 @@
 								<td
 									>{new Date(potle.date).getUTCFullYear()}.{new Date(potle.date).getUTCMonth() +
 										1}.{new Date(potle.date).getUTCDate()}. {new Date(potle.date).getUTCHours() +
-										1}:{new Date(potle.date).getUTCMinutes()}</td
+										2}:{new Date(potle.date).getUTCMinutes()}</td
 								>
 								<td>{potle.owner}</td>
 								<td>

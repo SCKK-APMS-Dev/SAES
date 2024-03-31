@@ -1,5 +1,5 @@
 import express from 'express';
-import { basicAuth, getTag, oauth } from '../lib/discord.js';
+import { basicAuth, oauth } from '../lib/discord.js';
 import * as admin from './admin.js';
 import * as calls from './calls.js';
 import { prisma } from '../lib/db.js';

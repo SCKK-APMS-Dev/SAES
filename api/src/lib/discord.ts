@@ -12,7 +12,7 @@ export async function getTag(
 	discordid: string
 ): Promise<{ id: number; admin: boolean; name: string } | undefined> {
 	try {
-		const fatch = await fetch(`http://api.scms.hanrickio.com:5002/discord/player/${discordid}`);
+		const fatch = await fetch(`http://192.168.100.148:5002/discord/player/${discordid}`);
 		if (fatch.ok) {
 			const ret = await fatch.json();
 			if (!ret.error) {
