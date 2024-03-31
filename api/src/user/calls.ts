@@ -1,6 +1,7 @@
 import express from 'express';
 import { basicAuth } from '../lib/discord.js';
 import { prisma } from '../lib/db.js';
+import { getApiUrl } from '../lib/apis.js';
 
 export const router = express.Router();
 
@@ -11,7 +12,7 @@ router.get('/', basicAuth, async (req, res) => {
 	prevPentek.setHours(22, 0, 0, 0);
 	nextPentek.setHours(22, 0, 0, 0);
 	try {
-		const fatcs = await fetch('https://app.sckk.hu/api/log/status/current');
+		const fatcs = await fetch(`${getApiUrl('erik')}/api/log/status/current`);
 		if (fatcs.ok) {
 			const eredmeny = await fatcs.json();
 			const leintes = await prisma.data.findMany({
