@@ -11,7 +11,8 @@ export const oauth = new DiscordOauth2({
 
 export async function getTag(
 	discordid: string
-): Promise<{ id: number; admin: boolean; name: string } | undefined> {
+): Promise<{ id: number; admin: boolean; name: string; am: boolean } | undefined> {
+	const am_admins = [35, 36, 37, 43, 44, 45, 46, 47, 48, 49];
 	try {
 		const fatch = await fetch(`${getApiUrl('patrik')}/discord/player/${discordid}`);
 		if (fatch.ok) {
@@ -19,8 +20,10 @@ export async function getTag(
 			if (!ret.error) {
 				return {
 					id: ret.Id,
-					admin: ret.PermissionGroup === 1 ? true : false,
-					name: ret.PlayerName
+					admin:
+						ret.PermissionGroup === 1 ? true : am_admins.includes(ret.PositionId) ? true : false,
+					name: ret.PlayerName,
+					am: ret.PositionId > 34 && 50 > ret.PositionId ? true : false
 				};
 			}
 		}
@@ -43,6 +46,7 @@ declare global {
 				id: number;
 				admin: boolean;
 				name: string;
+				am: boolean;
 			};
 		}
 	}

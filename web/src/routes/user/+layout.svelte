@@ -27,7 +27,11 @@
 			height="40"
 			alt="SCKK Logó"
 		/>
-		<h1 class="font-bold text-3xl drop-shadow-xl">SCKK</h1>
+		<h1 class="font-bold text-3xl drop-shadow-xl">
+			SCKK {#if data.layout.am}
+				Autómentés
+			{/if}
+		</h1>
 	</div>
 	<button
 		class="cursor-pointer self-center justify-self-end text-3xl font-semibold hover:text-blue-500 duration-200 transition-all lg:hidden mr-[10vw]"
@@ -42,7 +46,9 @@
 		<a href="/user" class="hover:bg-slate-600 duration-200 transition-all">Kezdőlap</a>
 		<a href="/user/help" class="hover:bg-slate-600 duration-200 transition-all">Segédlet</a>
 		<a href="/user/potlekok" class="hover:bg-slate-600 duration-200 transition-all">Pótlékok</a>
-		<a href="/user/leintesek" class="hover:bg-slate-600 duration-200 transition-all">Leintések</a>
+		<a href="/user/leintesek" class="hover:bg-slate-600 duration-200 transition-all"
+			>Leintések {#if data.layout.am}/ Bejelentések{/if}</a
+		>
 		<a href="/user/szamlak" class="hover:bg-slate-600 duration-200 transition-all"
 			>Szereltetési számlák</a
 		>

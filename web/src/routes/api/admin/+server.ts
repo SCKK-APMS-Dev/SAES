@@ -5,22 +5,32 @@ export const GET: RequestHandler = async ({ request, cookies }) => {
 	const dcauth = cookies.get('dc-auth') as string;
 	if (dcauth) {
 		if (request.headers.get('current') === 'false') {
-			const mama = await fetch(`${apiUrl}/user/admin/get/${request.headers.get('type')}`, {
-				headers: {
-					cookie: dcauth,
-					status: request.headers.get('status') as string
+			const mama = await fetch(
+				request.headers.get('am') === 'true'
+					? `${apiUrl}/user/admin/am/get/${request.headers.get('type')}`
+					: `${apiUrl}/user/admin/get/${request.headers.get('type')}`,
+				{
+					headers: {
+						cookie: dcauth,
+						status: request.headers.get('status') as string
+					}
 				}
-			});
+			);
 			if (mama.ok) {
 				return new Response(JSON.stringify({ data: await mama.json(), api: apiUrl }));
 			}
 		} else {
-			const mama = await fetch(`${apiUrl}/user/admin/get/current/${request.headers.get('type')}`, {
-				headers: {
-					cookie: dcauth,
-					status: request.headers.get('status') as string
+			const mama = await fetch(
+				request.headers.get('am') === 'true'
+					? `${apiUrl}/user/admin/am/get/current/${request.headers.get('type')}`
+					: `${apiUrl}/user/admin/get/current/${request.headers.get('type')}`,
+				{
+					headers: {
+						cookie: dcauth,
+						status: request.headers.get('status') as string
+					}
 				}
-			});
+			);
 			if (mama.ok) {
 				return new Response(JSON.stringify({ data: await mama.json(), api: apiUrl }));
 			}

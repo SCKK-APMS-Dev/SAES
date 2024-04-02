@@ -7,6 +7,7 @@
 	export let editdes = '';
 	export let extraText = '';
 	export let tools: string[] = [];
+	export let am: boolean = false;
 	let modal: HTMLDialogElement;
 	let bindbtn: HTMLButtonElement;
 	let potleks: {
@@ -30,6 +31,7 @@
 		const fatcs = await fetch('/api/admin', {
 			headers: {
 				status,
+				am,
 				type: type,
 				current: current.toString()
 			}
@@ -53,9 +55,9 @@
 			headers: {
 				'Content-Type': 'application/json'
 			},
-			mode: 'no-cors',
 			method: 'POST',
 			body: JSON.stringify({
+				am,
 				id: potleks.data[id].id,
 				status:
 					type === 'accept'
@@ -94,6 +96,8 @@
 			method: 'POST',
 			body: JSON.stringify({
 				id: bindEdit.id,
+
+				am,
 				status: bindEdit.status,
 				reason: bindEdit.reason,
 				extra: bindEdit.extra

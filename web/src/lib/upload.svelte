@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { loading } from './loading';
-
 	export let title = '';
 	export let underhood = '';
 	export let adat: { layout?: any; api?: any };
@@ -24,6 +23,7 @@
 				method: 'POST',
 				headers: {
 					type: underhood,
+					am: adat.layout.am,
 					dates: JSON.stringify(dates)
 				},
 				body: formData

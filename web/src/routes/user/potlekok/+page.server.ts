@@ -3,9 +3,10 @@ import type { PageServerLoad } from './$types';
 import { apiUrl } from '$lib/api';
 
 export const load = (async ({ parent, cookies }) => {
-	await parent();
+	const par = await parent();
+	console.log(par.layout.am ? `${apiUrl}/user/am/get` : `${apiUrl}/user/get`);
 	try {
-		const aha = await fetch(`${apiUrl}/user/get`, {
+		const aha = await fetch(par.layout.am ? `${apiUrl}/user/am/get` : `${apiUrl}/user/get`, {
 			mode: 'no-cors',
 			headers: {
 				type: 'pótlék',
