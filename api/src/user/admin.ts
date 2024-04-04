@@ -104,6 +104,7 @@ router.get('/am/get/current/:type', basicAuth, adminAuth, async (req, res) => {
 			id: true,
 			owner: true,
 			status: true,
+			am: true,
 			reason: true,
 			extra: true
 		},
