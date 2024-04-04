@@ -18,6 +18,7 @@
 			reason: string | null;
 			status: string;
 			extra: string | null;
+			am: boolean;
 		}[];
 		api: string;
 		error: boolean;
@@ -57,7 +58,7 @@
 			},
 			method: 'POST',
 			body: JSON.stringify({
-				am,
+				am: potleks.data[id].am,
 				id: potleks.data[id].id,
 				status:
 					type === 'accept'
@@ -96,7 +97,6 @@
 			method: 'POST',
 			body: JSON.stringify({
 				id: bindEdit.id,
-
 				am,
 				status: bindEdit.status,
 				reason: bindEdit.reason,
@@ -207,13 +207,18 @@
 				</thead>
 				<tbody>
 					{#each potleks.data as potle}
-						<tr class="bg-slate-800">
+						<tr class:bg-slate-800={!potle.am} class:bg-blue-800={potle.am}>
 							<td
 								>{new Date(potle.date).getUTCFullYear()}.{new Date(potle.date).getUTCMonth() +
 									1}.{new Date(potle.date).getUTCDate()}. {new Date(potle.date).getUTCHours() +
 									2}:{new Date(potle.date).getUTCMinutes()}</td
 							>
-							<td>{potle.owner}</td>
+							<td
+								>{potle.owner}
+								{#if potle.am}
+									(Autómentős)
+								{/if}</td
+							>
 							<td>
 								{#if type == 'leintés'}
 									<div class="flex flex-col xl:flex-row">
