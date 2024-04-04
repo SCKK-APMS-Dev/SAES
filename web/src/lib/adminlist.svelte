@@ -18,7 +18,7 @@
 			reason: string | null;
 			status: string;
 			extra: string | null;
-			am: true;
+			am: boolean;
 		}[];
 		api: string;
 		error: boolean;
@@ -58,7 +58,7 @@
 			},
 			method: 'POST',
 			body: JSON.stringify({
-				am,
+				am: potleks.data[id].am,
 				id: potleks.data[id].id,
 				status:
 					type === 'accept'
@@ -97,7 +97,6 @@
 			method: 'POST',
 			body: JSON.stringify({
 				id: bindEdit.id,
-
 				am,
 				status: bindEdit.status,
 				reason: bindEdit.reason,
