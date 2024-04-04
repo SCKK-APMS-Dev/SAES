@@ -1,5 +1,8 @@
 <script lang="ts">
-	export let data;
+	export let data: {
+		potlekok: { status: string; date: Date; reason: string | null; id: number }[];
+		api: string;
+	};
 	export let url = '';
 	export let magazo = '';
 	export let leintes = false;
@@ -22,9 +25,8 @@
 				>
 					<h1 class="font-bold drop-shadow-xl">
 						{new Date(potle.date).getUTCFullYear()}.{new Date(potle.date).getUTCMonth() +
-							1}.{new Date(potle.date).getUTCDate()}. {new Date(
-							potle.date
-						).getUTCHours()}:{new Date(potle.date).getUTCMinutes()}
+							1}.{new Date(potle.date).getUTCDate()}. {new Date(potle.date).getUTCHours() +
+							2}:{new Date(potle.date).getUTCMinutes()}
 					</h1>
 					<h1 class="font-bold drop-shadow-xl">Státusz: {potle.status}</h1>
 					{#if potle.reason}

@@ -31,7 +31,7 @@
 		const fatcs = await fetch('/api/admin', {
 			headers: {
 				status,
-				am,
+				am: String(am),
 				type: type,
 				current: current.toString()
 			}
