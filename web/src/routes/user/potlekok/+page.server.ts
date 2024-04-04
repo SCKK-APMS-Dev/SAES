@@ -4,7 +4,6 @@ import { apiUrl } from '$lib/api';
 
 export const load = (async ({ parent, cookies }) => {
 	const par = await parent();
-	console.log(par.layout.am ? `${apiUrl}/user/am/get` : `${apiUrl}/user/get`);
 	try {
 		const aha = await fetch(par.layout.am ? `${apiUrl}/user/am/get` : `${apiUrl}/user/get`, {
 			mode: 'no-cors',
