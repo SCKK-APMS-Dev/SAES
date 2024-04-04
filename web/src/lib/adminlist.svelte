@@ -98,7 +98,7 @@
 			method: 'POST',
 			body: JSON.stringify({
 				id: bindEdit.id,
-				am,
+				am: bindEdit.am,
 				status: bindEdit.status,
 				reason: bindEdit.reason,
 				extra: bindEdit.extra
