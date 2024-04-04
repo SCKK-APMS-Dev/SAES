@@ -6,6 +6,7 @@
 	export let type = '';
 	export let editdes = '';
 	export let extraText = '';
+	export let des = '';
 	export let tools: string[] = [];
 	export let am: boolean = false;
 	let modal: HTMLDialogElement;
@@ -173,6 +174,7 @@
 	<div class="m-auto text-center text-white">
 		{#if potleks && !potleks.error}
 			<h1 class="text-2xl font-bold">{title}</h1>
+			<h1 class="text-xl font-bold">{des}</h1>
 			<div class="flex justify-center text-center items-center gap-2">
 				<h2 class="text-xl font-bold">Filter</h2>
 				<Select
