@@ -1,5 +1,8 @@
 <script lang="ts">
-	export let data;
+	export let data: {
+		potlekok: { status: string; date: Date; reason: string | null; id: number }[];
+		api: string;
+	};
 	export let url = '';
 	export let magazo = '';
 	export let leintes = false;
