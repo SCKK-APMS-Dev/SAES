@@ -62,7 +62,6 @@ router.get('/get/current/:type', basicAuth, adminAuth, async (req, res) => {
 		where: {
 			type: req.params.type,
 			status: req.headers.status ? (req.headers.status as string) : 'feltöltve',
-			am: false,
 			date: {
 				lte: nextPentek.toISOString(),
 				gte: prevPentek.toISOString()
@@ -74,7 +73,8 @@ router.get('/get/current/:type', basicAuth, adminAuth, async (req, res) => {
 			owner: true,
 			status: true,
 			reason: true,
-			extra: true
+			extra: true,
+			am: true
 		},
 		orderBy: {
 			date: 'desc'
