@@ -82,7 +82,7 @@
 						<div class="flex gap-2">
 							<h2>{key2}: {key.endsWith('számla') ? value2 + '$' : value2 + ' db'}</h2>
 							<a
-								href={`https://sckk.hu/list/${key2.replace(' ', '_')}/${key.split('_')[1]}`}
+								href={`https://sckk.hu/list/${key2.replace(' ', '_')}/${key2.startsWith('am') ? key.split('_')[1] : key}`}
 								class="bg-blue-900 px-2 rounded-xl"
 								target="_blank">Link</a
 							>
