@@ -13,31 +13,32 @@
 	onMount(() => {
 		if (data.date) {
 			for (const jana of data.stats) {
+				console.log(jana);
 				if (new Date(jana.date) > data.date?.prev && new Date(jana.date) < data.date?.next) {
 					if (jana.type !== 'számla') {
 						if (jana.type === 'pótlék') {
 							if (jana.extra === 'éjszakai') {
-								if (aha['pótlék_éjszakai']) {
-									if (aha['pótlék_éjszakai'][jana.owner]) {
-										aha['pótlék_éjszakai'][jana.owner]++;
+								if (aha[jana.am ? 'am_pótlék_éjszakai' : 'pótlék_éjszakai']) {
+									if (aha[jana.am ? 'am_pótlék_éjszakai' : 'pótlék_éjszakai'][jana.owner]) {
+										aha[jana.am ? 'am_pótlék_éjszakai' : 'pótlék_éjszakai'][jana.owner]++;
 									} else {
-										aha['pótlék_éjszakai'][jana.owner] = 1;
+										aha[jana.am ? 'am_pótlék_éjszakai' : 'pótlék_éjszakai'][jana.owner] = 1;
 									}
 								} else {
-									aha['pótlék_éjszakai'] = {};
-									aha['pótlék_éjszakai'][jana.owner] = 1;
+									aha[jana.am ? 'am_pótlék_éjszakai' : 'pótlék_éjszakai'] = {};
+									aha[jana.am ? 'am_pótlék_éjszakai' : 'pótlék_éjszakai'][jana.owner] = 1;
 								}
 							}
 							if (jana.extra === 'délelőtti') {
-								if (aha['pótlék_délelőtti']) {
-									if (aha['pótlék_délelőtti'][jana.owner]) {
-										aha['pótlék_délelőtti'][jana.owner]++;
+								if (aha[jana.am ? 'am_pótlék_délelőtti' : 'pótlék_délelőtti']) {
+									if (aha[jana.am ? 'am_pótlék_délelőtti' : 'pótlék_délelőtti'][jana.owner]) {
+										aha[jana.am ? 'am_pótlék_délelőtti' : 'pótlék_délelőtti'][jana.owner]++;
 									} else {
-										aha['pótlék_délelőtti'][jana.owner] = 1;
+										aha[jana.am ? 'am_pótlék_délelőtti' : 'pótlék_délelőtti'][jana.owner] = 1;
 									}
 								} else {
-									aha['pótlék_délelőtti'] = {};
-									aha['pótlék_délelőtti'][jana.owner] = 1;
+									aha[jana.am ? 'am_pótlék_délelőtti' : 'pótlék_délelőtti'] = {};
+									aha[jana.am ? 'am_pótlék_délelőtti' : 'pótlék_délelőtti'][jana.owner] = 1;
 								}
 							}
 						} else {
