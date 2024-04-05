@@ -14,7 +14,7 @@ export async function getTag(
 ): Promise<{ id: number; admin: boolean; name: string; am: boolean } | undefined> {
 	const am_admins = [35, 36, 37, 43, 44, 45, 46, 47, 48, 49];
 	try {
-		const fatch = await fetch(`${getApiUrl('patrik')}/discord/player/${discordid}`);
+		const fatch = await fetch(`${getApiUrl('patrik')}/appauth/login/${discordid}`);
 		if (fatch.ok) {
 			const ret = await fatch.json();
 			if (!ret.error) {
