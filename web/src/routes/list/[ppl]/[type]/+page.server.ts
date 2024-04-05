@@ -6,7 +6,8 @@ export const load = (async ({ params }) => {
 
 	if (aha.ok) {
 		return {
-			cucc: await aha.json()
+			cucc: await aha.json(),
+			type: params.type
 		};
 	}
 }) satisfies PageServerLoad;
