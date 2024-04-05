@@ -118,8 +118,7 @@ router.get('/am/get/current/:type', basicAuth, adminAuth, async (req, res) => {
 router.get('/getall', basicAuth, adminAuth, async (req, res) => {
 	const potlekok = await prisma.data.findMany({
 		where: {
-			status: req.headers.status ? (req.headers.status as string) : 'feltöltve',
-			am: false
+			status: req.headers.status ? (req.headers.status as string) : 'feltöltve'
 		},
 		select: {
 			date: true,
@@ -128,7 +127,8 @@ router.get('/getall', basicAuth, adminAuth, async (req, res) => {
 			status: true,
 			reason: true,
 			type: true,
-			extra: true
+			extra: true,
+			am: true
 		},
 		orderBy: {
 			date: 'desc'
