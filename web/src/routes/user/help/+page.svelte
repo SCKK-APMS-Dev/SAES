@@ -37,7 +37,10 @@
 				</h2>
 			</li>
 		</ul>
-		<h1 class="text-3xl font-bold text-left ml-[20%] mt-5">2. Leintések</h1>
+		<h1 class="text-3xl font-bold text-left ml-[20%] mt-5">
+			2. Leintések {#if data.layout.am}/ Bejelentések
+			{/if}
+		</h1>
 		<ul class="child:mx-[20%] child:text-left">
 			<li class="flex gap-2">
 				<h2 class="text-xl font-bold">2.1.</h2>
