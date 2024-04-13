@@ -1,21 +1,39 @@
+<script lang="ts">
+	export let data;
+</script>
+
 <div class="text-center text-white">
 	<h1 class="text-3xl font-bold">Segítség az oldal használatához</h1>
 	<h2 class="text-2xl font-bold mt-3">Alap információk</h2>
 	<h2 class="text-gray-300 mb-3">
-		Ez a weboldal a taxi és a vontatósok papírmunkáját könnyíti meg. Ide kell feltölteni a
-		leintéseket, számlákat illetve a műszakon kívüli pótlékokat.
+		Ez a weboldal a {#if data.layout.am}
+			vontatósok
+		{:else}
+			taxi
+		{/if} papírmunkáját könnyíti meg. Ide kell feltölteni a leintéseket, számlákat illetve a műszakon
+		kívüli pótlékokat.
 	</h2>
 	<div class="align-bottom">
 		<h1 class="text-3xl font-bold text-left ml-[20%] mt-5">1. Pótlékok</h1>
 		<ul class="child:mx-[20%]">
 			<li class="flex items-center gap-2">
 				<h2 class="text-xl text-left font-bold">1.1.</h2>
-				<h2 class="text-xl">A fotónak tartalmaznia kell a nyugtát.</h2>
+				<h2 class="text-xl">
+					{#if data.layout.am}
+						A fotónak tartalmaznia kell a kiadott számlát és a teljes játékot
+					{:else}
+						A fotónak tartalmaznia kell a nyugtát és a teljes játékot
+					{/if}
+				</h2>
 			</li>
 			<li class="flex items-center gap-2">
 				<h2 class="text-xl text-left font-bold">1.2.</h2>
 				<h2 class="text-xl">
-					Pótlékok a következő időben érvényesek: 8-15 óra (délelőtti), 22-4 (éjszakai)
+					Pótlékok a következő időben érvényesek: {#if data.layout.am}
+						8-16 óra (délelőtti), 20-4 (éjszakai)
+					{:else}
+						8-15 óra (délelőtti), 22-4 (éjszakai)
+					{/if}
 				</h2>
 			</li>
 		</ul>
@@ -28,14 +46,22 @@
 			<li class="flex gap-2">
 				<h2 class="text-xl font-bold">2.2.</h2>
 				<h2 class="text-xl">
-					Az első képen a 10-12 rádiózásának, vagy hívás átvételnél a rádió rp-nek kell látszódnia
+					{#if data.layout.am}
+						Az első képen a kiadott számlának kell látszódnia
+					{:else}
+						Az első képen a 10-12 rádiózásának, vagy hívás átvételnél a rádió rp-nek kell látszódnia
+					{/if}
 				</h2>
 			</li>
 			<li class="flex gap-2">
 				<h2 class="text-xl font-bold">2.3.</h2>
 				<h2 class="text-xl">
-					A második képen a közép fent található "xy kifizette az utazást" szövegnek kell látszódnia
-					vagy a kék dobozban, vagy a chaten
+					{#if data.layout.am}
+						A második képen a fizetésről kell képet készíteni (chat)
+					{:else}
+						A második képen a közép fent található "xy kifizette az utazást" szövegnek kell
+						látszódnia vagy a kék dobozban, vagy a chaten
+					{/if}
 				</h2>
 			</li>
 		</ul>
