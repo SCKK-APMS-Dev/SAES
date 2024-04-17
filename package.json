@@ -6,6 +6,7 @@
 	"scripts": {
 		"dev:web": "pnpm --filter ./web run dev",
 		"dev:api": "pnpm --filter ./api run dev",
+		"dev:app": "pnpm --filter ./app run dev",
 		"pr": "pnpm --filter ./api run pr"
 	},
 	"keywords": [],

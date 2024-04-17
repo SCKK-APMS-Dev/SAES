@@ -1,5 +1,9 @@
 <script lang="ts">
-	export let data;
+	export let data: {
+		api?: string | undefined;
+		layout: { am: boolean };
+		error?: string | undefined;
+	};
 </script>
 
 <div class="text-center text-white">

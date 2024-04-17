@@ -3,12 +3,13 @@
 	import { navigating } from '$app/stores';
 
 	import { loading } from '$lib/loading';
+	// biome-ignore lint/suspicious/noConfusingLabels: <explanation>
 	$: $loading = !!$navigating;
 </script>
 
 <head>
 	<title>SCKK</title>
-	<meta name="description" content="SCKK a legjobbaknak" />
+	<meta name="description" content="A SeeCity Közlekedési Központ weboldala" />
 </head>
 
 <slot />
