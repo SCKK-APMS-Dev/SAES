@@ -8,7 +8,7 @@
 
 <head>
 	<title>SCKK</title>
-	<meta name="description" content="SCKK a legjobbaknak" />
+	<meta name="description" content="A SeeCity Közlekedési Központ weboldala" />
 </head>
 
 <slot />
