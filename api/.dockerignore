@@ -1,3 +1,5 @@
-node_modules
-.env
-data
+target
+Dockerfile
+.dockerignore
+.git
+.gitignore
