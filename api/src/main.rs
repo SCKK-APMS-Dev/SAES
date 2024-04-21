@@ -2,6 +2,7 @@
 extern crate rocket;
 
 mod cucc;
+mod db;
 mod user;
 
 #[get("/")]
