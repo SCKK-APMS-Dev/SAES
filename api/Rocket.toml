@@ -2,3 +2,6 @@
 address = "0.0.0.0"
 port = 3000
 limits = { form = "1 GiB", json = "1 GiB" }
+
+[debug]
+address = "127.0.0.1"
