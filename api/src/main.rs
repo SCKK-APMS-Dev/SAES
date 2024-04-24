@@ -4,8 +4,6 @@ mod cucc;
 mod db;
 mod user;
 
-use user::home::user_main;
-
 #[get("/")]
 async fn index() -> impl Responder {
     "SCKK API Szerver v2.0 Actix Web használatával"
@@ -18,7 +16,7 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .wrap(logger)
             .default_service(web::to(|| HttpResponse::NotFound()))
-            .service(user_main)
+            .service(user::routes())
     })
     .bind(("127.0.0.1", 3000))?
     .run()
