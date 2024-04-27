@@ -1,5 +1,8 @@
-use actix_web::{get, middleware::Logger, web, App, HttpResponse, HttpServer, Responder};
+use actix_web::{
+    dev::Service, get, middleware::Logger, web, App, HttpResponse, HttpServer, Responder,
+};
 use env_logger::Env;
+use futures_util::future::FutureExt;
 
 mod cucc;
 mod db;
@@ -19,7 +22,13 @@ async fn main() -> std::io::Result<()> {
             .wrap(Logger::new("%a %{User-Agent}i"))
             .default_service(web::to(|| HttpResponse::NotFound()))
             .service(index)
-            .service(user::routes())
+            .service(user::routes().wrap_fn(|req, srv| {
+                println!("Hi from start. You requested: {}", req.path());
+                srv.call(req).map(|res| {
+                    println!("Hi from response");
+                    res
+                })
+            }))
     })
     .bind(("0.0.0.0", 3000))?
     .run()
