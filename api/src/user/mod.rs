@@ -1,6 +1,6 @@
-use actix_web::services;
+use actix_web::{services, web};
 mod home;
 
-pub fn routes() -> (home::user_main,) {
-    services![home::user_main]
+pub fn routes() -> (actix_web::Scope,) {
+    services![web::scope("/user").service(services![home::user_main])]
 }
