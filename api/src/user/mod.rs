@@ -1,7 +1,7 @@
-use actix_web::web;
+use axum::Router;
 
-mod home;
+mod base;
 
-pub fn routes() -> actix_web::Scope {
-    web::scope("/user").service(home::user_main)
+pub fn routes() -> Router {
+    Router::new().route("/", base::user_home())
 }
