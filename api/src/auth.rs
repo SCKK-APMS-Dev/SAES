@@ -1,9 +1,9 @@
+use axum::extract::Query;
 use oauth2::basic::BasicClient;
-use oauth2::reqwest::http_client;
 use oauth2::{
-    AuthUrl, AuthorizationCode, ClientId, ClientSecret, CsrfToken, PkceCodeChallenge, RedirectUrl,
-    Scope, TokenResponse, TokenUrl,
+    AuthUrl, ClientId, ClientSecret, CsrfToken, PkceCodeChallenge, RedirectUrl, Scope, TokenUrl,
 };
+use serde::Deserialize;
 use std::env;
 
 pub fn get_url() -> String {
@@ -24,16 +24,23 @@ pub fn get_url() -> String {
     .set_redirect_uri(RedirectUrl::new(cb).expect("Redirect Url lekérése sikertelen"));
 
     // Generate a PKCE challenge.
-    let (pkce_challenge, pkce_verifier) = PkceCodeChallenge::new_random_sha256();
+    let pkce = PkceCodeChallenge::new_random_sha256();
 
     // Generate the full authorization URL.
-    let (auth_url, csrf_token) = client
+    let auth_url = client
         .authorize_url(CsrfToken::new_random)
         // Set the desired scopes.
-        .add_scope(Scope::new("read".to_string()))
-        .add_scope(Scope::new("write".to_string()))
+        .add_scope(Scope::new("identify".to_string()))
         // Set the PKCE code challenge.
-        .set_pkce_challenge(pkce_challenge)
+        .set_pkce_challenge(pkce.0)
         .url();
-    auth_url.to_string()
+    auth_url.0.to_string()
+}
+
+struct Code {
+    code: String,
+}
+
+pub async fn callback(code: Query<Code>) -> String {
+    code.0.code
 }
