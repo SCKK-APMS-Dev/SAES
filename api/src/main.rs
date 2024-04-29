@@ -1,16 +1,19 @@
-use axum::{routing::get, Router};
+use axum::{response::Redirect, routing::get, Router};
+use dotenvy::dotenv;
 use tower_cookies::CookieManagerLayer;
 
+mod auth;
 mod user;
 
 #[tokio::main]
 async fn main() {
-    // build our application with a single route
+    dotenv().expect(".env fájl nem található");
     let app = Router::new()
         .route(
             "/",
             get(|| async { "SCKK Web API V2 Axum & SQLx használatával" }),
         )
+        .route("/auth", get(|| async { Redirect::to(&auth::get_url()) }))
         .nest("/user", user::routes())
         .layer(CookieManagerLayer::new());
 
