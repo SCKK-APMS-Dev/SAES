@@ -6,9 +6,9 @@
 	<div class="m-auto text-center">
 		{#if data?.noauth}
 			<h1 class="text-white text-3xl font-bold">Az oldal használatához kérlek lépj be</h1>
-			<button class="relative group overflow-hidden px-6 h-12 rounded-full flex space-x-2 items-center bg-gradient-to-r from-white to-red-600 hover:to-red-700">
+			<button class="relative group overflow-hidden px-6 h-12 rounded-full flex space-x-2 items-center bg-gradient-to-r from-white to-red-600 hover:to-red-700 m-auto">
 				<a href="user">
-					<span class="relative text-sm text-white">Belépés Discordal</span>
+					<span class="relative text-sm text-black font-bold text-xl">Belépés Discordal</span>
 				</a>
 				<div class="flex items-center -space-x-3 translate-x-3">
 				  <div class="w-2.5 h-[1.6px] rounded bg-white origin-left scale-x-0 transition duration-300 group-hover:scale-x-100"></div>
