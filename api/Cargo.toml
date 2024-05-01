@@ -13,4 +13,5 @@ axum = { version = "0.7.5", features = ["macros"] }
 tokio = { version = "1.37.0", features = ["full"] }
 tower-cookies = "0.10.0"
 dotenvy = "0.15.7"
-oauth2 = "4.4.2"
+reqwest = "0.12.4"
+url-builder = "0.1.1"

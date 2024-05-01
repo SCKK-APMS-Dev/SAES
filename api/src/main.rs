@@ -13,7 +13,10 @@ async fn main() {
             "/",
             get(|| async { "SCKK Web API V2 Axum & SQLx használatával" }),
         )
-        .route("/auth", get(|| async { Redirect::to(&auth::get_url()) }))
+        .route(
+            "/auth",
+            get(|| async { Redirect::to(&auth::get_auth_url()) }),
+        )
         .route("/cb", get(auth::callback))
         .nest("/user", user::routes())
         .layer(CookieManagerLayer::new());

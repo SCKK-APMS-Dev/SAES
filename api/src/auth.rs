@@ -1,56 +1,47 @@
-use axum::extract::Query;
-use axum::{debug_handler, Json};
-use oauth2::basic::{BasicClient, BasicErrorResponseType, BasicTokenType};
-use oauth2::reqwest::http_client;
-use oauth2::{
-    AccessToken, AuthUrl, AuthorizationCode, ClientId, ClientSecret, CsrfToken,
-    EmptyExtraTokenFields, RedirectUrl, RefreshToken, RevocationErrorResponseType, Scope,
-    StandardErrorResponse, StandardRevocableToken, StandardTokenIntrospectionResponse,
-    StandardTokenResponse, TokenResponse, TokenUrl,
-};
-use serde::Deserialize;
 use std::env;
-use std::time::Duration;
 
-fn get_client() -> oauth2::Client<
-    StandardErrorResponse<BasicErrorResponseType>,
-    StandardTokenResponse<EmptyExtraTokenFields, BasicTokenType>,
-    BasicTokenType,
-    StandardTokenIntrospectionResponse<EmptyExtraTokenFields, BasicTokenType>,
-    StandardRevocableToken,
-    StandardErrorResponse<RevocationErrorResponseType>,
-> {
+use axum::debug_handler;
+use axum::extract::Query;
+use url_builder::URLBuilder;
+
+use serde::Deserialize;
+
+struct DiscordStuff {
+    discord_base: String,
+    discord_token_url: String,
+    discord_id: String,
+    discord_secret: String,
+    redirect_url: String,
+    api_endpoint: String,
+}
+
+fn get_discord_envs() -> DiscordStuff {
     let id = env::var("DISCORD_ID")
         .expect("DISCORD_ID .env fájlból betöltése sikertelen. Létre van hozva?");
     let secret = env::var("DISCORD_SECRET")
         .expect("DISCORD_SECRET .env fájlból betöltése sikertelen. Létre van hozva?");
     let cb = env::var("REDIRECT_URL")
         .expect("REDIRECT_URL .env fájlból betöltése sikertelen. Létre van hozva?");
-    return BasicClient::new(
-        ClientId::new(id),
-        Some(ClientSecret::new(secret)),
-        AuthUrl::new("https://discord.com/api/oauth2/authorize".to_string())
-            .expect("Auth Url lekérése sikertelen"),
-        Some(
-            TokenUrl::new("https://discord.com/api/oauth2/token".to_string())
-                .expect("Token Url lekérése sikertelen"),
-        ),
-    )
-    // Set the URL the user will be redirected to after the authorization process.
-    .set_redirect_uri(RedirectUrl::new(cb).expect("Redirect Url megadása sikertelen"));
+    DiscordStuff {
+        discord_id: id,
+        discord_secret: secret,
+        redirect_url: cb,
+        discord_base: String::from("discord.com/oauth2/authorize"),
+        discord_token_url: String::from("discord.com/api/oauth2/token"),
+        api_endpoint: String::from("https://discord.com/api/v10"),
+    }
 }
 
-pub fn get_url() -> String {
-    // Generate a PKCE challenge.
-    let client = get_client();
-    // Generate the full authorization URL.
-    let auth_url = client
-        .authorize_url(CsrfToken::new_random)
-        // Set the desired scopes.
-        .add_scope(Scope::new("identify".to_string()))
-        // Set the PKCE code challenge.
-        .url();
-    auth_url.0.to_string()
+pub fn get_auth_url() -> String {
+    let mut ub = URLBuilder::new();
+    let ds = get_discord_envs();
+    ub.set_protocol("https")
+        .set_host(&ds.discord_base.as_str())
+        .add_param("response_type", "code")
+        .add_param("client_id", &ds.discord_id)
+        .add_param("scope", "identify")
+        .add_param("redirect_uri", &ds.redirect_url);
+    ub.build()
 }
 
 #[derive(Deserialize)]
@@ -58,12 +49,40 @@ pub struct Code {
     code: String,
 }
 
+#[derive(Debug, Deserialize)]
+struct TokenResponse {
+    token_type: String,
+    expires_in: u64,
+    refresh_token: String,
+    scope: String,
+    access_token: String,
+    // Add other relevant fields from the response here (e.g., token_type, expires_in)
+}
+
 #[debug_handler]
 pub async fn callback(Query(query): Query<Code>) -> String {
-    let client = get_client();
-    let result = client
-        .exchange_code(AuthorizationCode::new(query.code))
-        .request(http_client)
-        .expect("Token lekérése sikertelen");
-    String::from("kuki")
+    let client = reqwest::Client::new();
+    let ds = get_discord_envs();
+    let data = [
+        ("grant_type", "authorization_code"),
+        ("code", &query.code),
+        ("redirect_uri", &ds.redirect_url),
+    ];
+    let url = format!("{}/oauth2/token", ds.api_endpoint);
+    let response = client
+        .post(&url)
+        .basic_auth(ds.discord_id, Some(ds.discord_secret.to_string()))
+        .form(&data)
+        .send()
+        .await;
+
+    let token_response: String = response
+        .expect("Lekérés sikertelen")
+        .text()
+        .await
+        .expect("Átalakítás sikerleten");
+    let object: TokenResponse =
+        serde_json::from_str(&token_response).expect("Átalakítás sikertelen");
+    println!("{},{}", object.access_token, object.expires_in);
+    token_response
 }
