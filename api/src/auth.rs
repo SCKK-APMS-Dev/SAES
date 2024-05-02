@@ -82,7 +82,7 @@ pub async fn callback(Query(query): Query<Code>, cookies: Cookies) -> Redirect {
         .expect("Lekérés sikertelen")
         .text()
         .await
-        .expect("Átalakítás sikerleten");
+        .expect("Átalakítás sikertelen");
     let object: TokenResponse =
         serde_json::from_str(&token_response).expect("Átalakítás sikertelen");
     cookies.add(

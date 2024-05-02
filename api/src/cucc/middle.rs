@@ -4,6 +4,10 @@ use tower_cookies::Cookies;
 
 use crate::auth::get_discord_envs;
 
+pub struct DiscordUser {
+    pub id: String,
+}
+
 pub async fn basic_auth(
     Extension(cookies): Extension<Cookies>,
     request: Request,
@@ -14,18 +18,16 @@ pub async fn basic_auth(
     let ds = get_discord_envs();
     if auth.is_some() {
         let client = reqwest::Client::new();
-        let url = format!("{}/users/@me", ds.api_endpoint);
-        let response = client
-            .get(&url)
+        let dcuserget: String = client
+            .get(format!("{}/users/@me", ds.api_endpoint))
             .header("Authorization", format!("Bearer {}", auth.unwrap().value()))
             .send()
-            .await;
-        let real_response: String = response
+            .await
             .expect("Lekérés sikertelen")
             .text()
             .await
-            .expect("Átalakítás sikerleten");
-        println!("{}", real_response)
+            .expect("Átalakítás sikertelen");
+        println!("{}", dcuserget)
     } else {
         return Err((StatusCode::NOT_FOUND, "Nincs kuki".to_string()));
     };
