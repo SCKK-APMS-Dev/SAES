@@ -8,12 +8,14 @@
 	export let leintes = false;
 </script>
 
-<div class="text-center text-white grid grid-cols-1">
-	<a href={`/user/${url}/upload`} class="bg-green-500 text-2xl p-2 drop-shadow-xl font-bold"
+<div class="text-center dark:text-white text-black grid grid-cols-1">
+	<a
+		href={`/user/${url}/upload`}
+		class="bg-gradient-to-r from-white to-red-600 text-2xl p-2 drop-shadow-xl font-bold mr-96 ml-96 mt-16 rounded-lg text-black"
 		>Feltöltés</a
 	>
 	<h1 class="text-5xl font-bold drop-shadow-xl">{magazo}:</h1>
-	<h2 class="mb-3 text-gray-400">(az elmúlt két hétben)</h2>
+	<h2 class="mb-3 dark:text-white text-black">(az elmúlt két hétben)</h2>
 	<div class="flex flex-auto flex-wrap align-middle items-center justify-center gap-3">
 		{#if data.potlekok}
 			{#each data.potlekok as potle}

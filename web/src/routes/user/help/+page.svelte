@@ -6,10 +6,10 @@
 	};
 </script>
 
-<div class="text-center text-white">
+<div class="text-center text-black dark:text-white">
 	<h1 class="text-3xl font-bold">Segítség az oldal használatához</h1>
 	<h2 class="text-2xl font-bold mt-3">Alap információk</h2>
-	<h2 class="text-gray-300 mb-3">
+	<h2 class="text-black dark:text-white mb-3">
 		Ez a weboldal a {#if data.layout.am}
 			vontatósok
 		{:else}

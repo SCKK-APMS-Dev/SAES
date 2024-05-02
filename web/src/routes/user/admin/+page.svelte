@@ -80,7 +80,7 @@
 				<h1 class="text-3xl font-bold">
 					Jelenlegi hét ({`${data.date?.prev.getUTCMonth() + 1}.${data.date?.prev.getUTCDate()}. - ${data.date?.next.getUTCMonth() + 1}.${data.date?.next.getUTCDate()}`})
 				</h1>
-				<h2 class="text-gray-300">
+				<h2 class="text-black dark:text-white">
 					A jelenlegi hétnél nincsen link, péntek 22:00-után az előző heti linkek ezeket fogják
 					mutatni
 				</h2>
