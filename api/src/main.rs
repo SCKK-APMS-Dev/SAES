@@ -3,6 +3,7 @@ use dotenvy::dotenv;
 use tower_cookies::CookieManagerLayer;
 
 mod auth;
+mod cucc;
 mod user;
 
 #[tokio::main]

@@ -2,24 +2,22 @@ use std::env;
 
 use axum::extract::Query;
 use axum::{debug_handler, response::Redirect};
-use serde::de::IntoDeserializer;
 use tower_cookies::cookie::time::Duration;
 use tower_cookies::{Cookie, Cookies};
 use url_builder::URLBuilder;
 
-use serde::{Deserialize, Deserializer};
+use serde::Deserialize;
 
-struct DiscordStuff {
-    discord_base: String,
-    discord_token_url: String,
-    discord_id: String,
-    discord_secret: String,
-    redirect_url: String,
-    domain: String,
-    api_endpoint: String,
+pub struct DiscordStuff {
+    pub api_endpoint: String,
+    pub discord_base: String,
+    pub discord_id: String,
+    pub discord_secret: String,
+    pub redirect_url: String,
+    pub domain: String,
 }
 
-fn get_discord_envs() -> DiscordStuff {
+pub fn get_discord_envs() -> DiscordStuff {
     let id = env::var("DISCORD_ID")
         .expect("DISCORD_ID .env fájlból betöltése sikertelen. Létre van hozva?");
     let secret = env::var("DISCORD_SECRET")
@@ -29,13 +27,12 @@ fn get_discord_envs() -> DiscordStuff {
     let domain =
         env::var("DOMAIN").expect("DOMAIN .env fájlból betöltése sikertelen. Létre van hozva?");
     DiscordStuff {
+        api_endpoint: String::from("https://discord.com/api/v10"),
         discord_id: id,
         discord_secret: secret,
         domain: domain,
         redirect_url: cb,
         discord_base: String::from("discord.com/oauth2/authorize"),
-        discord_token_url: String::from("discord.com/api/oauth2/token"),
-        api_endpoint: String::from("https://discord.com/api/v10"),
     }
 }
 
