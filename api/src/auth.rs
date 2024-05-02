@@ -1,10 +1,13 @@
 use std::env;
 
-use axum::debug_handler;
 use axum::extract::Query;
+use axum::{debug_handler, response::Redirect};
+use serde::de::IntoDeserializer;
+use tower_cookies::cookie::time::Duration;
+use tower_cookies::{Cookie, Cookies};
 use url_builder::URLBuilder;
 
-use serde::Deserialize;
+use serde::{Deserialize, Deserializer};
 
 struct DiscordStuff {
     discord_base: String,
@@ -12,6 +15,7 @@ struct DiscordStuff {
     discord_id: String,
     discord_secret: String,
     redirect_url: String,
+    domain: String,
     api_endpoint: String,
 }
 
@@ -22,9 +26,12 @@ fn get_discord_envs() -> DiscordStuff {
         .expect("DISCORD_SECRET .env fájlból betöltése sikertelen. Létre van hozva?");
     let cb = env::var("REDIRECT_URL")
         .expect("REDIRECT_URL .env fájlból betöltése sikertelen. Létre van hozva?");
+    let domain =
+        env::var("DOMAIN").expect("DOMAIN .env fájlból betöltése sikertelen. Létre van hozva?");
     DiscordStuff {
         discord_id: id,
         discord_secret: secret,
+        domain: domain,
         redirect_url: cb,
         discord_base: String::from("discord.com/oauth2/authorize"),
         discord_token_url: String::from("discord.com/api/oauth2/token"),
@@ -51,16 +58,14 @@ pub struct Code {
 
 #[derive(Debug, Deserialize)]
 struct TokenResponse {
-    token_type: String,
-    expires_in: u64,
-    refresh_token: String,
-    scope: String,
+    expires_in: i64,
+    // refresh_token: String,
     access_token: String,
     // Add other relevant fields from the response here (e.g., token_type, expires_in)
 }
 
 #[debug_handler]
-pub async fn callback(Query(query): Query<Code>) -> String {
+pub async fn callback(Query(query): Query<Code>, cookies: Cookies) -> Redirect {
     let client = reqwest::Client::new();
     let ds = get_discord_envs();
     let data = [
@@ -83,6 +88,14 @@ pub async fn callback(Query(query): Query<Code>) -> String {
         .expect("Átalakítás sikerleten");
     let object: TokenResponse =
         serde_json::from_str(&token_response).expect("Átalakítás sikertelen");
-    println!("{},{}", object.access_token, object.expires_in);
-    token_response
+    cookies.add(
+        Cookie::build(("auth_token", object.access_token))
+            .max_age(Duration::seconds(object.expires_in))
+            .path("/")
+            .domain(ds.domain)
+            .build(),
+    );
+
+    let red = Redirect::to("https://sckk.hu");
+    red
 }
