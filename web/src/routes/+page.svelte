@@ -1,8 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-
 	export let data;
-	onMount(() => {});
 </script>
 
 <div class="h-screen flex">
