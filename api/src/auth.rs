@@ -30,7 +30,7 @@ pub fn get_discord_envs() -> DiscordStuff {
         api_endpoint: String::from("https://discord.com/api/v10"),
         discord_id: id,
         discord_secret: secret,
-        domain: domain,
+        domain,
         redirect_url: cb,
         discord_base: String::from("discord.com/oauth2/authorize"),
     }

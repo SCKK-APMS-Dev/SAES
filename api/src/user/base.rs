@@ -1,10 +1,9 @@
-use axum::{debug_handler, extract::Request};
-use tower_cookies::Cookies;
+use axum::{debug_handler, extract::Request, Json};
 
-use crate::cucc::middle::DiscordUser;
+use crate::cucc::middle::Tag;
 
 #[debug_handler]
-pub async fn user_home(cookies: Cookies, mut request: Request) -> String {
-    let exts: Option<&String> = request.extensions_mut().get();
-    String::from(exts.unwrap())
+pub async fn user_home(mut request: Request) -> Json<Tag> {
+    let exts: Option<&Tag> = request.extensions_mut().get();
+    Json(exts.unwrap().clone())
 }
