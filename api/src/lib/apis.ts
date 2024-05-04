@@ -5,6 +5,6 @@ export function getApiUrl(api: 'erik' | 'patrik') {
 		return 'https://app.sckk.hu';
 	}
 	if (api === 'patrik') {
-		return 'http://api.scms.hanrickio.com:5002';
+		return 'https://scms.sckk.hu';
 	}
 }
