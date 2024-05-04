@@ -1,9 +1,10 @@
+use axum::{debug_handler, extract::Request};
 use tower_cookies::Cookies;
 
-pub async fn user_home(cookies: Cookies) -> String {
-    if let Some(token) = cookies.get("auth_token") {
-        format!("Van token: {}", token.value())
-    } else {
-        String::from("Nincs token")
-    }
+use crate::cucc::middle::DiscordUser;
+
+#[debug_handler]
+pub async fn user_home(cookies: Cookies, mut request: Request) -> String {
+    let exts: Option<&String> = request.extensions_mut().get();
+    String::from(exts.unwrap())
 }

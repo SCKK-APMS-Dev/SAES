@@ -1,16 +1,20 @@
+use std::sync::Arc;
+
 use axum::{extract::Request, middleware::Next, response::IntoResponse, Extension};
 use reqwest::StatusCode;
+use serde::Deserialize;
 use tower_cookies::Cookies;
 
 use crate::auth::get_discord_envs;
 
+#[derive(Debug, Deserialize, Clone)]
 pub struct DiscordUser {
     pub id: String,
 }
 
 pub async fn basic_auth(
     Extension(cookies): Extension<Cookies>,
-    request: Request,
+    mut request: Request,
     next: Next,
 ) -> Result<impl IntoResponse, (StatusCode, String)> {
     // do something with `request`...
@@ -27,9 +31,11 @@ pub async fn basic_auth(
             .text()
             .await
             .expect("Átalakítás sikertelen");
-        println!("{}", dcuserget)
+        let parsed_user: DiscordUser =
+            serde_json::from_str(&dcuserget).expect("User object létrehozása sikertelen");
+        request.extensions_mut().insert(parsed_user.id);
+        return Ok(next.run(request).await);
     } else {
         return Err((StatusCode::NOT_FOUND, "Nincs kuki".to_string()));
     };
-    Ok(next.run(request).await)
 }
