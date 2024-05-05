@@ -27,6 +27,9 @@
 		class="text-xl col-span-2 lg:col-span-1 child:px-2 child:rounded-lg flex-col lg:!flex items-center justify-center hidden text-center lg:mr-[10vw] md:flex-row lg:z-auto child:drop-shadow-xl"
 	>
 		<a href="/user/admin" class="hover:bg-emerald-600 duration-200 transition-all">Jelenlegi hét</a>
+		<a href="/user/admin/call" class="hover:bg-emerald-600 duration-200 transition-all"
+			>Ősi hívásszámláló</a
+		>
 		<a href="/user/admin/prev" class="hover:bg-emerald-600 duration-200 transition-all">Előző hét</a
 		>
 		<a href="/user/admin/potlekok" class="hover:bg-emerald-600 duration-200 transition-all"
