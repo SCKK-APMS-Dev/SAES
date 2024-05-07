@@ -17,7 +17,7 @@ pub struct DiscordUser {
 #[derive(Debug, Deserialize, Clone)]
 pub struct GetUserRes {
     pub Id: i64,
-    pub PermissionGroup: Option<i8>,
+    pub PermissionGroup: Option<u32>,
     pub PlayerName: String,
     pub PositionId: i8,
 }
@@ -65,7 +65,7 @@ pub async fn basic_auth(
         let tag = Tag {
             id: parsed_user.id,
             name: parsed_tag.PlayerName,
-            admin: parsed_tag.PermissionGroup.is_some(),
+            admin: parsed_tag.PermissionGroup.is_some_and(|x| x == 1),
             am: false,
         };
         request.extensions_mut().insert(tag);
