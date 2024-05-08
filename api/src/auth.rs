@@ -89,10 +89,10 @@ pub async fn callback(Query(query): Query<Code>, cookies: Cookies) -> Redirect {
         Cookie::build(("auth_token", object.access_token))
             .max_age(Duration::seconds(object.expires_in))
             .path("/")
-            .domain(ds.domain)
+            .domain(ds.domain.clone())
             .build(),
     );
 
-    let red = Redirect::to("https://sckk.hu");
+    let red = Redirect::to(&ds.domain);
     red
 }
