@@ -74,3 +74,16 @@ pub async fn basic_auth(
         return Err((StatusCode::NOT_FOUND, "Nincs kuki".to_string()));
     };
 }
+
+pub async fn admin_auth(
+    mut req: Request,
+    next: Next,
+) -> Result<impl IntoResponse, (StatusCode, String)> {
+    let exts: Option<&Tag> = req.extensions_mut().get();
+    let uwrp = exts.expect("Tag lekérése sikertelen, basic_auth megtörtént?");
+    if uwrp.admin == true {
+        return Ok(next.run(req).await);
+    } else {
+        return Err((StatusCode::UNAUTHORIZED, "Nem vagy admin".to_string()));
+    }
+}
