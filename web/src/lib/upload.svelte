@@ -49,13 +49,13 @@
 </script>
 
 <div class="text-center text-white">
-	<div class="bg-green-500 p-2">
+	<div class="bg-green-500 p-2 mr-16 ml-16 mt-16 rounded-lg">
 		<h2 class="font-bold text-red-800 drop-shadow-xl">{formerror ? formerror : ''}</h2>
 		<h1 class="text-3xl font-bold">{title} feltöltése</h1>
 		<form on:submit|preventDefault={() => upload()} enctype="multipart/form-data">
 			<input type="text" class="hidden" name="name" value={adat.layout?.name} />
 			<input type="file" name="file" id="file" accept="image/*" required multiple />
-			<button type="submit" class="bg-red-600 font-bold text-xl px-2 rounded-xl">Feltöltés</button>
+			<button type="submit" class="bg-gradient-to-r from-white to-red-600 font-bold text-xl px-2 rounded-xl text-black">Feltöltés</button>
 			<h2>{desc}</h2>
 		</form>
 		<h2 class="bg-red-600 font-bold text-xl px-2 rounded-xl">

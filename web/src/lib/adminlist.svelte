@@ -171,12 +171,12 @@
 </dialog>
 
 <div class="flex">
-	<div class="m-auto text-center text-white">
+	<div class="m-auto text-center text-black dark:text-white">
 		{#if potleks && !potleks.error}
 			<h1 class="text-2xl font-bold">{title}</h1>
 			<h1 class="text-xl font-bold">{des}</h1>
 			<div class="flex justify-center text-center items-center gap-2">
-				<h2 class="text-xl font-bold">Filter</h2>
+				<h2 class="text-xl font-bold text-black dark:text-white">Filter</h2>
 				<Select
 					placeholder="Kérlek válassz"
 					id="potlek-type"
@@ -188,11 +188,11 @@
 					<option value="elfogadva" class="font-bold">Elfogadva</option>
 					<option value="elutasítva" class="font-bold">Elutasítva</option>
 				</Select>
-				<h2 class="text-xl font-bold">Aktuális hét</h2>
+				<h2 class="text-xl font-bold text-black dark:text-white">Aktuális hét</h2>
 				<Checkbox name="csekd" bind:checked={current} on:change={() => rerun()} />
 			</div>
-			<table class="table-auto p-10 mt-5 rounded-2xl">
-				<thead class="bg-green-700 rounded-2xl">
+			<table class="table-auto p-10 mt-5 text-white">
+				<thead class="bg-green-700 rounded-xl">
 					<tr class="child:p-2">
 						<th>Dátum</th>
 						<th>IG Név</th>
