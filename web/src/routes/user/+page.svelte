@@ -2,9 +2,9 @@
 	export let data;
 </script>
 
-<div class="text-center text-white grid grid-cols-1 grid-rows-1 child:p-2 md:child:p-16">
+<div class="text-center text-white grid grid-cols-1 grid-rows-1 child:p-2 md:child:p-16 ">
 	{#if !data.error}
-		<div class="bg-emerald-600">
+		<div class="bg-emerald-600 rounded-lg mr-16 ml-16 mt-16">
 			<h1 class="text-2xl md:text-5xl md:font-bold md:mb-4 drop-shadow-lg">
 				Üdv {data.layout?.name}!
 			</h1>

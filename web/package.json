@@ -39,5 +39,8 @@
 		"unplugin-icons": "^0.18.5",
 		"vite": "^5.2.7"
 	},
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"tw-elements": "^2.0.0"
+	}
 }
