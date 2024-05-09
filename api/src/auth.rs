@@ -15,6 +15,7 @@ pub struct DiscordStuff {
     pub discord_secret: String,
     pub redirect_url: String,
     pub domain: String,
+    pub fdomain: String,
 }
 
 pub fn get_discord_envs() -> DiscordStuff {
@@ -26,11 +27,14 @@ pub fn get_discord_envs() -> DiscordStuff {
         .expect("REDIRECT_URL .env fájlból betöltése sikertelen. Létre van hozva?");
     let domain =
         env::var("DOMAIN").expect("DOMAIN .env fájlból betöltése sikertelen. Létre van hozva?");
+    let fdomain = env::var("FULL_DOMAIN")
+        .expect("FULL_DOMAIN .env fájlból betöltése sikertelen. Létre van hozva?");
     DiscordStuff {
         api_endpoint: String::from("https://discord.com/api/v10"),
         discord_id: id,
         discord_secret: secret,
         domain,
+        fdomain,
         redirect_url: cb,
         discord_base: String::from("discord.com/oauth2/authorize"),
     }
@@ -93,6 +97,6 @@ pub async fn callback(Query(query): Query<Code>, cookies: Cookies) -> Redirect {
             .build(),
     );
 
-    let red = Redirect::to(&ds.domain);
+    let red = Redirect::to(&ds.fdomain);
     red
 }
