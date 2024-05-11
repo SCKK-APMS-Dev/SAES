@@ -2,7 +2,7 @@ import { apiUrl } from '$lib/api';
 import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = async ({ request, cookies }) => {
-	const dcauth = cookies.get('dc-auth') as string;
+	const dcauth = cookies.get('auth_token') as string;
 	if (dcauth) {
 		if (request.headers.get('current') === 'false') {
 			const mama = await fetch(
@@ -42,7 +42,7 @@ export const GET: RequestHandler = async ({ request, cookies }) => {
 export const POST: RequestHandler = async ({ request, cookies }) => {
 	const body = await request.json();
 	if (!body) return new Response(null, { status: 404 });
-	const dcauth = cookies.get('dc-auth') as string;
+	const dcauth = cookies.get('auth_token') as string;
 	if (dcauth) {
 		const mama = await fetch(`${apiUrl}/user/admin/post`, {
 			method: 'post',

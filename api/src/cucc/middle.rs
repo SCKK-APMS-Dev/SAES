@@ -1,9 +1,8 @@
 #![allow(non_snake_case)]
 
-use axum::{extract::Request, middleware::Next, response::IntoResponse, Extension};
+use axum::{extract::Request, http::HeaderMap, middleware::Next, response::IntoResponse};
 use reqwest::StatusCode;
 use serde::{Deserialize, Serialize};
-use tower_cookies::Cookies;
 
 use crate::auth::get_discord_envs;
 
@@ -31,19 +30,22 @@ pub struct Tag {
 }
 
 pub async fn basic_auth(
-    Extension(cookies): Extension<Cookies>,
+    headers: HeaderMap,
     mut request: Request,
     next: Next,
 ) -> Result<impl IntoResponse, (StatusCode, String)> {
     // do something with `request`...
-    let auth = cookies.get("auth_token");
+    let auth = headers.get("cookie");
     let ds = get_discord_envs();
     let envs = get_api_envs();
     if auth.is_some() {
         let client = reqwest::Client::new();
         let dcuserget: String = client
             .get(format!("{}/users/@me", ds.api_endpoint))
-            .header("Authorization", format!("Bearer {}", auth.unwrap().value()))
+            .header(
+                "Authorization",
+                format!("Bearer {}", auth.unwrap().to_str().unwrap()),
+            )
             .send()
             .await
             .expect("Lekérés sikertelen")

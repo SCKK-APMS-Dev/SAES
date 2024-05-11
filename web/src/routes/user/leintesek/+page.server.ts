@@ -9,7 +9,7 @@ export const load = (async ({ parent, cookies }) => {
 			mode: 'no-cors',
 			headers: {
 				type: 'leintés',
-				cookie: cookies.get('dc-auth') as string
+				cookie: cookies.get('auth_token') as string
 			}
 		});
 		if (aha.status === 401) {

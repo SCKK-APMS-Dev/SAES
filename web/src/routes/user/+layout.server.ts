@@ -4,19 +4,19 @@ import { apiUrl } from '$lib/api';
 
 export const load = (async ({ cookies }) => {
 	try {
+		console.log(cookies.get('auth_token'));
 		const aha = await fetch(`${apiUrl}/user`, {
-			mode: 'no-cors',
 			headers: {
-				cookie: cookies.get('dc-auth') as string
+				cookie: cookies.get('auth_token')!
 			}
 		});
-		if (aha.status === 404) {
-			throw redirect(
-				302,
+		// if (aha.status === 404) {
+		// 	throw redirect(
+		// 		302,
 
-				`${apiUrl}/user/auth`
-			);
-		}
+		// 		`${apiUrl}/auth`
+		// 	);
+		// }
 		if (aha.status === 401) {
 			throw redirect(302, '/noaccess');
 		}

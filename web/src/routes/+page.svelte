@@ -12,7 +12,7 @@
 				class="relative group overflow-hidden px-6 h-12 rounded-full flex space-x-2 items-center bg-gradient-to-r from-white to-red-600 hover:to-red-700 m-auto"
 			>
 				<a href="user">
-					<span class="relative text-sm text-black font-bold text-xl">Belépés Discordal</span>
+					<span class="relative text-black font-bold text-xl">Belépés Discordal</span>
 				</a>
 				<div class="flex items-center -space-x-3 translate-x-3">
 					<div
