@@ -10,8 +10,15 @@ pub struct DriverRecord {
     pub count: u32,
 }
 
+#[derive(Debug, Deserialize, Serialize)]
+pub struct callz {
+    pub app: u32,
+    pub leintes: u32,
+}
+
 #[debug_handler]
-pub async fn calls(mut request: Request) -> Json<DriverRecord> {
+pub async fn calls(mut request: Request) -> Json<callz> {
+    let exts: Option<&Tag> = request.extensions_mut().get();
     let client = reqwest::Client::new();
     let envs = get_api_envs();
     let calls = client
@@ -24,11 +31,8 @@ pub async fn calls(mut request: Request) -> Json<DriverRecord> {
         .expect("Átalakítás sikertelen");
     let driver_records: Vec<DriverRecord> = from_str(&calls).expect("Átalakítás nem megyen");
 
-    Json(
-        driver_records
-            .iter()
-            .find(|record| record.driver == "Lemondott")
-            .unwrap()
-            .clone(),
-    )
+    let rec = driver_records
+        .iter()
+        .find(|record| record.driver == exts.unwrap().name);
+    Json(callz { app: 0, leintes: 0 })
 }

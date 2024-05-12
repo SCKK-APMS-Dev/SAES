@@ -8,14 +8,14 @@
 			<h1 class="text-2xl md:text-5xl md:font-bold md:mb-4 drop-shadow-lg">
 				Üdv {data.layout?.name}!
 			</h1>
-			<!-- {#if !data.layout.am}
+			{#if !data.layout.am}
 				<h2 class="text-xl md:text-2xl drop-shadow-lg">
 					Hívásaid (app+leintés): {data.calls?.app}+{data.calls?.leintes.elfogadott}={Number(
 						data.calls.app
 					) + Number(data.calls?.leintes.elfogadott)}
 				</h2>
 			{/if}
-			<h2 class="text-xl md:text-2xl drop-shadow-lg">
+			<!-- <h2 class="text-xl md:text-2xl drop-shadow-lg">
 				Elfogadott pótlékaid (délelőtti+éjszakai): {data.calls?.potlek.de}+{data.calls?.potlek.éj}
 			</h2> -->
 		</div>
