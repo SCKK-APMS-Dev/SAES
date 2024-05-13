@@ -4,13 +4,15 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"dev:web": "pnpm --filter ./web run dev",
-		"dev:api": "cd api && cargo watch -x run",
-		"dev:app": "pnpm --filter ./app run dev",
-		"pr": "cd api/src && rmdir /s /q db && mkdir db && cd db && sea-orm-cli generate entity"
+		"dev:web": "bun --filter src/web run dev",
+		"dev:api": "cd src/api && cargo watch -x run",
+		"pr": "cd src/api/src && rmdir /s /q db && mkdir db && cd db && sea-orm-cli generate entity"
 	},
 	"keywords": [],
 	"author": "",
+	"workspaces": [
+		"src/*"
+	],
 	"license": "ISC",
 	"packageManager": "pnpm@9.1.0"
 }

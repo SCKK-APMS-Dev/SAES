@@ -10,9 +10,8 @@
 			</h1>
 			{#if !data.layout.am}
 				<h2 class="text-xl md:text-2xl drop-shadow-lg">
-					Hívásaid (app+leintés): {data.calls?.app}+{data.calls?.leintes.elfogadott}={Number(
-						data.calls.app
-					) + Number(data.calls?.leintes.elfogadott)}
+					Hívásaid (app+leintés): {data.calls?.app}+{data.calls?.leintes}={Number(data.calls.app) +
+						Number(data.calls?.leintes)}
 				</h2>
 			{/if}
 			<!-- <h2 class="text-xl md:text-2xl drop-shadow-lg">
