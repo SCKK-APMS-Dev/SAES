@@ -4,7 +4,7 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"dev:web": "bun --filter src/web run dev",
+		"dev:web": "cd src/web && bun dev",
 		"dev:api": "cd src/api && cargo watch -x run",
 		"pr": "cd src/api/src && rmdir /s /q db && mkdir db && cd db && sea-orm-cli generate entity"
 	},
