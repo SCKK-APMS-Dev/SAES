@@ -4,7 +4,6 @@ import { apiUrl } from '$lib/api';
 
 export const load = (async ({ cookies }) => {
 	try {
-		console.log(cookies.get('auth_token'));
 		const aha = await fetch(`${apiUrl}/user`, {
 			headers: {
 				cookie: cookies.get('auth_token')!
