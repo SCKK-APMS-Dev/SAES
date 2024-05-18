@@ -5,17 +5,17 @@
 
 <Error {data}>
 	<div class="relative z-20 border-b bg-white dark:bg-slate-900 dark:text-white">
-		<div class="px-6 md:px-12 lg:container lg:mx-auto lg:px-6 lg:py-4">
+		<div class="px-6 lg:container md:px-12 lg:mx-auto lg:px-6 lg:py-4">
 			<div class="flex items-center justify-between">
 				<div class="relative z-20">
 					<img
 						src="/favicon.png"
-						class="pointer-events-none drop-shadow-xl ml-5"
+						class="pointer-events-none ml-5 drop-shadow-xl"
 						width="40"
 						height="40"
 						alt="SCKK Logó"
 					/>
-					<h1 class="font-bold text-3xl drop-shadow-xl">
+					<h1 class="text-3xl font-bold drop-shadow-xl">
 						SCKK {#if data.layout.am}
 							Autómentés
 						{/if}
@@ -26,7 +26,7 @@
 					<input type="checkbox" name="hamburger" id="hamburger" class="peer opacity-0" hidden />
 					<label
 						for="hamburger"
-						class="peer-checked:hamburger block relative z-20 p-6 -mr-6 cursor-pointer lg:hidden"
+						class="peer-checked:hamburger relative z-20 -mr-6 block cursor-pointer p-6 lg:hidden"
 					>
 						<div
 							aria-hidden="true"
@@ -39,11 +39,11 @@
 					</label>
 
 					<div
-						class="peer-checked:translate-x-0 fixed inset-0 w-[calc(100%-4.5rem)] translate-x-[-100%] bg-white dark:bg-slate-900 border-r shadow-xl transition duration-300 lg:border-r-0 lg:w-auto lg:static lg:shadow-none lg:translate-x-0"
+						class="fixed inset-0 w-[calc(100%-4.5rem)] translate-x-[-100%] border-r bg-white shadow-xl transition duration-300 peer-checked:translate-x-0 lg:static lg:w-auto lg:translate-x-0 lg:border-r-0 lg:shadow-none dark:bg-slate-900"
 					>
-						<div class="flex flex-col h-full justify-between lg:items-center lg:flex-row">
+						<div class="flex h-full flex-col justify-between lg:flex-row lg:items-center">
 							<ul
-								class="px-6 pt-32 text-gray-700 space-y-8 md:px-12 lg:space-y-0 lg:flex lg:space-x-12 lg:pt-0"
+								class="space-y-8 px-6 pt-32 text-gray-700 md:px-12 lg:flex lg:space-x-12 lg:space-y-0 lg:pt-0"
 							>
 								<li>
 									<a
@@ -90,12 +90,12 @@
 							</ul>
 
 							<div
-								class="border-t py-8 px-6 md:px-12 md:py-16 lg:border-t-0 lg:border-l lg:py-0 lg:pr-0 lg:pl-6"
+								class="border-t px-6 py-8 md:px-12 md:py-16 lg:border-l lg:border-t-0 lg:py-0 lg:pl-6 lg:pr-0"
 							>
 								{#if data.layout?.admin}
 									<a
 										href="/user/admin"
-										class="block px-6 py-3 rounded-full bg-gradient-to-r from-sky-600 to-cyan-400 text-center text-black font-bold"
+										class="block rounded-full bg-gradient-to-r from-sky-600 to-cyan-400 px-6 py-3 text-center font-bold text-black"
 									>
 										Műszakvezetés
 									</a>
@@ -109,8 +109,8 @@
 	</div>
 
 	<footer>
-		<h2 class="text-center bg-blue-600 text-white py-1 text-xl">
-			Nem vagy biztos valamiben? Nézd meg a <a href="/user/help" class="text-yellow-300 font-bold"
+		<h2 class="bg-blue-600 py-1 text-center text-xl text-white">
+			Nem vagy biztos valamiben? Nézd meg a <a href="/user/help" class="font-bold text-yellow-300"
 				>segédletet</a
 			>!
 		</h2>

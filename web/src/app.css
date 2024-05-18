@@ -21,9 +21,9 @@
 }
 @layer components {
 	.hamburger div:first-child {
-		@apply rotate-45 translate-y-1.5;
+		@apply translate-y-1.5 rotate-45;
 	}
 	.hamburger div:last-child {
-		@apply -rotate-45 -translate-y-1;
+		@apply -translate-y-1 -rotate-45;
 	}
 }

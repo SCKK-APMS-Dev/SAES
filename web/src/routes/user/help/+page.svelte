@@ -8,8 +8,8 @@
 
 <div class="text-center text-black dark:text-white">
 	<h1 class="text-3xl font-bold">Segítség az oldal használatához</h1>
-	<h2 class="text-2xl font-bold mt-3">Alap információk</h2>
-	<h2 class="text-black dark:text-white mb-3">
+	<h2 class="mt-3 text-2xl font-bold">Alap információk</h2>
+	<h2 class="mb-3 text-black dark:text-white">
 		Ez a weboldal a {#if data.layout.am}
 			vontatósok
 		{:else}
@@ -18,10 +18,10 @@
 		kívüli pótlékokat.
 	</h2>
 	<div class="align-bottom">
-		<h1 class="text-3xl font-bold text-left ml-[20%] mt-5">1. Pótlékok</h1>
+		<h1 class="ml-[20%] mt-5 text-left text-3xl font-bold">1. Pótlékok</h1>
 		<ul class="child:mx-[20%]">
 			<li class="flex items-center gap-2">
-				<h2 class="text-xl text-left font-bold">1.1.</h2>
+				<h2 class="text-left text-xl font-bold">1.1.</h2>
 				<h2 class="text-xl">
 					{#if data.layout.am}
 						A fotónak tartalmaznia kell a kiadott számlát és a teljes játékot
@@ -31,7 +31,7 @@
 				</h2>
 			</li>
 			<li class="flex items-center gap-2">
-				<h2 class="text-xl text-left font-bold">1.2.</h2>
+				<h2 class="text-left text-xl font-bold">1.2.</h2>
 				<h2 class="text-xl">
 					Pótlékok a következő időben érvényesek: {#if data.layout.am}
 						8-16 óra (délelőtti), 20-4 (éjszakai)
@@ -41,7 +41,7 @@
 				</h2>
 			</li>
 		</ul>
-		<h1 class="text-3xl font-bold text-left ml-[20%] mt-5">
+		<h1 class="ml-[20%] mt-5 text-left text-3xl font-bold">
 			2. Leintések {#if data.layout.am}/ Bejelentések
 			{/if}
 		</h1>
@@ -72,7 +72,7 @@
 				</h2>
 			</li>
 		</ul>
-		<h1 class="text-3xl font-bold text-left ml-[20%] mt-5">3. Számlák</h1>
+		<h1 class="ml-[20%] mt-5 text-left text-3xl font-bold">3. Számlák</h1>
 		<ul class="child:mx-[20%] child:text-left">
 			<li class="flex gap-2">
 				<h2 class="text-xl font-bold">3.1.</h2>

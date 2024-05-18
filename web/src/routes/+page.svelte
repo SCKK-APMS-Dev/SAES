@@ -2,25 +2,25 @@
 	export let data;
 </script>
 
-<div class="h-screen flex">
+<div class="flex h-screen">
 	<div class="m-auto text-center">
 		{#if data?.noauth}
-			<h1 class="text-black dark:text-white text-3xl font-bold">
+			<h1 class="text-3xl font-bold text-black dark:text-white">
 				Az oldal használatához kérlek lépj be
 			</h1>
 			<button
-				class="relative group overflow-hidden px-6 h-12 rounded-full flex space-x-2 items-center bg-gradient-to-r from-white to-red-600 hover:to-red-700 m-auto"
+				class="group relative m-auto flex h-12 items-center space-x-2 overflow-hidden rounded-full bg-gradient-to-r from-white to-red-600 px-6 hover:to-red-700"
 			>
 				<a href="user">
-					<span class="relative text-black font-bold text-xl">Belépés Discordal</span>
+					<span class="relative text-xl font-bold text-black">Belépés Discordal</span>
 				</a>
-				<div class="flex items-center -space-x-3 translate-x-3">
+				<div class="flex translate-x-3 items-center -space-x-3">
 					<div
-						class="w-2.5 h-[1.6px] rounded bg-white origin-left scale-x-0 transition duration-300 group-hover:scale-x-100"
+						class="h-[1.6px] w-2.5 origin-left scale-x-0 rounded bg-white transition duration-300 group-hover:scale-x-100"
 					></div>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
-						class="h-5 w-5 stroke-white -translate-x-2 transition duration-300 group-hover:translate-x-0"
+						class="h-5 w-5 -translate-x-2 stroke-white transition duration-300 group-hover:translate-x-0"
 						fill="none"
 						viewBox="0 0 24 24"
 						stroke="currentColor"

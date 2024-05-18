@@ -8,15 +8,15 @@
 	export let leintes = false;
 </script>
 
-<div class="text-center dark:text-white text-black grid grid-cols-1">
+<div class="grid grid-cols-1 text-center text-black dark:text-white">
 	<a
 		href={`/user/${url}/upload`}
-		class="bg-gradient-to-r from-white to-red-600 text-2xl p-2 drop-shadow-xl font-bold mr-96 ml-96 mt-16 rounded-lg text-black"
+		class="ml-96 mr-96 mt-16 rounded-lg bg-gradient-to-r from-white to-red-600 p-2 text-2xl font-bold text-black drop-shadow-xl"
 		>Feltöltés</a
 	>
 	<h1 class="text-5xl font-bold drop-shadow-xl">{magazo}:</h1>
-	<h2 class="mb-3 dark:text-white text-black">(az elmúlt két hétben)</h2>
-	<div class="flex flex-auto flex-wrap align-middle items-center justify-center gap-3">
+	<h2 class="mb-3 text-black dark:text-white">(az elmúlt két hétben)</h2>
+	<div class="flex flex-auto flex-wrap items-center justify-center gap-3 align-middle">
 		{#if data.potlekok}
 			{#each data.potlekok as potle}
 				<div
@@ -39,19 +39,19 @@
 							<img
 								src={`${data.api}/img/data/${potle.id}/0`}
 								alt=""
-								class="m-auto py-2 max-w-xl max-h-xl drop-shadow-xl"
+								class="max-h-xl m-auto max-w-xl py-2 drop-shadow-xl"
 							/>
 							<img
 								src={`${data.api}/img/data/${potle.id}/1`}
 								alt=""
-								class="m-auto py-2 max-w-xl max-h-xl drop-shadow-xl"
+								class="max-h-xl m-auto max-w-xl py-2 drop-shadow-xl"
 							/>
 						</div>
 					{:else}
 						<img
 							src={`${data.api}/img/data/${potle.id}`}
 							alt=""
-							class="m-auto py-2 max-w-xl max-h-xl drop-shadow-xl"
+							class="max-h-xl m-auto max-w-xl py-2 drop-shadow-xl"
 						/>
 					{/if}
 				</div>

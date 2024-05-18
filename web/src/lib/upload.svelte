@@ -49,23 +49,27 @@
 </script>
 
 <div class="text-center text-white">
-	<div class="bg-green-500 p-2 mr-16 ml-16 mt-16 rounded-lg">
+	<div class="ml-16 mr-16 mt-16 rounded-lg bg-green-500 p-2">
 		<h2 class="font-bold text-red-800 drop-shadow-xl">{formerror ? formerror : ''}</h2>
 		<h1 class="text-3xl font-bold">{title} feltöltése</h1>
 		<form on:submit|preventDefault={() => upload()} enctype="multipart/form-data">
 			<input type="text" class="hidden" name="name" value={adat.layout?.name} />
 			<input type="file" name="file" id="file" accept="image/*" required multiple />
-			<button type="submit" class="bg-gradient-to-r from-white to-red-600 font-bold text-xl px-2 rounded-xl text-black">Feltöltés</button>
+			<button
+				type="submit"
+				class="rounded-xl bg-gradient-to-r from-white to-red-600 px-2 text-xl font-bold text-black"
+				>Feltöltés</button
+			>
 			<h2>{desc}</h2>
 		</form>
-		<h2 class="bg-red-600 font-bold text-xl px-2 rounded-xl">
+		<h2 class="rounded-xl bg-red-600 px-2 text-xl font-bold">
 			{warning}
 		</h2>
 	</div>
-	<div class="flex-row align-middle items-center justify-center">
+	<div class="flex-row items-center justify-center align-middle">
 		<h2 class="font-bold">Ha sikeresen feltöltötted őket akkor itt fognak megjelenni:</h2>
 		<button
-			class="bg-red-600 hidden px-2 mb-2 rounded-lg transition-all hover:bg-red-800 duration-200"
+			class="mb-2 hidden rounded-lg bg-red-600 px-2 transition-all duration-200 hover:bg-red-800"
 			on:click={switchTope}
 			>{#if tope === 'row'}
 				Sorban
@@ -75,20 +79,20 @@
 		>
 		{#each seli as asd}
 			<div
-				class="flex bg-slate-500 py-4 align-middle items-center justify-center"
+				class="flex items-center justify-center bg-slate-500 py-4 align-middle"
 				class:flex-col={tope === 'col'}
 				class:flex-row={tope === 'row'}
 			>
 				<div>
-					<button class="p-2 bg-slate-900">
-						<img src={asd[0]} alt="asd" class="max-w-5xl max-h-5xl m-auto" />
+					<button class="bg-slate-900 p-2">
+						<img src={asd[0]} alt="asd" class="max-h-5xl m-auto max-w-5xl" />
 					</button>
 					<h2>Kép a 10-12-ről</h2>
 				</div>
 				<h1 class="text-5xl font-bold">+</h1>
 				<div>
-					<button class="p-2 bg-slate-900">
-						<img src={asd[1]} alt="asd" class="max-w-5xl max-h-5xl m-auto" />
+					<button class="bg-slate-900 p-2">
+						<img src={asd[1]} alt="asd" class="max-h-5xl m-auto max-w-5xl" />
 					</button>
 					<h2>Kép a "xy kifizette az utazást"-ról</h2>
 				</div>
@@ -100,16 +104,16 @@
 					<img
 						src={`${adat.api}/img/data/${nyam}/0`}
 						alt=""
-						class="max-w-5xl max-h-5xl m-auto py-3"
+						class="max-h-5xl m-auto max-w-5xl py-3"
 					/>
 					<img
 						src={`${adat.api}/img/data/${nyam}/1`}
 						alt=""
-						class="max-w-5xl max-h-5xl m-auto py-3"
+						class="max-h-5xl m-auto max-w-5xl py-3"
 					/>
 				</div>
 			{:else}
-				<img src={`${adat.api}/img/data/${nyam}`} alt="" class="max-w-5xl max-h-5xl m-auto py-3" />
+				<img src={`${adat.api}/img/data/${nyam}`} alt="" class="max-h-5xl m-auto max-w-5xl py-3" />
 			{/if}
 		{/each}
 	</div>

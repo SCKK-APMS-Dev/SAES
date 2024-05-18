@@ -83,7 +83,7 @@
 							<h2>{key2}: {key.endsWith('számla') ? value2 + '$' : value2 + ' db'}</h2>
 							<a
 								href={`https://sckk.hu/list/${key2.replace(' ', '_')}/${key.startsWith('am') ? key.split('_')[1] : key}`}
-								class="bg-blue-900 px-2 rounded-xl"
+								class="rounded-xl bg-blue-900 px-2"
 								target="_blank">Link</a
 							>
 						</div>
