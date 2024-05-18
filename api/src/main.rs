@@ -1,9 +1,11 @@
 use axum::{response::Redirect, routing::get, Router};
 use dotenvy::dotenv;
+use sea_orm::EntityTrait;
 use tower_cookies::CookieManagerLayer;
 
 mod auth;
 mod cucc;
+mod db;
 mod user;
 
 #[tokio::main]

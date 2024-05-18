@@ -3,18 +3,17 @@
 use sea_orm::entity::prelude::*;
 
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq)]
-#[sea_orm(table_name = "data")]
+#[sea_orm(table_name = "leintesek")]
 pub struct Model {
     #[sea_orm(primary_key)]
     pub id: i32,
-    pub r#type: String,
-    pub owner: String,
     #[sea_orm(column_type = "custom(\"LONGTEXT\")")]
-    pub kep: String,
+    pub img1: String,
+    #[sea_orm(column_type = "custom(\"LONGTEXT\")")]
+    pub img2: String,
+    pub owner: String,
     pub status: String,
-    pub extra: Option<String>,
     pub reason: Option<String>,
-    pub am: i8,
     pub date: DateTimeUtc,
 }
 

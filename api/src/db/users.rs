@@ -3,19 +3,15 @@
 use sea_orm::entity::prelude::*;
 
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq)]
-#[sea_orm(table_name = "data")]
+#[sea_orm(table_name = "users")]
 pub struct Model {
     #[sea_orm(primary_key)]
     pub id: i32,
-    pub r#type: String,
-    pub owner: String,
-    #[sea_orm(column_type = "custom(\"LONGTEXT\")")]
-    pub kep: String,
-    pub status: String,
-    pub extra: Option<String>,
-    pub reason: Option<String>,
-    pub am: i8,
-    pub date: DateTimeUtc,
+    #[sea_orm(unique)]
+    pub discordid: String,
+    #[sea_orm(column_type = "Text")]
+    pub name: String,
+    pub role: String,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
