@@ -2,16 +2,11 @@
 	"name": "sckk",
 	"version": "1.0.0",
 	"description": "",
-	"main": "index.js",
 	"scripts": {
-		"dev:web": "cd src/web && bun -b dev",
-		"dev:api": "cd src/api && cargo watch -x run"
+		"dev:web": "pnpm --filter ./web run dev",
+		"dev:api": "cd api && cargo watch -x run"
 	},
 	"keywords": [],
-	"author": "",
-	"workspaces": [
-		"src/*"
-	],
-	"license": "ISC",
-	"packageManager": "pnpm@9.1.0"
+	"author": "HVCsano",
+	"license": "GPL-3.0-only"
 }
