@@ -21,3 +21,7 @@ Ezen kívül itt a főkönyvtárban is meg tudjuk tenni csak adjuk hozzá a vég
 # API
 
 Fontos megjegyezni, hogy az api NEM NodeJS-t használ már. Magyarul oda hiába akarunk felrakni bármilyen npm csomagot mivel még package.json sincs a /api könyvtárban. Részleteg a mappán belüli readme-ben.
+
+# További információk
+
+A monorepo egyes részeiről azok mappáiban található readme fájlból tudsz további információt gyűjteni.
