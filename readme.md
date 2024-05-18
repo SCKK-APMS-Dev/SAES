@@ -1,8 +1,8 @@
-# SCKK Taxi Monorepo
+# SCKK Extra Monorepo
 
 Ez a [pnpm](https://pnpm.io) [monorepo](https://monorepo.tools) tartalmazza az sckk.hu weboldalt és az ahhoz tartozó api-t.
 
-Bármi probléma akadna [itt](https://github.com/SCKK-APMS-Dev/TaxiWeb/issues/new) lehet panaszt tenni
+Bármi probléma akadna [itt](https://github.com/SCKK-APMS-Dev/SCKKExtra/issues/new) lehet panaszt tenni
 
 ## Development
 
