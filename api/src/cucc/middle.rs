@@ -40,7 +40,7 @@ pub async fn basic_auth(
     let envs = get_api_envs();
     if auth.is_some() {
         let client = reqwest::Client::new();
-        let dcuserget: String = client
+        let dcuserget = client
             .get(format!("{}/users/@me", ds.api_endpoint))
             .header(
                 "Authorization",
@@ -48,30 +48,32 @@ pub async fn basic_auth(
             )
             .send()
             .await
-            .expect("Lekérés sikertelen")
-            .text()
-            .await
-            .expect("Átalakítás sikertelen");
-        let parsed_user: DiscordUser =
-            serde_json::from_str(&dcuserget).expect("User object létrehozása sikertelen");
-        let getuser: String = client
-            .get(format!("{}/appauth/login/{}", envs.patrik, parsed_user.id))
-            .send()
-            .await
-            .expect("Lekérés sikertelen")
-            .text()
-            .await
-            .expect("Átalakítás sikertelen");
-        let parsed_tag: GetUserRes =
-            serde_json::from_str(&getuser).expect("User object létrehozása sikertelen");
-        let tag = Tag {
-            id: parsed_user.id,
-            name: parsed_tag.PlayerName,
-            admin: parsed_tag.PermissionGroup.is_some_and(|x| x == 1),
-            am: false,
-        };
-        request.extensions_mut().insert(tag);
-        return Ok(next.run(request).await);
+            .expect("Lekérés sikertelen");
+        if dcuserget.status().as_u16() == 200 {
+            let handled_user = dcuserget.text().await.expect("Átalakítás sikertelen");
+            let parsed_user: DiscordUser =
+                serde_json::from_str(&handled_user).expect("User object létrehozása sikertelen");
+            let getuser: String = client
+                .get(format!("{}/appauth/login/{}", envs.patrik, parsed_user.id))
+                .send()
+                .await
+                .expect("Lekérés sikertelen")
+                .text()
+                .await
+                .expect("Átalakítás sikertelen");
+            let parsed_tag: GetUserRes =
+                serde_json::from_str(&getuser).expect("User object létrehozása sikertelen");
+            let tag = Tag {
+                id: parsed_user.id,
+                name: parsed_tag.PlayerName,
+                admin: parsed_tag.PermissionGroup.is_some_and(|x| x == 1),
+                am: false,
+            };
+            request.extensions_mut().insert(tag);
+            return Ok(next.run(request).await);
+        } else {
+            return Err((StatusCode::NOT_ACCEPTABLE, "Sikertelen lekérés".to_string()));
+        }
     } else {
         return Err((StatusCode::NOT_FOUND, "Nincs kuki".to_string()));
     };

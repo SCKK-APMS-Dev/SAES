@@ -5,14 +5,17 @@
 <div class="flex h-screen">
 	<div class="m-auto text-center">
 		{#if data?.noauth}
-			<h1 class="text-3xl font-bold text-black dark:text-white">
+			<h1 class="animate-pulse text-3xl font-bold text-black dark:text-white">
 				Az oldal használatához kérlek lépj be
 			</h1>
 			<button
-				class="group relative m-auto flex h-12 items-center space-x-2 overflow-hidden rounded-full bg-gradient-to-r from-white to-red-600 px-6 hover:to-red-700"
+				class="group relative m-auto mt-3 flex h-12 animate-bounce items-center space-x-2 overflow-hidden rounded-full bg-gradient-to-r from-rose-500 to-red-600 px-6 hover:to-red-700"
 			>
 				<a href="user">
-					<span class="relative text-xl font-bold text-black">Belépés Discordal</span>
+					<span
+						class="relative text-xl font-bold text-white transition-colors duration-300 group-hover:text-black"
+						>Belépés Discordal</span
+					>
 				</a>
 				<div class="flex translate-x-3 items-center -space-x-3">
 					<div

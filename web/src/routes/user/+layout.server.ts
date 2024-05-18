@@ -3,23 +3,25 @@ import type { LayoutServerLoad } from './$types';
 import { apiUrl } from '$lib/api';
 
 export const load = (async ({ cookies }) => {
+	if (!cookies.get('auth_token')) {
+		throw redirect(302, `${apiUrl}/auth`);
+	}
 	try {
 		const aha = await fetch(`${apiUrl}/user`, {
 			headers: {
 				cookie: cookies.get('auth_token')!
 			}
 		});
-		// if (aha.status === 404) {
-		// 	throw redirect(
-		// 		302,
+		if (aha.status === 404 || aha.status === 406) {
+			throw redirect(
+				302,
 
-		// 		`${apiUrl}/auth`
-		// 	);
-		// }
+				`${apiUrl}/auth`
+			);
+		}
 		if (aha.status === 401) {
 			throw redirect(302, '/noaccess');
 		}
-
 		if (aha.ok) {
 			return {
 				layout: await aha.json(),
