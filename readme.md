@@ -1,4 +1,4 @@
-# SCKK Weboldal
+# SCKK Taxi Monorepo
 
 Ez a [pnpm](https://pnpm.io) [monorepo](https://monorepo.tools) tartalmazza az sckk.hu weboldalt és az ahhoz tartozó api-t.
 
