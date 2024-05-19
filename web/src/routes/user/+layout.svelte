@@ -4,10 +4,10 @@
 </script>
 
 <Error {data}>
-	<div class="relative z-20 border-b bg-white dark:bg-slate-900 dark:text-white">
+	<div class="relative z-20 border-b bg-white dark:bg-gray-700 dark:text-white">
 		<div class="px-6 lg:container md:px-12 lg:mx-auto lg:px-6 lg:py-4">
 			<div class="flex items-center justify-between">
-				<div class="relative z-20">
+				<div class="relative z-20 mt-1">
 					<img
 						src="/favicon.png"
 						class="pointer-events-none ml-5 drop-shadow-xl"
@@ -39,7 +39,7 @@
 					</label>
 
 					<div
-						class="fixed inset-0 w-[calc(100%-4.5rem)] translate-x-[-100%] border-r bg-white shadow-xl transition duration-300 peer-checked:translate-x-0 lg:static lg:w-auto lg:translate-x-0 lg:border-r-0 lg:shadow-none dark:bg-slate-900"
+						class="child:font-bold fixed inset-0 w-[calc(100%-4.5rem)] translate-x-[-100%] border-r bg-white shadow-xl transition duration-300 peer-checked:translate-x-0 lg:static lg:w-auto lg:translate-x-0 lg:border-r-0 lg:shadow-none dark:bg-gray-700"
 					>
 						<div class="flex h-full flex-col justify-between lg:flex-row lg:items-center">
 							<ul
@@ -48,7 +48,7 @@
 								<li>
 									<a
 										href="/user"
-										class="group relative before:absolute before:inset-x-0 before:bottom-0 before:h-2 before:origin-right before:scale-x-0 before:bg-red-800 before:transition before:duration-200 hover:before:origin-left hover:before:scale-x-100"
+										class="before:bg-taxi group relative before:absolute before:inset-x-0 before:bottom-0 before:h-2 before:origin-right before:scale-x-0 before:transition before:duration-200 hover:before:origin-left hover:before:scale-x-100"
 									>
 										<span class="relative text-black dark:text-white">Kezdőlap</span>
 									</a>
@@ -56,7 +56,7 @@
 								<li>
 									<a
 										href="/user/help"
-										class="group relative before:absolute before:inset-x-0 before:bottom-0 before:h-2 before:origin-right before:scale-x-0 before:bg-red-800 before:transition before:duration-200 hover:before:origin-left hover:before:scale-x-100"
+										class="before:bg-taxi group relative before:absolute before:inset-x-0 before:bottom-0 before:h-2 before:origin-right before:scale-x-0 before:transition before:duration-200 hover:before:origin-left hover:before:scale-x-100"
 									>
 										<span class="relative text-black dark:text-white">Segédlet</span>
 									</a>
@@ -64,7 +64,7 @@
 								<li>
 									<a
 										href="/user/potlekok"
-										class="group relative before:absolute before:inset-x-0 before:bottom-0 before:h-2 before:origin-right before:scale-x-0 before:bg-red-800 before:transition before:duration-200 hover:before:origin-left hover:before:scale-x-100"
+										class="before:bg-taxi group relative before:absolute before:inset-x-0 before:bottom-0 before:h-2 before:origin-right before:scale-x-0 before:transition before:duration-200 hover:before:origin-left hover:before:scale-x-100"
 									>
 										<span class="relative text-black dark:text-white">Pótlékok</span>
 									</a>
@@ -72,7 +72,7 @@
 								<li>
 									<a
 										href="/user/leintesek"
-										class="group relative before:absolute before:inset-x-0 before:bottom-0 before:h-2 before:origin-right before:scale-x-0 before:bg-red-800 before:transition before:duration-200 hover:before:origin-left hover:before:scale-x-100"
+										class="before:bg-taxi group relative before:absolute before:inset-x-0 before:bottom-0 before:h-2 before:origin-right before:scale-x-0 before:transition before:duration-200 hover:before:origin-left hover:before:scale-x-100"
 									>
 										<span class="relative text-black dark:text-white"
 											>Leintések {#if data.layout.am}/ Bejelentések{/if}</span
@@ -82,7 +82,7 @@
 								<li>
 									<a
 										href="/user/szamlak"
-										class="group relative before:absolute before:inset-x-0 before:bottom-0 before:h-2 before:origin-right before:scale-x-0 before:bg-red-800 before:transition before:duration-200 hover:before:origin-left hover:before:scale-x-100"
+										class="before:bg-taxi group relative before:absolute before:inset-x-0 before:bottom-0 before:h-2 before:origin-right before:scale-x-0 before:transition before:duration-200 hover:before:origin-left hover:before:scale-x-100"
 									>
 										<span class="relative text-black dark:text-white">Szereltetési számlák</span>
 									</a>
@@ -95,7 +95,7 @@
 								{#if data.layout?.admin}
 									<a
 										href="/user/admin"
-										class="block rounded-full bg-gradient-to-r from-sky-600 to-cyan-400 px-6 py-3 text-center font-bold text-black"
+										class="from-taxi block rounded-full bg-gradient-to-r to-yellow-400 px-6 py-3 text-center font-bold text-white"
 									>
 										Műszakvezetés
 									</a>
@@ -109,8 +109,8 @@
 	</div>
 
 	<footer>
-		<h2 class="bg-blue-600 py-1 text-center text-xl text-white">
-			Nem vagy biztos valamiben? Nézd meg a <a href="/user/help" class="font-bold text-yellow-300"
+		<h2 class="bg-rose-600 py-1 text-center text-xl text-white">
+			Nem vagy biztos valamiben? Nézd meg a <a href="/user/help" class="text-taxi font-bold"
 				>segédletet</a
 			>!
 		</h2>

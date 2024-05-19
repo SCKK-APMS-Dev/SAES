@@ -12,6 +12,9 @@ export default {
 		extend: {
 			fontFamily: {
 				sans: ['Poppins']
+			},
+			colors: {
+				taxi: '#fece01'
 			}
 		}
 	},

@@ -20,6 +20,12 @@ pub struct DriverRecord {
 pub struct Callz {
     pub app: u32,
     pub leintes: usize,
+    pub potlek: Potlek,
+}
+#[derive(Debug, Deserialize, Serialize)]
+pub struct Potlek {
+    de: usize,
+    du: usize,
 }
 
 #[debug_handler]
@@ -46,10 +52,25 @@ pub async fn calls(mut request: Request) -> Json<Callz> {
         .filter(Data::Column::Owner.eq(&exts.unwrap().name))
         .filter(Data::Column::Type.eq("leintés"))
         .filter(Data::Column::Status.eq("elfogadva"))
-        .filter(Data::Column::Date.gt(tegnap))
         .all(&db)
         .await
         .expect("Leintések lekérése sikertelen az adatbázisból");
+    let de_potlek = Data::Entity::find()
+        .filter(Data::Column::Owner.eq(&exts.unwrap().name))
+        .filter(Data::Column::Type.eq("pótlék"))
+        .filter(Data::Column::Extra.eq("délelőtti"))
+        .filter(Data::Column::Status.eq("elfogadva"))
+        .all(&db)
+        .await
+        .expect("Délelőtti pótlék lekérése sikertelen az adatbázisból");
+    let du_potlek = Data::Entity::find()
+        .filter(Data::Column::Owner.eq(&exts.unwrap().name))
+        .filter(Data::Column::Type.eq("pótlék"))
+        .filter(Data::Column::Extra.eq("éjszakai"))
+        .filter(Data::Column::Status.eq("elfogadva"))
+        .all(&db)
+        .await
+        .expect("Éjszakai pótlék lekérése sikertelen az adatbázisból");
 
     let rec = driver_records
         .iter()
@@ -57,5 +78,9 @@ pub async fn calls(mut request: Request) -> Json<Callz> {
     Json(Callz {
         app: if rec.is_some() { rec.unwrap().count } else { 0 },
         leintes: leintesek.len(),
+        potlek: Potlek {
+            de: de_potlek.len(),
+            du: du_potlek.len(),
+        },
     })
 }

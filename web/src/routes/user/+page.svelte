@@ -4,9 +4,9 @@
 
 <div class="child:p-2 md:child:p-16 grid grid-cols-1 grid-rows-1 text-center text-white">
 	{#if !data.error}
-		<div class="ml-16 mr-16 mt-16 rounded-lg bg-emerald-600">
+		<div class="ml-16 mr-16 mt-16 rounded-lg bg-amber-600">
 			<h1 class="text-2xl drop-shadow-lg md:mb-4 md:text-5xl md:font-bold">
-				Üdv {data.layout?.name}!
+				Üdvözlöm, {data.layout?.name}!
 			</h1>
 			{#if !data.layout.am}
 				<h2 class="text-xl drop-shadow-lg md:text-2xl">
@@ -14,9 +14,9 @@
 						Number(data.calls?.leintes)}
 				</h2>
 			{/if}
-			<!-- <h2 class="text-xl md:text-2xl drop-shadow-lg">
-				Elfogadott pótlékaid (délelőtti+éjszakai): {data.calls?.potlek.de}+{data.calls?.potlek.éj}
-			</h2> -->
+			<h2 class="text-xl drop-shadow-lg md:text-2xl">
+				Elfogadott pótlékaid: délelőtti: {data.calls?.potlek.de}, éjszakai: {data.calls?.potlek.du}
+			</h2>
 		</div>
 	{/if}
 </div>
