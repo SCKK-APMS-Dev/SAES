@@ -1,4 +1,7 @@
+use std::time::Duration;
+
 use axum::{debug_handler, extract::Request, Json};
+use chrono::{Datelike, Local, NaiveDate, NaiveDateTime, NaiveTime, TimeZone, Utc};
 use sea_orm::{ColumnTrait, EntityTrait, QueryFilter};
 use serde::{Deserialize, Serialize};
 use serde_json::from_str;
@@ -35,10 +38,15 @@ pub async fn calls(mut request: Request) -> Json<Callz> {
         .await
         .expect("Átalakítás sikertelen");
     let driver_records: Vec<DriverRecord> = from_str(&calls).expect("Átalakítás nem megyen");
+    let tegnap_ev = NaiveDate::from_ymd_opt(2024, 3, 12);
+    let tegnap_ora = NaiveTime::from_hms_opt(22, 0, 0);
+    let real_tegnap = NaiveDateTime::new(tegnap_ev.unwrap(), tegnap_ora.unwrap());
+    let utc_tegnap = Utc::from_utc_datetime(&Utc, &real_tegnap);
     let leintesek = Data::Entity::find()
         .filter(Data::Column::Owner.eq(&exts.unwrap().name))
         .filter(Data::Column::Type.eq("leintés"))
         .filter(Data::Column::Status.eq("elfogadva"))
+        .filter(Data::Column::Date.gt(tegnap))
         .all(&db)
         .await
         .expect("Leintések lekérése sikertelen az adatbázisból");
@@ -46,15 +54,8 @@ pub async fn calls(mut request: Request) -> Json<Callz> {
     let rec = driver_records
         .iter()
         .find(|record| record.driver == exts.unwrap().name);
-    if rec.is_some() {
-        Json(Callz {
-            app: rec.unwrap().count,
-            leintes: leintesek.len(),
-        })
-    } else {
-        Json(Callz {
-            app: 0,
-            leintes: leintesek.len(),
-        })
-    }
+    Json(Callz {
+        app: if rec.is_some() { rec.unwrap().count } else { 0 },
+        leintes: leintesek.len(),
+    })
 }
