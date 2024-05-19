@@ -7,7 +7,7 @@
 	<div class="relative z-20 border-b bg-white dark:bg-gray-700 dark:text-white">
 		<div class="px-6 lg:container md:px-12 lg:mx-auto lg:px-6 lg:py-4">
 			<div class="flex items-center justify-between">
-				<div class="relative z-20 mt-1">
+				<div class="relative z-20 flex items-center gap-3">
 					<img
 						src="/favicon.png"
 						class="pointer-events-none ml-5 drop-shadow-xl"
@@ -30,16 +30,16 @@
 					>
 						<div
 							aria-hidden="true"
-							class="m-auto h-0.5 w-6 rounded bg-sky-900 transition duration-300"
+							class="m-auto h-0.5 w-6 rounded bg-white transition duration-300"
 						></div>
 						<div
 							aria-hidden="true"
-							class="m-auto mt-2 h-0.5 w-6 rounded bg-sky-900 transition duration-300"
+							class="m-auto mt-2 h-0.5 w-6 rounded bg-white transition duration-300"
 						></div>
 					</label>
 
 					<div
-						class="child:font-bold fixed inset-0 w-[calc(100%-4.5rem)] translate-x-[-100%] border-r bg-white shadow-xl transition duration-300 peer-checked:translate-x-0 lg:static lg:w-auto lg:translate-x-0 lg:border-r-0 lg:shadow-none dark:bg-gray-700"
+						class="fixed inset-0 w-[calc(100%-4.5rem)] translate-x-[-100%] border-r bg-white shadow-xl transition duration-300 peer-checked:translate-x-0 lg:static lg:w-auto lg:translate-x-0 lg:border-r-0 lg:shadow-none dark:bg-gray-700"
 					>
 						<div class="flex h-full flex-col justify-between lg:flex-row lg:items-center">
 							<ul
@@ -95,7 +95,7 @@
 								{#if data.layout?.admin}
 									<a
 										href="/user/admin"
-										class="from-taxi block rounded-full bg-gradient-to-r to-yellow-400 px-6 py-3 text-center font-bold text-white"
+										class="from-taxi hover:bg-pos-100 bg-size-200 bg-pos-0 block rounded-full bg-gradient-to-r via-amber-600 to-red-500 px-6 py-3 text-center font-bold text-white drop-shadow-lg transition-all duration-500"
 									>
 										Műszakvezetés
 									</a>

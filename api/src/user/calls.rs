@@ -1,7 +1,5 @@
-use std::time::Duration;
-
 use axum::{debug_handler, extract::Request, Json};
-use chrono::{Datelike, Local, NaiveDate, NaiveDateTime, NaiveTime, TimeZone, Utc};
+use chrono::{NaiveDate, NaiveDateTime, NaiveTime, TimeZone, Utc};
 use sea_orm::{ColumnTrait, EntityTrait, QueryFilter};
 use serde::{Deserialize, Serialize};
 use serde_json::from_str;
@@ -33,7 +31,6 @@ pub async fn calls(mut request: Request) -> Json<Callz> {
     let exts: Option<&Tag> = request.extensions_mut().get();
     let client = reqwest::Client::new();
     let db = get_conn().await;
-
     let envs = get_api_envs();
     let calls = client
         .get(format!("{}/api/log/status/current", envs.erik))
@@ -71,7 +68,6 @@ pub async fn calls(mut request: Request) -> Json<Callz> {
         .all(&db)
         .await
         .expect("Éjszakai pótlék lekérése sikertelen az adatbázisból");
-
     let rec = driver_records
         .iter()
         .find(|record| record.driver == exts.unwrap().name);
