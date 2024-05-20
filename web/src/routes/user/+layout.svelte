@@ -3,7 +3,7 @@
 	import Error from '$lib/error.svelte';
 	import { onMount } from 'svelte';
 	onMount(() => {
-		let audioFile = new Audio('/papa.wav');
+		let audioFile: HTMLAudioElement;
 		document.getElementById('mvbtn')?.addEventListener('mouseenter', () => {
 			audioFile = new Audio('/papa.wav');
 			audioFile.play();

@@ -38,6 +38,6 @@
 	"display": "standalone",
 	"scope": "/",
 	"orientation": "any",
-	"theme_color": "#b91c1c",
+	"theme_color": "#374151",
 	"description": "SCKK Weboldal"
 }
