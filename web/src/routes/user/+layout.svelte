@@ -1,6 +1,17 @@
 <script lang="ts">
 	export let data;
 	import Error from '$lib/error.svelte';
+	import { onMount } from 'svelte';
+	onMount(() => {
+		let audioFile = new Audio('/papa.wav');
+		document.getElementById('mvbtn')?.addEventListener('mouseenter', () => {
+			audioFile = new Audio('/papa.wav');
+			audioFile.play();
+		});
+		document.getElementById('mvbtn')?.addEventListener('mouseleave', () => {
+			audioFile.pause();
+		});
+	});
 </script>
 
 <Error {data}>
@@ -95,6 +106,7 @@
 								{#if data.layout?.admin}
 									<a
 										href="/user/admin"
+										id="mvbtn"
 										class="from-taxi hover:bg-pos-100 bg-size-200 bg-pos-0 block rounded-full bg-gradient-to-r via-amber-600 to-red-500 px-6 py-3 text-center font-bold text-white drop-shadow-lg transition-all duration-500"
 									>
 										Műszakvezetés
