@@ -1,6 +1,6 @@
 <script lang="ts">
 	export let data;
-	let hour = 20;
+	let hour = new Date().getHours();
 	let greet = '';
 	let end = '!';
 	if (hour >= 19 || hour < 4) {
