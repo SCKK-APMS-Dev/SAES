@@ -3,14 +3,29 @@
 	import Error from '$lib/error.svelte';
 	import { onMount } from 'svelte';
 	onMount(() => {
-		let audioFile=new Audio('/taxi.mp3');;
-		document.getElementById('mvbtn')?.addEventListener('mouseenter', () => {
-			audioFile.currentTime = 0; 
-			audioFile.play();
-		});
-		document.getElementById('mvbtn')?.addEventListener('mouseleave', () => {
-			audioFile.pause();
-		});
+		if (data.layout?.admin) {
+			let mins = new Date().getMinutes();
+			if (mins % 2 === 0) {
+				// maradékos osztás 2-vel
+				let audioFile = new Audio('/taxi.mp3');
+				document.getElementById('mvbtn')?.addEventListener('mouseenter', () => {
+					audioFile.currentTime = 0;
+					audioFile.play();
+				});
+				document.getElementById('mvbtn')?.addEventListener('mouseleave', () => {
+					audioFile.pause();
+				});
+			} else {
+				let audioFile = new Audio('/papa.wav');
+				document.getElementById('mvbtn')?.addEventListener('mouseenter', () => {
+					audioFile.currentTime = 0;
+					audioFile.play();
+				});
+				document.getElementById('mvbtn')?.addEventListener('mouseleave', () => {
+					audioFile.pause();
+				});
+			}
+		}
 	});
 </script>
 
