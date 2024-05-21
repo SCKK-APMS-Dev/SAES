@@ -6,7 +6,6 @@ export default {
 	content: [
 		'./src/**/*.{html,js,svelte,ts}',
 		'./node_modules/flowbite/**/*.js',
-		'./node_modules/tw-elements/js/**/*.js'
 	],
 	theme: {
 		extend: {
@@ -31,7 +30,5 @@ export default {
 			addVariant('child-hover', '& > *:hover');
 		},
 		addDynamicIconSelectors(),
-		flowbite,
-		require('tw-elements/plugin.cjs')
-	]
+		flowbite	]
 };

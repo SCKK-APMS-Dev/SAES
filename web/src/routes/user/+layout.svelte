@@ -3,9 +3,9 @@
 	import Error from '$lib/error.svelte';
 	import { onMount } from 'svelte';
 	onMount(() => {
-		let audioFile: HTMLAudioElement;
+		let audioFile=new Audio('/taxi.mp3');;
 		document.getElementById('mvbtn')?.addEventListener('mouseenter', () => {
-			audioFile = new Audio('/papa.wav');
+			audioFile.currentTime = 0; 
 			audioFile.play();
 		});
 		document.getElementById('mvbtn')?.addEventListener('mouseleave', () => {
