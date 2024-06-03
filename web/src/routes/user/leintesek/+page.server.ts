@@ -5,13 +5,15 @@ import { apiUrl } from '$lib/api';
 export const load = (async ({ parent, cookies }) => {
 	const par = await parent();
 	try {
-		const aha = await fetch(par.layout.am ? `${apiUrl}/user/am/get` : `${apiUrl}/user/get`, {
-			mode: 'no-cors',
-			headers: {
-				type: 'leintés',
-				cookie: cookies.get('auth_token') as string
+		const aha = await fetch(
+			par.layout.am ? `${apiUrl}/user/items/get` : `${apiUrl}/user/items/get?tipus=leintés`,
+			{
+				mode: 'no-cors',
+				headers: {
+					cookie: cookies.get('auth_token') as string
+				}
 			}
-		});
+		);
 		if (aha.status === 401) {
 			throw redirect(302, 'noaccess');
 		}

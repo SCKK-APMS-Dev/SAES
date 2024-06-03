@@ -26,24 +26,13 @@ pub struct Potlek {
     du: usize,
 }
 
-#[debug_handler]
-pub async fn calls(mut request: Request) -> Json<Callz> {
-    let exts: Option<&Tag> = request.extensions_mut().get();
-    let client = reqwest::Client::new();
-    let db = get_conn().await;
-    let envs = get_api_envs();
-    let calls = client
-        .get(format!("{}/api/log/status/current", envs.erik))
-        .send()
-        .await
-        .expect("Lekérés sikertelen")
-        .text()
-        .await
-        .expect("Átalakítás sikertelen");
-    let driver_records: Vec<DriverRecord> = from_str(&calls).expect("Átalakítás nem megyen");
-    let input_date = Local::now().date_naive();
+pub struct Friday {
+    pub prev: NaiveDateTime,
+    pub next: NaiveDateTime,
+}
 
-    // Determine the current weekday of the input date (0 = Monday, ..., 6 = Sunday)
+pub fn get_fridays() -> Friday {
+    let input_date = Local::now().date_naive();
     let current_weekday = input_date.weekday().num_days_from_monday();
     let zaras = NaiveTime::from_hms_opt(18, 0, 0).unwrap();
     // Calculate the number of days until the next Friday (5th day of the week)
@@ -60,13 +49,34 @@ pub async fn calls(mut request: Request) -> Json<Callz> {
     let last_friday = next_friday + Duration::days(-7);
     let next_friday_whole = NaiveDateTime::new(next_friday, zaras);
     let last_friday_whole = NaiveDateTime::new(last_friday, zaras);
+    Friday {
+        prev: last_friday_whole,
+        next: next_friday_whole,
+    }
+}
 
+#[debug_handler]
+pub async fn calls(mut request: Request) -> Json<Callz> {
+    let exts: Option<&Tag> = request.extensions_mut().get();
+    let client = reqwest::Client::new();
+    let db = get_conn().await;
+    let envs = get_api_envs();
+    let calls = client
+        .get(format!("{}/api/log/status/current", envs.erik))
+        .send()
+        .await
+        .expect("Lekérés sikertelen")
+        .text()
+        .await
+        .expect("Átalakítás sikertelen");
+    let driver_records: Vec<DriverRecord> = from_str(&calls).expect("Átalakítás nem megyen");
+    let fridays = get_fridays();
     let leintesek = Data::Entity::find()
         .filter(Data::Column::Owner.eq(&exts.unwrap().name))
         .filter(Data::Column::Type.eq("leintés"))
         .filter(Data::Column::Status.eq("elfogadva"))
-        .filter(Data::Column::Date.gte(last_friday_whole))
-        .filter(Data::Column::Date.lte(next_friday_whole))
+        .filter(Data::Column::Date.gte(fridays.prev))
+        .filter(Data::Column::Date.lte(fridays.next))
         .all(&db)
         .await
         .expect("Leintések lekérése sikertelen az adatbázisból");
@@ -75,8 +85,8 @@ pub async fn calls(mut request: Request) -> Json<Callz> {
         .filter(Data::Column::Type.eq("pótlék"))
         .filter(Data::Column::Extra.eq("délelőtti"))
         .filter(Data::Column::Status.eq("elfogadva"))
-        .filter(Data::Column::Date.gte(last_friday_whole))
-        .filter(Data::Column::Date.lte(next_friday_whole))
+        .filter(Data::Column::Date.gte(fridays.prev))
+        .filter(Data::Column::Date.lte(fridays.next))
         .all(&db)
         .await
         .expect("Délelőtti pótlék lekérése sikertelen az adatbázisból");
@@ -85,8 +95,8 @@ pub async fn calls(mut request: Request) -> Json<Callz> {
         .filter(Data::Column::Type.eq("pótlék"))
         .filter(Data::Column::Extra.eq("éjszakai"))
         .filter(Data::Column::Status.eq("elfogadva"))
-        .filter(Data::Column::Date.gte(last_friday_whole))
-        .filter(Data::Column::Date.lte(next_friday_whole))
+        .filter(Data::Column::Date.gte(fridays.prev))
+        .filter(Data::Column::Date.lte(fridays.next))
         .all(&db)
         .await
         .expect("Éjszakai pótlék lekérése sikertelen az adatbázisból");
