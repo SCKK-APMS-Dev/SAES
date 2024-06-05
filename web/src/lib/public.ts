@@ -18,3 +18,11 @@ export function getRealText(text: string) {
 			return 'AM leintések';
 	}
 }
+const Reeler = {
+	leintes: ['leintés', 'Leintéseid'],
+	potlek: ['pótlék', 'Pótlékaid'],
+	szamla: ['számla', 'Számláid']
+};
+
+export const Reeler_keys = Object.keys(Reeler);
+export const Reeler_vals = Object.values(Reeler);

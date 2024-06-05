@@ -88,7 +88,7 @@
 								</li>
 								<li>
 									<a
-										href="/user/potlekok"
+										href="/user/items/potlek"
 										class="before:bg-taxi group relative before:absolute before:inset-x-0 before:bottom-0 before:h-2 before:origin-right before:scale-x-0 before:transition before:duration-200 hover:before:origin-left hover:before:scale-x-100"
 									>
 										<span class="relative text-black dark:text-white">Pótlékok</span>
@@ -96,7 +96,7 @@
 								</li>
 								<li>
 									<a
-										href="/user/leintesek"
+										href="/user/items/leintes"
 										class="before:bg-taxi group relative before:absolute before:inset-x-0 before:bottom-0 before:h-2 before:origin-right before:scale-x-0 before:transition before:duration-200 hover:before:origin-left hover:before:scale-x-100"
 									>
 										<span class="relative text-black dark:text-white"
@@ -106,7 +106,7 @@
 								</li>
 								<li>
 									<a
-										href="/user/szamlak"
+										href="/user/items/szamla"
 										class="before:bg-taxi group relative before:absolute before:inset-x-0 before:bottom-0 before:h-2 before:origin-right before:scale-x-0 before:transition before:duration-200 hover:before:origin-left hover:before:scale-x-100"
 									>
 										<span class="relative text-black dark:text-white">Szereltetési számlák</span>

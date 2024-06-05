@@ -5,5 +5,5 @@
 </script>
 
 <Error {data}>
-	<List {data} magazo="Pótlékaid" url="potlekok" />
+	<List {data} magazo={data.real[1]} url={data.type} />
 </Error>
