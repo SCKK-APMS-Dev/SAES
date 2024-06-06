@@ -11,9 +11,7 @@ export const load = (async ({ parent, cookies, params }) => {
 			const aha = await fetch(
 				par.layout.am ? `${apiUrl}/user/am/get` : `${apiUrl}/user/items/get?tipus=${real[0]}`,
 				{
-					mode: 'no-cors',
 					headers: {
-						type: 'pótlék',
 						cookie: cookies.get('auth_token') as string
 					}
 				}
