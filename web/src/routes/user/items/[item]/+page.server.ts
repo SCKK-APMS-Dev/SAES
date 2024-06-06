@@ -6,7 +6,7 @@ import { Reeler_keys, Reeler_vals } from '$lib/public';
 export const load = (async ({ parent, cookies, params }) => {
 	const par = await parent();
 	try {
-		if (typeof params.item === 'string' && Reeler_keys.includes(params.item)) {
+		if (Reeler_keys.includes(params.item)) {
 			const real = Reeler_vals[Reeler_keys.indexOf(params.item)];
 			const aha = await fetch(
 				par.layout.am ? `${apiUrl}/user/am/get` : `${apiUrl}/user/items/get?tipus=${real[0]}`,
