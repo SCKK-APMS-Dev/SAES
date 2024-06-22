@@ -3,7 +3,7 @@ use axum::{
     extract::{Multipart, Query, Request},
     http::HeaderMap,
     routing::{get, post},
-    Json, Router,
+    Extension, Json, Router,
 };
 use chrono::Utc;
 use sea_orm::{ColumnTrait, EntityTrait, QueryFilter};
@@ -40,12 +40,11 @@ pub struct Header {
 }
 
 #[debug_handler]
-pub async fn items_get(cucc: Query<Header>, request: Request) -> Json<Vec<Items>> {
-    let exts: Option<&Tag> = request.extensions().get();
+pub async fn items_get(ext: Extension<Tag>, cucc: Query<Header>) -> Json<Vec<Items>> {
     let fridays = get_fridays();
     let db = get_conn().await;
     let getitem = Data::Entity::find()
-        .filter(Data::Column::Owner.eq(&exts.unwrap().name))
+        .filter(Data::Column::Owner.eq(&ext.name))
         .filter(Data::Column::Type.eq(cucc.tipus.clone()))
         .filter(Data::Column::Date.gte(fridays.prev))
         .filter(Data::Column::Date.lte(fridays.next))
@@ -70,13 +69,15 @@ pub async fn items_get(cucc: Query<Header>, request: Request) -> Json<Vec<Items>
 }
 
 #[debug_handler]
-pub async fn items_post(mut multipart: Multipart) -> String {
-    println!("cs");
+pub async fn items_post(ext: Extension<Tag>, mut multipart: Multipart) -> String {
     while let Some(field) = multipart.next_field().await.unwrap() {
         let field_name = field.name().unwrap().to_string();
         if field_name == "files" {
+            let file_name = field.file_name().unwrap().to_string();
             let data = field.bytes().await.unwrap();
-            let mut file = File::create("./public/test.png").await.unwrap();
+            let mut file = File::create(format!("./public/{}-{}", ext.name, file_name))
+                .await
+                .unwrap();
             file.write(&data).await.unwrap();
         } else {
             let data = field.text().await.unwrap();
