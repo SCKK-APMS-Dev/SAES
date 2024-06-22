@@ -1,13 +1,14 @@
 use axum::{
     debug_handler,
-    extract::{Query, Request},
+    extract::{Multipart, Query, Request},
     http::HeaderMap,
-    routing::get,
+    routing::{get, post},
     Json, Router,
 };
 use chrono::Utc;
 use sea_orm::{ColumnTrait, EntityTrait, QueryFilter};
 use serde::{Deserialize, Serialize};
+use tokio::{fs::File, io::AsyncWriteExt};
 
 use crate::{
     cucc::{middle::Tag, sql::get_conn},
@@ -28,12 +29,14 @@ pub struct Items {
 }
 
 pub fn routes() -> Router {
-    Router::new().route("/get", get(items_get))
+    Router::new()
+        .route("/get", get(items_get))
+        .route("/post", post(items_post))
 }
 
 #[derive(Debug, Deserialize)]
-struct Header {
-    tipus: String,
+pub struct Header {
+    pub tipus: String,
 }
 
 #[debug_handler]
@@ -64,4 +67,21 @@ pub async fn items_get(cucc: Query<Header>, request: Request) -> Json<Vec<Items>
         })
         .collect();
     Json(another)
+}
+
+#[debug_handler]
+pub async fn items_post(mut multipart: Multipart) -> String {
+    println!("cs");
+    while let Some(field) = multipart.next_field().await.unwrap() {
+        let field_name = field.name().unwrap().to_string();
+        if field_name == "files" {
+            let data = field.bytes().await.unwrap();
+            let mut file = File::create("./public/test.png").await.unwrap();
+            file.write(&data).await.unwrap();
+        } else {
+            let data = field.text().await.unwrap();
+            println!("field: {}   value: {}", field_name, data)
+        }
+    }
+    String::from("Sikeres")
 }

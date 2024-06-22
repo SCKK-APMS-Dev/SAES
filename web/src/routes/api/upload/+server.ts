@@ -5,18 +5,15 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 	const body = await request.formData();
 	const dcauth = cookies.get('auth_token') as string;
 	if (dcauth) {
-		const mama = await fetch(
-			request.headers.get('am') === 'true' ? `${apiUrl}/user/am/upload` : `${apiUrl}/user/upload`,
-			{
-				method: 'post',
-				headers: {
-					cookie: dcauth,
-					type: request.headers.get('type') as string,
-					dates: request.headers.get('dates') as string
-				},
-				body
-			}
-		);
+		const mama = await fetch(`${apiUrl}/user/items/post`, {
+			method: 'post',
+			mode: 'no-cors',
+			headers: {
+				cookie: dcauth
+			},
+			body
+		});
+		console.log(await mama.text());
 		return new Response(await mama.text());
 	}
 	return new Response(body);

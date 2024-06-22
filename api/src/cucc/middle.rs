@@ -69,6 +69,7 @@ pub async fn basic_auth(
                 admin: parsed_tag.PermissionGroup.is_some_and(|x| x == 1),
                 am: false,
             };
+
             request.extensions_mut().insert(tag);
             return Ok(next.run(request).await);
         } else {
