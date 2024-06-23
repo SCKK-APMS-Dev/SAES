@@ -4,7 +4,7 @@
 	export let data;
 	let text = data.layout.am
 		? '8:00-16:00: Délelőtti pótlék, 20:00-4:00: Éjszakai pótlék'
-		: '8:00-15:00: Délelőtti pótlék, 22:00-4:00: Éjszakai pótlék';
+		: '8:00-14:00: Délelőtti pótlék, 23:00-4:00: Éjszakai pótlék';
 </script>
 
 <Error {data}>
