@@ -1,12 +1,14 @@
 use axum::{
     debug_handler,
-    extract::{Multipart, Query, Request},
+    extract::{DefaultBodyLimit, Multipart, Query, Request},
     http::HeaderMap,
+    response::IntoResponse,
     routing::{get, post},
     Extension, Json, Router,
 };
-use chrono::Utc;
-use sea_orm::{ColumnTrait, EntityTrait, QueryFilter};
+use chrono::{Local, Utc};
+use reqwest::StatusCode;
+use sea_orm::{ColumnTrait, EntityTrait, IntoActiveModel, QueryFilter, Set};
 use serde::{Deserialize, Serialize};
 use tokio::{fs::File, io::AsyncWriteExt};
 
@@ -32,6 +34,7 @@ pub fn routes() -> Router {
     Router::new()
         .route("/get", get(items_get))
         .route("/post", post(items_post))
+        .layer(DefaultBodyLimit::max(10000000))
 }
 
 #[derive(Debug, Deserialize)]
@@ -69,20 +72,42 @@ pub async fn items_get(ext: Extension<Tag>, cucc: Query<Header>) -> Json<Vec<Ite
 }
 
 #[debug_handler]
-pub async fn items_post(ext: Extension<Tag>, mut multipart: Multipart) -> String {
+pub async fn items_post(
+    ext: Extension<Tag>,
+    mut multipart: Multipart,
+) -> Result<impl IntoResponse, (StatusCode, String)> {
+    let mut file_ids: Vec<i32> = Vec::new();
     while let Some(field) = multipart.next_field().await.unwrap() {
         let field_name = field.name().unwrap().to_string();
         if field_name == "files" {
             let file_name = field.file_name().unwrap().to_string();
-            let data = field.bytes().await.unwrap();
-            let mut file = File::create(format!("./public/{}-{}", ext.name, file_name))
-                .await
-                .unwrap();
-            file.write(&data).await.unwrap();
+            let data = field.bytes().await;
+            if data.is_ok() {
+                let db = get_conn().await;
+                let mut file = File::create(format!("./public/{}-{}", ext.name, file_name))
+                    .await
+                    .unwrap();
+                file.write(&data.unwrap()).await.unwrap();
+                let iten = Data::ActiveModel {
+                    am: Set(0),
+                    date: Set(Local::now().to_utc()),
+                    owner: Set(ext.name.clone()),
+                    r#type: Set(String::from("pótlék")),
+                    kep: Set(format!("{}-{}", ext.name, file_name)),
+                    ..Default::default()
+                };
+                let newitem = Data::Entity::insert(iten)
+                    .exec(&db)
+                    .await
+                    .expect("Adatbázisba mentés sikertelen");
+                file_ids.push(newitem.last_insert_id)
+            } else {
+                return Err((StatusCode::NOT_ACCEPTABLE, "toobig".to_string()));
+            }
         } else {
             let data = field.text().await.unwrap();
             println!("field: {}   value: {}", field_name, data)
         }
     }
-    String::from("Sikeres")
+    Ok(Json(file_ids))
 }

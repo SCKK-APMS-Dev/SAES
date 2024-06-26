@@ -16,6 +16,7 @@
 				formData.append('files', files.files[i]);
 				dates.push(files.files[i].lastModified.toString());
 			}
+			formerror = '';
 			const mama = await fetch('/api/upload', {
 				method: 'POST',
 				headers: {
@@ -24,7 +25,13 @@
 				body: formData
 			});
 			$loading = false;
-			fileas = JSON.parse(await mama.text());
+			const ret = await mama.json();
+			if (ret.error === 'toobig') {
+				formerror =
+					'A feltöltött fájlok túl lépték a 10MB-os határértéket. Lehetséges, hogy az egyik fel lett tölve, ezért nézd meg azokat a rendes, nem feltöltési oldalrészen!';
+			} else {
+				fileas = ret;
+			}
 			// for (let i = 0; i < files.files.length / 2; i++) {
 			// 	seli.push([]);
 			// 	seli[i].push(URL.createObjectURL(files.files[i]));

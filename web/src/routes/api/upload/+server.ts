@@ -13,8 +13,11 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 			},
 			body
 		});
-		console.log(await mama.text());
-		return new Response(await mama.text());
+		if (mama.status === 406) {
+			return new Response(JSON.stringify({ error: 'toobig' }));
+		}
+		const bodi = await mama.json();
+		return new Response(JSON.stringify(bodi));
 	}
 	return new Response(body);
 };

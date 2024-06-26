@@ -111,7 +111,11 @@
 										id="mvbtn"
 										class="from-taxi hover:bg-pos-100 bg-size-200 bg-pos-0 block rounded-full bg-gradient-to-r via-amber-600 to-red-500 px-6 py-3 text-center font-bold text-white drop-shadow-lg transition-all duration-500"
 									>
+										<span class="icon-[mingcute--music-line]" style="width: 1rem; height: 1rem;"
+										></span>
 										Műszakvezetés
+										<span class="icon-[mingcute--music-line]" style="width: 1rem; height: 1rem;"
+										></span>
 									</a>
 								{/if}
 							</div>
