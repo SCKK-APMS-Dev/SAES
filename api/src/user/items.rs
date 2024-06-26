@@ -1,20 +1,19 @@
 use axum::{
     debug_handler,
-    extract::{DefaultBodyLimit, Multipart, Query, Request},
-    http::HeaderMap,
+    extract::{DefaultBodyLimit, Multipart, Query},
     response::IntoResponse,
     routing::{get, post},
     Extension, Json, Router,
 };
 use chrono::{Local, Utc};
 use reqwest::StatusCode;
-use sea_orm::{ColumnTrait, EntityTrait, IntoActiveModel, QueryFilter, Set};
+use sea_orm::{ColumnTrait, EntityTrait, QueryFilter, Set};
 use serde::{Deserialize, Serialize};
 use tokio::{fs::File, io::AsyncWriteExt};
 
 use crate::{
-    cucc::{middle::Tag, sql::get_conn},
-    db::data::{self as Data},
+    cucc::{headers::TypeHeader, middle::Tag, sql::get_conn},
+    db::data as Data,
 };
 
 use super::calls::get_fridays;
@@ -37,13 +36,8 @@ pub fn routes() -> Router {
         .layer(DefaultBodyLimit::max(10000000))
 }
 
-#[derive(Debug, Deserialize)]
-pub struct Header {
-    pub tipus: String,
-}
-
 #[debug_handler]
-pub async fn items_get(ext: Extension<Tag>, cucc: Query<Header>) -> Json<Vec<Items>> {
+pub async fn items_get(ext: Extension<Tag>, cucc: Query<TypeHeader>) -> Json<Vec<Items>> {
     let fridays = get_fridays();
     let db = get_conn().await;
     let getitem = Data::Entity::find()
