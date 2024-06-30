@@ -5,9 +5,10 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 	const body = await request.formData();
 	const dcauth = cookies.get('auth_token') as string;
 	const tipus = request.headers.get('tip');
-	const am = request.headers.get('am');
+	const dates = request.headers.get('dates');
+	const ate = JSON.parse(dates!);
 	if (dcauth) {
-		const mama = await fetch(`${apiUrl}/user/items/post?tipus=${tipus}&am=${am}`, {
+		const mama = await fetch(`${apiUrl}/user/items/post?tipus=${tipus}&dates=${ate.toString()}`, {
 			method: 'post',
 			mode: 'no-cors',
 			headers: {

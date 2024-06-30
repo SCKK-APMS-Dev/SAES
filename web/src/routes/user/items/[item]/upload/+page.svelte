@@ -21,7 +21,6 @@
 				method: 'POST',
 				headers: {
 					tip: data.real[0],
-					am: data.layout.am,
 					dates: JSON.stringify(dates)
 				},
 				body: formData

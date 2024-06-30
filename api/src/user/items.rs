@@ -5,14 +5,18 @@ use axum::{
     routing::{get, post},
     Extension, Json, Router,
 };
-use chrono::{Local, Utc};
+use chrono::{DateTime, Utc};
 use reqwest::StatusCode;
 use sea_orm::{ColumnTrait, EntityTrait, QueryFilter, Set};
 use serde::{Deserialize, Serialize};
 use tokio::{fs::File, io::AsyncWriteExt};
 
 use crate::{
-    cucc::{headers::TypeHeader, middle::Tag, sql::get_conn},
+    cucc::{
+        headers::{TypeExtraHeader, TypeHeader},
+        middle::Tag,
+        sql::get_conn,
+    },
     db::data as Data,
 };
 
@@ -68,11 +72,14 @@ pub async fn items_get(ext: Extension<Tag>, cucc: Query<TypeHeader>) -> Json<Vec
 #[debug_handler]
 pub async fn items_post(
     ext: Extension<Tag>,
-    cucc: Query<TypeHeader>,
+    cucc: Query<TypeExtraHeader>,
     mut multipart: Multipart,
 ) -> Result<impl IntoResponse, (StatusCode, String)> {
     let mut file_ids: Vec<i32> = Vec::new();
     let mut files_for_leintes: Vec<String> = Vec::new();
+    let dates = cucc.dates.clone();
+    let ditas: Vec<&str> = dates.split(",").collect();
+    let mut i = 0;
     while let Some(field) = multipart.next_field().await.unwrap() {
         let field_name = field.name().unwrap().to_string();
         if field_name == "files" {
@@ -88,7 +95,9 @@ pub async fn items_post(
                     if files_for_leintes.len().eq(&1) {
                         let iten = Data::ActiveModel {
                             am: Set(if ext.am.clone() { 1 } else { 0 }),
-                            date: Set(Local::now().to_utc()),
+                            date: Set(
+                                DateTime::from_timestamp_millis(ditas[i].parse().unwrap()).unwrap()
+                            ),
                             owner: Set(ext.name.clone()),
                             r#type: Set(String::from(cucc.tipus.clone())),
                             kep: Set(format!(
@@ -109,7 +118,9 @@ pub async fn items_post(
                 } else {
                     let iten = Data::ActiveModel {
                         am: Set(if ext.am.clone() { 1 } else { 0 }),
-                        date: Set(Local::now().to_utc()),
+                        date: Set(
+                            DateTime::from_timestamp_millis(ditas[i].parse().unwrap()).unwrap()
+                        ),
                         owner: Set(ext.name.clone()),
                         r#type: Set(String::from(cucc.tipus.clone())),
                         kep: Set(format!("{}-{}", ext.name, file_name)),
@@ -121,6 +132,7 @@ pub async fn items_post(
                         .expect("Adatbázisba mentés sikertelen");
                     file_ids.push(newitem.last_insert_id)
                 }
+                i += 1
             } else {
                 return Err((StatusCode::NOT_ACCEPTABLE, "toobig".to_string()));
             }
