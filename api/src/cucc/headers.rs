@@ -9,3 +9,9 @@ pub struct TypeHeader {
 pub struct ImgHeader {
     pub id: String,
 }
+
+#[derive(Debug, Deserialize)]
+pub struct ImgLeintHeader {
+    pub id: String,
+    pub ver: String,
+}

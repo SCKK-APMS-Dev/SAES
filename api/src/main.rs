@@ -1,6 +1,6 @@
 use axum::{response::Redirect, routing::get, Router};
 use dotenvy::dotenv;
-use image::image_get;
+use image::{image_get, leintes_image_get};
 use tower_cookies::CookieManagerLayer;
 
 mod auth;
@@ -23,6 +23,7 @@ async fn main() {
         )
         .route("/cb", get(auth::callback))
         .route("/img", get(image_get))
+        .route("/limg", get(leintes_image_get))
         .nest("/user", user::routes())
         .layer(CookieManagerLayer::new());
 

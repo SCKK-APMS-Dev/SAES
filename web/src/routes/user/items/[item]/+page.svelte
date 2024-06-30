@@ -31,22 +31,22 @@
 							{#if potle.reason}
 								<h1 class="font-bold drop-shadow-xl">Megjegyzés: {potle.reason}</h1>
 							{/if}
-							{#if data.type}
+							{#if data.type === 'leintes'}
 								<div class="flex flex-col xl:flex-row">
 									<img
-										src={`${data.api}/img/data/${potle.id}/0`}
+										src={`${data.api}/limg?id=${potle.id}&ver=0`}
 										alt=""
 										class="max-h-xl m-auto max-w-xl py-2 drop-shadow-xl"
 									/>
 									<img
-										src={`${data.api}/img/data/${potle.id}/1`}
+										src={`${data.api}/limg?id=${potle.id}&ver=1`}
 										alt=""
 										class="max-h-xl m-auto max-w-xl py-2 drop-shadow-xl"
 									/>
 								</div>
 							{:else}
 								<img
-									src={`${data.api}/img/data/${potle.id}`}
+									src={`${data.api}/img?id=${potle.id}`}
 									alt=""
 									class="max-h-xl m-auto max-w-xl py-2 drop-shadow-xl"
 								/>

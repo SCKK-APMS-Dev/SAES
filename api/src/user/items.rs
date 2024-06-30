@@ -68,9 +68,11 @@ pub async fn items_get(ext: Extension<Tag>, cucc: Query<TypeHeader>) -> Json<Vec
 #[debug_handler]
 pub async fn items_post(
     ext: Extension<Tag>,
+    cucc: Query<TypeHeader>,
     mut multipart: Multipart,
 ) -> Result<impl IntoResponse, (StatusCode, String)> {
     let mut file_ids: Vec<i32> = Vec::new();
+    let mut files_for_leintes: Vec<String> = Vec::new();
     while let Some(field) = multipart.next_field().await.unwrap() {
         let field_name = field.name().unwrap().to_string();
         if field_name == "files" {
@@ -82,19 +84,43 @@ pub async fn items_post(
                     .await
                     .unwrap();
                 file.write(&data.unwrap()).await.unwrap();
-                let iten = Data::ActiveModel {
-                    am: Set(0),
-                    date: Set(Local::now().to_utc()),
-                    owner: Set(ext.name.clone()),
-                    r#type: Set(String::from("pótlék")),
-                    kep: Set(format!("{}-{}", ext.name, file_name)),
-                    ..Default::default()
-                };
-                let newitem = Data::Entity::insert(iten)
-                    .exec(&db)
-                    .await
-                    .expect("Adatbázisba mentés sikertelen");
-                file_ids.push(newitem.last_insert_id)
+                if cucc.tipus.clone() == String::from("leintés") {
+                    if files_for_leintes.len().eq(&1) {
+                        let iten = Data::ActiveModel {
+                            am: Set(if ext.am.clone() { 1 } else { 0 }),
+                            date: Set(Local::now().to_utc()),
+                            owner: Set(ext.name.clone()),
+                            r#type: Set(String::from(cucc.tipus.clone())),
+                            kep: Set(format!(
+                                "['{}','{}-{}']",
+                                files_for_leintes[0], ext.name, file_name
+                            )),
+                            ..Default::default()
+                        };
+                        let newitem = Data::Entity::insert(iten)
+                            .exec(&db)
+                            .await
+                            .expect("Adatbázisba mentés sikertelen");
+                        file_ids.push(newitem.last_insert_id);
+                        files_for_leintes.clear();
+                    } else {
+                        files_for_leintes.push(format!("{}-{}", ext.name, file_name))
+                    }
+                } else {
+                    let iten = Data::ActiveModel {
+                        am: Set(if ext.am.clone() { 1 } else { 0 }),
+                        date: Set(Local::now().to_utc()),
+                        owner: Set(ext.name.clone()),
+                        r#type: Set(String::from(cucc.tipus.clone())),
+                        kep: Set(format!("{}-{}", ext.name, file_name)),
+                        ..Default::default()
+                    };
+                    let newitem = Data::Entity::insert(iten)
+                        .exec(&db)
+                        .await
+                        .expect("Adatbázisba mentés sikertelen");
+                    file_ids.push(newitem.last_insert_id)
+                }
             } else {
                 return Err((StatusCode::NOT_ACCEPTABLE, "toobig".to_string()));
             }

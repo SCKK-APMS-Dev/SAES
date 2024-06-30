@@ -20,6 +20,8 @@
 			const mama = await fetch('/api/upload', {
 				method: 'POST',
 				headers: {
+					tip: data.real[0],
+					am: data.layout.am,
 					dates: JSON.stringify(dates)
 				},
 				body: formData
@@ -110,19 +112,19 @@
 					{#if data.real[0] === 'leintés'}
 						<div class="flex flex-col">
 							<img
-								src={`${data.api}/img/data/${nyam}/0`}
+								src={`${data.api}/limg?id=${nyam}&ver=0`}
 								alt=""
 								class="max-h-5xl m-auto max-w-5xl py-3"
 							/>
 							<img
-								src={`${data.api}/img/data/${nyam}/1`}
+								src={`${data.api}/limg?id=${nyam}&ver=1`}
 								alt=""
 								class="max-h-5xl m-auto max-w-5xl py-3"
 							/>
 						</div>
 					{:else}
 						<img
-							src={`${data.api}/img/data/${nyam}`}
+							src={`${data.api}/img?id=${nyam}`}
 							alt=""
 							class="max-h-5xl m-auto max-w-5xl py-3"
 						/>
