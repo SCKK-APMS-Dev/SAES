@@ -15,7 +15,6 @@ pub struct DiscordUser {
 
 #[derive(Debug, Deserialize, Clone)]
 pub struct GetUserRes {
-    pub Id: i64,
     pub PermissionGroup: Option<u32>,
     pub PlayerName: String,
     pub PositionId: i8,
@@ -63,13 +62,23 @@ pub async fn basic_auth(
                 .expect("Átalakítás sikertelen");
             let parsed_tag: GetUserRes =
                 serde_json::from_str(&getuser).expect("User object létrehozása sikertelen");
+            let am_admins: [i8; 10] = [35, 36, 37, 43, 44, 45, 46, 47, 48, 49];
             let tag = Tag {
                 id: parsed_user.id,
                 name: parsed_tag.PlayerName,
-                admin: parsed_tag.PermissionGroup.is_some_and(|x| x == 1),
-                am: false,
+                admin: if parsed_tag.PermissionGroup.is_some_and(|x| x == 1)
+                    || am_admins.contains(&parsed_tag.PositionId)
+                {
+                    true
+                } else {
+                    false
+                },
+                am: if parsed_tag.PositionId.gt(&34) && parsed_tag.PositionId.lt(&50) {
+                    true
+                } else {
+                    false
+                },
             };
-
             request.extensions_mut().insert(tag);
             return Ok(next.run(request).await);
         } else {
@@ -80,15 +89,15 @@ pub async fn basic_auth(
     };
 }
 
-pub async fn admin_auth(
-    mut req: Request,
-    next: Next,
-) -> Result<impl IntoResponse, (StatusCode, String)> {
-    let exts: Option<&Tag> = req.extensions_mut().get();
-    let uwrp = exts.expect("Tag lekérése sikertelen, basic_auth megtörtént?");
-    if uwrp.admin == true {
-        return Ok(next.run(req).await);
-    } else {
-        return Err((StatusCode::UNAUTHORIZED, "Nem vagy admin".to_string()));
-    }
-}
+// pub async fn admin_auth(
+//     mut req: Request,
+//     next: Next,
+// ) -> Result<impl IntoResponse, (StatusCode, String)> {
+//     let exts: Option<&Tag> = req.extensions_mut().get();
+//     let uwrp = exts.expect("Tag lekérése sikertelen, basic_auth megtörtént?");
+//     if uwrp.admin == true {
+//         return Ok(next.run(req).await);
+//     } else {
+//         return Err((StatusCode::UNAUTHORIZED, "Nem vagy admin".to_string()));
+//     }
+// }

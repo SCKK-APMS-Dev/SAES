@@ -36,7 +36,7 @@
 					Pótlékok a következő időben érvényesek: {#if data.layout.am}
 						8-16 óra (délelőtti), 20-4 (éjszakai)
 					{:else}
-						8-15 óra (délelőtti), 22-4 (éjszakai)
+						8-14 óra (délelőtti), 23-4 (éjszakai)
 					{/if}
 				</h2>
 			</li>

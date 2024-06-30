@@ -23,8 +23,9 @@ export const load = (async ({ cookies }) => {
 			throw redirect(302, '/noaccess');
 		}
 		if (aha.ok) {
+			const jeson = await aha.json();
 			return {
-				layout: await aha.json(),
+				layout: jeson,
 				api: apiUrl
 			};
 		}
