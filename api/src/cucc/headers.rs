@@ -6,6 +6,12 @@ pub struct TypeHeader {
 }
 
 #[derive(Debug, Deserialize)]
+pub struct TypeExtraHeader {
+    pub tipus: String,
+    pub dates: String,
+}
+
+#[derive(Debug, Deserialize)]
 pub struct ImgHeader {
     pub id: String,
 }
