@@ -4,18 +4,15 @@ import { apiUrl } from '$lib/api';
 import { Reeler_keys, Reeler_vals } from '$lib/public';
 
 export const load = (async ({ parent, cookies, params }) => {
-	const par = await parent();
+	await parent();
 	try {
 		if (Reeler_keys.includes(params.item)) {
 			const real = Reeler_vals[Reeler_keys.indexOf(params.item)];
-			const aha = await fetch(
-				par.layout.am ? `${apiUrl}/user/am/get` : `${apiUrl}/user/items/get?tipus=${real[0]}`,
-				{
-					headers: {
-						cookie: cookies.get('auth_token') as string
-					}
+			const aha = await fetch(`${apiUrl}/user/items/get?tipus=${real[0]}`, {
+				headers: {
+					cookie: cookies.get('auth_token') as string
 				}
-			);
+			});
 			if (aha.status === 401) {
 				throw redirect(302, 'noaccess');
 			}
