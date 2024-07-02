@@ -23,7 +23,8 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-latest    permissions:
+    runs-on: ubuntu-latest    
+    permissions:
       contents: read
       packages: write
       # This is used to complete the identity challenge
