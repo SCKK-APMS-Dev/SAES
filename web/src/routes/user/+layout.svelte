@@ -3,15 +3,15 @@
 	import Error from '$lib/error.svelte';
 	import { onMount } from 'svelte';
 	onMount(() => {
-		let audioFile = new Audio('/taxi.wav');
-		if (data.layout?.admin) {
-			document.getElementById('mvbtn')?.addEventListener('mouseenter', () => {
-				audioFile.currentTime = 0;
-				audioFile.play();
-			});
-			document.getElementById('mvbtn')?.addEventListener('mouseleave', () => {
-				audioFile.pause();
-			});
+		if (!data.layout.am) {
+			let audioFile = new Audio('/taxi.wav');
+			audioFile.volume = 0.5;
+			if (data.layout?.admin) {
+				document.getElementById('mvbtn')?.addEventListener('mouseenter', () => {
+					audioFile.currentTime = 0;
+					audioFile.play();
+				});
+			}
 		}
 	});
 </script>
@@ -56,7 +56,7 @@
 					>
 						<div class="flex h-full flex-col justify-between lg:flex-row lg:items-center">
 							<ul
-								class="space-y-8 px-6 pt-32 text-gray-700 md:px-12 lg:flex lg:space-x-12 lg:space-y-0 lg:pt-0"
+								class="items-center space-y-8 px-6 pt-32 text-center text-gray-700 md:px-12 lg:flex lg:space-x-12 lg:space-y-0 lg:pt-0"
 							>
 								<li>
 									<a
@@ -111,11 +111,7 @@
 										id="mvbtn"
 										class="from-taxi hover:bg-pos-100 bg-size-200 bg-pos-0 block rounded-full bg-gradient-to-r via-amber-600 to-red-500 px-6 py-3 text-center font-bold text-white drop-shadow-lg transition-all duration-500"
 									>
-										<span class="icon-[mingcute--music-line]" style="width: 1rem; height: 1rem;"
-										></span>
 										Műszakvezetés
-										<span class="icon-[mingcute--music-line]" style="width: 1rem; height: 1rem;"
-										></span>
 									</a>
 								{/if}
 							</div>

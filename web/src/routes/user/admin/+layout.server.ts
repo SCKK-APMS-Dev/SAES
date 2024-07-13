@@ -18,7 +18,7 @@ export const load = (async ({ parent, cookies }) => {
 				`${apiUrl}/auth`
 			);
 		}
-		if (aha.status === 401) {
+		if (aha.status === 403) {
 			throw redirect(302, '/user');
 		}
 
