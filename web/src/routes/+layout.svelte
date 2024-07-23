@@ -8,8 +8,8 @@
 </script>
 
 <head>
-	<title>SCKK</title>
-	<meta name="description" content="A SeeCity Közlekedési Központ weboldala" />
+	<title>SCKK Weboldal</title>
+	<meta name="description" content="A See City Közlekedési Központ weboldala" />
 </head>
 
 <slot />

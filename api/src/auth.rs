@@ -16,6 +16,7 @@ pub struct DiscordStuff {
     pub redirect_url: String,
     pub domain: String,
     pub fdomain: String,
+    pub secret_key: String,
 }
 
 pub fn get_discord_envs() -> DiscordStuff {
@@ -29,6 +30,8 @@ pub fn get_discord_envs() -> DiscordStuff {
         env::var("DOMAIN").expect("DOMAIN .env fájlból betöltése sikertelen. Létre van hozva?");
     let fdomain = env::var("FULL_DOMAIN")
         .expect("FULL_DOMAIN .env fájlból betöltése sikertelen. Létre van hozva?");
+    let secret_key = env::var("SECRET_KEY")
+        .expect("SECRET_KEY .env fájlból betöltése sikertelen. Létre van hozva?");
     DiscordStuff {
         api_endpoint: String::from("https://discord.com/api/v10"),
         discord_id: id,
@@ -37,6 +40,7 @@ pub fn get_discord_envs() -> DiscordStuff {
         fdomain,
         redirect_url: cb,
         discord_base: String::from("discord.com/oauth2/authorize"),
+        secret_key,
     }
 }
 
