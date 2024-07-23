@@ -4,7 +4,8 @@
 	"description": "",
 	"scripts": {
 		"dev:web": "pnpm --filter ./web run dev",
-		"dev:api": "cd api && cargo watch -x run"
+		"dev:api": "cd api && cargo watch -x run",
+		"dev:bot": "cd gbot && cargo watch -x run"
 	},
 	"keywords": [],
 	"author": "HVCsano",
