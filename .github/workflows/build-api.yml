@@ -7,12 +7,7 @@ name: SCKKExtra API Build
 
 on:
   push:
-    branches: [ "main","test" ]
-    paths:
-      - 'api/**/*'
-      - '.github/workflows/build-api.yml'
-  pull_request:
-    branches: [ "main","test" ]
+    branches: ['main', 'test']
     paths:
       - 'api/**/*'
       - '.github/workflows/build-api.yml'
@@ -24,10 +19,9 @@ env:
   # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ github.repository }}
 
-
 jobs:
   build:
-    runs-on: ubuntu-latest    
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
