@@ -27,21 +27,21 @@ async fn main() {
     let mut interval = interval(Duration::from_secs(120));
     loop {
         interval.tick().await; // This should go first.
-        println!("");
+        println!(" ");
         println!("==== Taxi A műszak ====");
-        println!("");
+        println!(" ");
         handle_tables("Taxi A műszak", "A2:A21", "B2").await;
-        println!("");
+        println!(" ");
         println!("==== Taxi B műszak ====");
-        println!("");
+        println!(" ");
         handle_tables("Taxi B műszak", "A2:A21", "B2").await;
-        println!("");
+        println!(" ");
         println!("==== Taxi C műszak ====");
-        println!("");
+        println!(" ");
         handle_tables("Taxi C műszak", "A2:A21", "B2").await;
-        println!("");
+        println!(" ");
         println!("=======================");
-        println!("");
+        println!(" ");
     }
 }
 async fn handle_tables(table: &str, read_range: &str, write_range: &str) {
