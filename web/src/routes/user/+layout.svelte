@@ -16,6 +16,10 @@
 	});
 </script>
 
+<svelte:head>
+	<title>SCKK Felhasználói felület</title>
+</svelte:head>
+
 <Error {data}>
 	<div class="relative z-20 border-b bg-white dark:bg-gray-700 dark:text-white">
 		<div class="px-6 lg:container md:px-12 lg:mx-auto lg:px-6 lg:py-4">

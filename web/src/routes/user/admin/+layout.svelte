@@ -12,9 +12,14 @@
 	};
 </script>
 
+<svelte:head>
+	<title>SCKK Műszakvezetői felület</title>
+</svelte:head>
+
 <nav class="grid grid-cols-2 items-center justify-between bg-emerald-700 text-white lg:flex">
 	<div class="ml-[10vw] flex items-center gap-2">
-		<h1 class="text-3xl font-bold drop-shadow-xl">Admin</h1>
+		<h1 class="hidden text-3xl font-bold drop-shadow-xl md:block">Műszakvezetés</h1>
+		<h1 class="text-3xl font-bold drop-shadow-xl md:hidden">Műszakv.</h1>
 	</div>
 	<button
 		class="mr-[10vw] cursor-pointer self-center justify-self-end text-3xl font-semibold transition-all duration-200 hover:text-emerald-500 lg:hidden"

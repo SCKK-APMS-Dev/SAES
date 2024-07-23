@@ -34,10 +34,50 @@ pub async fn basic_auth(
     next: Next,
 ) -> Result<impl IntoResponse, (StatusCode, String)> {
     // do something with `request`...
+    let special_key = headers.get("special-key");
+    let special_id = headers.get("special-id");
     let auth = headers.get("cookie");
     let ds = get_discord_envs();
     let envs = get_api_envs();
-    if auth.is_some() {
+    if special_key.is_some()
+        && special_id.is_some()
+        && special_key.unwrap().to_str().unwrap() == ds.secret_key
+    {
+        let client = reqwest::Client::new();
+        let getuser: String = client
+            .get(format!(
+                "{}/appauth/login/{}",
+                envs.patrik,
+                special_id.unwrap().to_str().unwrap()
+            ))
+            .send()
+            .await
+            .expect("Lekérés sikertelen")
+            .text()
+            .await
+            .expect("Átalakítás sikertelen");
+        let parsed_tag: GetUserRes =
+            serde_json::from_str(&getuser).expect("User object létrehozása sikertelen");
+        let am_admins: [i8; 10] = [35, 36, 37, 43, 44, 45, 46, 47, 48, 49];
+        let tag = Tag {
+            id: special_id.unwrap().to_str().unwrap().to_string(),
+            name: parsed_tag.PlayerName,
+            admin: if parsed_tag.PermissionGroup.is_some_and(|x| x == 1)
+                || am_admins.contains(&parsed_tag.PositionId)
+            {
+                true
+            } else {
+                false
+            },
+            am: if parsed_tag.PositionId.gt(&34) && parsed_tag.PositionId.lt(&50) {
+                true
+            } else {
+                false
+            },
+        };
+        request.extensions_mut().insert(tag);
+        return Ok(next.run(request).await);
+    } else if auth.is_some() {
         let client = reqwest::Client::new();
         let dcuserget = client
             .get(format!("{}/users/@me", ds.api_endpoint))
