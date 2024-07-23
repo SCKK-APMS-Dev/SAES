@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+dotenvy = "0.15.7"
 gcp_auth = "0.12.2"
 google-sheets4 = "5.0.5"
 reqwest = "0.12.5"

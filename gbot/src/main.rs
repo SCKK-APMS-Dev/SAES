@@ -1,5 +1,6 @@
 use std::{env, time::Duration};
 
+use dotenvy::dotenv;
 use google_sheets4::{api::ValueRange, hyper, hyper_rustls, Sheets};
 use serde::Deserialize;
 use serde_json::Value;
@@ -24,21 +25,22 @@ async fn get_drivers() -> Vec<DriverData> {
 }
 #[tokio::main]
 async fn main() {
+    dotenv().expect(".env fájl olvasása sikertelen");
     let mut interval = interval(Duration::from_secs(120));
     loop {
         interval.tick().await; // This should go first.
         println!(" ");
         println!("==== Taxi A műszak ====");
         println!(" ");
-        handle_tables("Taxi A műszak", "A2:A21", "B2").await;
+        handle_tables("Taxi A műszak", "A2:B21", "B2").await;
         println!(" ");
         println!("==== Taxi B műszak ====");
         println!(" ");
-        handle_tables("Taxi B műszak", "A2:A21", "B2").await;
+        handle_tables("Taxi B műszak", "A2:B21", "B2").await;
         println!(" ");
         println!("==== Taxi C műszak ====");
         println!(" ");
-        handle_tables("Taxi C műszak", "A2:A21", "B2").await;
+        handle_tables("Taxi C műszak", "A2:B21", "B2").await;
         println!(" ");
         println!("=======================");
         println!(" ");
@@ -70,10 +72,19 @@ async fn handle_tables(table: &str, read_range: &str, write_range: &str) {
     let mut vals: Vec<Vec<Value>> = vec![];
     for tag in values.iter() {
         if let Some(call) = calls.iter().find(|x| x.driver == tag[0]) {
-            println!("{}: {}", tag[0], call.count);
-            vals.push(vec![serde_json::Value::String(call.count.to_string())])
+            if tag[1] == call.count.to_string() {
+                println!("{}: {}!", tag[0], call.count);
+                vals.push(vec![serde_json::Value::Null])
+            } else {
+                println!("{}: {}", tag[0], call.count);
+                vals.push(vec![serde_json::Value::String(call.count.to_string())])
+            }
         } else {
-            vals.push(vec![serde_json::Value::String(0.to_string())])
+            if tag[1] == 0.to_string() {
+                vals.push(vec![serde_json::Value::Null])
+            } else {
+                vals.push(vec![serde_json::Value::String(0.to_string())])
+            }
         }
     }
     req.values = vals.into();
