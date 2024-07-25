@@ -72,7 +72,7 @@ async fn handle_tables(table: &str, read_range: &str, write_range: &str) {
     let mut vals: Vec<Vec<Value>> = vec![];
     for tag in values.iter() {
         if let Some(call) = calls.iter().find(|x| x.driver == tag[0]) {
-            if tag[1] == call.count.to_string() {
+            if tag.len() > 1 && tag[1] == call.count.to_string() {
                 println!("{}: {}!", tag[0], call.count);
                 vals.push(vec![serde_json::Value::Null])
             } else {
@@ -80,7 +80,7 @@ async fn handle_tables(table: &str, read_range: &str, write_range: &str) {
                 vals.push(vec![serde_json::Value::String(call.count.to_string())])
             }
         } else {
-            if tag[1] == 0.to_string() {
+            if tag.len() > 1 && tag[1] == 0.to_string() {
                 vals.push(vec![serde_json::Value::Null])
             } else {
                 vals.push(vec![serde_json::Value::String(0.to_string())])
