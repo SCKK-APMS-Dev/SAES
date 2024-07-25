@@ -71,41 +71,37 @@ pub async fn calls(mut request: Request) -> Json<Callz> {
         .expect("Átalakítás sikertelen");
     let driver_records: Vec<DriverRecord> = from_str(&calls).expect("Átalakítás nem megyen");
     let fridays = get_fridays();
-    let leintesek = Data::Entity::find()
+    let dbreturn = Data::Entity::find()
         .filter(Data::Column::Owner.eq(&exts.unwrap().name))
-        .filter(Data::Column::Type.eq("leintés"))
+        .filter(Data::Column::Type.ne("számla"))
         .filter(Data::Column::Status.eq("elfogadva"))
         .filter(Data::Column::Date.gte(fridays.prev))
         .filter(Data::Column::Date.lte(fridays.next))
         .all(&db)
         .await
         .expect("Leintések lekérése sikertelen az adatbázisból");
-    let de_potlek = Data::Entity::find()
-        .filter(Data::Column::Owner.eq(&exts.unwrap().name))
-        .filter(Data::Column::Type.eq("pótlék"))
-        .filter(Data::Column::Extra.eq("délelőtti"))
-        .filter(Data::Column::Status.eq("elfogadva"))
-        .filter(Data::Column::Date.gte(fridays.prev))
-        .filter(Data::Column::Date.lte(fridays.next))
-        .all(&db)
-        .await
-        .expect("Délelőtti pótlék lekérése sikertelen az adatbázisból");
-    let du_potlek = Data::Entity::find()
-        .filter(Data::Column::Owner.eq(&exts.unwrap().name))
-        .filter(Data::Column::Type.eq("pótlék"))
-        .filter(Data::Column::Extra.eq("éjszakai"))
-        .filter(Data::Column::Status.eq("elfogadva"))
-        .filter(Data::Column::Date.gte(fridays.prev))
-        .filter(Data::Column::Date.lte(fridays.next))
-        .all(&db)
-        .await
-        .expect("Éjszakai pótlék lekérése sikertelen az adatbázisból");
-    let rec = driver_records
+    let mut leintes = vec![];
+    let mut de_potlek = vec![];
+    let mut du_potlek = vec![];
+    for model in dbreturn.iter() {
+        if model.r#type == "pótlék" {
+            if model.extra == "délelőtti".to_string().into() {
+                de_potlek.push(model)
+            }
+            if model.extra == "éjszakai".to_string().into() {
+                du_potlek.push(model)
+            }
+        }
+        if model.r#type == "leintés" {
+            leintes.push(model)
+        }
+    }
+    let rec: Option<&DriverRecord> = driver_records
         .iter()
         .find(|record| record.driver == exts.unwrap().name);
     Json(Callz {
         app: if rec.is_some() { rec.unwrap().count } else { 0 },
-        leintes: leintesek.len(),
+        leintes: leintes.len(),
         potlek: Potlek {
             de: de_potlek.len(),
             du: du_potlek.len(),
