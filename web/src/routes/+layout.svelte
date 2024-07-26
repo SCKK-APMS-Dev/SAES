@@ -4,8 +4,7 @@
 
 	import { loading } from '$lib/loading';
 	// biome-ignore lint/suspicious/noConfusingLabels: <explanation>
-	// $: $loading = !!$navigating;
-	$: $loading = true;
+	$: $loading = !!$navigating;
 </script>
 
 <head>
