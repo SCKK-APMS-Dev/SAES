@@ -1,6 +1,7 @@
 use axum::{response::Redirect, routing::get, Router};
 use dotenvy::dotenv;
 use image::{image_get, leintes_image_get};
+use tower_cookies::CookieManagerLayer;
 use tower_http::trace::TraceLayer;
 
 mod auth;
@@ -25,7 +26,8 @@ async fn main() {
         .route("/img", get(image_get))
         .route("/limg", get(leintes_image_get))
         .nest("/user", user::routes())
-        .layer(TraceLayer::new_for_http());
+        .layer(TraceLayer::new_for_http())
+        .layer(CookieManagerLayer::new());
 
     // run our app with hyper, listening globally on port 3000
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
