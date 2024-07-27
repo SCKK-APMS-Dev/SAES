@@ -15,8 +15,8 @@ use crate::{
     db::data as Data,
     utils::{
         functions::get_fridays,
-        headers::{TypeExtraHeader, TypeHeader},
         middle::Tag,
+        queries::{TypeExtraQuery, TypeQuery},
         sql::get_conn,
     },
 };
@@ -40,7 +40,7 @@ pub fn routes() -> Router {
 }
 
 #[debug_handler]
-pub async fn items_get(ext: Extension<Tag>, cucc: Query<TypeHeader>) -> Json<Vec<Items>> {
+pub async fn items_get(ext: Extension<Tag>, cucc: Query<TypeQuery>) -> Json<Vec<Items>> {
     let fridays = get_fridays();
     let db = get_conn().await;
     let getitem = Data::Entity::find()
@@ -71,7 +71,7 @@ pub async fn items_get(ext: Extension<Tag>, cucc: Query<TypeHeader>) -> Json<Vec
 #[debug_handler]
 pub async fn items_post(
     ext: Extension<Tag>,
-    cucc: Query<TypeExtraHeader>,
+    cucc: Query<TypeExtraQuery>,
     mut multipart: Multipart,
 ) -> Result<impl IntoResponse, (StatusCode, String)> {
     let mut file_ids: Vec<i32> = Vec::new();

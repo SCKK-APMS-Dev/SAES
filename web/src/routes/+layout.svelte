@@ -16,8 +16,8 @@
 
 {#if $loading}
 	<div
-		class="shadow-taxi border-taxi absolute left-1/2
- top-1/2 h-24 w-24 -translate-x-1/2 -translate-y-1/2 transform cursor-progress content-center overflow-hidden rounded-full border-2 bg-gray-500 shadow-lg"
+		class="shadow-taxi border-taxi pointer-events-none absolute
+ left-1/2 top-1/2 h-24 w-24 -translate-x-1/2 -translate-y-1/2 transform cursor-progress content-center overflow-hidden rounded-full border-2 bg-gray-500 shadow-lg"
 	>
 		<!-- <span class="loader"></span> -->
 		<img src="/kaktusz-unscreen.gif" alt="kaktusz" />

@@ -23,9 +23,7 @@ export const load = (async ({ parent, cookies }) => {
 		}
 
 		if (aha.ok) {
-			return {
-				admin: await aha.json()
-			};
+			return {};
 		}
 	} catch (err) {
 		if ((err as Redirect).status) {
