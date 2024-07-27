@@ -1,6 +1,6 @@
 use axum::{debug_handler, extract::Request, Json};
 
-use crate::cucc::middle::Tag;
+use crate::utils::middle::Tag;
 
 #[debug_handler]
 pub async fn user_home(mut request: Request) -> Json<Tag> {

@@ -1,6 +1,6 @@
 use axum::{middleware, routing::get, Router};
 
-use crate::cucc::middle::admin_auth;
+use crate::utils::middle::admin_auth;
 
 mod base;
 

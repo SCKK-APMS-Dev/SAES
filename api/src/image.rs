@@ -4,11 +4,11 @@ use sea_orm::{ColumnTrait, EntityTrait, QueryFilter};
 use tokio::{fs::File, io::AsyncReadExt};
 
 use crate::{
-    cucc::{
+    db::data as Data,
+    utils::{
         headers::{ImgHeader, ImgLeintHeader},
         sql::get_conn,
     },
-    db::data as Data,
 };
 
 #[debug_handler]

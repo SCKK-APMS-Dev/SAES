@@ -5,10 +5,10 @@ use tower_cookies::CookieManagerLayer;
 use tower_http::trace::TraceLayer;
 
 mod auth;
-mod cucc;
 mod db;
 mod image;
 mod user;
+mod utils;
 
 #[tokio::main]
 async fn main() {
