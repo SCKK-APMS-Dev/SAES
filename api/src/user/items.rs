@@ -12,15 +12,14 @@ use serde::{Deserialize, Serialize};
 use tokio::{fs::File, io::AsyncWriteExt};
 
 use crate::{
-    cucc::{
+    db::data as Data,
+    utils::{
+        functions::get_fridays,
         headers::{TypeExtraHeader, TypeHeader},
         middle::Tag,
         sql::get_conn,
     },
-    db::data as Data,
 };
-
-use super::calls::get_fridays;
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Items {
