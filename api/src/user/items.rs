@@ -36,6 +36,7 @@ pub fn routes() -> Router {
     Router::new()
         .route("/get", get(items_get))
         .route("/post", post(items_post))
+        .route("/custompost", post(items_custom_post))
         .layer(DefaultBodyLimit::max(10000000))
 }
 
@@ -141,4 +142,25 @@ pub async fn items_post(
         }
     }
     Ok(Json(file_ids))
+}
+
+#[debug_handler]
+pub async fn items_custom_post(
+    ext: Extension<Tag>,
+    cucc: Query<TypeQuery>,
+    body: String,
+) -> impl IntoResponse {
+    let db = get_conn().await;
+    let iten = Data::ActiveModel {
+        am: Set(if ext.am.clone() { 1 } else { 0 }),
+        owner: Set(ext.name.clone()),
+        r#type: Set(String::from(cucc.tipus.clone())),
+        kep: Set(body),
+        ..Default::default()
+    };
+    Data::Entity::insert(iten)
+        .exec(&db)
+        .await
+        .expect("Adatbázisba mentés sikertelen");
+    ""
 }
