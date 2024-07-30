@@ -1,3 +1,5 @@
+use std::{fs::File, io::Write};
+
 use axum::{
     debug_handler,
     extract::{DefaultBodyLimit, Multipart, Query},
@@ -9,12 +11,10 @@ use chrono::{DateTime, Utc};
 use reqwest::StatusCode;
 use sea_orm::{ColumnTrait, EntityTrait, QueryFilter, Set};
 use serde::{Deserialize, Serialize};
-use tokio::{fs::File, io::AsyncWriteExt};
 
 use crate::{
     db::data as Data,
     utils::{
-        functions::get_fridays,
         middle::Tag,
         queries::{TypeExtraQuery, TypeQuery},
         sql::get_conn,
@@ -42,13 +42,10 @@ pub fn routes() -> Router {
 
 #[debug_handler]
 pub async fn items_get(ext: Extension<Tag>, cucc: Query<TypeQuery>) -> Json<Vec<Items>> {
-    let fridays = get_fridays();
     let db = get_conn().await;
     let getitem = Data::Entity::find()
         .filter(Data::Column::Owner.eq(&ext.name))
         .filter(Data::Column::Type.eq(cucc.tipus.clone()))
-        .filter(Data::Column::Date.gte(fridays.prev))
-        .filter(Data::Column::Date.lte(fridays.next))
         .all(&db)
         .await
         .expect("Leintések lekérése sikertelen az adatbázisból");
@@ -87,10 +84,9 @@ pub async fn items_post(
             let data = field.bytes().await;
             if data.is_ok() {
                 let db = get_conn().await;
-                let mut file = File::create(format!("./public/{}-{}", ext.name, file_name))
-                    .await
-                    .unwrap();
-                file.write(&data.unwrap()).await.unwrap();
+                let mut file =
+                    File::create(format!("./public/{}-{}", ext.name, file_name)).unwrap();
+                file.write(&data.unwrap()).unwrap();
                 if cucc.tipus.clone() == String::from("leintés") {
                     if files_for_leintes.len().eq(&1) {
                         let iten = Data::ActiveModel {

@@ -27,15 +27,15 @@
 		greet = 'Miért nem alszol';
 		end = '?';
 	}
-	const sendResponse = async () => {
-		await fetch('/api/upload', {
-			method: 'POST',
-			headers: {
-				tip: 'midnightReason'
-			},
-			body: reason
-		});
-	};
+	// const sendResponse = async () => {
+	// 	await fetch('/api/upload', {
+	// 		method: 'POST',
+	// 		headers: {
+	// 			tip: 'midnightReason'
+	// 		},
+	// 		body: reason
+	// 	});
+	// };
 </script>
 
 <div class="child:p-2 md:child:p-16 grid grid-cols-1 grid-rows-1 text-center text-white">
@@ -44,7 +44,7 @@
 			<h1 class="text-2xl drop-shadow-lg md:text-5xl md:font-bold">
 				{greet}, {data.layout?.name}{end}
 			</h1>
-			{#if end === '?'}
+			<!-- {#if end === '?'}
 				<form class="flex items-center justify-center gap-2 md:mb-4" on:submit={sendResponse}>
 					<input
 						bind:value={reason}
@@ -59,7 +59,7 @@
 						>Küld</button
 					>
 				</form>
-			{/if}
+			{/if} -->
 			{#if !data.layout.am}
 				<h2 class="text-xl drop-shadow-lg md:text-2xl">
 					Hívásaid (app+leintés): {data.calls?.app}+{data.calls?.leintes}={Number(data.calls.app) +

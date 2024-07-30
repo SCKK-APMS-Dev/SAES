@@ -23,7 +23,7 @@ pub async fn image_get(cucc: Query<ImgQuery>) -> Response {
         let fel_kep = kep.unwrap();
         let mut kep_file = File::open(format!("./public/{}", fel_kep.kep))
             .await
-            .unwrap();
+            .expect("[ERROR] Nem létező fájl megnyitása sikertelen");
         let mut contents = vec![];
         let _ = kep_file.read_to_end(&mut contents).await;
         let body = Body::from(contents);
