@@ -10,7 +10,6 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 	if (dcauth) {
 		const mama = await fetch(`${apiUrl}/user/items/post?tipus=${tipus}&dates=${ate.toString()}`, {
 			method: 'post',
-			mode: 'no-cors',
 			headers: {
 				cookie: dcauth
 			},
@@ -22,5 +21,6 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 		const bodi = await mama.json();
 		return new Response(JSON.stringify(bodi));
 	}
+
 	return new Response(body);
 };

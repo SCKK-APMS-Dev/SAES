@@ -8,6 +8,7 @@
 		[key: string]: calls;
 	}
 	export let data;
+	console.log(data);
 	let aha: tipus = {};
 	onMount(() => {
 		if (data.date) {
@@ -63,6 +64,8 @@
 							aha[jana.am ? `am_${jana.type}` : jana.type][jana.owner] = Number(jana.extra);
 						}
 					}
+				} else {
+					console.log('rossz dátum');
 				}
 			}
 		}
@@ -74,19 +77,16 @@
 		{#if data.date}
 			<div>
 				<h1 class="text-3xl font-bold">
-					Előző hét ({`${data.date?.prev.getUTCMonth() + 1}.${data.date?.prev.getUTCDate()}. - ${data.date?.next.getUTCMonth() + 1}.${data.date?.next.getUTCDate()}`})
+					Jelenlegi hét ({`${new Date(data.date?.prev).getMonth() + 1}.${new Date(data.date?.prev).getDate()}. - ${new Date(data.date?.next).getMonth() + 1}.${new Date(data.date.next).getDate()}`})
 				</h1>
+				<h2 class="text-black dark:text-white">
+					A jelenlegi hétnél nincsen link, péntek 22:00-után az előző heti linkek ezeket fogják
+					mutatni
+				</h2>
 				{#each Object.entries(aha) as [key, value]}
 					<h1 class="text-xl font-bold">{getRealText(key)}</h1>
 					{#each Object.entries(value) as [key2, value2]}
-						<div class="flex gap-2">
-							<h2>{key2}: {key.endsWith('számla') ? value2 + '$' : value2 + ' db'}</h2>
-							<a
-								href={`https://sckk.hu/list/${key2.replace(' ', '_')}/${key.startsWith('am') ? key.split('_')[1] : key}`}
-								class="rounded-xl bg-blue-900 px-2"
-								target="_blank">Link</a
-							>
-						</div>
+						<h2>{key2}: {key.endsWith('számla') ? value2 + '$' : value2 + ' db'}</h2>
 					{/each}
 				{/each}
 			</div>

@@ -1,3 +1,5 @@
+use std::{fs::File, io::Write};
+
 use axum::{
     debug_handler,
     extract::{DefaultBodyLimit, Multipart, Query},
@@ -9,14 +11,12 @@ use chrono::{DateTime, Utc};
 use reqwest::StatusCode;
 use sea_orm::{ColumnTrait, EntityTrait, QueryFilter, Set};
 use serde::{Deserialize, Serialize};
-use tokio::{fs::File, io::AsyncWriteExt};
 
 use crate::{
     db::data as Data,
     utils::{
-        functions::get_fridays,
-        headers::{TypeExtraHeader, TypeHeader},
         middle::Tag,
+        queries::{TypeExtraQuery, TypeQuery},
         sql::get_conn,
     },
 };
@@ -36,18 +36,16 @@ pub fn routes() -> Router {
     Router::new()
         .route("/get", get(items_get))
         .route("/post", post(items_post))
+        .route("/custompost", post(items_custom_post))
         .layer(DefaultBodyLimit::max(10000000))
 }
 
 #[debug_handler]
-pub async fn items_get(ext: Extension<Tag>, cucc: Query<TypeHeader>) -> Json<Vec<Items>> {
-    let fridays = get_fridays();
+pub async fn items_get(ext: Extension<Tag>, cucc: Query<TypeQuery>) -> Json<Vec<Items>> {
     let db = get_conn().await;
     let getitem = Data::Entity::find()
         .filter(Data::Column::Owner.eq(&ext.name))
         .filter(Data::Column::Type.eq(cucc.tipus.clone()))
-        .filter(Data::Column::Date.gte(fridays.prev))
-        .filter(Data::Column::Date.lte(fridays.next))
         .all(&db)
         .await
         .expect("Leintések lekérése sikertelen az adatbázisból");
@@ -71,7 +69,7 @@ pub async fn items_get(ext: Extension<Tag>, cucc: Query<TypeHeader>) -> Json<Vec
 #[debug_handler]
 pub async fn items_post(
     ext: Extension<Tag>,
-    cucc: Query<TypeExtraHeader>,
+    cucc: Query<TypeExtraQuery>,
     mut multipart: Multipart,
 ) -> Result<impl IntoResponse, (StatusCode, String)> {
     let mut file_ids: Vec<i32> = Vec::new();
@@ -86,10 +84,9 @@ pub async fn items_post(
             let data = field.bytes().await;
             if data.is_ok() {
                 let db = get_conn().await;
-                let mut file = File::create(format!("./public/{}-{}", ext.name, file_name))
-                    .await
-                    .unwrap();
-                file.write(&data.unwrap()).await.unwrap();
+                let mut file =
+                    File::create(format!("./public/{}-{}", ext.name, file_name)).unwrap();
+                file.write(&data.unwrap()).unwrap();
                 if cucc.tipus.clone() == String::from("leintés") {
                     if files_for_leintes.len().eq(&1) {
                         let iten = Data::ActiveModel {
@@ -141,4 +138,25 @@ pub async fn items_post(
         }
     }
     Ok(Json(file_ids))
+}
+
+#[debug_handler]
+pub async fn items_custom_post(
+    ext: Extension<Tag>,
+    cucc: Query<TypeQuery>,
+    body: String,
+) -> impl IntoResponse {
+    let db = get_conn().await;
+    let iten = Data::ActiveModel {
+        am: Set(if ext.am.clone() { 1 } else { 0 }),
+        owner: Set(ext.name.clone()),
+        r#type: Set(String::from(cucc.tipus.clone())),
+        kep: Set(body),
+        ..Default::default()
+    };
+    Data::Entity::insert(iten)
+        .exec(&db)
+        .await
+        .expect("Adatbázisba mentés sikertelen");
+    ""
 }

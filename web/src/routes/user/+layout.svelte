@@ -2,14 +2,18 @@
 	export let data;
 	import Error from '$lib/error.svelte';
 	import { onMount } from 'svelte';
+	let played = false;
 	onMount(() => {
 		if (!data.layout.am) {
 			let audioFile = new Audio('/taxi.wav');
-			audioFile.volume = 0.5;
+			audioFile.volume = 0.2;
 			if (data.layout?.admin) {
 				document.getElementById('mvbtn')?.addEventListener('mouseenter', () => {
-					audioFile.currentTime = 0;
-					audioFile.play();
+					if (!played) {
+						played = true;
+						audioFile.currentTime = 0;
+						audioFile.play();
+					}
 				});
 			}
 		}

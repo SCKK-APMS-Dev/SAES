@@ -7,5 +7,6 @@ mod base;
 pub fn routes() -> Router {
     Router::new()
         .route("/", get(base::admin_home))
+        .route("/stat", get(base::admin_stat))
         .layer(middleware::from_fn(admin_auth))
 }
