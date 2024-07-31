@@ -5,7 +5,7 @@
 	let reason = '';
 
 	let end = '!';
-	if (hour >= 19 || hour < 4) {
+	if (hour >= 19) {
 		greet = 'Szép estét';
 	}
 	if (hour >= 13 && hour < 19) {

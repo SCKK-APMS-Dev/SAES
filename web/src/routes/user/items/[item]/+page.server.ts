@@ -3,7 +3,7 @@ import type { PageServerLoad } from './$types';
 import { apiUrl } from '$lib/api';
 import { Reeler_keys, Reeler_vals } from '$lib/public';
 
-export const load = (async ({ parent, cookies, params }) => {
+export const load = (async ({ parent, cookies, params, url }) => {
 	await parent();
 	try {
 		if (Reeler_keys.includes(params.item)) {
@@ -22,7 +22,8 @@ export const load = (async ({ parent, cookies, params }) => {
 					return {
 						potlekok: await aha.json(),
 						type: params.item,
-						real
+						real,
+						page: url.searchParams.get('page') ? url.searchParams.get('page') : 0
 					};
 				} catch {
 					return {

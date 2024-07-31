@@ -1,6 +1,40 @@
 <script lang="ts">
+	import { goto, invalidateAll } from '$app/navigation';
+	import { page } from '$app/stores';
 	export let data;
 	import Error from '$lib/error.svelte';
+	let multipage = false;
+	let handled_potleks: any = [];
+	let pagee = data.page as number;
+	render();
+	function switchPage(mode: 'next' | 'prev') {
+		let url = new URL($page.url);
+		if (mode === 'next') {
+			url.searchParams.set('page', String(Number(pagee) + 1));
+			goto(`?${url.searchParams.toString()}`);
+			pagee = Number(pagee) + 1;
+			render();
+		}
+		if (mode === 'prev') {
+			url.searchParams.set('page', String(Number(pagee) - 1));
+			goto(`?${url.searchParams.toString()}`);
+			pagee = Number(pagee) - 1;
+			render();
+		}
+	}
+	function render() {
+		handled_potleks = [];
+		if (data.potlekok.length > 10 && data.potlekok.length > 0) {
+			multipage = true;
+			for (let i = (pagee as number) * 10; i < (pagee as number) * 10 + 10; i++) {
+				if (data.potlekok[i]) {
+					handled_potleks.push(data.potlekok[i]);
+				}
+			}
+		} else {
+			handled_potleks = data;
+		}
+	}
 </script>
 
 <Error {data}>
@@ -8,14 +42,14 @@
 		<div class="grid grid-cols-1 text-center text-black dark:text-white">
 			<a
 				href={`/user/items/${data.type}/upload`}
-				class="ml-96 mr-96 mt-16 rounded-lg bg-gradient-to-r from-white to-red-600 p-2 text-2xl font-bold text-black drop-shadow-xl"
+				class="from-taxi hover:bg-pos-100 bg-size-200 bg-pos-0 mb-5 ml-5 mr-5 mt-5 block rounded-full bg-gradient-to-r via-teal-400 to-green-600 px-6 py-3 text-center text-xl font-bold text-white drop-shadow-lg transition-all duration-500"
 				>Feltöltés</a
 			>
 			<h1 class="text-5xl font-bold drop-shadow-xl">{data.real[1]}:</h1>
-			<h2 class="mb-3 text-black dark:text-white">(az elmúlt két hétben)</h2>
+			<h2 class="mb-3 text-black dark:text-gray-400">(összesen {data.potlekok.length} darab)</h2>
 			<div class="flex flex-auto flex-wrap items-center justify-center gap-3 align-middle">
-				{#if data.potlekok}
-					{#each data.potlekok as potle}
+				{#if handled_potleks}
+					{#each handled_potleks as potle}
 						<div
 							class="rounded-xl p-2 drop-shadow-xl"
 							class:bg-green-600={potle.status === 'elfogadva'}
@@ -58,5 +92,25 @@
 				{/if}
 			</div>
 		</div>
+		{#if multipage}
+			<div class="mb-5 mt-5 flex items-center justify-center gap-4">
+				{#if pagee > 0}
+					<button
+						on:click={() => switchPage('prev')}
+						class="hover:bg-pos-100 bg-size-200 bg-pos-0 rounded-full bg-gradient-to-r from-emerald-500 via-teal-600 to-red-500 text-white duration-300"
+						style="width: calc(5vw*2.5); height: 5vh;"
+						><span class="icon-[solar--map-arrow-left-bold] h-full w-full"></span></button
+					>
+				{/if}
+				{#if Math.ceil(data.potlekok.length / 10) - 1 > pagee}
+					<button
+						on:click={() => switchPage('next')}
+						class="hover:bg-pos-100 bg-size-200 bg-pos-0 rounded-full bg-gradient-to-r from-emerald-500 via-teal-600 to-red-500 text-white duration-300"
+						style="width: calc(5vw*2.5); height: 5vh;"
+						><span class="icon-[solar--map-arrow-right-bold] h-full w-full"></span></button
+					>
+				{/if}
+			</div>
+		{/if}
 	{/if}
 </Error>
