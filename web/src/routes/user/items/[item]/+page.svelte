@@ -3,10 +3,13 @@
 	import { page } from '$app/stores';
 	export let data;
 	import Error from '$lib/error.svelte';
+	import { onMount } from 'svelte';
 	let multipage = false;
 	let handled_potleks: any = [];
 	let pagee = data.page as number;
-	render();
+	onMount(() => {
+		render();
+	});
 	function switchPage(mode: 'next' | 'prev') {
 		let url = new URL($page.url);
 		if (mode === 'next') {
@@ -32,7 +35,7 @@
 				}
 			}
 		} else {
-			handled_potleks = data;
+			handled_potleks = data.potlekok;
 		}
 	}
 </script>

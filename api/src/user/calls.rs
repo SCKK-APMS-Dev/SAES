@@ -46,8 +46,8 @@ pub async fn calls(mut request: Request) -> Json<Callz> {
         .filter(Data::Column::Owner.eq(&exts.unwrap().name))
         .filter(Data::Column::Type.ne("számla"))
         .filter(Data::Column::Status.eq("elfogadva"))
-        .filter(Data::Column::Date.gte(fridays.prev))
-        .filter(Data::Column::Date.lte(fridays.next))
+        .filter(Data::Column::Date.gt(fridays.last))
+        .filter(Data::Column::Date.lt(fridays.next))
         .all(&db)
         .await
         .expect("Leintések lekérése sikertelen az adatbázisból");

@@ -8,64 +8,43 @@
 		[key: string]: calls;
 	}
 	export let data;
-	console.log(data);
 	let aha: tipus = {};
 	onMount(() => {
 		if (data.date) {
-			for (const jana of data.stats) {
-				if (new Date(jana.date) > data.date?.prev && new Date(jana.date) < data.date?.next) {
-					if (jana.type !== 'számla') {
-						if (jana.type === 'pótlék') {
-							if (jana.extra === 'éjszakai') {
-								if (aha[jana.am ? 'am_pótlék_éjszakai' : 'pótlék_éjszakai']) {
-									if (aha[jana.am ? 'am_pótlék_éjszakai' : 'pótlék_éjszakai'][jana.owner]) {
-										aha[jana.am ? 'am_pótlék_éjszakai' : 'pótlék_éjszakai'][jana.owner]++;
-									} else {
-										aha[jana.am ? 'am_pótlék_éjszakai' : 'pótlék_éjszakai'][jana.owner] = 1;
-									}
-								} else {
-									aha[jana.am ? 'am_pótlék_éjszakai' : 'pótlék_éjszakai'] = {};
-									aha[jana.am ? 'am_pótlék_éjszakai' : 'pótlék_éjszakai'][jana.owner] = 1;
-								}
-							}
-							if (jana.extra === 'délelőtti') {
-								if (aha[jana.am ? 'am_pótlék_délelőtti' : 'pótlék_délelőtti']) {
-									if (aha[jana.am ? 'am_pótlék_délelőtti' : 'pótlék_délelőtti'][jana.owner]) {
-										aha[jana.am ? 'am_pótlék_délelőtti' : 'pótlék_délelőtti'][jana.owner]++;
-									} else {
-										aha[jana.am ? 'am_pótlék_délelőtti' : 'pótlék_délelőtti'][jana.owner] = 1;
-									}
-								} else {
-									aha[jana.am ? 'am_pótlék_délelőtti' : 'pótlék_délelőtti'] = {};
-									aha[jana.am ? 'am_pótlék_délelőtti' : 'pótlék_délelőtti'][jana.owner] = 1;
-								}
-							}
-						} else {
-							if (aha[jana.am ? `am_${jana.type}` : jana.type]) {
-								if (aha[jana.am ? `am_${jana.type}` : jana.type][jana.owner]) {
-									aha[jana.am ? `am_${jana.type}` : jana.type][jana.owner]++;
-								} else {
-									aha[jana.am ? `am_${jana.type}` : jana.type][jana.owner] = 1;
-								}
-							} else {
-								aha[jana.am ? `am_${jana.type}` : jana.type] = {};
-								aha[jana.am ? `am_${jana.type}` : jana.type][jana.owner] = 1;
-							}
-						}
+			for (const potlek of data.stats.potlekok) {
+				if (potlek.extra === 'délelőtti') {
+					if (!aha['pótlék_délelőtti']) aha['pótlék_délelőtti'] = {};
+					if (aha['pótlék_délelőtti'][potlek.owner]) {
+						aha['pótlék_délelőtti'][potlek.owner]++;
 					} else {
-						if (aha[jana.am ? `am_${jana.type}` : jana.type]) {
-							if (aha[jana.am ? `am_${jana.type}` : jana.type][jana.owner]) {
-								aha[jana.am ? `am_${jana.type}` : jana.type][jana.owner] += Number(jana.extra);
-							} else {
-								aha[jana.am ? `am_${jana.type}` : jana.type][jana.owner] = Number(jana.extra);
-							}
-						} else {
-							aha[jana.am ? `am_${jana.type}` : jana.type] = {};
-							aha[jana.am ? `am_${jana.type}` : jana.type][jana.owner] = Number(jana.extra);
-						}
+						aha['pótlék_délelőtti'][potlek.owner] = 1;
 					}
+				}
+				if (potlek.extra === 'éjszakai') {
+					if (!aha['pótlék_éjszakai']) aha['pótlék_éjszakai'] = {};
+					if (aha['pótlék_éjszakai'][potlek.owner]) {
+						aha['pótlék_éjszakai'][potlek.owner]++;
+					} else {
+						aha['pótlék_éjszakai'][potlek.owner] = 1;
+					}
+				}
+			}
+
+			for (const leintes of data.stats.leintesek) {
+				if (!aha['leintés']) aha['leintés'] = {};
+				if (aha['leintés'][leintes.owner]) {
+					aha['leintés'][leintes.owner]++;
 				} else {
-					console.log('rossz dátum');
+					aha['leintés'][leintes.owner] = 1;
+				}
+			}
+
+			for (const szamla of data.stats.szamlak) {
+				if (!aha['számla']) aha['számla'] = {};
+				if (aha['számla'][szamla.owner]) {
+					aha['számla'][szamla.owner] += Number(szamla.extra);
+				} else {
+					aha['számla'][szamla.owner] = Number(szamla.extra);
 				}
 			}
 		}
@@ -75,13 +54,16 @@
 <div class="flex">
 	<div class="m-auto text-center text-white">
 		{#if data.date}
-			<div>
-				<h1 class="text-3xl font-bold">
-					Jelenlegi hét ({`${new Date(data.date?.prev).getMonth() + 1}.${new Date(data.date?.prev).getDate()}. - ${new Date(data.date?.next).getMonth() + 1}.${new Date(data.date.next).getDate()}`})
+			<div class="mt-2">
+				<h1 class="font-bold text-red-500">
+					Jelenleg tesztelés céljából került be ez a weboldalra, az előző hét még nem megy.
 				</h1>
-				<h2 class="text-black dark:text-white">
-					A jelenlegi hétnél nincsen link, péntek 22:00-után az előző heti linkek ezeket fogják
-					mutatni
+				<h1 class="text-3xl font-bold">
+					Jelenlegi hét ({`${new Date(data.date?.prev).getMonth() + 1}.${new Date(data.date?.prev).getDate()}. - ${new Date(data.date?.next).getMonth() + 1}.${new Date(data.date.next).getDate()}.`})
+				</h1>
+				<h2 class="mb-5 text-black dark:text-gray-400">
+					A jelenlegi hétnél nincsen link, péntek 22:00-után az előző heti linkek ezeket az
+					értékeket fogják mutatni
 				</h2>
 				{#each Object.entries(aha) as [key, value]}
 					<h1 class="text-xl font-bold">{getRealText(key)}</h1>
