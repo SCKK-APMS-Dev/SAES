@@ -9,7 +9,7 @@ pub struct Friday {
 pub fn get_fridays() -> Friday {
     let input_date = Local::now().date_naive();
     let current_weekday = input_date.weekday().num_days_from_monday();
-    let zaras = NaiveTime::from_hms_opt(18, 0, 0).unwrap();
+    let zaras = NaiveTime::from_hms_opt(20, 0, 0).unwrap();
     // Calculate the number of days until the next Friday (5th day of the week)
     let days_until_friday = (4 + 7 - current_weekday) % 7;
     // If the input date is already Friday, we need to move to the next week's Friday
