@@ -1,15 +1,12 @@
 <script lang="ts">
-	import { goto, invalidateAll } from '$app/navigation';
-	import { page } from '$app/stores';
+	import { goto } from '$app/navigation';
+	import { navigating, page } from '$app/stores';
 	export let data;
 	import Error from '$lib/error.svelte';
-	import { onMount } from 'svelte';
 	let multipage = false;
 	let handled_potleks: any = [];
 	let pagee = data.page as number;
-	onMount(() => {
-		render();
-	});
+	$: if (!$navigating) render();
 	function switchPage(mode: 'next' | 'prev') {
 		let url = new URL($page.url);
 		if (mode === 'next') {
