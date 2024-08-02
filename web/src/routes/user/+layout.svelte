@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+	import { navigating, page } from '$app/stores';
 	export let data;
 	import Error from '$lib/error.svelte';
 	import { Reeler_keys, Reeler_vals } from '$lib/public';
@@ -23,20 +23,22 @@
 </script>
 
 <svelte:head>
-	{#if $page.url.pathname.includes('admin')}
-		<title>Műszakvezetői felület - SCKK</title>
-	{:else if $page.url.pathname.includes('items')}
-		{#if $page.url.pathname.endsWith('/upload')}
-			<title
-				>{Reeler_vals[Reeler_keys.indexOf($page.url.pathname.split('/')[3])][2]} feltöltés - SCKK</title
-			>
+	{#if !$navigating}
+		{#if $page.url.pathname.includes('admin')}
+			<title>Műszakvezetői felület - SCKK</title>
+		{:else if $page.url.pathname.includes('items')}
+			{#if $page.url.pathname.endsWith('/upload')}
+				<title
+					>{Reeler_vals[Reeler_keys.indexOf($page.url.pathname.split('/')[3])][2]} feltöltés - SCKK</title
+				>
+			{:else}
+				<title
+					>{Reeler_vals[Reeler_keys.indexOf($page.url.pathname.split('/')[3])][1]} megtekintése - SCKK</title
+				>
+			{/if}
 		{:else}
-			<title
-				>{Reeler_vals[Reeler_keys.indexOf($page.url.pathname.split('/')[3])][1]} megtekintése - SCKK</title
-			>
+			<title>Felhasználói felület - SCKK</title>
 		{/if}
-	{:else}
-		<title>Felhasználói felület - SCKK</title>
 	{/if}
 </svelte:head>
 
