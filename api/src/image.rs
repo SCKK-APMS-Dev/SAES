@@ -16,6 +16,7 @@ pub async fn image_get(cucc: Query<ImgQuery>) -> Response {
     let db = get_conn().await;
     let kep = Data::Entity::find()
         .filter(Data::Column::Id.eq(cucc.id.clone()))
+        .filter(Data::Column::Type.ne("leintés"))
         .one(&db)
         .await
         .unwrap();
@@ -44,6 +45,7 @@ pub async fn leintes_image_get(cucc: Query<ImgLeintQuery>) -> Response {
     let db = get_conn().await;
     let kep = Data::Entity::find()
         .filter(Data::Column::Id.eq(cucc.id.clone()))
+        .filter(Data::Column::Type.eq("leintés"))
         .one(&db)
         .await
         .unwrap();

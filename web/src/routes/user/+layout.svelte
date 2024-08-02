@@ -85,6 +85,7 @@
 								<li>
 									<a
 										href="/user/items/potlek"
+										data-sveltekit-replacestate
 										class="before:bg-taxi group relative before:absolute before:inset-x-0 before:-bottom-1.5 before:h-2 before:origin-right before:scale-x-0 before:transition before:duration-200 hover:before:origin-left hover:before:scale-x-100"
 									>
 										<span class="relative text-black dark:text-white">Pótlékok</span>
@@ -93,6 +94,7 @@
 								<li>
 									<a
 										href="/user/items/leintes"
+										data-sveltekit-replacestate
 										class="before:bg-taxi group relative before:absolute before:inset-x-0 before:-bottom-1.5 before:h-2 before:origin-right before:scale-x-0 before:transition before:duration-200 hover:before:origin-left hover:before:scale-x-100"
 									>
 										<span class="relative text-black dark:text-white"
@@ -103,6 +105,7 @@
 								<li>
 									<a
 										href="/user/items/szamla"
+										data-sveltekit-replacestate
 										class="before:bg-taxi group relative before:absolute before:inset-x-0 before:-bottom-1.5 before:h-2 before:origin-right before:scale-x-0 before:transition before:duration-200 hover:before:origin-left hover:before:scale-x-100"
 									>
 										<span class="relative text-black dark:text-white">Szereltetési számlák</span>

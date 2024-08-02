@@ -1,15 +1,12 @@
 <script lang="ts">
-	import { goto, invalidateAll } from '$app/navigation';
-	import { page } from '$app/stores';
+	import { goto } from '$app/navigation';
+	import { navigating, page } from '$app/stores';
 	export let data;
 	import Error from '$lib/error.svelte';
-	import { onMount } from 'svelte';
 	let multipage = false;
 	let handled_potleks: any = [];
 	let pagee = data.page as number;
-	onMount(() => {
-		render();
-	});
+	$: if (!$navigating) render();
 	function switchPage(mode: 'next' | 'prev') {
 		let url = new URL($page.url);
 		if (mode === 'next') {
@@ -48,9 +45,6 @@
 				class="from-taxi hover:bg-pos-100 bg-size-200 bg-pos-0 mb-5 ml-5 mr-5 mt-5 block rounded-full bg-gradient-to-r via-teal-400 to-green-600 px-6 py-3 text-center text-xl font-bold text-white drop-shadow-lg transition-all duration-500"
 				>Feltöltés</a
 			>
-			<h1 class="font-bold text-red-500">
-				Pótlék, leintés vagy számla közötti váltásnál a képen csak egy F5 után töltődnek be.
-			</h1>
 			<h1 class="text-5xl font-bold drop-shadow-xl">{data.real[1]}:</h1>
 			<h2 class="mb-3 text-black dark:text-gray-400">(összesen {data.potlekok.length} darab)</h2>
 			<div class="flex flex-auto flex-wrap items-center justify-center gap-3 align-middle">

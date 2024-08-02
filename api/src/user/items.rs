@@ -9,7 +9,7 @@ use axum::{
 };
 use chrono::{DateTime, Utc};
 use reqwest::StatusCode;
-use sea_orm::{ColumnTrait, EntityTrait, QueryFilter, Set};
+use sea_orm::{ColumnTrait, EntityTrait, Order, QueryFilter, QueryOrder, Set};
 use serde::{Deserialize, Serialize};
 
 use crate::{
@@ -46,6 +46,7 @@ pub async fn items_get(ext: Extension<Tag>, cucc: Query<TypeQuery>) -> Json<Vec<
     let getitem = Data::Entity::find()
         .filter(Data::Column::Owner.eq(&ext.name))
         .filter(Data::Column::Type.eq(cucc.tipus.clone()))
+        .order_by(Data::Column::Date, Order::Desc)
         .all(&db)
         .await
         .expect("Leintések lekérése sikertelen az adatbázisból");
