@@ -12,10 +12,6 @@
 	};
 </script>
 
-<svelte:head>
-	<title>SCKK Műszakvezetői felület</title>
-</svelte:head>
-
 <nav class="grid grid-cols-2 items-center justify-between bg-emerald-700 text-white lg:flex">
 	<div class="ml-[10vw] flex items-center gap-2">
 		<h1 class="hidden text-3xl font-bold drop-shadow-xl xl:block">Műszakvezetés</h1>
