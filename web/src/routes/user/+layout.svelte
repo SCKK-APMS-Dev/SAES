@@ -1,6 +1,8 @@
 <script lang="ts">
+	import { navigating, page } from '$app/stores';
 	export let data;
 	import Error from '$lib/error.svelte';
+	import { Reeler_keys, Reeler_vals } from '$lib/public';
 	import { onMount } from 'svelte';
 	let played = false;
 	onMount(() => {
@@ -21,7 +23,23 @@
 </script>
 
 <svelte:head>
-	<title>SCKK Felhasználói felület</title>
+	{#if !$navigating}
+		{#if $page.url.pathname.includes('admin')}
+			<title>Műszakvezetői felület - SCKK</title>
+		{:else if $page.url.pathname.includes('items')}
+			{#if $page.url.pathname.endsWith('/upload')}
+				<title
+					>{Reeler_vals[Reeler_keys.indexOf($page.url.pathname.split('/')[3])][2]} feltöltés - SCKK</title
+				>
+			{:else}
+				<title
+					>{Reeler_vals[Reeler_keys.indexOf($page.url.pathname.split('/')[3])][1]} megtekintése - SCKK</title
+				>
+			{/if}
+		{:else}
+			<title>Felhasználói felület - SCKK</title>
+		{/if}
+	{/if}
 </svelte:head>
 
 <Error {data}>
@@ -85,7 +103,6 @@
 								<li>
 									<a
 										href="/user/items/potlek"
-										data-sveltekit-replacestate
 										class="before:bg-taxi group relative before:absolute before:inset-x-0 before:-bottom-1.5 before:h-2 before:origin-right before:scale-x-0 before:transition before:duration-200 hover:before:origin-left hover:before:scale-x-100"
 									>
 										<span class="relative text-black dark:text-white">Pótlékok</span>
@@ -94,7 +111,6 @@
 								<li>
 									<a
 										href="/user/items/leintes"
-										data-sveltekit-replacestate
 										class="before:bg-taxi group relative before:absolute before:inset-x-0 before:-bottom-1.5 before:h-2 before:origin-right before:scale-x-0 before:transition before:duration-200 hover:before:origin-left hover:before:scale-x-100"
 									>
 										<span class="relative text-black dark:text-white"
@@ -105,7 +121,6 @@
 								<li>
 									<a
 										href="/user/items/szamla"
-										data-sveltekit-replacestate
 										class="before:bg-taxi group relative before:absolute before:inset-x-0 before:-bottom-1.5 before:h-2 before:origin-right before:scale-x-0 before:transition before:duration-200 hover:before:origin-left hover:before:scale-x-100"
 									>
 										<span class="relative text-black dark:text-white">Szereltetési számlák</span>

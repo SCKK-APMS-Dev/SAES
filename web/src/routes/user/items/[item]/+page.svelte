@@ -23,22 +23,24 @@
 		}
 	}
 	function render() {
-		handled_potleks = [];
-		if (data.potlekok.length > 10 && data.potlekok.length > 0) {
-			multipage = true;
-			for (let i = (pagee as number) * 10; i < (pagee as number) * 10 + 10; i++) {
-				if (data.potlekok[i]) {
-					handled_potleks.push(data.potlekok[i]);
+		if (data.real) {
+			handled_potleks = [];
+			if (data.potlekok.length > 10 && data.potlekok.length > 0) {
+				multipage = true;
+				for (let i = (pagee as number) * 10; i < (pagee as number) * 10 + 10; i++) {
+					if (data.potlekok[i]) {
+						handled_potleks.push(data.potlekok[i]);
+					}
 				}
+			} else {
+				handled_potleks = data.potlekok;
 			}
-		} else {
-			handled_potleks = data.potlekok;
 		}
 	}
 </script>
 
 <Error {data}>
-	{#if data.real}
+	{#if data.real && !$navigating}
 		<div class="grid grid-cols-1 text-center text-black dark:text-white">
 			<a
 				href={`/user/items/${data.type}/upload`}
