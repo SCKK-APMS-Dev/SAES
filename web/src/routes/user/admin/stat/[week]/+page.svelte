@@ -1,7 +1,7 @@
 <script lang="ts">
+	import { navigating } from '$app/stores';
 	import Error from '$lib/error.svelte';
 	import { getRealText } from '$lib/public';
-	import { onMount } from 'svelte';
 	interface calls {
 		[key: string]: number;
 	}
@@ -10,7 +10,9 @@
 	}
 	export let data;
 	let aha: tipus = {};
-	onMount(() => {
+	$: if (!$navigating) render();
+	function render() {
+		aha = {};
 		if (data.date) {
 			for (const potlek of data.stats.potlekok) {
 				if (potlek.extra === 'délelőtti') {
@@ -49,7 +51,7 @@
 				}
 			}
 		}
-	});
+	}
 </script>
 
 <Error {data}>
