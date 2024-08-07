@@ -11,9 +11,9 @@ export function getRealText(text: string) {
 	}
 }
 const Reeler = {
-	leintes: ['leintés', 'Leintéseid', 'Leintés'],
-	potlek: ['pótlék', 'Pótlékaid', 'Pótlék'],
-	szamla: ['számla', 'Számláid', 'Számla']
+	leintes: ['leintés', 'Leintéseid', 'Leintés', 'Leintések', 'leintésének'],
+	potlek: ['pótlék', 'Pótlékaid', 'Pótlék', 'Pótlékok', 'pótlékjának'],
+	szamla: ['számla', 'Számláid', 'Számla', 'Számlák', 'számlájának']
 };
 
 export const Reeler_keys = Object.keys(Reeler);
