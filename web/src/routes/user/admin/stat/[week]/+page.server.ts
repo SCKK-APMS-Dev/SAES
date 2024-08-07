@@ -14,11 +14,16 @@ interface returnstat {
 	};
 }
 
-export const load = (async ({ parent, cookies }) => {
+export const load = (async ({ parent, cookies, params }) => {
+	const weektypes = ['current', 'previous'];
+	if (!weektypes.includes(params.week))
+		return {
+			error: 'Ilyen hét nincs!'
+		};
 	await parent();
 	const dcauth = cookies.get('auth_token');
 	if (dcauth) {
-		const mama = await fetch(`${apiUrl}/user/admin/stat?week=current`, {
+		const mama = await fetch(`${apiUrl}/user/admin/stat?week=${params.week}`, {
 			headers: {
 				cookie: dcauth
 			}
@@ -27,6 +32,7 @@ export const load = (async ({ parent, cookies }) => {
 			const ret: returnstat = await mama.json();
 			return {
 				stats: ret.stats,
+				week: params.week,
 				date: {
 					next: ret.date.next,
 					prev: ret.date.prev
