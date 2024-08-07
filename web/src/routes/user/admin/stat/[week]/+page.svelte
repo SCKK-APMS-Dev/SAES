@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Error from '$lib/error.svelte';
 	import { getRealText } from '$lib/public';
 	import { onMount } from 'svelte';
 	interface calls {
@@ -51,27 +52,37 @@
 	});
 </script>
 
-<div class="flex">
-	<div class="m-auto text-center text-white">
-		{#if data.date}
-			<div class="mt-2">
-				<h1 class="font-bold text-red-500">
-					Jelenleg tesztelés céljából került be ez a weboldalra, az előző hét még nem megy.
-				</h1>
-				<h1 class="text-3xl font-bold">
-					Jelenlegi hét ({`${new Date(data.date?.prev).getMonth() + 1}.${new Date(data.date?.prev).getDate()}. - ${new Date(data.date?.next).getMonth() + 1}.${new Date(data.date.next).getDate()}.`})
-				</h1>
-				<h2 class="mb-5 text-black dark:text-gray-400">
-					A jelenlegi hétnél nincsen link, péntek 22:00-után az előző heti linkek ezeket az
-					értékeket fogják mutatni
-				</h2>
-				{#each Object.entries(aha) as [key, value]}
-					<h1 class="text-xl font-bold">{getRealText(key)}</h1>
-					{#each Object.entries(value) as [key2, value2]}
-						<h2>{key2}: {key.endsWith('számla') ? value2 + '$' : value2 + ' db'}</h2>
+<Error {data}>
+	<div class="flex">
+		<div class="m-auto text-center text-white">
+			{#if data.date}
+				<div class="mt-2">
+					{#if data.week === 'previous'}
+						<h1 class="font-bold text-red-500">
+							Jelenleg extra tesztelés céljából került be a weboldalra, linkek még nem elérhetőek.
+						</h1>
+					{/if}
+					<h1 class="text-3xl font-bold">
+						{#if data.week === 'current'}
+							Jelenlegi hét
+						{:else if data.week === 'previous'}
+							Előző hét
+						{/if} ({`${new Date(data.date?.prev).getMonth() + 1}.${new Date(data.date?.prev).getDate()}. - ${new Date(data.date?.next).getMonth() + 1}.${new Date(data.date.next).getDate()}.`})
+					</h1>
+					{#if data.week === 'current'}
+						<h2 class="mb-5 text-black dark:text-gray-400">
+							A jelenlegi hétnél nincsen link, péntek 22:00-után az előző heti linkek ezeket az
+							értékeket fogják mutatni
+						</h2>
+					{/if}
+					{#each Object.entries(aha) as [key, value]}
+						<h1 class="text-xl font-bold">{getRealText(key)}</h1>
+						{#each Object.entries(value) as [key2, value2]}
+							<h2>{key2}: {key.endsWith('számla') ? value2 + '$' : value2 + ' db'}</h2>
+						{/each}
 					{/each}
-				{/each}
-			</div>
-		{/if}
+				</div>
+			{/if}
+		</div>
 	</div>
-</div>
+</Error>

@@ -1,4 +1,4 @@
-<div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform text-center">
+<div class="mt-5 text-center">
 	<h1 class=" mb-2 text-3xl font-bold text-white">Hamarosan! 😉</h1>
 	<h2 class="text-gray-400">
 		Eddig, a Műszakvezetés gomb az eheti statisztikához vitt, most viszont az ún. Főoldalra.
