@@ -40,7 +40,7 @@
 </script>
 
 <Error {data}>
-	{#if data.real && !$navigating}
+	{#if data.real}
 		<div class="grid grid-cols-1 text-center text-black dark:text-white">
 			<a
 				href={`/user/items/${data.type}/upload`}
