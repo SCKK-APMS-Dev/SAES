@@ -37,7 +37,7 @@ pub fn routes() -> Router {
         .route("/get", get(items_get))
         .route("/post", post(items_post))
         .route("/custompost", post(items_custom_post))
-        .layer(DefaultBodyLimit::max(10000000))
+        .layer(DefaultBodyLimit::max(16000000))
 }
 
 #[debug_handler]

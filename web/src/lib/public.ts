@@ -10,10 +10,24 @@ export function getRealText(text: string) {
 			return 'Leintések';
 	}
 }
+
+export function getAlterText(text: string) {
+	switch (text) {
+		case 'pótlék_délelőtti':
+			return 'potlek_de';
+		case 'pótlék_éjszakai':
+			return 'potlek_ej';
+		case 'számla':
+			return 'szamla';
+		case 'leintés':
+			return 'leintes';
+	}
+}
+
 const Reeler = {
-	leintes: ['leintés', 'Leintéseid', 'Leintés'],
-	potlek: ['pótlék', 'Pótlékaid', 'Pótlék'],
-	szamla: ['számla', 'Számláid', 'Számla']
+	leintesek: ['leintés', 'Leintéseid', 'Leintés', 'Leintések', 'leintésének'],
+	potlekok: ['pótlék', 'Pótlékaid', 'Pótlék', 'Pótlékok', 'pótlékjának'],
+	szamlak: ['számla', 'Számláid', 'Számla', 'Számlák', 'számlájának']
 };
 
 export const Reeler_keys = Object.keys(Reeler);

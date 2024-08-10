@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { loading } from '$lib/loading';
 	import { onMount } from 'svelte';
-	import { Tooltip, Button, Select, Checkbox } from 'flowbite-svelte';
+	import { Tooltip, Button, Select } from 'flowbite-svelte';
 	export let title = '';
 	export let type = '';
 	export let editdes = '';
@@ -13,29 +13,29 @@
 	let bindbtn: HTMLButtonElement;
 	let potleks: {
 		data: {
-			date: Date;
-			id: number;
-			owner: string;
-			reason: string | null;
-			status: string;
-			extra: string | null;
-			am: boolean;
-		}[];
+			items: {
+				date: Date;
+				id: number;
+				owner: string;
+				reason: string | null;
+				status: string;
+				extra: string | null;
+				am: boolean;
+			}[];
+		};
 		api: string;
 		error: boolean;
-	} = { data: [], api: '', error: false };
+	} = { data: { items: [] }, api: '', error: false };
 	let jona = 'feltöltve';
-	let current = true;
 	let bindEdit: any = {};
 	let editid = 0;
-	async function getPotleks(status: string, current: boolean) {
+	async function getPotleks(status: string) {
 		$loading = true;
 		const fatcs = await fetch('/api/admin', {
 			headers: {
 				status,
 				am: String(am),
-				type: type,
-				current: current.toString()
+				type: type
 			}
 		});
 		$loading = false;
@@ -44,12 +44,12 @@
 		}
 	}
 	onMount(async () => {
-		potleks = await getPotleks('feltöltve', true);
+		potleks = await getPotleks(jona);
 	});
 
 	function edit(id: number) {
 		modal.showModal();
-		bindEdit = potleks.data[id];
+		bindEdit = potleks.data.items[id];
 		editid = id;
 	}
 	async function quickTools(type: string, id: number) {
@@ -59,8 +59,8 @@
 			},
 			method: 'POST',
 			body: JSON.stringify({
-				am: potleks.data[id].am,
-				id: potleks.data[id].id,
+				am: potleks.data.items[id].am,
+				id: potleks.data.items[id].id,
 				status:
 					type === 'accept'
 						? 'elfogadva'
@@ -68,23 +68,24 @@
 							? 'elutasítva'
 							: type === 'de' || 'du'
 								? 'elfogadva'
-								: potleks.data[id].status,
-				reason: potleks.data[id].reason,
-				extra: type === 'de' ? 'délelőtti' : type === 'du' ? 'éjszakai' : potleks.data[id].extra
+								: potleks.data.items[id].status,
+				reason: potleks.data.items[id].reason,
+				extra:
+					type === 'de' ? 'délelőtti' : type === 'du' ? 'éjszakai' : potleks.data.items[id].extra
 			})
 		});
 		if (fatcs.ok) {
 			const cucc = await fatcs.json();
 			modal.close();
 			if (jona === cucc.status) {
-				potleks.data[id] = cucc;
+				potleks.data.items[id] = cucc;
 			} else {
-				potleks = await getPotleks('feltöltve', current);
+				potleks = await getPotleks(jona);
 			}
 		}
 	}
 	async function rerun() {
-		potleks = await getPotleks(jona, current);
+		potleks = await getPotleks(jona);
 	}
 	async function editDone() {
 		bindbtn.classList.add('cursor-not-allowed');
@@ -108,9 +109,9 @@
 			const cucc = await fatcs.json();
 			modal.close();
 			if (jona === cucc.status) {
-				potleks.data[editid] = cucc;
+				potleks.data.items[editid] = cucc;
 			} else {
-				potleks = await getPotleks('feltöltve', current);
+				potleks = await getPotleks(jona);
 			}
 		}
 		bindbtn.classList.remove('cursor-not-allowed');
@@ -150,13 +151,25 @@
 				/>
 				{#if extraText}
 					<label for="extra" class="text-xl">{extraText}</label>
-					<input
-						type="text"
-						name="extra"
-						id="extra"
-						class="text-xl text-black"
-						bind:value={bindEdit.extra}
-					/>
+					{#if type === 'pótlék'}
+						<Select
+							placeholder="Kérlek válassz"
+							name="potlek-type"
+							class="bg-emerald-600 text-xl text-white"
+							bind:value={bindEdit.extra}
+						>
+							<option value="délelőtti">délelőtti</option>
+							<option value="éjszakai">éjszakai</option>
+						</Select>
+					{:else}
+						<input
+							type="text"
+							name="extra"
+							id="extra"
+							class="text-xl text-black"
+							bind:value={bindEdit.extra}
+						/>
+					{/if}
 				{/if}
 				<button
 					type="submit"
@@ -188,8 +201,6 @@
 					<option value="elfogadva" class="font-bold">Elfogadva</option>
 					<option value="elutasítva" class="font-bold">Elutasítva</option>
 				</Select>
-				<h2 class="text-xl font-bold text-black dark:text-white">Aktuális hét</h2>
-				<Checkbox name="csekd" bind:checked={current} on:change={() => rerun()} />
 			</div>
 			<table class="mt-5 table-auto p-10 text-white">
 				<thead class="rounded-xl bg-green-700">
@@ -208,7 +219,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					{#each potleks.data as potle}
+					{#each potleks.data.items as potle}
 						<tr class:bg-slate-800={!potle.am} class:bg-blue-800={potle.am}>
 							<td
 								>{new Date(potle.date).getUTCFullYear()}.{new Date(potle.date).getUTCMonth() +
@@ -224,24 +235,24 @@
 							<td>
 								{#if type == 'leintés'}
 									<div class="flex flex-col xl:flex-row">
-										<a href={`${potleks.api}/img/data/${potle.id}/0`} target="”_blank”"
+										<a href={`${potleks.api}/limg/?id=${potle.id}&ver=0`} target="”_blank”"
 											><img
-												src={`${potleks.api}/img/data/${potle.id}/0`}
+												src={`${potleks.api}/limg?id=${potle.id}&ver=0`}
 												alt=""
 												class="max-w-52"
 											/></a
 										>
-										<a href={`${potleks.api}/img/data/${potle.id}/1`} target="”_blank”"
+										<a href={`${potleks.api}/limg?id=${potle.id}&ver=1`} target="”_blank”"
 											><img
-												src={`${potleks.api}/img/data/${potle.id}/1`}
+												src={`${potleks.api}/limg?id=${potle.id}&ver=1`}
 												alt=""
 												class="max-w-52"
 											/></a
 										>
 									</div>
 								{:else}
-									<a href={`${potleks.api}/img/data/${potle.id}`} target="”_blank”"
-										><img src={`${potleks.api}/img/data/${potle.id}`} alt="" class="max-w-52" /></a
+									<a href={`${potleks.api}/img?id=${potle.id}`} target="”_blank”"
+										><img src={`${potleks.api}/img?id=${potle.id}`} alt="" class="max-w-52" /></a
 									>
 								{/if}
 							</td>
@@ -255,35 +266,35 @@
 									{#if tools.includes('délelőtti') && jona === 'feltöltve'}
 										<Button
 											class="icon-[lucide--sun] h-6 w-6 rounded-xl bg-white font-bold transition-all duration-150 hover:bg-yellow-300"
-											on:click={() => quickTools('de', potleks.data.indexOf(potle))}
+											on:click={() => quickTools('de', potleks.data.items.indexOf(potle))}
 										></Button>
 										<Tooltip class="bg-slate-500">{type} elfogadása délelőttiként</Tooltip>
 									{/if}
 									{#if tools.includes('éjszakai') && jona === 'feltöltve'}
 										<Button
 											class="icon-[lucide--moon] h-6 w-6 rounded-xl bg-white font-bold transition-all duration-150 hover:bg-blue-800"
-											on:click={() => quickTools('du', potleks.data.indexOf(potle))}
+											on:click={() => quickTools('du', potleks.data.items.indexOf(potle))}
 										></Button>
 										<Tooltip class="bg-slate-500">{type} elfogadása éjszakaiként</Tooltip>
 									{/if}
 									{#if tools.includes('accept') && jona === 'feltöltve'}
 										<Button
 											class="icon-[lucide--check] h-6 w-6 rounded-xl bg-white font-bold transition-all duration-150 hover:bg-green-500"
-											on:click={() => quickTools('accept', potleks.data.indexOf(potle))}
+											on:click={() => quickTools('accept', potleks.data.items.indexOf(potle))}
 										></Button>
 										<Tooltip class="bg-slate-500">{type} elfogadása</Tooltip>
 									{/if}
 									{#if tools.includes('decline') && jona === 'feltöltve'}
 										<Button
 											class="icon-[lucide--x] h-6 w-6 rounded-xl bg-white font-bold transition-all duration-150 hover:bg-red-600"
-											on:click={() => quickTools('decline', potleks.data.indexOf(potle))}
+											on:click={() => quickTools('decline', potleks.data.items.indexOf(potle))}
 										></Button>
 										<Tooltip class="bg-slate-500">{type} elutasítása</Tooltip>
 									{/if}
 									{#if tools.includes('edit')}
 										<Button
 											class="icon-[lucide--edit] h-6 w-6 rounded-xl bg-white font-bold transition-all duration-150 hover:bg-slate-500"
-											on:click={() => edit(potleks.data.indexOf(potle))}
+											on:click={() => edit(potleks.data.items.indexOf(potle))}
 										></Button>
 										<Tooltip class="bg-slate-500">{type} szerkesztése</Tooltip>
 									{/if}
@@ -293,7 +304,7 @@
 					{/each}
 				</tbody>
 			</table>
-			{#if potleks.data.length === 0}
+			{#if potleks.data.items.length === 0}
 				<h2>Nincs ilyen elem az adatbázisban!</h2>
 			{/if}
 		{:else}

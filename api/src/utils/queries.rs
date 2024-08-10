@@ -26,3 +26,15 @@ pub struct ImgLeintQuery {
 pub struct StatQuery {
     pub week: String,
 }
+
+#[derive(Debug, Deserialize)]
+pub struct AdminItemsQuery {
+    pub tipus: String,
+    pub status: String,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct ListQuery {
+    pub tipus: String,
+    pub driver: String,
+}

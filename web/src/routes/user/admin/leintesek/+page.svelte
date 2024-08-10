@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Adminlist from '$lib/adminlist.svelte';
+	import Adminlist from '$lib/admin/adminlist.svelte';
 </script>
 
 <Adminlist
