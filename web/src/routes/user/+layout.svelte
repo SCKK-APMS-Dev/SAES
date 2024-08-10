@@ -26,14 +26,14 @@
 	{#if !$navigating}
 		{#if $page.url.pathname.includes('admin')}
 			<title>Műszakvezetői felület - SCKK</title>
-		{:else if $page.url.pathname.includes('items')}
+		{:else if Reeler_keys.some((el) => $page.url.pathname.includes(el))}
 			{#if $page.url.pathname.endsWith('/upload')}
 				<title
-					>{Reeler_vals[Reeler_keys.indexOf($page.url.pathname.split('/')[3])][2]} feltöltés - SCKK</title
+					>{Reeler_vals[Reeler_keys.indexOf($page.url.pathname.split('/')[2])][2]} feltöltés - SCKK</title
 				>
 			{:else}
 				<title
-					>{Reeler_vals[Reeler_keys.indexOf($page.url.pathname.split('/')[3])][1]} megtekintése - SCKK</title
+					>{Reeler_vals[Reeler_keys.indexOf($page.url.pathname.split('/')[2])][1]} megtekintése - SCKK</title
 				>
 			{/if}
 		{:else}
@@ -102,7 +102,7 @@
 								</li>
 								<li>
 									<a
-										href="/user/items/potlek"
+										href="/user/potlekok"
 										class="before:bg-taxi group relative before:absolute before:inset-x-0 before:-bottom-1.5 before:h-2 before:origin-right before:scale-x-0 before:transition before:duration-200 hover:before:origin-left hover:before:scale-x-100"
 									>
 										<span class="relative text-black dark:text-white">Pótlékok</span>
@@ -110,7 +110,7 @@
 								</li>
 								<li>
 									<a
-										href="/user/items/leintes"
+										href="/user/leintesek"
 										class="before:bg-taxi group relative before:absolute before:inset-x-0 before:-bottom-1.5 before:h-2 before:origin-right before:scale-x-0 before:transition before:duration-200 hover:before:origin-left hover:before:scale-x-100"
 									>
 										<span class="relative text-black dark:text-white"
@@ -120,7 +120,7 @@
 								</li>
 								<li>
 									<a
-										href="/user/items/szamla"
+										href="/user/szamlak"
 										class="before:bg-taxi group relative before:absolute before:inset-x-0 before:-bottom-1.5 before:h-2 before:origin-right before:scale-x-0 before:transition before:duration-200 hover:before:origin-left hover:before:scale-x-100"
 									>
 										<span class="relative text-black dark:text-white">Szereltetési számlák</span>

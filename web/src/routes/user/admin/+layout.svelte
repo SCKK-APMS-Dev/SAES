@@ -37,13 +37,13 @@
 		<a href="/user/admin/call" class="transition-all duration-200 hover:bg-emerald-600"
 			>Hívásszámláló</a
 		>
-		<a href="/user/admin/items/potlek" class="transition-all duration-200 hover:bg-emerald-600"
+		<a href="/user/admin/potlekok" class="transition-all duration-200 hover:bg-emerald-600"
 			>Pótlékok</a
 		>
-		<a href="/user/admin/items/leintes" class="transition-all duration-200 hover:bg-emerald-600"
+		<a href="/user/admin/leintesek" class="transition-all duration-200 hover:bg-emerald-600"
 			>Leintések</a
 		>
-		<a href="/user/admin/items/szamla" class="transition-all duration-200 hover:bg-emerald-600"
+		<a href="/user/admin/szamlak" class="transition-all duration-200 hover:bg-emerald-600"
 			>Szereltetési számlák</a
 		>
 	</div>

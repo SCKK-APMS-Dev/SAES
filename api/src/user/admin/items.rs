@@ -1,7 +1,7 @@
 use axum::{debug_handler, extract::Query, response::IntoResponse, Extension, Json};
 use serde::Serialize;
 
-use sea_orm::{ColumnTrait, EntityTrait, QueryFilter};
+use sea_orm::{ColumnTrait, EntityTrait, Order, QueryFilter, QueryOrder};
 
 use crate::{
     db::data::{self as Data, Model},
@@ -22,6 +22,7 @@ pub async fn admin_items_get(
     let statreturn = Data::Entity::find()
         .filter(Data::Column::Status.eq(quer.status.clone()))
         .filter(Data::Column::Type.eq(quer.tipus.clone()))
+        .order_by(Data::Column::Date, Order::Desc)
         .filter(Data::Column::Am.eq(if ext.am == true { 1 } else { 0 }))
         .all(&db)
         .await

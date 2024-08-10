@@ -9,6 +9,6 @@ pub fn routes() -> Router {
     Router::new()
         .route("/", get(base::admin_home))
         .route("/stat", get(base::admin_stat))
-        .route("/items/get", get(items::admin_items_get))
+        .route("/get", get(items::admin_items_get))
         .layer(middleware::from_fn(admin_auth))
 }
