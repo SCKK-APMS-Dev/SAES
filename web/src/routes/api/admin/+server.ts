@@ -12,7 +12,6 @@ export const GET: RequestHandler = async ({ request, cookies }) => {
 				}
 			}
 		);
-		console.log(mama.status);
 		if (mama.ok) {
 			return new Response(JSON.stringify({ data: await mama.json(), api: apiUrl }));
 		}

@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { navigating } from '$app/stores';
+	import { navigating, page } from '$app/stores';
 	import Error from '$lib/error.svelte';
-	import { getRealText } from '$lib/public';
+	import { getRealText, getAlterText } from '$lib/public';
 	interface calls {
 		[key: string]: number;
 	}
@@ -52,6 +52,10 @@
 			}
 		}
 	}
+	function copyClip(str: string) {
+		navigator.clipboard.writeText(str);
+		alert('Link kimásolva a vágólapra!');
+	}
 </script>
 
 <Error {data}>
@@ -59,11 +63,6 @@
 		<div class="m-auto text-center text-white">
 			{#if data.date}
 				<div class="mt-2">
-					{#if data.week === 'previous'}
-						<h1 class="font-bold text-red-500">
-							Jelenleg extra tesztelés céljából került be a weboldalra, linkek még nem elérhetőek.
-						</h1>
-					{/if}
 					<h1 class="text-3xl font-bold">
 						{#if data.week === 'current'}
 							Jelenlegi hét
@@ -78,9 +77,31 @@
 						</h2>
 					{/if}
 					{#each Object.entries(aha) as [key, value]}
-						<h1 class="text-xl font-bold">{getRealText(key)}</h1>
+						<h1 class="text-2xl font-bold">{getRealText(key)}</h1>
 						{#each Object.entries(value) as [key2, value2]}
-							<h2>{key2}: {key.endsWith('számla') ? value2 + '$' : value2 + ' db'}</h2>
+							{#if data.week === 'previous'}
+								<div class="flex items-center justify-center">
+									<h2 class="text-xl">
+										{key2}: {key.endsWith('számla') ? value2 + '$' : value2 + ' db'}
+									</h2>
+									<button
+										class="ml-1 flex rounded-full bg-blue-600 p-1 transition-colors duration-200 hover:bg-blue-800"
+										on:click={() =>
+											copyClip(
+												`${$page.url.origin}/list/${key2.replace(' ', '_')}/${getAlterText(key)}`
+											)}><span class="icon-[mdi--clipboard-outline]"></span></button
+									>
+									<a
+										class="ml-1 flex rounded-full bg-emerald-500 p-1 transition-colors duration-200 hover:bg-emerald-800"
+										href={`${$page.url.origin}/list/${key2.replace(' ', '_')}/${getAlterText(key)}`}
+										target="”_blank”"
+									>
+										<span class="icon-[ion--open-outline]"></span></a
+									>
+								</div>
+							{:else}
+								<h2>{key2}: {key.endsWith('számla') ? value2 + '$' : value2 + ' db'}</h2>
+							{/if}
 						{/each}
 					{/each}
 				</div>

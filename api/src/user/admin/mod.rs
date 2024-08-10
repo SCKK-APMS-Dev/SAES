@@ -1,4 +1,8 @@
-use axum::{middleware, routing::get, Router};
+use axum::{
+    middleware,
+    routing::{get, post},
+    Router,
+};
 
 use crate::utils::middle::admin_auth;
 
@@ -10,5 +14,6 @@ pub fn routes() -> Router {
         .route("/", get(base::admin_home))
         .route("/stat", get(base::admin_stat))
         .route("/get", get(items::admin_items_get))
+        .route("/post", post(items::admin_items_post))
         .layer(middleware::from_fn(admin_auth))
 }

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { loading } from '$lib/loading';
 	import { onMount } from 'svelte';
-	import { Tooltip, Button, Select, Checkbox } from 'flowbite-svelte';
+	import { Tooltip, Button, Select } from 'flowbite-svelte';
 	export let title = '';
 	export let type = '';
 	export let editdes = '';
@@ -44,7 +44,7 @@
 		}
 	}
 	onMount(async () => {
-		potleks = await getPotleks('feltöltve');
+		potleks = await getPotleks(jona);
 	});
 
 	function edit(id: number) {
@@ -80,7 +80,7 @@
 			if (jona === cucc.status) {
 				potleks.data.items[id] = cucc;
 			} else {
-				potleks = await getPotleks('feltöltve');
+				potleks = await getPotleks(jona);
 			}
 		}
 	}
@@ -111,7 +111,7 @@
 			if (jona === cucc.status) {
 				potleks.data.items[editid] = cucc;
 			} else {
-				potleks = await getPotleks('feltöltve');
+				potleks = await getPotleks(jona);
 			}
 		}
 		bindbtn.classList.remove('cursor-not-allowed');
@@ -151,13 +151,25 @@
 				/>
 				{#if extraText}
 					<label for="extra" class="text-xl">{extraText}</label>
-					<input
-						type="text"
-						name="extra"
-						id="extra"
-						class="text-xl text-black"
-						bind:value={bindEdit.extra}
-					/>
+					{#if type === 'pótlék'}
+						<Select
+							placeholder="Kérlek válassz"
+							name="potlek-type"
+							class="bg-emerald-600 text-xl text-white"
+							bind:value={bindEdit.extra}
+						>
+							<option value="délelőtti">délelőtti</option>
+							<option value="éjszakai">éjszakai</option>
+						</Select>
+					{:else}
+						<input
+							type="text"
+							name="extra"
+							id="extra"
+							class="text-xl text-black"
+							bind:value={bindEdit.extra}
+						/>
+					{/if}
 				{/if}
 				<button
 					type="submit"

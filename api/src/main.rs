@@ -7,6 +7,7 @@ use tower_http::trace::TraceLayer;
 mod auth;
 mod db;
 mod image;
+mod list;
 mod user;
 mod utils;
 
@@ -24,6 +25,7 @@ async fn main() {
         )
         .route("/cb", get(auth::callback))
         .route("/img", get(image_get))
+        .route("/list", get(list::list_get))
         .route("/limg", get(leintes_image_get))
         .nest("/user", user::routes())
         .layer(TraceLayer::new_for_http())
