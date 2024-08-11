@@ -77,7 +77,7 @@
 						</h2>
 					{/if}
 					{#each Object.entries(aha) as [key, value]}
-						<h1 class="text-2xl font-bold">{getRealText(key)}</h1>
+						<h1 class="mt-2 text-2xl font-bold">{getRealText(key)}</h1>
 						{#each Object.entries(value) as [key2, value2]}
 							{#if data.week === 'previous'}
 								<div class="flex items-center justify-center">
