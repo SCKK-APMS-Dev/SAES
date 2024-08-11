@@ -3,7 +3,11 @@ import type { PageServerLoad } from './$types';
 import { apiUrl } from '$lib/api';
 
 export const load = (async ({ params }) => {
-	const shorts = await fetch(`${apiUrl}/shorts?key=${process.env.secret_key}`);
+	const shorts = await fetch(`${apiUrl}/shorts`, {
+		headers: {
+			special_key: process.env.special_key
+		}
+	});
 	if (shorts.ok) {
 		const res: { short: string; url: string }[] = await shorts.json();
 		if (res.some((val) => val.short === params.short)) {
