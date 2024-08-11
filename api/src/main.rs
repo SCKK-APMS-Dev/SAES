@@ -8,6 +8,7 @@ mod auth;
 mod db;
 mod image;
 mod list;
+mod shorts;
 mod user;
 mod utils;
 
@@ -27,6 +28,7 @@ async fn main() {
         .route("/img", get(image_get))
         .route("/list", get(list::list_get))
         .route("/limg", get(leintes_image_get))
+        .route("/shorts", get(shorts::get_shorts))
         .nest("/user", user::routes())
         .layer(TraceLayer::new_for_http())
         .layer(CookieManagerLayer::new());
