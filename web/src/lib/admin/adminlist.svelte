@@ -4,8 +4,9 @@
 	import { Tooltip, Button, Select } from 'flowbite-svelte';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
+	import type { PageData } from '../../routes/user/admin/leintesek/$types';
 	export let title = '';
-	export let data;
+	export let data: PageData;
 	export let type = '';
 	export let editdes = '';
 	export let extraText = '';
@@ -31,7 +32,7 @@
 		api: string;
 		error: boolean;
 	} = { data: { items: [] }, api: '', error: false };
-	let jona = 'feltöltve';
+	let jona = data.status;
 	let multipage = false;
 	let bindEdit: any = {};
 	let editid = 0;
@@ -39,7 +40,7 @@
 		$loading = true;
 		const fatcs = await fetch('/api/admin', {
 			headers: {
-				status: jona,
+				status: jona as string,
 				am: String(am),
 				type: type
 			}
@@ -63,10 +64,10 @@
 						items: handled
 					}
 				};
-				originallength = ret.data.items.length;
 			} else {
 				potleks = ret;
 			}
+			originallength = ret.data.items.length;
 		}
 	}
 	onMount(async () => {
@@ -111,9 +112,6 @@
 		}
 	}
 	let pagee = data.page as number;
-	async function rerun() {
-		await render();
-	}
 	function switchPage(mode: 'next' | 'prev') {
 		let url = new URL($page.url);
 		if (mode === 'next') {
@@ -126,6 +124,19 @@
 			url.searchParams.set('page', String(Number(pagee) - 1));
 			goto(`?${url.searchParams.toString()}`);
 			pagee = Number(pagee) - 1;
+			render();
+		}
+	}
+	function changestatus(ev: Event) {
+		if (ev.target) {
+			let url = new URL($page.url);
+			// @ts-expect-error
+			url.searchParams.set('status', ev.target[ev.target.selectedIndex].value);
+			url.searchParams.delete('page', pagee.toString());
+			goto(`?${url.searchParams.toString()}`);
+			// @ts-expect-error
+			jona = ev.target[ev.target.selectedIndex].value;
+			pagee = 0;
 			render();
 		}
 	}
@@ -237,7 +248,7 @@
 					id="potlek-type"
 					class="bg-emerald-600 font-bold text-white"
 					bind:value={jona}
-					on:change={() => rerun()}
+					on:input={(e) => changestatus(e)}
 				>
 					<option value="feltöltve" class="font-bold">Feltöltve</option>
 					<option value="elfogadva" class="font-bold">Elfogadva</option>
