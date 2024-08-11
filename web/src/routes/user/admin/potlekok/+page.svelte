@@ -9,6 +9,7 @@
 	type="pótlék"
 	editdes="pótlékának"
 	extraText="Típus"
+	{data}
 	am={data.layout.am}
 	tools={['délelőtti', 'éjszakai', 'edit']}
 />

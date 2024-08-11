@@ -2,7 +2,10 @@
 	import { loading } from '$lib/loading';
 	import { onMount } from 'svelte';
 	import { Tooltip, Button, Select } from 'flowbite-svelte';
+	import { page } from '$app/stores';
+	import { goto } from '$app/navigation';
 	export let title = '';
+	export let data;
 	export let type = '';
 	export let editdes = '';
 	export let extraText = '';
@@ -11,6 +14,7 @@
 	export let am: boolean = false;
 	let modal: HTMLDialogElement;
 	let bindbtn: HTMLButtonElement;
+	let originallength = 0;
 	let potleks: {
 		data: {
 			items: {
@@ -23,28 +27,50 @@
 				am: boolean;
 			}[];
 		};
+
 		api: string;
 		error: boolean;
 	} = { data: { items: [] }, api: '', error: false };
 	let jona = 'feltöltve';
+	let multipage = false;
 	let bindEdit: any = {};
 	let editid = 0;
-	async function getPotleks(status: string) {
+	async function render() {
 		$loading = true;
 		const fatcs = await fetch('/api/admin', {
 			headers: {
-				status,
+				status: jona,
 				am: String(am),
 				type: type
 			}
 		});
-		$loading = false;
 		if (fatcs.ok) {
-			return await fatcs.json();
+			let handled = [];
+			potleks.data.items = [];
+			let ret = await fatcs.json();
+			$loading = false;
+			if (ret.data.items.length > 10 && ret.data.items.length > 0) {
+				multipage = true;
+				for (let i = pagee * 10; i < (pagee as number) * 10 + 10; i++) {
+					if (ret.data.items[i]) {
+						handled.push(ret.data.items[i]);
+					}
+				}
+				potleks = {
+					api: ret.api,
+					error: ret.error,
+					data: {
+						items: handled
+					}
+				};
+				originallength = ret.data.items.length;
+			} else {
+				potleks = ret;
+			}
 		}
 	}
 	onMount(async () => {
-		potleks = await getPotleks(jona);
+		render();
 	});
 
 	function edit(id: number) {
@@ -80,12 +106,28 @@
 			if (jona === cucc.status) {
 				potleks.data.items[id] = cucc;
 			} else {
-				potleks = await getPotleks(jona);
+				await render();
 			}
 		}
 	}
+	let pagee = data.page as number;
 	async function rerun() {
-		potleks = await getPotleks(jona);
+		await render();
+	}
+	function switchPage(mode: 'next' | 'prev') {
+		let url = new URL($page.url);
+		if (mode === 'next') {
+			url.searchParams.set('page', String(Number(pagee) + 1));
+			goto(`?${url.searchParams.toString()}`);
+			pagee = Number(pagee) + 1;
+			render();
+		}
+		if (mode === 'prev') {
+			url.searchParams.set('page', String(Number(pagee) - 1));
+			goto(`?${url.searchParams.toString()}`);
+			pagee = Number(pagee) - 1;
+			render();
+		}
 	}
 	async function editDone() {
 		bindbtn.classList.add('cursor-not-allowed');
@@ -111,7 +153,7 @@
 			if (jona === cucc.status) {
 				potleks.data.items[editid] = cucc;
 			} else {
-				potleks = await getPotleks(jona);
+				await render();
 			}
 		}
 		bindbtn.classList.remove('cursor-not-allowed');
@@ -312,3 +354,23 @@
 		{/if}
 	</div>
 </div>
+{#if multipage}
+	<div class="mb-5 mt-5 flex items-center justify-center gap-4">
+		{#if pagee > 0}
+			<button
+				on:click={() => switchPage('prev')}
+				class="hover:bg-pos-100 bg-size-200 bg-pos-0 rounded-full bg-gradient-to-r from-emerald-500 via-teal-600 to-red-500 text-white duration-300"
+				style="width: calc(5vw*2.5); height: 5vh;"
+				><span class="icon-[solar--map-arrow-left-bold] h-full w-full"></span></button
+			>
+		{/if}
+		{#if Math.ceil(originallength / 10) - 1 > pagee}
+			<button
+				on:click={() => switchPage('next')}
+				class="hover:bg-pos-100 bg-size-200 bg-pos-0 rounded-full bg-gradient-to-r from-emerald-500 via-teal-600 to-red-500 text-white duration-300"
+				style="width: calc(5vw*2.5); height: 5vh;"
+				><span class="icon-[solar--map-arrow-right-bold] h-full w-full"></span></button
+			>
+		{/if}
+	</div>
+{/if}
