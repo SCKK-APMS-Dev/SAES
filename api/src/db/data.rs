@@ -3,7 +3,7 @@
 use sea_orm::entity::prelude::*;
 use serde::Serialize;
 
-#[derive(Clone, Debug, Serialize, PartialEq, DeriveEntityModel, Eq)]
+#[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq, Serialize)]
 #[sea_orm(table_name = "data")]
 pub struct Model {
     #[sea_orm(primary_key)]
@@ -15,6 +15,7 @@ pub struct Model {
     pub status: String,
     pub extra: Option<String>,
     pub reason: Option<String>,
+    pub admin: Option<String>,
     pub am: i8,
     pub date: DateTimeUtc,
 }

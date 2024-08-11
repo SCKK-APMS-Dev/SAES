@@ -2,4 +2,5 @@
 
 pub mod data;
 pub mod leintesek;
+pub mod shorts;
 pub mod users;
