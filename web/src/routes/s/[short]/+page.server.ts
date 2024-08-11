@@ -5,7 +5,7 @@ import { apiUrl } from '$lib/api';
 export const load = (async ({ params }) => {
 	const shorts = await fetch(`${apiUrl}/shorts`, {
 		headers: {
-			'secret-key': process.env.special_key as string
+			'secret-key': process.env.secret_key as string
 		}
 	});
 	if (shorts.ok) {
