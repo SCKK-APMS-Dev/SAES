@@ -34,8 +34,8 @@ pub async fn basic_auth(
     next: Next,
 ) -> Result<impl IntoResponse, (StatusCode, String)> {
     // do something with `request`...
-    let special_key = headers.get("special-key");
-    let special_id = headers.get("special-id");
+    let special_key = headers.get("secret_key");
+    let special_id = headers.get("secret_id");
     let auth = headers.get("cookie");
     let ds = get_discord_envs();
     let envs = get_api_envs();

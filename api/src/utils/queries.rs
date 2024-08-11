@@ -12,11 +12,6 @@ pub struct TypeExtraQuery {
 }
 
 #[derive(Debug, Deserialize)]
-pub struct ShortsQuery {
-    pub key: String,
-}
-
-#[derive(Debug, Deserialize)]
 pub struct ImgQuery {
     pub id: String,
 }
