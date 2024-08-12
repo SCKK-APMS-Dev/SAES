@@ -5,6 +5,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 	const body = await request.formData();
 	let count = 0;
 	console.log('POST START');
+	console.log(body);
 	body.entries().forEach(() => {
 		count++;
 	});
