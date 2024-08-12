@@ -1,7 +1,6 @@
 <script>
 	import '../app.css';
 	import { navigating } from '$app/stores';
-
 	import { loading } from '$lib/loading';
 	// biome-ignore lint/suspicious/noConfusingLabels: <explanation>
 	$: $loading = !!$navigating;

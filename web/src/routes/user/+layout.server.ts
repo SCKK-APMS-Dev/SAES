@@ -19,8 +19,10 @@ export const load = (async ({ cookies }) => {
 				`${apiUrl}/auth`
 			);
 		}
-		if (aha.status === 401) {
-			throw redirect(302, '/noaccess');
+		if (aha.status === 403) {
+			return {
+				noaccess: true
+			};
 		}
 		if (aha.ok) {
 			const jeson = await aha.json();
