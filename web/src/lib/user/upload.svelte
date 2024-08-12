@@ -30,6 +30,7 @@
 			});
 			$loading = false;
 			const ret = await mama.json();
+			console.log(ret);
 			if (ret.error === 'toobig') {
 				formerror =
 					'A feltöltött fájlok túl lépték a 16MB-os határértéket. Lehetséges, hogy pár fel lett tölve, ezért nézd meg azokat a rendes, nem feltöltési oldalrészen!';

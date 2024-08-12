@@ -24,6 +24,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 				return new Response(JSON.stringify({ error: 'toobig' }));
 			}
 			const bodi = await mama.json();
+			console.log(bodi);
 			return new Response(JSON.stringify(bodi));
 		}
 	} else {
