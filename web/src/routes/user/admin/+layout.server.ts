@@ -8,24 +8,22 @@ export const load = (async ({ parent, cookies }) => {
 		const aha = await fetch(`${apiUrl}/user/admin`, {
 			mode: 'no-cors',
 			headers: {
-				cookie: cookies.get('dc-auth') as string
+				cookie: cookies.get('auth_token') as string
 			}
 		});
 		if (aha.status === 404) {
 			throw redirect(
 				302,
 
-				`${apiUrl}/user/auth`
+				`${apiUrl}/auth`
 			);
 		}
-		if (aha.status === 401) {
+		if (aha.status === 403) {
 			throw redirect(302, '/user');
 		}
 
 		if (aha.ok) {
-			return {
-				admin: await aha.json()
-			};
+			return {};
 		}
 	} catch (err) {
 		if ((err as Redirect).status) {

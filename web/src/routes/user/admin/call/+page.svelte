@@ -312,20 +312,20 @@
 </script>
 
 <div class="flex h-screen" id="drop-zone">
-	<div id="majne" class="m-auto p-10 rounded-xl pt-1 pb-1 bg-gray-600 text-center">
+	<div id="majne" class="m-auto rounded-xl bg-gray-600 p-10 pb-1 pt-1 text-center">
 		<div
-			class="flex bg-gray-900 px-10 -mt-1 rounded-tl-xl rounded-tr-xl py-2 text-center justify-center -mx-10 items-end gap-1"
+			class="-mx-10 -mt-1 flex items-end justify-center gap-1 rounded-tl-xl rounded-tr-xl bg-gray-900 px-10 py-2 text-center"
 		>
-			<h1 class="font-semibold text-white text-3xl">SCKK Log Számláló</h1>
+			<h1 class="text-3xl font-semibold text-white">SCKK Log Számláló</h1>
 			<h2 class="text-gray-300">
 				by
 				<a class="font-semibold hover:text-blue-400" href="https://github.com/HVCsano">HVCsano</a>
 			</h2>
 		</div>
-		<h2 class="text-gray-300 font-semibold text-lg" id="draghelp">Húzd be ide a logokat</h2>
+		<h2 class="text-lg font-semibold text-gray-300" id="draghelp">Húzd be ide a logokat</h2>
 		<div id="loadhelp" class="!hidden">
 			<div class="lds-dual-ring"></div>
-			<h2 class="text-gray-300 font-semibold text-lg" id="draghelp">
+			<h2 class="text-lg font-semibold text-gray-300" id="draghelp">
 				Ez sokáig eltarthat, ne töltsd újra az oldalt!
 			</h2>
 		</div>
@@ -334,7 +334,7 @@
 </div>
 <div
 	id="alertbox"
-	class="fixed hidden bg-red-500 font-semibold left-1/2 opacity-75 transform cursor-pointer -translate-x-1/2 top-5 p-2 rounded-xl"
+	class="fixed left-1/2 top-5 hidden -translate-x-1/2 transform cursor-pointer rounded-xl bg-red-500 p-2 font-semibold opacity-75"
 >
 	<h1>Oldal betöltésekor ajánlott egy force refresht (CTRL+F5) alkalmazni.</h1>
 </div>

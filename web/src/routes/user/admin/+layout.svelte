@@ -12,33 +12,38 @@
 	};
 </script>
 
-<nav class="bg-emerald-700 grid grid-cols-2 lg:flex text-white justify-between items-center">
-	<div class="flex items-center gap-2 ml-[10vw]">
-		<h1 class="font-bold text-3xl drop-shadow-xl">Admin</h1>
+<nav class="grid grid-cols-2 items-center justify-between bg-emerald-700 text-white lg:flex">
+	<div class="ml-[10vw] flex items-center gap-2">
+		<h1 class="hidden text-3xl font-bold drop-shadow-xl xl:block">Műszakvezetés</h1>
+		<h1 class="text-3xl font-bold drop-shadow-xl xl:hidden">Műszakv.</h1>
 	</div>
 	<button
-		class="cursor-pointer self-center justify-self-end text-3xl font-semibold hover:text-emerald-500 duration-200 transition-all lg:hidden mr-[10vw]"
+		class="mr-[10vw] cursor-pointer self-center justify-self-end text-3xl font-semibold transition-all duration-200 hover:text-emerald-500 lg:hidden"
 		on:click={tognav}
 	>
 		<MaterialSymbolsMenu />
 	</button>
 	<div
 		bind:this={nav}
-		class="text-xl col-span-2 lg:col-span-1 child:px-2 child:rounded-lg flex-col lg:!flex items-center justify-center hidden text-center lg:mr-[10vw] md:flex-row lg:z-auto child:drop-shadow-xl"
+		class="child:px-2 child:rounded-lg child:drop-shadow-xl col-span-2 hidden flex-col items-center justify-center text-center text-xl md:flex-row lg:z-auto lg:col-span-1 lg:mr-[10vw] lg:!flex"
 	>
-		<a href="/user/admin" class="hover:bg-emerald-600 duration-200 transition-all">Jelenlegi hét</a>
-		<a href="/user/admin/call" class="hover:bg-emerald-600 duration-200 transition-all"
-			>Ősi hívásszámláló</a
+		<a href="/user/admin" class="transition-all duration-200 hover:bg-emerald-600">Főoldal</a>
+		<a href="/user/admin/stat/current" class="transition-all duration-200 hover:bg-emerald-600"
+			>Jelenlegi hét</a
 		>
-		<a href="/user/admin/prev" class="hover:bg-emerald-600 duration-200 transition-all">Előző hét</a
+		<a href="/user/admin/stat/previous" class="transition-all duration-200 hover:bg-emerald-600"
+			>Előző hét</a
 		>
-		<a href="/user/admin/potlekok" class="hover:bg-emerald-600 duration-200 transition-all"
+		<a href="/user/admin/call" class="transition-all duration-200 hover:bg-emerald-600"
+			>Hívásszámláló</a
+		>
+		<a href="/user/admin/potlekok" class="transition-all duration-200 hover:bg-emerald-600"
 			>Pótlékok</a
 		>
-		<a href="/user/admin/leintesek" class="hover:bg-emerald-600 duration-200 transition-all"
+		<a href="/user/admin/leintesek" class="transition-all duration-200 hover:bg-emerald-600"
 			>Leintések</a
 		>
-		<a href="/user/admin/szamlak" class="hover:bg-emerald-600 duration-200 transition-all"
+		<a href="/user/admin/szamlak" class="transition-all duration-200 hover:bg-emerald-600"
 			>Szereltetési számlák</a
 		>
 	</div>

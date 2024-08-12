@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Adminlist from '$lib/adminlist.svelte';
+	import Adminlist from '$lib/admin/adminlist.svelte';
 	export let data;
 </script>
 
@@ -9,6 +9,7 @@
 	type="pótlék"
 	editdes="pótlékának"
 	extraText="Típus"
+	{data}
 	am={data.layout.am}
 	tools={['délelőtti', 'éjszakai', 'edit']}
 />

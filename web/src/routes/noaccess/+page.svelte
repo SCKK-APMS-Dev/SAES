@@ -6,12 +6,12 @@
 	}
 </script>
 
-<div class="h-screen flex">
+<div class="flex h-screen">
 	<div class="m-auto text-center">
-		<h1 class="text-3xl text-red-600 font-bold">Nincs jogosultságod!</h1>
+		<h1 class="text-3xl font-bold text-red-600">Nincs jogosultságod!</h1>
 		<button
 			on:click={() => quit()}
-			class="text-white font-bold bg-green-500 px-2 mt-5 text-xl drop-shadow-xl rounded-xl hover:bg-green-800"
+			class="mt-5 rounded-xl bg-green-500 px-2 text-xl font-bold text-white drop-shadow-xl hover:bg-green-800"
 			>Kijelentkezés</button
 		>
 	</div>

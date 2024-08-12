@@ -1,3 +1,7 @@
-node_modules
+target
+Dockerfile
+.dockerignore
+.git
+.gitignore
 .env
-data
+.env.example

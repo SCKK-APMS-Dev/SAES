@@ -1,19 +1,10 @@
-FROM node:18
-WORKDIR /usr/src/app
+FROM rust
 
-# install dependencies into temp directory
-# this will cache them and speed up future builds
+WORKDIR /usr/src/api
 
-COPY ./package.json ./
+COPY . .
 
-RUN npm install -g pnpm
-RUN pnpm install
-
-COPY ./ ./
-
-RUN pnpm build
-
-# run the app
-USER root
+RUN cargo install --path .
+RUN touch .env
 EXPOSE 3000
-CMD [ "node", "." ]
+CMD ["api"]

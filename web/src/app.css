@@ -19,3 +19,11 @@
 		transform: rotate(1turn);
 	}
 }
+@layer components {
+	.hamburger div:first-child {
+		@apply translate-y-1.5 rotate-45;
+	}
+	.hamburger div:last-child {
+		@apply -translate-y-1 -rotate-45;
+	}
+}

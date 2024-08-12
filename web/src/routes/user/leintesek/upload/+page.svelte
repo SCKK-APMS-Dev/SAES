@@ -1,9 +1,12 @@
 <script lang="ts">
-	import Upload from '$lib/upload.svelte';
+	import Upload from '$lib/user/upload.svelte';
+
 	export let data;
-	import Error from '$lib/error.svelte';
 </script>
 
-<Error {data}>
-	<Upload adat={data} title="Leintés" underhood="leintés" />
-</Error>
+<Upload
+	{data}
+	display="Leintés"
+	tipus="leintés"
+	warning="Egy leintés 2 képből áll, magyarul a 2 többszörösét fogadja el a rendszer! (Egyszerre több leintést is fel lehet tölteni)"
+/>

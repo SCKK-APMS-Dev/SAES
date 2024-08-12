@@ -2,14 +2,13 @@
 	"name": "sckk",
 	"version": "1.0.0",
 	"description": "",
-	"main": "index.js",
 	"scripts": {
 		"dev:web": "pnpm --filter ./web run dev",
-		"dev:api": "pnpm --filter ./api run dev",
-		"dev:app": "pnpm --filter ./app run dev",
-		"pr": "pnpm --filter ./api run pr"
+		"dev:api": "cd api && cargo watch -x run",
+		"dev:bot": "cd gbot && cargo watch -x run"
 	},
 	"keywords": [],
-	"author": "",
-	"license": "ISC"
+	"author": "HVCsano",
+	"license": "GPL-3.0-only",
+	"packageManager": "pnpm@9.1.4"
 }

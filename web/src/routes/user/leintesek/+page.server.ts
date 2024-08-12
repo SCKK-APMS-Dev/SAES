@@ -2,14 +2,12 @@ import { redirect, type Redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { apiUrl } from '$lib/api';
 
-export const load = (async ({ parent, cookies }) => {
-	const par = await parent();
+export const load = (async ({ parent, cookies, url }) => {
+	await parent();
 	try {
-		const aha = await fetch(par.layout.am ? `${apiUrl}/user/am/get` : `${apiUrl}/user/get`, {
-			mode: 'no-cors',
+		const aha = await fetch(`${apiUrl}/user/items/get?tipus=leintes`, {
 			headers: {
-				type: 'leintés',
-				cookie: cookies.get('dc-auth') as string
+				cookie: cookies.get('auth_token') as string
 			}
 		});
 		if (aha.status === 401) {
@@ -19,13 +17,18 @@ export const load = (async ({ parent, cookies }) => {
 		if (aha.ok) {
 			try {
 				return {
-					potlekok: await aha.json()
+					potlekok: await aha.json(),
+					page: url.searchParams.get('page') ? url.searchParams.get('page') : 0
 				};
 			} catch {
 				return {
 					potlekok: undefined
 				};
 			}
+		} else {
+			return {
+				error: 'Leintés lekérése sikertelen: ' + aha.status + ' ' + aha.statusText
+			};
 		}
 	} catch (err) {
 		if ((err as Redirect).status) {

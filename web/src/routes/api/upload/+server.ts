@@ -3,21 +3,32 @@ import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async ({ request, cookies }) => {
 	const body = await request.formData();
-	const dcauth = cookies.get('dc-auth') as string;
-	if (dcauth) {
-		const mama = await fetch(
-			request.headers.get('am') === 'true' ? `${apiUrl}/user/am/upload` : `${apiUrl}/user/upload`,
-			{
+	let count = 0;
+	body.entries().forEach(() => {
+		count++;
+	});
+	const dcauth = cookies.get('auth_token') as string;
+	const tipus = request.headers.get('tip');
+	const dates = request.headers.get('dates');
+	const ate = JSON.parse(dates!);
+	if (tipus != 'leintés' || count % 2 === 0) {
+		if (dcauth) {
+			const mama = await fetch(`${apiUrl}/user/items/post?tipus=${tipus}&dates=${ate.toString()}`, {
 				method: 'post',
 				headers: {
-					cookie: dcauth,
-					type: request.headers.get('type') as string,
-					dates: request.headers.get('dates') as string
+					cookie: dcauth
 				},
 				body
+			});
+			if (mama.status === 406) {
+				return new Response(JSON.stringify({ error: 'toobig' }));
 			}
-		);
-		return new Response(await mama.text());
+			const bodi = await mama.json();
+			return new Response(JSON.stringify(bodi));
+		}
+	} else {
+		return new Response(JSON.stringify({ error: 'leintestipik' }));
 	}
+
 	return new Response(body);
 };
