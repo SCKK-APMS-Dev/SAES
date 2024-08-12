@@ -12,6 +12,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 	const tipus = request.headers.get('tip');
 	const dates = request.headers.get('dates');
 	const ate = JSON.parse(dates!);
+	console.log(tipus);
 	if (tipus != 'leintés' || count % 2 === 0) {
 		console.log('POST != LEINTES');
 		if (dcauth) {
