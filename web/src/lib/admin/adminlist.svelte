@@ -1,7 +1,17 @@
 <script lang="ts">
 	import { loading } from '$lib/loading';
 	import { onMount } from 'svelte';
-	import { Tooltip, Button, Select } from 'flowbite-svelte';
+	import {
+		Tooltip,
+		Button,
+		Select,
+		Table,
+		TableHead,
+		TableBody,
+		TableBodyRow,
+		TableHeadCell,
+		TableBodyCell
+	} from 'flowbite-svelte';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
 	import type { PageData } from '../../routes/user/admin/leintesek/$types';
@@ -11,6 +21,7 @@
 	export let editdes = '';
 	export let extraText = '';
 	export let des = '';
+	let haveadmin = false;
 	export let tools: string[] = [];
 	export let am: boolean = false;
 	let modal: HTMLDialogElement;
@@ -25,6 +36,7 @@
 				reason: string | null;
 				status: string;
 				extra: string | null;
+				admin: string | null;
 				am: boolean;
 			}[];
 		};
@@ -66,6 +78,18 @@
 				};
 			} else {
 				potleks = ret;
+			}
+			for (const elem of potleks.data.items) {
+				if (elem.admin !== null) {
+					haveadmin = true;
+					break;
+				}
+				if (potleks.data.items.indexOf(elem) === potleks.data.items.length - 1) {
+					haveadmin = false;
+				}
+			}
+			if (potleks.data.items.length === 0) {
+				haveadmin = false;
 			}
 			originallength = ret.data.items.length;
 		}
@@ -255,37 +279,38 @@
 					<option value="elutasítva" class="font-bold">Elutasítva</option>
 				</Select>
 			</div>
-			<table class="mt-5 table-auto p-10 text-white">
-				<thead class="rounded-xl bg-green-700">
-					<tr class="child:p-2">
-						<th>Dátum</th>
-						<th>IG Név</th>
-						<th>Kép (Kattints rá)</th>
-						<th>Státusz</th>
-						<th>Megjegyzés</th>
-						{#if extraText}
-							<th>{extraText}</th>
-						{/if}
-						{#if tools.length > 0}
-							<th>Műveletek</th>
-						{/if}
-					</tr>
-				</thead>
-				<tbody>
+			<Table class="mt-5 table-auto p-10 text-center text-white">
+				<TableHead class="rounded-xl">
+					<TableHeadCell>Dátum</TableHeadCell>
+					<TableHeadCell>IG Név</TableHeadCell>
+					<TableHeadCell>Kép (Kattints rá)</TableHeadCell>
+					<TableHeadCell>Státusz</TableHeadCell>
+					<TableHeadCell>Megjegyzés</TableHeadCell>
+					{#if extraText}
+						<TableHeadCell>{extraText}</TableHeadCell>
+					{/if}
+					{#if haveadmin}
+						<TableHeadCell>Kezelte</TableHeadCell>
+					{/if}
+					{#if tools.length > 0}
+						<TableHeadCell>Műveletek</TableHeadCell>
+					{/if}
+				</TableHead>
+				<TableBody>
 					{#each potleks.data.items as potle}
-						<tr class:bg-slate-800={!potle.am} class:bg-blue-800={potle.am}>
-							<td
+						<TableBodyRow>
+							<TableBodyCell
 								>{new Date(potle.date).getUTCFullYear()}.{new Date(potle.date).getUTCMonth() +
 									1}.{new Date(potle.date).getUTCDate()}. {new Date(potle.date).getUTCHours() +
-									2}:{new Date(potle.date).getUTCMinutes()}</td
+									2}:{new Date(potle.date).getUTCMinutes()}</TableBodyCell
 							>
-							<td
+							<TableBodyCell
 								>{potle.owner}
 								{#if potle.am}
 									(Autómentős)
-								{/if}</td
+								{/if}</TableBodyCell
 							>
-							<td>
+							<TableBodyCell>
 								{#if type == 'leintés'}
 									<div class="flex flex-col xl:flex-row">
 										<a href={`${potleks.api}/limg/?id=${potle.id}&ver=0`} target="”_blank”"
@@ -308,14 +333,17 @@
 										><img src={`${potleks.api}/img?id=${potle.id}`} alt="" class="max-w-52" /></a
 									>
 								{/if}
-							</td>
-							<td>{potle.status}</td>
-							<td>{potle.reason ? potle.reason : 'nincs'}</td>
+							</TableBodyCell>
+							<TableBodyCell>{potle.status}</TableBodyCell>
+							<TableBodyCell>{potle.reason ? potle.reason : 'nincs'}</TableBodyCell>
 							{#if extraText}
-								<td>{potle.extra ? potle.extra : 'nincs'}</td>
+								<TableBodyCell>{potle.extra ? potle.extra : 'nincs'}</TableBodyCell>
+							{/if}
+							{#if haveadmin}
+								<TableBodyCell>{potle.admin ? potle.admin : '-'}</TableBodyCell>
 							{/if}
 							{#if tools.length > 0}
-								<td>
+								<TableBodyCell>
 									{#if tools.includes('délelőtti') && jona === 'feltöltve'}
 										<Button
 											class="icon-[lucide--sun] h-6 w-6 rounded-xl bg-white font-bold transition-all duration-150 hover:bg-yellow-300"
@@ -351,12 +379,12 @@
 										></Button>
 										<Tooltip class="bg-slate-500">{type} szerkesztése</Tooltip>
 									{/if}
-								</td>
+								</TableBodyCell>
 							{/if}
-						</tr>
+						</TableBodyRow>
 					{/each}
-				</tbody>
-			</table>
+				</TableBody>
+			</Table>
 			{#if potleks.data.items.length === 0}
 				<h2>Nincs ilyen elem az adatbázisban!</h2>
 			{/if}

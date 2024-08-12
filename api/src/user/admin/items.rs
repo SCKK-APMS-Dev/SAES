@@ -46,6 +46,7 @@ pub async fn admin_items_get(
 
 #[debug_handler]
 pub async fn admin_items_post(
+    ext: Extension<Tag>,
     extract::Json(body): extract::Json<AdminPostItemsBody>,
 ) -> impl IntoResponse {
     let db = get_conn().await;
@@ -55,6 +56,7 @@ pub async fn admin_items_post(
         status: Set(body.status),
         reason: Set(body.reason),
         extra: Set(body.extra),
+        admin: Set(Some(ext.name.clone())),
         ..Default::default()
     };
     let statreturn = Data::Entity::update(activemodel)
