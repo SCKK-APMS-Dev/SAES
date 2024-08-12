@@ -263,8 +263,13 @@
 <div class="flex">
 	<div class="m-auto text-center text-black dark:text-white">
 		{#if potleks && !potleks.error}
-			<h1 class="text-2xl font-bold">{title}</h1>
-			<h1 class="text-xl font-bold">{des}</h1>
+			<div class="flex items-center justify-center gap-3 text-center">
+				<h1 class="text-2xl font-bold">{title}</h1>
+				{#if originallength > 0}
+					<h2 class="text-taxi text-xl font-bold">{originallength} db</h2>
+				{/if}
+			</div>
+			<h1 class="mb-2 text-xl text-gray-400">{des}</h1>
 			<div class="flex items-center justify-center gap-2 text-center">
 				<h2 class="text-xl font-bold text-black dark:text-white">Filter</h2>
 				<Select
