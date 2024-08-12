@@ -94,40 +94,44 @@ pub async fn basic_auth(
             .expect("Lekérés sikertelen");
         if dcuserget.status().as_u16() == 200 {
             let handled_user = dcuserget.text().await.expect("Átalakítás sikertelen");
-            let parsed_user: DiscordUser =
-                serde_json::from_str(&handled_user).expect("User object létrehozása sikertelen");
-            let getuser: String = client
-                .get(format!("{}/appauth/login/{}", envs.patrik, parsed_user.id))
-                .send()
-                .await
-                .expect("Lekérés sikertelen")
-                .text()
-                .await
-                .expect("Átalakítás sikertelen");
-            let parsed_tag = serde_json::from_str(&getuser);
-            if parsed_tag.is_ok() {
-                let real_tag: GetUserRes = parsed_tag.unwrap();
-                let am_admins: [i8; 10] = [35, 36, 37, 43, 44, 45, 46, 47, 48, 49];
-                let tag = Tag {
-                    id: parsed_user.id,
-                    name: real_tag.PlayerName,
-                    admin: if real_tag.PermissionGroup.is_some_and(|x| x == 1)
-                        || am_admins.contains(&real_tag.PositionId)
-                    {
-                        true
-                    } else {
-                        false
-                    },
-                    am: if real_tag.PositionId.gt(&34) && real_tag.PositionId.lt(&50) {
-                        true
-                    } else {
-                        false
-                    },
-                };
-                request.extensions_mut().insert(tag);
-                return Ok(next.run(request).await);
+            let parsed_user = serde_json::from_str(&handled_user);
+            if parsed_user.is_ok() {
+                let real_user: DiscordUser = parsed_user.unwrap();
+                let getuser: String = client
+                    .get(format!("{}/appauth/login/{}", envs.patrik, real_user.id))
+                    .send()
+                    .await
+                    .expect("Lekérés sikertelen")
+                    .text()
+                    .await
+                    .expect("Átalakítás sikertelen");
+                let parsed_tag = serde_json::from_str(&getuser);
+                if parsed_tag.is_ok() {
+                    let real_tag: GetUserRes = parsed_tag.unwrap();
+                    let am_admins: [i8; 10] = [35, 36, 37, 43, 44, 45, 46, 47, 48, 49];
+                    let tag = Tag {
+                        id: real_user.id,
+                        name: real_tag.PlayerName,
+                        admin: if real_tag.PermissionGroup.is_some_and(|x| x == 1)
+                            || am_admins.contains(&real_tag.PositionId)
+                        {
+                            true
+                        } else {
+                            false
+                        },
+                        am: if real_tag.PositionId.gt(&34) && real_tag.PositionId.lt(&50) {
+                            true
+                        } else {
+                            false
+                        },
+                    };
+                    request.extensions_mut().insert(tag);
+                    return Ok(next.run(request).await);
+                } else {
+                    return Err((StatusCode::FORBIDDEN, "Nincs jogod!".to_string()));
+                }
             } else {
-                return Err((StatusCode::FORBIDDEN, "Nincs jogod!".to_string()));
+                return Err((StatusCode::BAD_REQUEST, "Érvénytelen lekérés!".to_string()));
             }
         } else {
             return Err((StatusCode::NOT_ACCEPTABLE, "Sikertelen lekérés".to_string()));
