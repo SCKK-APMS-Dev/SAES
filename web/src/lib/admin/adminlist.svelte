@@ -313,7 +313,7 @@
 							<TableBodyCell>
 								{#if type == 'leintés'}
 									<div class="flex flex-col xl:flex-row">
-										<a href={`${potleks.api}/limg/?id=${potle.id}&ver=0`} target="”_blank”"
+										<a href={`${potleks.api}/limg?id=${potle.id}&ver=0`} target="”_blank”"
 											><img
 												src={`${potleks.api}/limg?id=${potle.id}&ver=0`}
 												alt=""
