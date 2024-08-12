@@ -6,9 +6,10 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 	let count = 0;
 	console.log('POST START');
 	console.log(body);
-	body.entries().forEach(() => {
+	body.forEach(() => {
 		count++;
 	});
+	console.log(count);
 	const dcauth = cookies.get('auth_token') as string;
 	const tipus = request.headers.get('tip');
 	console.log(tipus);
