@@ -10,9 +10,9 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 	});
 	const dcauth = cookies.get('auth_token') as string;
 	const tipus = request.headers.get('tip');
+	console.log(tipus);
 	const dates = request.headers.get('dates');
 	const ate = JSON.parse(dates!);
-	console.log(tipus);
 	if (tipus != 'leintés' || count % 2 === 0) {
 		console.log('POST != LEINTES');
 		if (dcauth) {
