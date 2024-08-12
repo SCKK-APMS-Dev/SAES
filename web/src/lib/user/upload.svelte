@@ -19,7 +19,6 @@
 				formData.append('files', files.files[i]);
 				dates.push(files.files[i].lastModified.toString());
 			}
-			console.log(dates);
 			formerror = '';
 			const mama = await fetch('/api/upload', {
 				method: 'POST',
@@ -31,7 +30,6 @@
 			});
 			$loading = false;
 			const ret = await mama.json();
-			console.log(ret);
 			if (ret.error === 'toobig') {
 				formerror =
 					'A feltöltött fájlok túl lépték a 16MB-os határértéket. Lehetséges, hogy pár fel lett tölve, ezért nézd meg azokat a rendes, nem feltöltési oldalrészen!';
