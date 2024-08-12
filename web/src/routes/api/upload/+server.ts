@@ -4,6 +4,7 @@ import type { RequestHandler } from './$types';
 export const POST: RequestHandler = async ({ request, cookies }) => {
 	const body = await request.formData();
 	let count = 0;
+	console.log('POST START');
 	body.entries().forEach(() => {
 		count++;
 	});
@@ -12,7 +13,9 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 	const dates = request.headers.get('dates');
 	const ate = JSON.parse(dates!);
 	if (tipus != 'leintés' || count % 2 === 0) {
+		console.log('POST != LEINTES');
 		if (dcauth) {
+			console.log('POST = DCAUTH');
 			const mama = await fetch(`${apiUrl}/user/items/post?tipus=${tipus}&dates=${ate.toString()}`, {
 				method: 'post',
 				headers: {
@@ -20,6 +23,8 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 				},
 				body
 			});
+			console.log(mama.status);
+			console.log(mama.statusText);
 			if (mama.status === 406) {
 				return new Response(JSON.stringify({ error: 'toobig' }));
 			}

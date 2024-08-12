@@ -19,6 +19,7 @@
 				formData.append('files', files.files[i]);
 				dates.push(files.files[i].lastModified.toString());
 			}
+			console.log(formData);
 			formerror = '';
 			const mama = await fetch('/api/upload', {
 				method: 'POST',
