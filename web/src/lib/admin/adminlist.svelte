@@ -263,7 +263,7 @@
 <div class="flex">
 	<div class="m-auto text-center text-black dark:text-white">
 		{#if potleks && !potleks.error}
-			<div class="flex items-center justify-center gap-3 text-center">
+			<div class="flex items-end justify-center gap-1 text-end">
 				<h1 class="text-2xl font-bold">{title}</h1>
 				{#if originallength > 0}
 					<h2 class="text-taxi text-xl font-bold">{originallength} db</h2>
