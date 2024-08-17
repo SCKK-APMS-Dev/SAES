@@ -84,11 +84,11 @@
 						</h2>
 					{/if}
 					{#each Object.entries(aha) as [key, value]}
-						<h1 class="mt-3 text-5xl font-bold">{getRealText(key)}</h1>
+						<h1 class="mt-3 text-3xl font-bold">{getRealText(key)}</h1>
 						{#each Object.entries(value) as [key2, value2]}
 							{#if data.week === 'previous'}
 								<div class="flex items-center justify-center">
-									<h2 class="text-3xl">
+									<h2 class="text-2xl">
 										{key2}: {key.endsWith('számla') ? value2 + '$' : value2 + ' db'}
 									</h2>
 									<button
@@ -99,9 +99,9 @@
 												`${key}_${key2}`
 											)}
 										>{#if copied[`${key}_${key2}`]}
-											<span class="icon-[ic--twotone-check] h-8 w-8 text-green-400"></span>
+											<span class="icon-[ic--twotone-check] h-6 w-6 text-green-400"></span>
 										{:else}
-											<span class="icon-[mdi--clipboard-outline] text-taxi h-8 w-8"></span>
+											<span class="icon-[mdi--clipboard-outline] text-taxi h-6 w-6"></span>
 										{/if}
 									</button>
 									<a
@@ -109,7 +109,7 @@
 										href={`${$page.url.origin}/list/${key2.replace(' ', '_')}/${getAlterText(key)}`}
 										target="”_blank”"
 									>
-										<span class="icon-[ion--open-outline] h-8 w-8 text-blue-500"></span></a
+										<span class="icon-[ion--open-outline] h-6 w-6 text-blue-500"></span></a
 									>
 								</div>
 							{:else}
