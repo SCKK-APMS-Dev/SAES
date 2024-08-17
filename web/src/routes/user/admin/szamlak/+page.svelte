@@ -10,5 +10,5 @@
 	editdes="számlájának"
 	extraText="Összeg"
 	am={data.layout.am}
-	tools={['accept', 'decline', 'edit']}
+	tools={['edit']}
 />
