@@ -28,7 +28,8 @@ export const load = (async ({ cookies }) => {
 			const jeson = await aha.json();
 			return {
 				layout: jeson,
-				api: apiUrl
+				api: apiUrl,
+				auth: cookies.get('auth_token')!
 			};
 		}
 	} catch (err) {

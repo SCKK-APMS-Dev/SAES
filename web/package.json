@@ -39,5 +39,8 @@
 		"unplugin-icons": "^0.18.5",
 		"vite": "^5.4.1"
 	},
-	"type": "module"
+	"type": "module",
+	"dependencies": {
+		"socket.io-client": "^4.7.5"
+	}
 }
