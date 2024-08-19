@@ -29,7 +29,12 @@ export const load = (async ({ cookies }) => {
 			return {
 				layout: jeson,
 				api: apiUrl,
-				auth: cookies.get('auth_token')!
+				auth: cookies.get('auth_token')!,
+				maintenance: cookies.get('maintenance')
+					? jeson.admin
+						? cookies.get('maintenance')
+						: false
+					: false
 			};
 		}
 	} catch (err) {

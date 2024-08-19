@@ -1,7 +1,7 @@
 use serde::Deserialize;
 use socketioxide::extract::{Data, SocketRef};
 use stores::get_stores;
-use tracing::info;
+use tracing::{info, warn};
 
 use crate::{
     auth::get_discord_envs,
@@ -69,21 +69,22 @@ pub async fn on_connect(socket: SocketRef, Data(data): Data<InitialData>) {
                 };
                 info!(
                     "Socket {} authenticated: {} / {}",
-                    socket.id, tag.id, tag.name
+                    socket.id, tag.name, tag.id
                 );
                 let mama = get_stores();
                 socket.emit("maintenance", mama.maintenance).unwrap();
                 socket.emit("announcement", mama.announcement).unwrap();
+                socket.emit("doneload", "").unwrap();
             } else {
-                info!("Socket {} nincs joga", socket.id);
+                warn!("Socket {} nincs joga", socket.id);
                 return socket.disconnect().unwrap();
             }
         } else {
-            info!("Socket {} érvénytelen lekérés", socket.id);
+            warn!("Socket {} érvénytelen lekérés", socket.id);
             return socket.disconnect().unwrap();
         }
     } else {
-        info!("Socket {} érvénytelen lekérés", socket.id);
+        warn!("Socket {} érvénytelen lekérés", socket.id);
         return socket.disconnect().unwrap();
     }
 }

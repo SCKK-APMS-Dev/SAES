@@ -7,8 +7,10 @@
 	import { Reeler_keys, Reeler_vals } from '$lib/public';
 	import { io } from 'socket.io-client';
 	import { onMount } from 'svelte';
+	import { loading } from '$lib/loading';
 	let maintenance = false;
 	let announcement = false;
+	let nosocket: boolean | string = true;
 	let socket = io(apiUrl, {
 		auth: {
 			auth_token: data.auth
@@ -26,14 +28,20 @@
 	socket.on('announcement', (data) => {
 		if (data !== '') {
 			announcement = data;
-			console.log(announcement);
 		}
 	});
-	socket.on('connect', () => {
+	socket.on('doneload', () => {
 		console.log('Socket csatlakozva');
+		$loading = false;
+		nosocket = false;
+	});
+	socket.on('disconnect', () => {
+		nosocket = 'failed';
+		$loading = false;
 	});
 	let played = false;
 	onMount(() => {
+		$loading = true;
 		if (!data.layout.am) {
 			let audioFile = new Audio('/taxi.wav');
 			audioFile.volume = 0.2;
@@ -51,7 +59,7 @@
 </script>
 
 <svelte:head>
-	{#if !maintenance}
+	{#if !maintenance || data.maintenance}
 		{#if !$navigating}
 			{#if $page.url.pathname.includes('admin')}
 				<title>Műszakvezetői felület - SCKK</title>
@@ -73,7 +81,21 @@
 		<title>Karbantartás - SCKK</title>
 	{/if}
 </svelte:head>
-{#if !maintenance || ($page.url.searchParams.get('ignoremaintenance') === 'true' && data.layout?.admin)}
+
+{#if nosocket}
+	{#if nosocket === 'failed'}
+		<div class="flex h-screen">
+			<div class="m-auto text-center">
+				<h1 class="text-3xl font-bold text-red-600">Sikertelen socket csatlakozás!</h1>
+				<a
+					href="/logout"
+					class="hover:bg-pos-100 bg-size-200 bg-pos-0 mb-5 ml-5 mr-5 mt-5 block rounded-full bg-gradient-to-r from-red-500 via-amber-400 to-rose-600 px-2 py-1 text-center text-lg font-bold text-white drop-shadow-lg transition-all duration-500"
+					>Kijelentkezés</a
+				>
+			</div>
+		</div>
+	{/if}
+{:else if !maintenance || data.maintenance}
 	{#if data.noaccess}
 		<div class="flex h-screen">
 			<div class="m-auto text-center">
@@ -88,7 +110,7 @@
 	{:else}
 		{#if maintenance}
 			<div
-				class="w-screen items-center justify-center bg-lime-500 text-center text-2xl font-bold uppercase text-white"
+				class="w-screen items-center justify-center bg-rose-900 text-center text-2xl font-bold uppercase text-white"
 			>
 				<h1 class="drop-shadow-lg">
 					Karbantartás mód aktív {#if typeof maintenance === 'string'}
@@ -226,61 +248,6 @@
 			<slot />
 		</Error>
 	{/if}
-	<!--
-	régi menü
-<nav class="bg-gray-700 grid lg:flex grid-cols-2 text-white justify-between items-center py-2">
-	<div class="flex items-center gap-2 ml-[10vw] align-middle content-center">
-		<img
-			src="/favicon.png"
-			class="pointer-events-none drop-shadow-xl"
-			width="40"
-			height="40"
-			alt="SCKK Logó"
-		/>
-		<h1 class="font-bold text-3xl drop-shadow-xl">
-			SCKK {#if data.layout.am}
-				Autómentés
-			{/if}
-		</h1>
-	</div>
-	<button
-		class="cursor-pointer self-center justify-self-end text-3xl font-semibold hover:text-blue-500 duration-200 transition-all lg:hidden mr-[10vw]"
-		on:click={tognav}
-	>
-		<MaterialSymbolsMenu />
-	</button>
-	<div
-		bind:this={nav}
-		class="z-10 text-xl hidden col-span-2 flex-col lg:flex child:px-2 child:rounded-lg justify-center items-center text-center lg:mr-[10vw] md:flex-row lg:z-auto child:drop-shadow-xl"
-	>
-		<a href="/user" class="hover:bg-slate-600 duration-200 transition-all">Kezdőlap</a>
-		<a href="/user/help" class="hover:bg-slate-600 duration-200 transition-all">Segédlet</a>
-		<a href="/user/potlekok" class="hover:bg-slate-600 duration-200 transition-all">Pótlékok</a>
-		<a href="/user/leintesek" class="hover:bg-slate-600 duration-200 transition-all"
-			>Leintések {#if data.layout.am}/ Bejelentések{/if}</a
-		>
-		<a href="/user/szamlak" class="hover:bg-slate-600 duration-200 transition-all"
-			>Szereltetési számlák</a
-		>
-		{#if data.layout?.admin}
-			<a href="/user/admin" class="hover:bg-slate-600 duration-200 transition-all">Műszakvezetés</a>
-		{/if}
-	</div>
-</nav>
-
-let nav: HTMLDivElement;
-	const tognav = () => {
-		if (nav.classList.contains('hidden')) {
-			nav.classList.remove('hidden');
-			nav.classList.add('flex');
-		} else {
-			nav.classList.add('hidden');
-			nav.classList.remove('flex');
-		}
-	}; 
-	
-	
--->
 {:else}
 	<div class="flex h-screen">
 		<div class="m-auto text-center">
@@ -293,9 +260,9 @@ let nav: HTMLDivElement;
 			{/if}
 			{#if data.layout?.admin}
 				<a
-					href="?ignoremaintenance=true"
+					href="/user/keine"
 					class="hover:bg-pos-100 bg-size-200 bg-pos-0 mb-5 ml-5 mr-5 mt-5 block rounded-full bg-gradient-to-r from-red-500 via-amber-400 to-rose-600 px-2 py-1 text-center text-lg font-bold text-white drop-shadow-lg transition-all duration-500"
-					>Továbblépés</a
+					>Továbblépés (nyomj rá majd töltsd újra az oldalt)</a
 				>
 			{/if}
 		</div>
