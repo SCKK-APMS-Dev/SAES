@@ -1,5 +1,6 @@
 use serde::Deserialize;
 use socketioxide::extract::{Data, SocketRef};
+use stores::get_stores;
 use tracing::info;
 
 use crate::{
@@ -10,12 +11,14 @@ use crate::{
     },
 };
 
+mod stores;
+
 #[derive(Debug, Deserialize)]
-pub struct AuthData {
+pub struct InitialData {
     auth_token: String,
 }
 
-pub async fn on_connect(socket: SocketRef, Data(data): Data<AuthData>) {
+pub async fn on_connect(socket: SocketRef, Data(data): Data<InitialData>) {
     info!(
         "Socket.IO connected: {:?} {:?} {:?}",
         socket.ns(),
@@ -65,10 +68,12 @@ pub async fn on_connect(socket: SocketRef, Data(data): Data<AuthData>) {
                     },
                 };
                 info!(
-                    "Socket {} authenticated: {}/{}",
+                    "Socket {} authenticated: {} / {}",
                     socket.id, tag.id, tag.name
                 );
-                socket.emit("cs", data.auth_token).unwrap()
+                let mama = get_stores();
+                socket.emit("maintenance", mama.maintenance).unwrap();
+                socket.emit("announcement", mama.announcement).unwrap();
             } else {
                 info!("Socket {} nincs joga", socket.id);
                 return socket.disconnect().unwrap();
