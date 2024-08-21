@@ -1,7 +1,6 @@
 <script lang="ts">
 	import SvelteMarkdown from 'svelte-markdown';
 	import { navigating, page } from '$app/stores';
-	import { apiUrl } from '$lib/api.js';
 	export let data;
 	import Error from '$lib/error.svelte';
 	import { Reeler_keys, Reeler_vals } from '$lib/public';
@@ -15,8 +14,7 @@
 	let played = false;
 	onMount(() => {
 		if (!data.noaccess) {
-			console.log(`API URL: ${apiUrl}`);
-			let socket = io(apiUrl, {
+			let socket = io(data.api as string, {
 				auth: {
 					auth_token: data.auth
 				}
