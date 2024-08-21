@@ -18,5 +18,5 @@ A weboldal szorosan egybefügg az apival. Ezt úgy kell érteni, hogy az api né
 
 # Környezeti változók
 
-- `SECRET_KEY`: A secret_key az api eléréséhez.
-- `API_PROD_URL`: Az api nyilvános url elérhetősége.
+- `secret_key`: A secret_key az api eléréséhez.
+- `api_prod_url`: Az api nyilvános url elérhetősége.
