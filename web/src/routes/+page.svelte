@@ -11,7 +11,7 @@
 			<button
 				class="from-taxi hover:bg-pos-100 bg-size-200 bg-pos-0 group relative m-auto mt-3 flex h-12 animate-bounce items-center space-x-2 overflow-hidden rounded-full bg-gradient-to-r via-rose-500 to-red-600 px-6 transition-all duration-500"
 			>
-				<a href="user">
+				<a href="ucp">
 					<span
 						class="relative text-xl font-bold text-white transition-colors duration-300 group-hover:text-black"
 						>Belépés Discordal</span
