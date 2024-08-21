@@ -14,7 +14,7 @@ mod image;
 mod list;
 mod shorts;
 mod socket;
-mod user;
+mod ucp;
 mod utils;
 
 #[tokio::main]
@@ -39,7 +39,7 @@ async fn main() {
         .route("/list", get(list::list_get))
         .route("/limg", get(leintes_image_get))
         .route("/shorts", get(shorts::get_shorts))
-        .nest("/user", user::routes())
+        .nest("/ucp", ucp::routes())
         .layer(
             ServiceBuilder::new()
                 .layer(CorsLayer::permissive())

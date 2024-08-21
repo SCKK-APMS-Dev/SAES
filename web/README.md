@@ -15,3 +15,8 @@ Nincs más dolgunk mint vagy a főkönyvtárból lefuttatni a `pnpm dev:web` par
 # FONTOS
 
 A weboldal szorosan egybefügg az apival. Ezt úgy kell érteni, hogy az api nélkül eléggé limitáltak a lehetőségek.
+
+# Környezeti változók
+
+- `SECRET_KEY`: A secret_key az api eléréséhez.
+- `API_PROD_URL`: Az api nyilvános url elérhetősége.

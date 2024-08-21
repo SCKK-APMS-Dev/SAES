@@ -13,7 +13,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 	const ate = JSON.parse(dates!);
 	if (tipus != 'leintés' || count % 2 === 0) {
 		if (dcauth) {
-			const mama = await fetch(`${apiUrl}/user/items/post?tipus=${tipus}&dates=${ate.toString()}`, {
+			const mama = await fetch(`${apiUrl}/ucp/items/post?tipus=${tipus}&dates=${ate.toString()}`, {
 				method: 'post',
 				headers: {
 					cookie: dcauth

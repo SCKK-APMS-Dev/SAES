@@ -5,7 +5,7 @@ export const GET: RequestHandler = async ({ request, cookies }) => {
 	const dcauth = cookies.get('auth_token') as string;
 	if (dcauth) {
 		const mama = await fetch(
-			`${apiUrl}/user/admin/get?tipus=${request.headers.get('type')}&status=${request.headers.get('status')}`,
+			`${apiUrl}/ucp/mv/get?tipus=${request.headers.get('type')}&status=${request.headers.get('status')}`,
 			{
 				headers: {
 					cookie: dcauth
@@ -24,7 +24,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 	if (!body) return new Response(null, { status: 404 });
 	const dcauth = cookies.get('auth_token') as string;
 	if (dcauth) {
-		const mama = await fetch(`${apiUrl}/user/admin/post`, {
+		const mama = await fetch(`${apiUrl}/ucp/mv/post`, {
 			method: 'post',
 			headers: {
 				cookie: dcauth,

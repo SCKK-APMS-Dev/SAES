@@ -9,7 +9,7 @@ export const load = (async ({ cookies }) => {
 	// throw redirect(302, 'https://api.ampix.hu/sckk/auth');
 	const dcauth = cookies.get('auth_token');
 	if (dcauth) {
-		throw redirect(302, 'user');
+		throw redirect(302, 'ucp');
 	}
 	return {
 		noauth: true
