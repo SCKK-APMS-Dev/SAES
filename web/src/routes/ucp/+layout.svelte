@@ -15,6 +15,7 @@
 	let played = false;
 	onMount(() => {
 		if (!data.noaccess) {
+			console.log(`API URL: ${apiUrl}`);
 			let socket = io(apiUrl, {
 				auth: {
 					auth_token: data.auth
