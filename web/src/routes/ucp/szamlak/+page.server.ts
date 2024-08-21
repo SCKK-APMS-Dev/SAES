@@ -2,8 +2,7 @@ import { redirect, type Redirect } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 import { apiUrl } from '$lib/api';
 
-export const load = (async ({ parent, cookies, url }) => {
-	await parent();
+export const load = (async ({ cookies, url }) => {
 	try {
 		const aha = await fetch(`${apiUrl}/ucp/items/get?tipus=szamla`, {
 			headers: {

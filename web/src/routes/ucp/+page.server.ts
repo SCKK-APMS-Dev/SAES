@@ -3,8 +3,7 @@
 import type { PageServerLoad } from './$types';
 import { apiUrl } from '$lib/api';
 
-export const load = (async ({ parent, cookies }) => {
-	await parent();
+export const load = (async ({ cookies }) => {
 	try {
 		const aha = await fetch(`${apiUrl}/ucp/calls`, {
 			mode: 'no-cors',

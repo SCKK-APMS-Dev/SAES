@@ -14,13 +14,12 @@ interface returnstat {
 	};
 }
 
-export const load = (async ({ parent, cookies, params }) => {
+export const load = (async ({ cookies, params }) => {
 	const weektypes = ['current', 'previous'];
 	if (!weektypes.includes(params.week))
 		return {
 			error: 'Ilyen hét nincs!'
 		};
-	await parent();
 	const dcauth = cookies.get('auth_token');
 	if (dcauth) {
 		const mama = await fetch(`${apiUrl}/ucp/mv/stat?week=${params.week}`, {

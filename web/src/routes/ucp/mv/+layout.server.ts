@@ -2,8 +2,7 @@ import { redirect, type Redirect } from '@sveltejs/kit';
 import type { LayoutServerLoad } from './$types';
 import { apiUrl } from '$lib/api';
 
-export const load = (async ({ parent, cookies }) => {
-	await parent();
+export const load = (async ({ cookies }) => {
 	try {
 		const aha = await fetch(`${apiUrl}/ucp/mv`, {
 			mode: 'no-cors',
