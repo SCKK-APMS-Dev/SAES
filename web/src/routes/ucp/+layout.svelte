@@ -10,7 +10,7 @@
 	let maintenance = false;
 	let announcement = false;
 	let nosocket: boolean | string = true;
-
+	let audio: HTMLAudioElement | null;
 	let played = false;
 	onMount(() => {
 		if (!data.noaccess) {
@@ -44,20 +44,17 @@
 			});
 			$loading = true;
 			if (!data.layout.am) {
-				let audioFile = new Audio('/taxi.wav');
-				audioFile.volume = 0.2;
-				if (data.layout?.admin) {
-					document.getElementById('mvbtn')?.addEventListener('mouseenter', () => {
-						if (!played) {
-							played = true;
-							audioFile.currentTime = 0;
-							audioFile.play();
-						}
-					});
-				}
+				console.log('asd');
+				audio = new Audio('/taxi.wav');
+				audio.volume = 0.2;
 			}
 		}
 	});
+	const playmusic = () => {
+		if (!played) {
+			audio?.play();
+		}
+	};
 </script>
 
 <svelte:head>
@@ -217,7 +214,7 @@
 									{#if data.layout?.admin}
 										<a
 											href="/ucp/mv"
-											id="mvbtn"
+											on:pointerover={playmusic}
 											class="from-taxi hover:bg-pos-100 bg-size-200 bg-pos-0 block rounded-full bg-gradient-to-r via-amber-600 to-red-500 px-6 py-3 text-center font-bold text-white drop-shadow-lg transition-all duration-500"
 										>
 											Műszakvezetés
