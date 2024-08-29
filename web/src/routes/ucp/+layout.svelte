@@ -4,9 +4,10 @@
 	export let data;
 	import Error from '$lib/error.svelte';
 	import { Reeler_keys, Reeler_vals } from '$lib/public';
-	import { io } from 'socket.io-client';
 	import { onMount } from 'svelte';
 	import { loading } from '$lib/loading.js';
+	import { io } from 'socket.io-client';
+	import { socket } from '$lib/socket.js';
 	let maintenance = false;
 	let initial_socket = false;
 	let announcement = false;
@@ -15,12 +16,12 @@
 	let played = false;
 	onMount(() => {
 		if (!data.noaccess) {
-			let socket = io(data.api as string, {
+			$socket = io(data.api as string, {
 				auth: {
 					auth_token: data.auth
 				}
 			});
-			socket.on('maintenance', (data) => {
+			$socket.on('maintenance', (data) => {
 				if (data !== '') {
 					if (data === 'nincs') {
 						maintenance = true;
@@ -29,23 +30,22 @@
 					}
 				}
 			});
-			socket.on('announcement', (data) => {
+			$socket.on('announcement', (data) => {
 				if (data !== '') {
 					announcement = data;
 				}
 			});
-			socket.on('doneload', () => {
+			$socket.on('doneload', () => {
 				console.log('Socket csatlakozva');
 				nosocket = false;
 				initial_socket = true;
 				$loading = false;
 			});
-			socket.on('disconnect', () => {
+			$socket.on('disconnect', () => {
 				nosocket = 'Socket csatlakozás sikertelen';
 			});
 			$loading = true;
 			if (!data.layout.am) {
-				console.log('asd');
 				audio = new Audio('/taxi.wav');
 				audio.volume = 0.2;
 			}

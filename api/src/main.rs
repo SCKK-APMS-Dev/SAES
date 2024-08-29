@@ -1,7 +1,11 @@
 use axum::{response::Redirect, routing::get, Router};
 use dotenvy::dotenv;
 use image::{image_get, leintes_image_get};
-use socketioxide::SocketIo;
+use socket::InitialData;
+use socketioxide::{
+    extract::{Data, SocketRef},
+    SocketIo,
+};
 use tower::ServiceBuilder;
 use tower_cookies::CookieManagerLayer;
 use tower_http::{cors::CorsLayer, trace::TraceLayer};
@@ -22,7 +26,13 @@ async fn main() {
     dotenv().expect(".env fájl nem található");
     tracing::subscriber::set_global_default(FmtSubscriber::default()).unwrap();
     let (layer, io) = SocketIo::new_layer();
-    io.ns("/", socket::on_connect);
+    let io_copy = io.clone();
+    io.ns(
+        "/",
+        move |socket: SocketRef, Data(data): Data<InitialData>| {
+            socket::on_connect(socket, data, io_copy)
+        },
+    );
     let app = Router::new()
         .route(
             "/",

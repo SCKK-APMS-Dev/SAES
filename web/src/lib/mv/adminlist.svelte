@@ -14,7 +14,7 @@
 	} from 'flowbite-svelte';
 	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
-	import type { PageData } from '../../routes/user/admin/leintesek/$types';
+	import type { PageData } from '../../routes/ucp/mv/leintesek/$types';
 	export let title = '';
 	export let data: PageData;
 	export let type = '';

@@ -11,5 +11,5 @@
 	extraText="Típus"
 	{data}
 	am={data.layout.am}
-	tools={['délelőtti', 'éjszakai', 'edit']}
+	tools={['délelőtti', 'éjszakai', 'decline', 'edit']}
 />

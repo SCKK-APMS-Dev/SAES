@@ -4,7 +4,7 @@
 	export let data: PageData;
 	import Error from '$lib/error.svelte';
 	import { onMount } from 'svelte';
-	import type { PageData } from '../../routes/user/potlekok/$types';
+	import type { PageData } from '../../routes/ucp/potlekok/$types';
 	let multipage = false;
 	export let tipus = '';
 	export let display = '';

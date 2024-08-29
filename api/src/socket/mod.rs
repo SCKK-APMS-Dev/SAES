@@ -1,5 +1,5 @@
 use serde::Deserialize;
-use socketioxide::extract::{Data, SocketRef};
+use socketioxide::{extract::SocketRef, SocketIo};
 use stores::get_stores;
 use tracing::{info, warn};
 
@@ -18,12 +18,12 @@ pub struct InitialData {
     auth_token: String,
 }
 
-pub async fn on_connect(socket: SocketRef, Data(data): Data<InitialData>) {
+pub async fn on_connect(socket: SocketRef, data: InitialData, io: SocketIo) {
     info!(
-        "Socket.IO connected: {:?} {:?} {:?}",
-        socket.ns(),
+        "Socket {:?} connected: {:?} {:?}",
         socket.id,
-        data
+        socket.ns(),
+        data,
     );
     let client = reqwest::Client::new();
     let ds = get_discord_envs();
@@ -72,6 +72,13 @@ pub async fn on_connect(socket: SocketRef, Data(data): Data<InitialData>) {
                     socket.id, tag.name, tag.id
                 );
                 let mama = get_stores();
+                if tag.admin {
+                    socket.join("mv").expect("MV Szobacsatlakozás sikertelen")
+                }
+                io.to("socketppl")
+                    .emit("socketppl-update", io.sockets().unwrap().len())
+                    .expect("Fasz van");
+                socket.join("ucp").expect("UCP Szobacsatlakozás sikertelen");
                 socket.emit("maintenance", mama.maintenance).unwrap();
                 socket.emit("announcement", mama.announcement).unwrap();
                 socket.emit("doneload", "").unwrap();
