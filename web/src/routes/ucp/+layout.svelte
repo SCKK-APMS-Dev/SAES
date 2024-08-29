@@ -47,7 +47,7 @@
 			$loading = true;
 			if (!data.layout.am) {
 				audio = new Audio('/taxi.wav');
-				audio.volume = 0.2;
+				audio.volume = 0.1;
 			}
 		}
 	});
@@ -97,7 +97,7 @@
 {:else if !maintenance || data.maintenance}
 	{#if nosocket}
 		<div
-			class="w-screen items-center justify-center bg-red-500 text-center text-2xl font-semibold uppercase text-white"
+			class="flex items-center justify-center bg-red-500 text-center text-2xl font-semibold uppercase text-white"
 		>
 			<h1>
 				{#if nosocket !== true}
@@ -110,7 +110,7 @@
 	{:else}
 		{#if maintenance}
 			<div
-				class="w-screen items-center justify-center bg-rose-900 text-center text-2xl font-bold uppercase text-white"
+				class="flex items-center justify-center bg-rose-900 text-center text-2xl font-bold uppercase text-white"
 			>
 				<h1 class="drop-shadow-lg">
 					Karbantartás mód aktív {#if typeof maintenance === 'string'}
@@ -120,7 +120,7 @@
 			</div>
 		{/if}
 		{#if announcement}
-			<div class="w-screen items-center justify-center bg-blue-500 text-center text-2xl text-white">
+			<div class="flex items-center justify-center bg-blue-500 text-center text-2xl text-white">
 				<SvelteMarkdown source={announcement} />
 			</div>
 		{/if}
