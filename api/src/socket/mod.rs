@@ -1,5 +1,8 @@
 use serde::Deserialize;
-use socketioxide::{extract::SocketRef, SocketIo};
+use socketioxide::{
+    extract::{Data, SocketRef},
+    SocketIo,
+};
 use stores::get_stores;
 use tracing::{info, warn};
 
@@ -18,6 +21,11 @@ pub struct InitialData {
     auth_token: String,
 }
 
+#[derive(Debug, Deserialize)]
+pub struct EventData {
+    event_name: String,
+}
+
 pub async fn on_connect(socket: SocketRef, data: InitialData, io: SocketIo) {
     info!(
         "Socket {:?} connected: {:?} {:?}",
@@ -26,6 +34,7 @@ pub async fn on_connect(socket: SocketRef, data: InitialData, io: SocketIo) {
         data,
     );
     let client = reqwest::Client::new();
+    let iod = io.sockets().unwrap().len();
     let ds = get_discord_envs();
     let envs = get_api_envs();
     let dcuserget = client
@@ -69,7 +78,7 @@ pub async fn on_connect(socket: SocketRef, data: InitialData, io: SocketIo) {
                 };
                 info!(
                     "Socket {} authenticated: {} / {}",
-                    socket.id, tag.name, tag.id
+                    socket.id, tag.name, tag.id,
                 );
                 let mama = get_stores();
                 if tag.admin {
@@ -82,6 +91,21 @@ pub async fn on_connect(socket: SocketRef, data: InitialData, io: SocketIo) {
                 socket.emit("maintenance", mama.maintenance).unwrap();
                 socket.emit("announcement", mama.announcement).unwrap();
                 socket.emit("doneload", "").unwrap();
+                socket.on(
+                    "JoinEvent",
+                    move |s: SocketRef, Data(data): Data<EventData>| {
+                        if data.event_name == "socketppl" {
+                            s.join("socketppl").unwrap();
+                            s.emit("socketppl-update", iod).expect("Fasz van");
+                        }
+                    },
+                );
+                socket.on_disconnect(move |s: SocketRef| {
+                    info!("Socket {} disconnected {} / {}", s.id, tag.name, tag.id);
+                    io.to("socketppl")
+                        .emit("socketppl-update", iod - 1)
+                        .expect("Fasz van");
+                });
             } else {
                 warn!("Socket {} nincs joga", socket.id);
                 return socket.disconnect().unwrap();
