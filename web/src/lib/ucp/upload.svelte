@@ -32,7 +32,7 @@
 			const ret = await mama.json();
 			if (ret.error === 'toobig') {
 				formerror =
-					'A feltöltött fájlok túl lépték a 16MB-os határértéket. Lehetséges, hogy pár fel lett tölve, ezért nézd meg azokat a rendes, nem feltöltési oldalrészen!';
+					'A feltöltött fájlok túl lépték a 64MB-os határértéket. Lehetséges, hogy pár fel lett tölve, ezért nézd meg azokat a rendes, nem feltöltési oldalrészen!';
 			} else if (ret.error === 'leintestipik') {
 				formerror = 'Leintéshez kérlek 2-vel osztható mennyiségű képet tölts fel!';
 			} else {
