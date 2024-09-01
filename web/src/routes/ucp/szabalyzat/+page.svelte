@@ -7,15 +7,15 @@
 </script>
 
 <div class="text-center text-black dark:text-white">
-	<h1 class="text-3xl font-bold">Segítség az oldal használatához</h1>
+	<h1 class="text-3xl font-bold">Szabályzat az oldal használatához</h1>
 	<h2 class="mt-3 text-2xl font-bold">Alap információk</h2>
+	<h2 class="text-black dark:text-white">
+		Az itt feltüntetett pontok betartása kötelező, ellenkező esetben a feltöltött elem elutasításra
+		kerül.
+	</h2>
 	<h2 class="mb-3 text-black dark:text-white">
-		Ez a weboldal a {#if data.layout.am}
-			vontatósok
-		{:else}
-			taxi
-		{/if} papírmunkáját könnyíti meg. Ide kell feltölteni a leintéseket, számlákat illetve a műszakon
-		kívüli pótlékokat.
+		Amennyiben az egyik szabálypontot megszeged a feltöltött elem kezelőjének (elutasítójának)
+		kötelező indokként feltüntetni a sértett szabálypontokat.
 	</h2>
 	<div class="text-left align-bottom">
 		<h1 class="ml-[20%] mt-5 text-left text-3xl font-bold">1. Pótlékok</h1>
@@ -26,7 +26,7 @@
 					{#if data.layout.am}
 						A fotónak tartalmaznia kell a kiadott számlát és a teljes játékot.
 					{:else}
-						A fuvar igazolásáról kell egy teljes képernyős képet készíteni. (4-es pont)
+						A fuvar igazolásáról kell egy teljes képernyős képet készíteni. (4-es pont).
 					{/if}
 				</h2>
 			</li>
@@ -34,9 +34,9 @@
 				<h2 class="text-left text-xl font-bold">1.2.</h2>
 				<h2 class="text-xl">
 					Pótlékok a következő időben érvényesek: {#if data.layout.am}
-						8-16 óra (délelőtti), 20-4 (éjszakai)
+						8-16 óra (délelőtti), 20-4 (éjszakai).
 					{:else}
-						8-14 óra (délelőtti), 23-4 (éjszakai)
+						8-14 óra (délelőtti), 23-4 (éjszakai).
 					{/if}
 				</h2>
 			</li>
@@ -48,17 +48,30 @@
 		<ul class="child:mx-[20%] child:text-left">
 			<li class="flex gap-2">
 				<h2 class="text-xl font-bold">2.1.</h2>
-				<h2 class="text-xl">Egy érvényes leintés 2 képből áll</h2>
+				<h2 class="text-xl">Egy érvényes leintés 2 képből áll!</h2>
 			</li>
 			<li class="flex gap-2">
 				<h2 class="text-xl font-bold">2.2.</h2>
 				<h2 class="text-xl">
 					{#if data.layout.am}
-						Az első képen a kiadott számlának kell látszódnia
+						Az első képen a kiadott számlának kell látszódnia.
 					{:else}
-						Az első képen a 10-12 rádiózásának, vagy hívás átvételnél a rádió rp-nek kell látszódnia
+						Az első képen a 10-12 rádiózásának, vagy hívás átvételnél a rádió rp-nek kell
+						látszódnia.
 					{/if}
 				</h2>
+				{#if !data.layout.am}
+					<a
+						class="text-taxi text-xl font-bold uppercase"
+						target="_blank"
+						href="https://api.sckk.hu/limg?id=5965&ver=0">példa a 10-12-ről</a
+					>
+					<a
+						class="text-taxi text-xl font-bold uppercase"
+						target="_blank"
+						href="https://api.sckk.hu/limg?id=5509&ver=0">példa a rádió rpről</a
+					>
+				{/if}
 			</li>
 			<li class="flex gap-2">
 				<h2 class="text-xl font-bold">2.3.</h2>
@@ -75,24 +88,37 @@
 		<ul class="child:mx-[20%] child:text-left">
 			<li class="flex gap-2">
 				<h2 class="text-xl font-bold">3.1.</h2>
-				<h2 class="text-xl">
-					Csak is saját (te vagy az ügyfél a számlán) szereléseket tölthetsz fel, autó függetlenül
-				</h2>
+				<h2 class="text-xl">Csak saját szereléseket tölthetsz fel, autó függetlenül.</h2>
 			</li>
 			<li class="flex gap-2">
 				<h2 class="text-xl font-bold">3.2.</h2>
-				<h2 class="text-xl">Csak az APMS általi szerelésekért tudjuk visszaadni a pénzt</h2>
+				<h2 class="text-xl">Csak az APMS általi szerelésekért tudjuk visszaadni a pénzt.</h2>
+			</li>
+			<li class="flex gap-2">
+				<h2 class="text-xl font-bold">3.3.</h2>
+				<h2 class="text-xl font-bold">
+					Csakis az aznap lefotózott számlákat tudjuk elfogadni! (biztonsági protokoll)
+				</h2>
 			</li>
 		</ul>
 		<h1 class="ml-[20%] mt-5 text-left text-3xl font-bold">4. Hívások igazolása</h1>
 		<ul class="child:mx-[20%] child:text-left">
 			<li class="flex gap-2">
 				<h2 class="text-xl font-bold">4.1.</h2>
-				<h2 class="text-xl">Hívásokat kétféleképpen lehet igazolni, más módot nem fogadunk el!</h2>
+				<h2 class="text-xl">
+					Hívásokat az alábbi kétféleképpen lehet igazolni, más módot nem fogadunk el!
+				</h2>
 			</li>
 			<li class="flex gap-2">
 				<h2 class="text-xl font-bold">4.2.</h2>
 				<h2 class="text-xl">Lehetséges igazolni a fuvar végén kinyomtatott nyugta fotózásával.</h2>
+				{#if !data.layout.am}
+					<a
+						class="text-taxi text-xl font-bold uppercase"
+						target="_blank"
+						href="https://api.sckk.hu/img?id=5544">példa</a
+					>
+				{/if}
 			</li>
 			<li class="flex gap-2">
 				<h2 class="text-xl font-bold">4.3.</h2>
@@ -100,6 +126,13 @@
 					Lehetséges igazolni a fuvar kifizetésénél felbukkanó kék dobozzal, vagy a chaten látható
 					azonos "kifizette az utazást" szöveget tartalmaztó chatsorral.
 				</h2>
+				{#if !data.layout.am}
+					<a
+						class="text-taxi text-xl font-bold uppercase"
+						target="_blank"
+						href="https://api.sckk.hu/img?id=5883">példa</a
+					>
+				{/if}
 			</li>
 		</ul>
 	</div>

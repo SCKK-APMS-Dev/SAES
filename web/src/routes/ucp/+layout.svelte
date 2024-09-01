@@ -44,10 +44,14 @@
 			$socket.on('disconnect', () => {
 				nosocket = 'Socket csatlakozás sikertelen';
 			});
-			$loading = true;
 			if (!data.layout.am) {
 				audio = new Audio('/taxi.wav');
 				audio.volume = 0.1;
+			}
+			if (data.error) {
+				$loading = false;
+			} else {
+				$loading = true;
 			}
 		}
 	});
@@ -82,51 +86,50 @@
 		<title>Karbantartás - SCKK</title>
 	{/if}
 </svelte:head>
-
-{#if data.noaccess}
-	<div class="flex h-screen">
-		<div class="m-auto text-center">
-			<h1 class="text-3xl font-bold text-red-600">Nincs jogosultságod!</h1>
-			<a
-				href="/logout"
-				class="hover:bg-pos-100 bg-size-200 bg-pos-0 mb-5 ml-5 mr-5 mt-5 block rounded-full bg-gradient-to-r from-red-500 via-amber-400 to-rose-600 px-2 py-1 text-center text-lg font-bold text-white drop-shadow-lg transition-all duration-500"
-				>Kijelentkezés</a
-			>
+<Error {data}>
+	{#if data.noaccess}
+		<div class="flex h-screen">
+			<div class="m-auto text-center">
+				<h1 class="text-3xl font-bold text-red-600">Nincs jogosultságod!</h1>
+				<a
+					href="/logout"
+					class="hover:bg-pos-100 bg-size-200 bg-pos-0 mb-5 ml-5 mr-5 mt-5 block rounded-full bg-gradient-to-r from-red-500 via-amber-400 to-rose-600 px-2 py-1 text-center text-lg font-bold text-white drop-shadow-lg transition-all duration-500"
+					>Kijelentkezés</a
+				>
+			</div>
 		</div>
-	</div>
-{:else if !maintenance || data.maintenance}
-	{#if nosocket}
-		<div
-			class="flex items-center justify-center bg-red-500 text-center text-2xl font-semibold uppercase text-white"
-		>
-			<h1>
-				{#if nosocket !== true}
-					{nosocket}
-				{:else}
-					Sikertelen socket csatlakozás
-				{/if}
-			</h1>
-		</div>
-	{:else}
-		{#if maintenance}
+	{:else if !maintenance || data.maintenance}
+		{#if nosocket}
 			<div
-				class="flex items-center justify-center bg-rose-900 text-center text-2xl font-bold uppercase text-white"
+				class="flex items-center justify-center bg-red-500 text-center text-2xl font-semibold uppercase text-white"
 			>
-				<h1 class="drop-shadow-lg">
-					Karbantartás mód aktív {#if typeof maintenance === 'string'}
-						- {maintenance}
+				<h1>
+					{#if nosocket !== true}
+						{nosocket}
+					{:else}
+						Sikertelen socket csatlakozás
 					{/if}
 				</h1>
 			</div>
+		{:else}
+			{#if maintenance}
+				<div
+					class="flex items-center justify-center bg-rose-900 text-center text-2xl font-bold uppercase text-white"
+				>
+					<h1 class="drop-shadow-lg">
+						Karbantartás mód aktív {#if typeof maintenance === 'string'}
+							- {maintenance}
+						{/if}
+					</h1>
+				</div>
+			{/if}
+			{#if announcement}
+				<div class="flex items-center justify-center bg-blue-500 text-center text-2xl text-white">
+					<SvelteMarkdown source={announcement} />
+				</div>
+			{/if}
 		{/if}
-		{#if announcement}
-			<div class="flex items-center justify-center bg-blue-500 text-center text-2xl text-white">
-				<SvelteMarkdown source={announcement} />
-			</div>
-		{/if}
-	{/if}
-	{#if initial_socket}
-		<Error {data}>
+		{#if initial_socket}
 			<div class="relative z-20 border-b bg-white dark:bg-gray-700 dark:text-white">
 				<div class="px-6 lg:container md:px-12 lg:mx-auto lg:px-6 lg:py-4">
 					<div class="flex items-center justify-between">
@@ -184,10 +187,10 @@
 										</li>
 										<li>
 											<a
-												href="/ucp/help"
+												href="/ucp/szabalyzat"
 												class="before:bg-taxi group relative before:absolute before:inset-x-0 before:-bottom-1.5 before:h-2 before:origin-right before:scale-x-0 before:transition before:duration-200 hover:before:origin-left hover:before:scale-x-100"
 											>
-												<span class="relative text-black dark:text-white">Segédlet</span>
+												<span class="relative text-black dark:text-white">Szabályzat</span>
 											</a>
 										</li>
 										<li>
@@ -241,32 +244,33 @@
 
 			<footer>
 				<h2 class="bg-rose-600 py-1 text-center text-xl text-white">
-					Nem vagy biztos valamiben? Nézd meg a <a href="/ucp/help" class="text-taxi font-bold"
-						>segédletet</a
+					Nem vagy biztos valamiben? Nézd meg a <a
+						href="/ucp/szabalyzat"
+						class="text-taxi font-bold">szabályzatot</a
 					>!
 				</h2>
 			</footer>
 
 			<slot />
-		</Error>
-	{/if}
-{:else}
-	<div class="flex h-screen">
-		<div class="m-auto text-center">
-			<h1 class="text-5xl font-bold text-red-600">Karbantartás</h1>
-			<h1 class="text-3xl text-gray-300">
-				Jelenleg karbantartás zajlik, kérlek nézz vissza később!
-			</h1>
-			{#if typeof maintenance === 'string'}
-				<h1 class="text-2xl text-gray-300">Indoklás: {maintenance}</h1>
-			{/if}
-			{#if data.layout?.admin}
-				<a
-					href="/ucp/keine"
-					class="hover:bg-pos-100 bg-size-200 bg-pos-0 mb-5 ml-5 mr-5 mt-5 block rounded-full bg-gradient-to-r from-red-500 via-amber-400 to-rose-600 px-2 py-1 text-center text-lg font-bold text-white drop-shadow-lg transition-all duration-500"
-					>Továbblépés (nyomj rá majd töltsd újra az oldalt)</a
-				>
-			{/if}
+		{/if}
+	{:else}
+		<div class="flex h-screen">
+			<div class="m-auto text-center">
+				<h1 class="text-5xl font-bold text-red-600">Karbantartás</h1>
+				<h1 class="text-3xl text-gray-300">
+					Jelenleg karbantartás zajlik, kérlek nézz vissza később!
+				</h1>
+				{#if typeof maintenance === 'string'}
+					<h1 class="text-2xl text-gray-300">Indoklás: {maintenance}</h1>
+				{/if}
+				{#if data.layout?.admin}
+					<a
+						href="/ucp/keine"
+						class="hover:bg-pos-100 bg-size-200 bg-pos-0 mb-5 ml-5 mr-5 mt-5 block rounded-full bg-gradient-to-r from-red-500 via-amber-400 to-rose-600 px-2 py-1 text-center text-lg font-bold text-white drop-shadow-lg transition-all duration-500"
+						>Továbblépés (nyomj rá majd töltsd újra az oldalt)</a
+					>
+				{/if}
+			</div>
 		</div>
-	</div>
-{/if}
+	{/if}
+</Error>
