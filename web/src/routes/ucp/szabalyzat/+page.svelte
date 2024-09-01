@@ -7,8 +7,10 @@
 </script>
 
 <div class="text-center text-black dark:text-white">
-	<h1 class="text-3xl font-bold">Szabályzat az oldal használatához</h1>
-	<h2 class="mt-3 text-2xl font-bold">Alap információk</h2>
+	<h1 class="mb-4 mt-4 text-4xl font-bold">Szabályzat az oldal használatához</h1>
+	<h2 class="text-black dark:text-white">
+		A szabályzat felépítése pontokra bontott, azon belül pedig alpontokra bontott.
+	</h2>
 	<h2 class="text-black dark:text-white">
 		Az itt feltüntetett pontok betartása kötelező, ellenkező esetben a feltöltött elem elutasításra
 		kerül.
@@ -19,9 +21,9 @@
 	</h2>
 	<div class="text-left align-bottom">
 		<h1 class="ml-[20%] mt-5 text-left text-3xl font-bold">1. Pótlékok</h1>
-		<ul class="child:mx-[20%]">
+		<ul class="child:mx-[20%] child:text-left ml-2">
 			<li class="flex items-center gap-2">
-				<h2 class="text-left text-xl font-bold">1.1.</h2>
+				<h2 class="text-left text-xl font-bold">1.</h2>
 				<h2 class="text-xl">
 					{#if data.layout.am}
 						A fotónak tartalmaznia kell a kiadott számlát és a teljes játékot.
@@ -31,7 +33,7 @@
 				</h2>
 			</li>
 			<li class="flex items-center gap-2">
-				<h2 class="text-left text-xl font-bold">1.2.</h2>
+				<h2 class="text-left text-xl font-bold">2.</h2>
 				<h2 class="text-xl">
 					Pótlékok a következő időben érvényesek: {#if data.layout.am}
 						8-16 óra (délelőtti), 20-4 (éjszakai).
@@ -45,13 +47,13 @@
 			2. Leintések {#if data.layout.am}/ Bejelentések
 			{/if}
 		</h1>
-		<ul class="child:mx-[20%] child:text-left">
+		<ul class="child:mx-[20%] child:text-left ml-2">
 			<li class="flex gap-2">
-				<h2 class="text-xl font-bold">2.1.</h2>
+				<h2 class="text-xl font-bold">1.</h2>
 				<h2 class="text-xl">Egy érvényes leintés 2 képből áll!</h2>
 			</li>
 			<li class="flex gap-2">
-				<h2 class="text-xl font-bold">2.2.</h2>
+				<h2 class="text-xl font-bold">2.</h2>
 				<h2 class="text-xl">
 					{#if data.layout.am}
 						Az első képen a kiadott számlának kell látszódnia.
@@ -74,7 +76,7 @@
 				{/if}
 			</li>
 			<li class="flex gap-2">
-				<h2 class="text-xl font-bold">2.3.</h2>
+				<h2 class="text-xl font-bold">3.</h2>
 				<h2 class="text-xl">
 					{#if data.layout.am}
 						A második képen a fizetésről kell képet készíteni. (chat)
@@ -85,32 +87,32 @@
 			</li>
 		</ul>
 		<h1 class="ml-[20%] mt-5 text-left text-3xl font-bold">3. Számlák</h1>
-		<ul class="child:mx-[20%] child:text-left">
+		<ul class="child:mx-[20%] child:text-left ml-2">
 			<li class="flex gap-2">
-				<h2 class="text-xl font-bold">3.1.</h2>
-				<h2 class="text-xl">Csak saját szereléseket tölthetsz fel, autó függetlenül.</h2>
+				<h2 class="text-xl font-bold">1.</h2>
+				<h2 class="text-xl">Csak a saját szereléseket tölthetsz fel, autó függetlenül.</h2>
 			</li>
 			<li class="flex gap-2">
-				<h2 class="text-xl font-bold">3.2.</h2>
+				<h2 class="text-xl font-bold">2.</h2>
 				<h2 class="text-xl">Csak az APMS általi szerelésekért tudjuk visszaadni a pénzt.</h2>
 			</li>
 			<li class="flex gap-2">
-				<h2 class="text-xl font-bold">3.3.</h2>
+				<h2 class="text-xl font-bold">3.</h2>
 				<h2 class="text-xl font-bold">
-					Csakis az aznap lefotózott számlákat tudjuk elfogadni! (biztonsági protokoll)
+					Csak az aznap lefotózott számlákat tudjuk elfogadni! (biztonsági protokoll)
 				</h2>
 			</li>
 		</ul>
 		<h1 class="ml-[20%] mt-5 text-left text-3xl font-bold">4. Hívások igazolása</h1>
-		<ul class="child:mx-[20%] child:text-left">
+		<ul class="child:mx-[20%] child:text- ml-2">
 			<li class="flex gap-2">
-				<h2 class="text-xl font-bold">4.1.</h2>
+				<h2 class="text-xl font-bold">1.</h2>
 				<h2 class="text-xl">
 					Hívásokat az alábbi kétféleképpen lehet igazolni, más módot nem fogadunk el!
 				</h2>
 			</li>
 			<li class="flex gap-2">
-				<h2 class="text-xl font-bold">4.2.</h2>
+				<h2 class="text-xl font-bold">2.</h2>
 				<h2 class="text-xl">Lehetséges igazolni a fuvar végén kinyomtatott nyugta fotózásával.</h2>
 				{#if !data.layout.am}
 					<a
@@ -121,7 +123,7 @@
 				{/if}
 			</li>
 			<li class="flex gap-2">
-				<h2 class="text-xl font-bold">4.3.</h2>
+				<h2 class="text-xl font-bold">3.</h2>
 				<h2 class="text-xl">
 					Lehetséges igazolni a fuvar kifizetésénél felbukkanó kék dobozzal, vagy a chaten látható
 					azonos "kifizette az utazást" szöveget tartalmaztó chatsorral.
