@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { beforeNavigate } from '$app/navigation';
 	import Error from '$lib/error.svelte';
 	import { loading } from '$lib/loading';
 	export let data;
@@ -9,8 +10,15 @@
 	let seli: string[][] = [];
 	let fileas: string[] = [];
 	let tope = 'col';
+	let uploading = false;
+	beforeNavigate((ev) => {
+		if (uploading) {
+			ev.cancel();
+		}
+	});
 	async function upload() {
 		$loading = true;
+		uploading = true;
 		let files = document.getElementById('file') as HTMLInputElement;
 		if (files.files) {
 			const formData = new FormData();
@@ -29,6 +37,7 @@
 				body: formData
 			});
 			$loading = false;
+			uploading = false;
 			const ret = await mama.json();
 			if (ret.error === 'toobig') {
 				formerror =
