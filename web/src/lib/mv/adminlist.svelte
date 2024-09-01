@@ -13,7 +13,7 @@
 		TableBodyCell
 	} from 'flowbite-svelte';
 	import { page } from '$app/stores';
-	import { goto } from '$app/navigation';
+	import { beforeNavigate, goto } from '$app/navigation';
 	import type { PageData } from '../../routes/ucp/mv/leintesek/$types';
 	export let title = '';
 	export let data: PageData;
@@ -26,6 +26,7 @@
 	export let am: boolean = false;
 	let modal: HTMLDialogElement;
 	let bindbtn: HTMLButtonElement;
+	let editing = false;
 	let originallength = 0;
 	let potleks: {
 		data: {
@@ -94,14 +95,21 @@
 			originallength = ret.data.items.length;
 		}
 	}
-	onMount(async () => {
+	onMount(() => {
 		render();
+	});
+
+	beforeNavigate((ev) => {
+		if (editing) {
+			ev.cancel();
+		}
 	});
 
 	function edit(id: number) {
 		modal.showModal();
 		bindEdit = potleks.data.items[id];
 		editid = id;
+		editing = true;
 	}
 	async function quickTools(type: string, id: number) {
 		const fatcs = await fetch('/api/admin', {
@@ -185,6 +193,7 @@
 		if (fatcs.ok) {
 			const cucc = await fatcs.json();
 			modal.close();
+			editing = false;
 			if (jona === cucc.status) {
 				potleks.data.items[editid] = cucc;
 			} else {
@@ -195,12 +204,16 @@
 		bindbtn.classList.remove('bg-emerald-700');
 		bindbtn.disabled = false;
 	}
+	function closeModal() {
+		modal.close();
+		editing = false;
+	}
 </script>
 
 <dialog bind:this={modal} class="h-[60%] w-[60%] rounded-3xl bg-gray-500 text-center text-white">
 	<button
 		class="absolute right-4 top-2 text-3xl font-bold text-red-600 duration-150 hover:text-red-400"
-		on:click={() => modal.close()}>X</button
+		on:click={() => closeModal()}>X</button
 	>
 	<div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
 		<form on:submit|preventDefault={() => editDone()}>

@@ -1,9 +1,13 @@
 <script lang="ts">
+	import { beforeNavigate } from '$app/navigation';
 	import { socket } from '$lib/socket';
 	let count = 0;
 	$socket?.emit('JoinEvent', { event_name: 'socketppl' });
 	$socket?.on('socketppl-update', (data) => {
 		count = data;
+	});
+	beforeNavigate(() => {
+		$socket?.emit('LeaveEvent', { event_name: 'socketppl' });
 	});
 </script>
 

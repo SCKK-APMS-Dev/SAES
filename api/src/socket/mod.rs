@@ -95,8 +95,16 @@ pub async fn on_connect(socket: SocketRef, data: InitialData, io: SocketIo) {
                     "JoinEvent",
                     move |s: SocketRef, Data(data): Data<EventData>| {
                         if data.event_name == "socketppl" {
-                            s.join("socketppl").unwrap();
+                            s.join(data.event_name).unwrap();
                             s.emit("socketppl-update", iod).expect("Fasz van");
+                        }
+                    },
+                );
+                socket.on(
+                    "LeaveEvent",
+                    move |s: SocketRef, Data(data): Data<EventData>| {
+                        if data.event_name == "socketppl" {
+                            s.leave(data.event_name).unwrap();
                         }
                     },
                 );
