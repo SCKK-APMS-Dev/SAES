@@ -62,7 +62,7 @@
 			let handled = [];
 			potleks.data.items = [];
 			let ret = await fatcs.json();
-			$loading = false;
+
 			if (ret.data.items.length > 10 && ret.data.items.length > 0) {
 				multipage = true;
 				for (let i = pagee * 10; i < (pagee as number) * 10 + 10; i++) {
@@ -93,6 +93,7 @@
 				haveadmin = false;
 			}
 			originallength = ret.data.items.length;
+			$loading = false;
 		}
 	}
 	onMount(() => {
@@ -108,6 +109,7 @@
 	function edit(id: number) {
 		modal.showModal();
 		bindEdit = potleks.data.items[id];
+		bindEdit.custombg = true;
 		editid = id;
 		editing = true;
 	}
@@ -210,20 +212,43 @@
 	}
 </script>
 
-<dialog bind:this={modal} class="h-[60%] w-[60%] rounded-3xl bg-gray-500 text-center text-white">
+<dialog
+	bind:this={modal}
+	class="h-screen w-screen rounded-3xl bg-black bg-opacity-20 text-center text-white open:flex lg:h-[800px] lg:w-[600px]"
+>
+	{#if bindEdit.custombg}
+		<img
+			src={`${potleks.api}/img?id=${bindEdit.id}`}
+			class="absolute left-1/2 top-1/2 h-full -translate-x-1/2 -translate-y-1/2 opacity-90"
+			alt=""
+		/>
+	{/if}
 	<button
-		class="absolute right-4 top-2 text-3xl font-bold text-red-600 duration-150 hover:text-red-400"
-		on:click={() => closeModal()}>X</button
+		class="absolute right-16 top-2 flex items-center justify-center rounded-xl bg-black bg-opacity-40 p-2 text-3xl font-bold text-blue-600 duration-150 hover:bg-opacity-90"
+		on:click={() => {
+			if (bindEdit.custombg) {
+				bindEdit.custombg = false;
+			} else {
+				bindEdit.custombg = true;
+			}
+		}}><span class="icon-[mdi--eye] m-auto"></span></button
 	>
-	<div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+	<button
+		class="absolute right-4 top-2 flex items-center justify-center rounded-xl bg-black bg-opacity-40 p-2 text-3xl font-bold text-red-600 duration-150 hover:bg-opacity-90"
+		on:click={() => closeModal()}><span class="icon-[carbon--close-filled] m-auto"></span></button
+	>
+	<div class="z-20 m-auto h-max w-max rounded-3xl bg-black bg-opacity-25 p-5 lg:w-[500px]">
 		<form on:submit|preventDefault={() => editDone()}>
 			<div class="grid grid-cols-2 items-center gap-3">
-				<h1 class=" col-span-2 mx-2 text-3xl font-bold">{bindEdit.owner} {editdes} szerkesztése</h1>
-				<label for="type" class="text-xl">Státusz átállítása</label>
+				<h1 class=" col-span-2 mx-2 text-3xl font-bold">
+					{bindEdit.owner}
+					{editdes} szerkesztése
+				</h1>
+				<label for="type" class="text-xl">Státusz</label>
 				<Select
 					placeholder="Kérlek válassz"
 					name="type"
-					class="bg-emerald-600 text-xl text-white"
+					class="bg-emerald-600 text-xl text-white opacity-80 focus:opacity-100"
 					bind:value={bindEdit.status}
 				>
 					<option value="feltöltve">feltöltve</option>
@@ -236,7 +261,7 @@
 					type="text"
 					name="reason"
 					id="reason"
-					class="text-xl text-black"
+					class="text-xl text-black opacity-80 focus:opacity-100"
 					bind:value={bindEdit.reason}
 				/>
 				{#if extraText}
@@ -245,7 +270,7 @@
 						<Select
 							placeholder="Kérlek válassz"
 							name="potlek-type"
-							class="bg-emerald-600 text-xl text-white"
+							class="bg-emerald-600 text-xl text-white opacity-80 focus:opacity-100"
 							bind:value={bindEdit.extra}
 						>
 							<option value="délelőtti">délelőtti</option>
@@ -256,7 +281,7 @@
 							type="text"
 							name="extra"
 							id="extra"
-							class="text-xl text-black"
+							class="text-xl text-black opacity-80 focus:opacity-100"
 							bind:value={bindEdit.extra}
 						/>
 					{/if}
@@ -265,7 +290,7 @@
 					type="submit"
 					bind:this={bindbtn}
 					id="dialogbtn"
-					class="col-span-2 rounded-xl bg-emerald-500 px-2 py-1 text-2xl transition-all duration-200 hover:bg-emerald-700"
+					class="col-span-2 rounded-xl bg-emerald-500 px-2 py-1 text-2xl opacity-80 transition-all duration-200 hover:bg-emerald-700 hover:opacity-100"
 					>Mentés</button
 				>
 			</div>
@@ -335,20 +360,20 @@
 											><img
 												src={`${potleks.api}/limg?id=${potle.id}&ver=0`}
 												alt=""
-												class="max-w-52"
+												class="lg:w-52"
 											/></a
 										>
 										<a href={`${potleks.api}/limg?id=${potle.id}&ver=1`} target="”_blank”"
 											><img
 												src={`${potleks.api}/limg?id=${potle.id}&ver=1`}
 												alt=""
-												class="max-w-52"
+												class="lg:w-52"
 											/></a
 										>
 									</div>
 								{:else}
 									<a href={`${potleks.api}/img?id=${potle.id}`} target="”_blank”"
-										><img src={`${potleks.api}/img?id=${potle.id}`} alt="" class="max-w-52" /></a
+										><img src={`${potleks.api}/img?id=${potle.id}`} alt="" class="lg:w-52" /></a
 									>
 								{/if}
 							</TableBodyCell>
