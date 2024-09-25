@@ -1,3 +1,8 @@
+use std::{thread, time::Duration};
+
+use active_win_pos_rs::get_active_window;
+use tauri::{App, Manager, Window};
+
 #[cfg(desktop)]
 mod tray;
 
@@ -5,6 +10,16 @@ mod tray;
 #[tauri::command]
 fn greet(name: &str) -> String {
     format!("Hello, {}! You've been greeted from Rust!", name)
+}
+
+fn check_win(app: &mut App) {
+    loop {
+        let actual = get_active_window().expect("Sikertelen.");
+        println!("Actual Window: {:?}", actual.process_path);
+        thread::sleep(Duration::from_secs(4));
+        let win = app.get_webview_window("main").expect("Nincs");
+        win.hide();
+    }
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]

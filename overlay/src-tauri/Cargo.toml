@@ -1,14 +1,14 @@
 [package]
-name = "sckkextra-app"
+name = "sckkextra-overlay"
 version = "0.1.0"
-description = "Az SCKK új appja"
+description = "SCKK Átfedés"
 authors = ["HVCsano"]
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [lib]
-name = "sckkextra_app_lib"
+name = "sckkextra_overlay_lib"
 crate-type = ["staticlib", "cdylib", "rlib"]
 
 [build-dependencies]
@@ -19,4 +19,5 @@ tauri = { version = "2.0.0-rc", features = ["tray-icon"] }
 tauri-plugin-shell = "2.0.0-rc"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
+active-win-pos-rs = "0.8.3"
 

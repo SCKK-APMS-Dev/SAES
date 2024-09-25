@@ -13,8 +13,8 @@
 		"windows": [
 			{
 				"title": "SCKK Átfedés",
-				"width": 1920,
-				"height": 1080,
+				"width": 1280,
+				"height": 720,
 				"resizable": false,
 				"alwaysOnTop": true,
 				"decorations": false,

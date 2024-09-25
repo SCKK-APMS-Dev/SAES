@@ -10,5 +10,5 @@
 </script>
 
 <div class="flex h-screen">
-	<img class="m-auto" src="/icon.png" alt="" />
+	<img class="m-auto" src="/icon.png" alt="" on:click={() => greet()} />
 </div>
