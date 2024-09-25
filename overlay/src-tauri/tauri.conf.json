@@ -20,8 +20,7 @@
 				"decorations": false,
 				"skipTaskbar": true,
 				"focus": false,
-				"transparent": true,
-				"fullscreen": true
+				"transparent": true
 			}
 		],
 		"security": {
