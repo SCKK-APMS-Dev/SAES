@@ -12,21 +12,17 @@ fn greet(name: &str) -> String {
     format!("Hello, {}! You've been greeted from Rust!", name)
 }
 
-fn check_win(app: &mut App) {
-    loop {
-        let actual = get_active_window().expect("Sikertelen.");
-        println!("Actual Window: {:?}", actual.process_path);
-        thread::sleep(Duration::from_secs(4));
-        let win = app.get_webview_window("main").expect("Nincs");
-        win.hide();
-    }
+#[tauri::command]
+fn check_win() -> String {
+    let actual = get_active_window().expect("Sikertelen.");
+    format!("{:?}", actual.process_path)
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_shell::init())
-        .invoke_handler(tauri::generate_handler![greet])
+        .invoke_handler(tauri::generate_handler![greet, check_win])
         .setup(|app| {
             #[cfg(all(desktop))]
             {
