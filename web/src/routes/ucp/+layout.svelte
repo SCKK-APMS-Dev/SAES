@@ -14,6 +14,7 @@
 	let nosocket: boolean | string = 'Socket csatlakozás';
 	let audio: HTMLAudioElement | null;
 	let played = false;
+	let tip = data.layout.am ? 'TOW' : 'TAXI';
 	onMount(() => {
 		if (!data.noaccess) {
 			$socket = io(data.api as string, {
@@ -71,19 +72,19 @@
 			{:else if Reeler_keys.some((el) => $page.url.pathname.includes(el))}
 				{#if $page.url.pathname.endsWith('/upload')}
 					<title
-						>{Reeler_vals[Reeler_keys.indexOf($page.url.pathname.split('/')[2])][2]} feltöltés - SCKK</title
+						>{Reeler_vals[Reeler_keys.indexOf($page.url.pathname.split('/')[2])][2]} feltöltés - {tip}</title
 					>
 				{:else}
 					<title
-						>{Reeler_vals[Reeler_keys.indexOf($page.url.pathname.split('/')[2])][1]} megtekintése - SCKK</title
+						>{Reeler_vals[Reeler_keys.indexOf($page.url.pathname.split('/')[2])][1]} megtekintése - {tip}</title
 					>
 				{/if}
 			{:else}
-				<title>Felhasználói felület - SCKK</title>
+				<title>Felhasználói felület - {tip}</title>
 			{/if}
 		{/if}
 	{:else}
-		<title>Karbantartás - SCKK</title>
+		<title>Karbantartás - {tip}</title>
 	{/if}
 </svelte:head>
 <Error {data}>
@@ -142,11 +143,7 @@
 								alt="SCKK Logó"
 							/>
 							<h1 class="text-3xl font-bold drop-shadow-xl">
-								{#if data.layout.am}
-									TOW
-								{:else}
-									TAXI
-								{/if}
+								{tip}
 							</h1>
 						</div>
 
