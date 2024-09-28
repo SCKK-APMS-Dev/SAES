@@ -142,8 +142,10 @@
 								alt="SCKK Logó"
 							/>
 							<h1 class="text-3xl font-bold drop-shadow-xl">
-								SCKK {#if data.layout.am}
-									Autómentés
+								{#if data.layout.am}
+									TOW
+								{:else}
+									TAXI
 								{/if}
 							</h1>
 						</div>
