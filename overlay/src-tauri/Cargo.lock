@@ -2774,6 +2774,18 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f3cb5ba0dc43242ce17de99c180e96db90b235b8a9fdc9543c96d2209116bd9f"
 
 [[package]]
+name = "saes-overlay"
+version = "0.1.0"
+dependencies = [
+ "active-win-pos-rs",
+ "serde",
+ "serde_json",
+ "tauri",
+ "tauri-build",
+ "tauri-plugin-shell",
+]
+
+[[package]]
 name = "same-file"
 version = "1.0.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2806,18 +2818,6 @@ dependencies = [
  "quote",
  "serde_derive_internals",
  "syn 2.0.77",
-]
-
-[[package]]
-name = "sckkextra-overlay"
-version = "0.1.0"
-dependencies = [
- "active-win-pos-rs",
- "serde",
- "serde_json",
- "tauri",
- "tauri-build",
- "tauri-plugin-shell",
 ]
 
 [[package]]

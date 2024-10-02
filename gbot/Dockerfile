@@ -7,4 +7,4 @@ COPY . .
 RUN cargo install --path .
 RUN touch .env
 EXPOSE 3000
-CMD ["gbot"]
+CMD ["saes-gbot"]

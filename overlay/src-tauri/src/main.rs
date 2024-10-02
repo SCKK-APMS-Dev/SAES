@@ -2,5 +2,5 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 fn main() {
-    sckkextra_overlay_lib::run()
+    saes_overlay_lib::run()
 }
