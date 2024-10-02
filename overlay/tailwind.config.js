@@ -2,7 +2,11 @@
 export default {
 	content: ['./src/**/*.{html,svelte,ts}'],
 	theme: {
-		extend: {}
+		extend: {
+			fontFamily: {
+				sans: ['Fredoka']
+			}
+		}
 	},
 	plugins: []
 };
