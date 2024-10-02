@@ -36,9 +36,7 @@ async fn main() {
     let app = Router::new()
         .route(
             "/",
-            get(|| async {
-                "SCKKExtra API (korábban SCKK Web API) V2 Axum & SQLx használatával"
-            }),
+            get(|| async { "SAES API V2 Axum & SQLx használatával" }),
         )
         .route(
             "/auth",
