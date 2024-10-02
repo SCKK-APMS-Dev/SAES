@@ -1,8 +1,4 @@
-use std::{thread, time::Duration};
-
 use active_win_pos_rs::get_active_window;
-use tauri::{App, Manager, Window};
-
 #[cfg(desktop)]
 mod tray;
 
