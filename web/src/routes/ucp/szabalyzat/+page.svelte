@@ -66,12 +66,12 @@
 					<a
 						class="text-taxi text-xl font-bold uppercase"
 						target="_blank"
-						href="https://{data.api}/limg?id=5965&ver=0">példa a 10-12-ről</a
+						href="{data.api}/limg?id=5965&ver=0">példa a 10-12-ről</a
 					>
 					<a
 						class="text-taxi text-xl font-bold uppercase"
 						target="_blank"
-						href="https://{data.api}/limg?id=5509&ver=0">példa a rádió rpről</a
+						href="{data.api}/limg?id=5509&ver=0">példa a rádió rpről</a
 					>
 				{/if}
 			</li>
@@ -118,7 +118,7 @@
 					<a
 						class="text-taxi text-xl font-bold uppercase"
 						target="_blank"
-						href="https://{data.api}/img?id=5544">példa</a
+						href="{data.api}/img?id=5544">példa</a
 					>
 				{/if}
 			</li>
@@ -132,7 +132,7 @@
 					<a
 						class="text-taxi text-xl font-bold uppercase"
 						target="_blank"
-						href="https://{data.api}/img?id=5883">példa</a
+						href="{data.api}/img?id=5883">példa</a
 					>
 				{/if}
 			</li>
