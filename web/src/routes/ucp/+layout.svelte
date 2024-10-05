@@ -13,6 +13,7 @@
 	let announcement = false;
 	let nosocket: boolean | string = 'Socket csatlakozás';
 	let audio: HTMLAudioElement | null;
+	let music_muted = data.music;
 	let played = false;
 	let tip = data.layout.am ? 'TOW' : 'TAXI';
 	onMount(() => {
@@ -58,9 +59,13 @@
 	});
 
 	const playmusic = () => {
-		if (!played) {
+		if (!played && !music_muted) {
 			audio?.play();
 		}
+	};
+	const switchMute = async () => {
+		let mute = await (await fetch('/api/admin/mute')).text();
+		music_muted = mute === 'true' ? true : false;
 	};
 </script>
 
@@ -225,13 +230,20 @@
 										class="border-t px-6 py-8 md:px-12 md:py-16 lg:border-l lg:border-t-0 lg:py-0 lg:pl-6 lg:pr-0"
 									>
 										{#if data.layout?.admin}
-											<a
-												href="/ucp/mv"
-												on:pointerover={playmusic}
-												class="from-taxi hover:bg-pos-100 bg-size-200 bg-pos-0 block rounded-full bg-gradient-to-r via-amber-600 to-red-500 px-6 py-3 text-center font-bold text-white drop-shadow-lg transition-all duration-500"
-											>
-												Műszakvezetés
-											</a>
+											<div class="flex items-center gap-3">
+												<a
+													href="/ucp/mv"
+													on:pointerover={playmusic}
+													class="from-taxi hover:bg-pos-100 bg-size-200 bg-pos-0 block rounded-full bg-gradient-to-r via-amber-600 to-red-500 px-6 py-3 text-center font-bold text-white drop-shadow-lg transition-all duration-500"
+												>
+													Műszakvezetés
+												</a>
+												<button
+													on:click={switchMute}
+													class="icon-[mdi--mute] text-3xl"
+													class:text-red-600={music_muted}
+												></button>
+											</div>
 										{/if}
 									</div>
 								</div>

@@ -30,6 +30,7 @@ export const load = (async ({ cookies }) => {
 				layout: jeson,
 				api: apiUrl,
 				auth: cookies.get('auth_token')!,
+				music: jeson.admin ? (cookies.get('play_music') === 'true' ? true : false) : false,
 				maintenance: cookies.get('maintenance')
 					? jeson.admin
 						? cookies.get('maintenance')
