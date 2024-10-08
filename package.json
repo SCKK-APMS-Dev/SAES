@@ -6,7 +6,12 @@
 		"dev:web": "pnpm --filter ./web run dev",
 		"dev:api": "cd api && cargo watch -x run",
 		"dev:bot": "cd gbot && cargo watch -x run",
-		"dev:ovrl": "pnpm --filter ./overlay run tauri dev"
+		"dev:ovrl": "pnpm --filter ./overlay run tauri dev",
+		"update": "pnpm update:pnpm && pnpm update:api && pnpm update:bot && pnpm update:ovrl",
+		"update:pnpm": "pnpm update",
+		"update:api": "cd api && cargo update",
+		"update:bot": "cd gbot && cargo update",
+		"update:ovrl": "cd overlay/src-tauri && cargo update"
 	},
 	"keywords": [],
 	"author": "HVCsano",
