@@ -15,7 +15,7 @@
 	let audio: HTMLAudioElement | null;
 	let music_muted = data.music;
 	let played = false;
-	let tip = data.layout.am ? 'TOW' : 'TAXI';
+	let tip = !data.error ? (data.layout.am ? 'TOW' : 'TAXI') : 'SCKK';
 	onMount(() => {
 		if (!data.noaccess) {
 			$socket = io(data.api as string, {
@@ -73,7 +73,7 @@
 	{#if !maintenance || data.maintenance}
 		{#if !$navigating}
 			{#if $page.url.pathname.includes('mv')}
-				<title>Műszakvezetői felület - SCKK</title>
+				<title>Műszakvezetői felület - {tip}</title>
 			{:else if Reeler_keys.some((el) => $page.url.pathname.includes(el))}
 				{#if $page.url.pathname.endsWith('/upload')}
 					<title
