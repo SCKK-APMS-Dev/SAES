@@ -84,9 +84,9 @@ pub async fn on_connect(socket: SocketRef, data: InitialData, io: SocketIo) {
                 if tag.admin {
                     socket.join("mv").expect("MV Szobacsatlakozás sikertelen")
                 }
-                io.to("socketppl")
-                    .emit("socketppl-update", io.sockets().unwrap().len())
-                    .expect("Fasz van");
+                // io.to("socketppl")
+                //     .emit("socketppl-update", io.sockets().unwrap().len())
+                //     .expect("SocketPPL - Update kiküldése sikertelen");
                 socket.join("ucp").expect("UCP Szobacsatlakozás sikertelen");
                 socket.emit("maintenance", mama.maintenance).unwrap();
                 socket.emit("announcement", mama.announcement).unwrap();
