@@ -16,7 +16,9 @@
 
 <div class="mt-5 text-center">
 	<h1 class="mb-2 text-3xl font-bold text-white">Műszakvezetési statisztika</h1>
-	<h2 class="mb-2 mt-5 text-xl text-white">Weboldal használók száma: {count}</h2>
+	<h2 class="mb-2 mt-5 text-xl text-white">
+		Weboldal használók száma: {count} (abszurd, nem megy xd)
+	</h2>
 	<div class="child:p-2 md:child:p-4 ml-5 mr-5 grid grid-cols-3 gap-5 text-center text-white">
 		<div
 			class="rounded-lg"

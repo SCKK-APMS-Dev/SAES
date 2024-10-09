@@ -86,7 +86,7 @@ pub async fn on_connect(socket: SocketRef, data: InitialData, io: SocketIo) {
                 }
                 io.to("socketppl")
                     .emit("socketppl-update", io.sockets().unwrap().len())
-                    .expect("SocketPPL - Update kiküldése sikertelen");
+                    .expect("SocketPPL - Update on connect kiküldése sikertelen");
                 socket.join("ucp").expect("UCP Szobacsatlakozás sikertelen");
                 socket.emit("maintenance", mama.maintenance).unwrap();
                 socket.emit("announcement", mama.announcement).unwrap();
@@ -112,7 +112,7 @@ pub async fn on_connect(socket: SocketRef, data: InitialData, io: SocketIo) {
                     info!("Socket {} disconnected {} / {}", s.id, tag.name, tag.id);
                     io.to("socketppl")
                         .emit("socketppl-update", iod - 1)
-                        .expect("Fasz van");
+                        .expect("SocketPPL - Update on disconnect kiküldése sikertelen");
                 });
             } else {
                 warn!("Socket {} nincs joga", socket.id);
