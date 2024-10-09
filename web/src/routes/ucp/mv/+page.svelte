@@ -2,9 +2,9 @@
 	import { beforeNavigate } from '$app/navigation';
 	import { socket } from '$lib/socket';
 	export let data;
+	const supportCountries = ['HU', 'SK', 'RO'];
 	let count = 0;
-	let color: string = data.country;
-
+	let color = supportCountries.includes(data.country as string) ? data.country : 'HU';
 	$socket?.emit('JoinEvent', { event_name: 'socketppl' });
 	$socket?.on('socketppl-update', (data) => {
 		count = data;

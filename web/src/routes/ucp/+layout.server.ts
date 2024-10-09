@@ -2,7 +2,7 @@ import { redirect, type Redirect } from '@sveltejs/kit';
 import type { LayoutServerLoad } from './$types';
 import { apiUrl } from '$lib/api';
 
-export const load = (async ({ cookies }) => {
+export const load = (async ({ cookies, request }) => {
 	if (!cookies.get('auth_token')) {
 		throw redirect(302, `${apiUrl}/auth`);
 	}
@@ -29,6 +29,10 @@ export const load = (async ({ cookies }) => {
 			return {
 				layout: jeson,
 				api: apiUrl,
+				country:
+					process.env.NODE_ENV === 'development'
+						? 'HU'
+						: (request.headers.get('cf-ipcountry') as string),
 				auth: cookies.get('auth_token')!,
 				music: jeson.admin ? (cookies.get('play_music') === 'true' ? true : false) : false,
 				maintenance: cookies.get('maintenance')
