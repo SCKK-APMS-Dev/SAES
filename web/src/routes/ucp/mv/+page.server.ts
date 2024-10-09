@@ -7,8 +7,11 @@ export const load = (async ({ cookies, request }) => {
 			cookie: cookies.get('auth_token')!
 		}
 	});
-	console.log(request.headers);
 	return {
-		stat: await fetcs.json()
+		stat: await fetcs.json(),
+		country:
+			process.env.NODE_ENV === 'development'
+				? 'HU'
+				: (request.headers.get('cf-ipcountry') as string)
 	};
 }) satisfies PageServerLoad;
