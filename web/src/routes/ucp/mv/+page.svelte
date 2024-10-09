@@ -1,12 +1,17 @@
 <script lang="ts">
 	import { beforeNavigate } from '$app/navigation';
 	import { socket } from '$lib/socket';
+	import { onMount } from 'svelte';
 	export let data;
 	let count = 0;
 	let color: string = 'ro';
+
 	$socket?.emit('JoinEvent', { event_name: 'socketppl' });
 	$socket?.on('socketppl-update', (data) => {
 		count = data;
+	});
+	onMount(async () => {
+		console.log(await (await fetch('/api/geo', { method: 'POST' })).text());
 	});
 	beforeNavigate(() => {
 		$socket?.emit('LeaveEvent', { event_name: 'socketppl' });
