@@ -85,34 +85,34 @@ pub async fn on_connect(socket: SocketRef, data: InitialData, io: SocketIo) {
                     socket.join("mv").expect("MV Szobacsatlakozás sikertelen")
                 }
                 // io.to("socketppl")
-                 //   .emit("socketppl-update", io.sockets().unwrap().len())
-                 //   .expect("SocketPPL - Update on connect kiküldése sikertelen");
+                //   .emit("socketppl-update", io.sockets().unwrap().len())
+                //   .expect("SocketPPL - Update on connect kiküldése sikertelen");
                 socket.join("ucp").expect("UCP Szobacsatlakozás sikertelen");
                 socket.emit("maintenance", mama.maintenance).unwrap();
                 socket.emit("announcement", mama.announcement).unwrap();
                 socket.emit("doneload", "").unwrap();
                 //socket.on(
                 //    "JoinEvent",
-                 //   move |s: SocketRef, Data(data): Data<EventData>| {
-                 //       if data.event_name == "socketppl" {
-                 //           s.join(data.event_name).unwrap();
-                 //           s.emit("socketppl-update", iod).expect("Fasz van");
-                  //      }
-                  //  },
-               // )//;
-               // socket.on(
-               //     "LeaveEvent",
-               ///     move |s: SocketRef, Data(data): Data<EventData>| {
+                //   move |s: SocketRef, Data(data): Data<EventData>| {
+                //       if data.event_name == "socketppl" {
+                //           s.join(data.event_name).unwrap();
+                //           s.emit("socketppl-update", iod).expect("Fasz van");
+                //      }
+                //  },
+                // )//;
+                // socket.on(
+                //     "LeaveEvent",
+                ///     move |s: SocketRef, Data(data): Data<EventData>| {
                 //        if data.event_name == "socketppl" {
                 //            s.leave(data.event_name).unwrap();
-                 //       }
+                //       }
                 //    },
-               // );
+                // );
                 socket.on_disconnect(move |s: SocketRef| {
                     info!("Socket {} disconnected {} / {}", s.id, tag.name, tag.id);
                     //io.to("socketppl")
-                     //   .emit("socketppl-update", iod - 1)
-                     //   .expect("SocketPPL - Update on disconnect kiküldése sikertelen");
+                    //   .emit("socketppl-update", iod - 1)
+                    //   .expect("SocketPPL - Update on disconnect kiküldése sikertelen");
                 });
             } else {
                 warn!("Socket {} nincs joga", socket.id);

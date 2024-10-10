@@ -1,3 +1,8 @@
 {
-	"rust-analyzer.linkedProjects": ["overlay/src-tauri/Cargo.toml", "api/Cargo.toml", "gbot/Cargo.toml"]
+	"rust-analyzer.linkedProjects": [
+		"overlay/src-tauri/Cargo.toml",
+		"api/Cargo.toml",
+		"gbot/Cargo.toml"
+	],
+	"discord.enabled": false
 }

@@ -1,4 +1,7 @@
+use std::thread::spawn;
+
 use active_win_pos_rs::get_active_window;
+mod rpc;
 #[cfg(desktop)]
 mod tray;
 
@@ -16,6 +19,7 @@ fn check_win() -> String {
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
+    spawn(rpc::main);
     tauri::Builder::default()
         .plugin(tauri_plugin_shell::init())
         .invoke_handler(tauri::generate_handler![greet, check_win])

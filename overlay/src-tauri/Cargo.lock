@@ -690,6 +690,24 @@ dependencies = [
 ]
 
 [[package]]
+name = "discord-rpc-client"
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5577407c3d8ec8db993e7dd256ba64557cd00239de84a352b9d329175c70df23"
+dependencies = [
+ "byteorder",
+ "crossbeam-channel",
+ "log",
+ "named_pipe",
+ "num-derive",
+ "num-traits",
+ "serde",
+ "serde_derive",
+ "serde_json",
+ "uuid",
+]
+
+[[package]]
 name = "dispatch"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1834,6 +1852,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "named_pipe"
+version = "0.4.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ad9c443cce91fc3e12f017290db75dde490d685cdaaf508d7159d7cf41f0eb2b"
+dependencies = [
+ "winapi",
+]
+
+[[package]]
 name = "ndk"
 version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1890,6 +1917,17 @@ name = "num-conv"
 version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "51d515d32fb182ee37cda2ccdcb92950d6a3c2893aa280e540671c2cd0f3b1d9"
+
+[[package]]
+name = "num-derive"
+version = "0.4.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ed3955f1a9c7c0c15e092f9c887db08b1fc683305fdf6eb6684f22555355e202"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.79",
+]
 
 [[package]]
 name = "num-traits"
@@ -2669,6 +2707,7 @@ name = "saes-overlay"
 version = "0.1.0"
 dependencies = [
  "active-win-pos-rs",
+ "discord-rpc-client",
  "serde",
  "serde_json",
  "tauri",

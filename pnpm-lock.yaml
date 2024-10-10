@@ -16,6 +16,9 @@ importers:
       '@tauri-apps/plugin-shell':
         specifier: '>=2.0.0-rc.0'
         version: 2.0.0-rc.1
+      '@types/discord-rpc':
+        specifier: ^4.0.8
+        version: 4.0.8
     devDependencies:
       '@sveltejs/adapter-static':
         specifier: ^3.0.1
@@ -626,11 +629,17 @@ packages:
   '@types/cookie@0.6.0':
     resolution: {integrity: sha512-4Kh9a6B2bQciAhf7FSuMRRkUWecJgJu9nPnx3yzpsfXX/c50REIqpHY4C82bXP90qrLtXtkDxTZosYO3UpOwlA==}
 
+  '@types/discord-rpc@4.0.8':
+    resolution: {integrity: sha512-1tZf217Natkj+TziNXRRLwNmdm5GNa1bnrQr8VWowquo/Su5hMjdhobj8URxW1COMk2da28XCU1ahsYCAlxirA==}
+
   '@types/eslint@8.56.11':
     resolution: {integrity: sha512-sVBpJMf7UPo/wGecYOpk2aQya2VUGeHhe38WG7/mN5FufNSubf5VT9Uh9Uyp8/eLJpu1/tuhJ/qTo4mhSB4V4Q==}
 
   '@types/estree@1.0.5':
     resolution: {integrity: sha512-/kYRxGDLWzHOB7q+wtSUQlFrtcdUccpfy+X+9iMBpHK8QLLhx2wIPYuS5DYtR9Wa/YlZAbIovy7qVdB1Aq6Lyw==}
+
+  '@types/events@3.0.3':
+    resolution: {integrity: sha512-trOc4AAUThEz9hapPtSd7wf5tiQKvTtu5b371UxXdTuqzIh0ArcRspRP0i0Viu+LXstIQ1z96t1nsPxT9ol01g==}
 
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
@@ -2450,12 +2459,18 @@ snapshots:
 
   '@types/cookie@0.6.0': {}
 
+  '@types/discord-rpc@4.0.8':
+    dependencies:
+      '@types/events': 3.0.3
+
   '@types/eslint@8.56.11':
     dependencies:
       '@types/estree': 1.0.5
       '@types/json-schema': 7.0.15
 
   '@types/estree@1.0.5': {}
+
+  '@types/events@3.0.3': {}
 
   '@types/json-schema@7.0.15': {}
 
