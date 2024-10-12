@@ -15,6 +15,7 @@ use tracing_subscriber::FmtSubscriber;
 mod auth;
 mod db;
 mod image;
+mod init;
 mod list;
 mod shorts;
 mod socket;
@@ -26,12 +27,10 @@ async fn main() {
     dotenv().expect(".env fájl nem található");
     tracing::subscriber::set_global_default(FmtSubscriber::default()).unwrap();
     let (layer, io) = SocketIo::new_layer();
-    let io_copy = io.clone();
+    init::main();
     io.ns(
         "/",
-        move |socket: SocketRef, Data(data): Data<InitialData>| {
-            socket::on_connect(socket, data, io_copy)
-        },
+        move |socket: SocketRef, Data(data): Data<InitialData>| socket::on_connect(socket, data),
     );
     let app = Router::new()
         .route(

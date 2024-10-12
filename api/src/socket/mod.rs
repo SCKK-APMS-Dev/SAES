@@ -1,8 +1,5 @@
 use serde::Deserialize;
-use socketioxide::{
-    extract::{Data, SocketRef},
-    SocketIo,
-};
+use socketioxide::extract::SocketRef;
 use stores::get_stores;
 use tracing::{info, warn};
 
@@ -21,12 +18,7 @@ pub struct InitialData {
     auth_token: String,
 }
 
-#[derive(Debug, Deserialize)]
-pub struct EventData {
-    event_name: String,
-}
-
-pub async fn on_connect(socket: SocketRef, data: InitialData, io: SocketIo) {
+pub async fn on_connect(socket: SocketRef, data: InitialData) {
     info!(
         "Socket {:?} connected: {:?} {:?}",
         socket.id,
@@ -34,7 +26,6 @@ pub async fn on_connect(socket: SocketRef, data: InitialData, io: SocketIo) {
         data,
     );
     let client = reqwest::Client::new();
-    let iod = io.sockets().unwrap().len();
     let ds = get_discord_envs();
     let envs = get_api_envs();
     let dcuserget = client
@@ -102,7 +93,7 @@ pub async fn on_connect(socket: SocketRef, data: InitialData, io: SocketIo) {
                 // )//;
                 // socket.on(
                 //     "LeaveEvent",
-                ///     move |s: SocketRef, Data(data): Data<EventData>| {
+                //     move |s: SocketRef, Data(data): Data<EventData>| {
                 //        if data.event_name == "socketppl" {
                 //            s.leave(data.event_name).unwrap();
                 //       }

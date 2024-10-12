@@ -109,7 +109,7 @@
 	function edit(id: number) {
 		modal.showModal();
 		bindEdit = potleks.data.items[id];
-		bindEdit.custombg = true;
+		bindEdit.custombg = false;
 		editid = id;
 		editing = true;
 	}
@@ -231,71 +231,73 @@
 			} else {
 				bindEdit.custombg = true;
 			}
-		}}><span class="icon-[mdi--eye] m-auto"></span></button
+		}}><span class="icon-[mdi--image] m-auto"></span></button
 	>
 	<button
 		class="absolute right-4 top-2 flex items-center justify-center rounded-xl bg-black bg-opacity-40 p-2 text-3xl font-bold text-red-600 duration-150 hover:bg-opacity-90"
 		on:click={() => closeModal()}><span class="icon-[carbon--close-filled] m-auto"></span></button
 	>
-	<div class="z-20 m-auto h-max w-max rounded-3xl bg-black bg-opacity-25 p-5 lg:w-[500px]">
-		<form on:submit|preventDefault={() => editDone()}>
-			<div class="grid grid-cols-2 items-center gap-3">
-				<h1 class=" col-span-2 mx-2 text-3xl font-bold">
-					{bindEdit.owner}
-					{editdes} szerkesztése
-				</h1>
-				<label for="type" class="text-xl">Státusz</label>
-				<Select
-					placeholder="Kérlek válassz"
-					name="type"
-					class="bg-emerald-600 text-xl text-white opacity-80 focus:opacity-100"
-					bind:value={bindEdit.status}
-				>
-					<option value="feltöltve">feltöltve</option>
-					<option value="elfogadva">elfogadva</option>
-					<option value="elutasítva">elutasítva</option>
-				</Select>
+	{#if !bindEdit.custombg}
+		<div class="z-20 m-auto h-max w-max rounded-3xl bg-black bg-opacity-25 p-5 lg:w-[500px]">
+			<form on:submit|preventDefault={() => editDone()}>
+				<div class="grid grid-cols-2 items-center gap-3">
+					<h1 class=" col-span-2 mx-2 text-3xl font-bold">
+						{bindEdit.owner}
+						{editdes} szerkesztése
+					</h1>
+					<label for="type" class="text-xl">Státusz</label>
+					<Select
+						placeholder="Kérlek válassz"
+						name="type"
+						class="bg-emerald-600 text-xl text-white opacity-80 focus:opacity-100"
+						bind:value={bindEdit.status}
+					>
+						<option value="feltöltve">feltöltve</option>
+						<option value="elfogadva">elfogadva</option>
+						<option value="elutasítva">elutasítva</option>
+					</Select>
 
-				<label for="reason" class="text-xl">Megjegyzés</label>
-				<input
-					type="text"
-					name="reason"
-					id="reason"
-					class="text-xl text-black opacity-80 focus:opacity-100"
-					bind:value={bindEdit.reason}
-				/>
-				{#if extraText}
-					<label for="extra" class="text-xl">{extraText}</label>
-					{#if type === 'pótlék'}
-						<Select
-							placeholder="Kérlek válassz"
-							name="potlek-type"
-							class="bg-emerald-600 text-xl text-white opacity-80 focus:opacity-100"
-							bind:value={bindEdit.extra}
-						>
-							<option value="délelőtti">délelőtti</option>
-							<option value="éjszakai">éjszakai</option>
-						</Select>
-					{:else}
-						<input
-							type="text"
-							name="extra"
-							id="extra"
-							class="text-xl text-black opacity-80 focus:opacity-100"
-							bind:value={bindEdit.extra}
-						/>
+					<label for="reason" class="text-xl">Megjegyzés</label>
+					<input
+						type="text"
+						name="reason"
+						id="reason"
+						class="text-xl text-black opacity-80 focus:opacity-100"
+						bind:value={bindEdit.reason}
+					/>
+					{#if extraText}
+						<label for="extra" class="text-xl">{extraText}</label>
+						{#if type === 'pótlék'}
+							<Select
+								placeholder="Kérlek válassz"
+								name="potlek-type"
+								class="bg-emerald-600 text-xl text-white opacity-80 focus:opacity-100"
+								bind:value={bindEdit.extra}
+							>
+								<option value="délelőtti">délelőtti</option>
+								<option value="éjszakai">éjszakai</option>
+							</Select>
+						{:else}
+							<input
+								type="text"
+								name="extra"
+								id="extra"
+								class="text-xl text-black opacity-80 focus:opacity-100"
+								bind:value={bindEdit.extra}
+							/>
+						{/if}
 					{/if}
-				{/if}
-				<button
-					type="submit"
-					bind:this={bindbtn}
-					id="dialogbtn"
-					class="col-span-2 rounded-xl bg-emerald-500 px-2 py-1 text-2xl opacity-80 transition-all duration-200 hover:bg-emerald-700 hover:opacity-100"
-					>Mentés</button
-				>
-			</div>
-		</form>
-	</div>
+					<button
+						type="submit"
+						bind:this={bindbtn}
+						id="dialogbtn"
+						class="col-span-2 rounded-xl bg-emerald-500 px-2 py-1 text-2xl opacity-80 transition-all duration-200 hover:bg-emerald-700 hover:opacity-100"
+						>Mentés</button
+					>
+				</div>
+			</form>
+		</div>
+	{/if}
 </dialog>
 
 <div class="flex">

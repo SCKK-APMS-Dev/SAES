@@ -1,24 +1,11 @@
 <script lang="ts">
-	import { beforeNavigate } from '$app/navigation';
-	import { socket } from '$lib/socket';
 	export let data;
 	const supportCountries = ['HU', 'SK', 'RO'];
-	let count = 0;
 	let color = supportCountries.includes(data.country as string) ? data.country : 'HU';
-	$socket?.emit('JoinEvent', { event_name: 'socketppl' });
-	$socket?.on('socketppl-update', (data) => {
-		count = data;
-	});
-	beforeNavigate(() => {
-		$socket?.emit('LeaveEvent', { event_name: 'socketppl' });
-	});
 </script>
 
 <div class="mt-5 text-center">
 	<h1 class="mb-2 text-3xl font-bold text-white">Műszakvezetési statisztika</h1>
-	<h2 class="mb-2 mt-5 text-xl text-white">
-		Weboldal használók száma: {count} (abszurd, nem megy xd)
-	</h2>
 	<div class="child:p-2 md:child:p-4 ml-5 mr-5 grid grid-cols-3 gap-5 text-center text-white">
 		<div
 			class="rounded-lg"
