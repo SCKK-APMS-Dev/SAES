@@ -29,6 +29,7 @@ pub struct Items {
     pub status: String,
     pub reason: Option<String>,
     pub am: i8,
+    pub admin: Option<String>,
     pub date: chrono::DateTime<Utc>,
 }
 
@@ -61,6 +62,7 @@ pub async fn items_get(ext: Extension<Tag>, cucc: Query<TypeQuery>) -> Json<Vec<
                 status: strucc.status.clone(),
                 date: strucc.date.clone(),
                 id: strucc.id.clone(),
+                admin: strucc.admin.clone(),
             }
         })
         .collect();

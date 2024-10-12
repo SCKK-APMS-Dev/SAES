@@ -56,20 +56,24 @@
 			{#if handled_potleks}
 				{#each handled_potleks as potle}
 					<div
-						class="rounded-xl p-2 drop-shadow-xl"
-						class:bg-green-600={potle.status === 'elfogadva'}
-						class:bg-red-600={potle.status === 'elutasítva'}
-						class:bg-yellow-600={potle.status === 'feltöltve'}
+						class="rounded-lg bg-gradient-to-bl p-2 drop-shadow-xl"
+						class:from-teal-500={potle.status === 'elfogadva'}
+						class:to-green-600={potle.status === 'elfogadva'}
+						class:from-amber-500={potle.status === 'elutasítva'}
+						class:to-red-600={potle.status === 'elutasítva'}
+						class:from-cyan-800={potle.status === 'feltöltve'}
+						class:to-gray-700={potle.status === 'feltöltve'}
 					>
-						<h1 class="font-bold drop-shadow-xl">
+						<h1 class="-mb-2 text-2xl font-bold">{potle.status.toUpperCase()}</h1>
+						<h1 class="text-gray-200 drop-shadow-xl">
 							{new Date(potle.date).getUTCFullYear()}.{new Date(potle.date).getUTCMonth() +
 								1}.{new Date(potle.date).getUTCDate()}. {new Date(potle.date).getUTCHours() +
 								2}:{new Date(potle.date).getUTCMinutes()}
 						</h1>
-						<h1 class="font-bold drop-shadow-xl">Státusz: {potle.status}</h1>
 						{#if potle.reason}
-							<h1 class="font-bold drop-shadow-xl">Megjegyzés: {potle.reason}</h1>
+							<h1 class="drop-shadow-xl">Megjegyzés: {potle.reason}</h1>
 						{/if}
+
 						{#if tipus === 'leintés'}
 							<div class="flex flex-col xl:flex-row">
 								<img
@@ -84,11 +88,28 @@
 								/>
 							</div>
 						{:else}
-							<img
-								src={`${data.api}/img?id=${potle.id}`}
-								alt=""
-								class="max-h-xl m-auto max-w-xl py-2 drop-shadow-xl"
-							/>
+							<a
+								href={`${data.api}/img?id=${potle.id}`}
+								target="_blank"
+								on:mouseenter={() => (potle.focus = true)}
+								on:mouseleave={() => (potle.focus = false)}
+							>
+								<img
+									src={`${data.api}/img?id=${potle.id}`}
+									alt=""
+									class="max-h-xl m-auto max-w-xl py-2 drop-shadow-xl"
+									class:blur={potle.focus}
+								/>
+								{#if potle.focus}
+									<span
+										class="icon-[mdi--gesture-touch-hold] absolute left-1/2 top-1/2 h-24 w-24 -translate-x-1/2 -translate-y-1/2 transform shadow-2xl"
+									></span>
+								{/if}
+							</a>
+						{/if}
+
+						{#if potle.admin}
+							<h1 class="drop-shadow-xl">Kezelte: {potle.admin}</h1>
 						{/if}
 					</div>
 				{/each}
