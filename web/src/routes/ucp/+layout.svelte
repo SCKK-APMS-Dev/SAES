@@ -75,7 +75,7 @@
 			{#if $page.url.pathname.includes('mv')}
 				<title>Műszakvezetői felület - {tip}</title>
 				<meta content="https://sckk.hu/ucp/mv" property="og:url" />
-				<meta content="SCKK Műszakvezetői felület" property="og:description" />
+				<meta content="Műszakvezetői felület" property="og:description" />
 			{:else if Reeler_keys.some((el) => $page.url.pathname.includes(el))}
 				{#if $page.url.pathname.endsWith('/upload')}
 					<title
@@ -86,7 +86,7 @@
 						property="og:url"
 					/>
 					<meta
-						content="SCKK {Reeler_vals[
+						content="{Reeler_vals[
 							Reeler_keys.indexOf($page.url.pathname.split('/')[2])
 						][2]} feltöltés"
 						property="og:description"
@@ -96,7 +96,7 @@
 						>{Reeler_vals[Reeler_keys.indexOf($page.url.pathname.split('/')[2])][1]} megtekintése - {tip}</title
 					>
 					<meta
-						content="SCKK {Reeler_vals[
+						content="{Reeler_vals[
 							Reeler_keys.indexOf($page.url.pathname.split('/')[2])
 						][1]} megtekintése"
 						property="og:description"
@@ -109,7 +109,7 @@
 			{:else}
 				<title>Felhasználói felület - {tip}</title>
 				<meta content="https://sckk.hu/ucp" property="og:url" />
-				<meta content="SCKK Felhasználói felület" property="og:description" />
+				<meta content="Felhasználói felület" property="og:description" />
 			{/if}
 		{/if}
 	{:else}
