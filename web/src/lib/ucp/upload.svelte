@@ -67,15 +67,22 @@
 
 <Error {data}>
 	<div class="text-center text-white">
-		<div class="ml-16 mr-16 mt-16 rounded-lg bg-green-500 p-2">
+		<div class="ml-16 mr-16 mt-16 rounded-lg bg-gradient-to-tr from-green-500 to-emerald-400 p-2">
 			<h2 class="font-bold text-red-800 drop-shadow-xl">{formerror ? formerror : ''}</h2>
-			<h1 class="text-3xl font-bold">{display} feltöltése</h1>
+			<h1 class="mb-2 text-3xl font-bold uppercase">{display} feltöltése</h1>
 			<form on:submit|preventDefault={() => upload()} enctype="multipart/form-data">
-				<input type="text" class="hidden" name="name" value={data.layout?.name} />
-				<input type="file" name="file" id="file" accept="image/*" required multiple />
+				<input
+					class="file:text-black"
+					type="file"
+					name="file"
+					id="file"
+					accept="image/*"
+					required
+					multiple
+				/>
 				<button
 					type="submit"
-					class="rounded-xl bg-gradient-to-r from-white to-red-600 px-2 text-xl font-bold text-black"
+					class="from-taxi hover:bg-pos-100 bg-size-200 bg-pos-0 rounded-full bg-gradient-to-r via-amber-600 to-green-500 px-3 py-1 text-xl uppercase drop-shadow-lg transition-all duration-500"
 					>Feltöltés</button
 				>
 				<h2>

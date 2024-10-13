@@ -52,7 +52,7 @@
 		>
 		<h1 class="text-5xl font-bold drop-shadow-xl">{display}:</h1>
 		<h2 class="mb-3 text-black dark:text-gray-400">(összesen {data.potlekok.length} darab)</h2>
-		<div class="flex flex-auto flex-wrap items-center justify-center gap-3 align-middle">
+		<div class="mb-3 flex flex-auto flex-wrap items-center justify-center gap-3 align-middle">
 			{#if handled_potleks}
 				{#each handled_potleks as potle}
 					<div
@@ -145,7 +145,7 @@
 		</div>
 	</div>
 	{#if multipage}
-		<div class="mb-5 mt-5 flex items-center justify-center gap-4">
+		<div class="mb-3 flex items-center justify-center gap-4">
 			{#if pagee > 0}
 				<button
 					on:click={() => switchPage('prev')}

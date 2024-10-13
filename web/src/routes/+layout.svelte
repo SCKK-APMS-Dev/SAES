@@ -8,7 +8,7 @@
 </script>
 
 <head>
-	<title>SCKK Weboldal</title>
+	<title>SAES Web</title>
 	<meta name="description" content="A See City Közlekedési Központ weboldala" />
 </head>
 

@@ -254,7 +254,7 @@
 			</div>
 
 			<footer>
-				<h2 class="bg-rose-600 py-1 text-center text-xl text-white">
+				<h2 class="bg-gradient-to-r from-rose-600 to-amber-600 py-1 text-center text-xl text-white">
 					Nem vagy biztos valamiben? Nézd meg a <a
 						href="/ucp/szabalyzat"
 						class="text-taxi font-bold">szabályzatot</a
