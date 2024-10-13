@@ -91,6 +91,11 @@
 	{:else}
 		<title>Karbantartás - {tip}</title>
 	{/if}
+	<meta content="SCKK Weboldal" property="og:title" />
+	<meta content="https://sckk.hu/ucp" property="og:url" />
+	<meta content="SCKK Felhasználói felület" property="og:description" />
+	<meta content="https://sckk.hu/favicon.png" property="og:image" />
+	<meta content="#fece01" data-react-helmet="true" name="theme-color" />
 </svelte:head>
 <Error {data}>
 	{#if data.noaccess}

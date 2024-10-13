@@ -12,6 +12,7 @@
 	<meta name="description" content="A See City Közlekedési Központ weboldala" />
 	<meta content="SCKK Weboldal" property="og:title" />
 	<meta content="https://sckk.hu" property="og:url" />
+	<meta content="A See City Közlekedési Központ (SeeMTA v4) weboldala." property="og:description" />
 	<meta content="https://sckk.hu/favicon.png" property="og:image" />
 	<meta content="#fece01" data-react-helmet="true" name="theme-color" />
 </head>
