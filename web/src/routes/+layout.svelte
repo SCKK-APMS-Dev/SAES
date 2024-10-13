@@ -10,6 +10,10 @@
 <head>
 	<title>SAES Web</title>
 	<meta name="description" content="A See City Közlekedési Központ weboldala" />
+	<meta content="SCKK Weboldal" property="og:title" />
+	<meta content="https://sckk.hu" property="og:url" />
+	<meta content="https://sckk.hu/favicon.png" property="og:image" />
+	<meta content="#fece01" data-react-helmet="true" name="theme-color" />
 </head>
 
 <slot />
