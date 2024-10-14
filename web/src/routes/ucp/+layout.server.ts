@@ -35,6 +35,7 @@ export const load = (async ({ cookies, request }) => {
 						: (request.headers.get('cf-ipcountry') as string),
 				auth: cookies.get('auth_token')!,
 				music: jeson.admin ? (cookies.get('play_music') === 'true' ? true : false) : false,
+				agent: request.headers.get('user-agent') as string,
 				maintenance: cookies.get('maintenance')
 					? jeson.admin
 						? cookies.get('maintenance')

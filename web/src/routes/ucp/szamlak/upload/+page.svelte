@@ -4,4 +4,4 @@
 	export let data;
 </script>
 
-<Upload {data} display="Számla" tipus="számla" />
+<Upload {data} display="Számla" tipus="számla" agent={data.agent} />

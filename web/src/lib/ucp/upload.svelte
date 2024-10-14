@@ -7,6 +7,7 @@
 	export let display = '';
 	export let tipus = '';
 	export let warning = '';
+	export let agent = '';
 	let seli: string[][] = [];
 	let fileas: string[] = [];
 	let tope = 'col';
@@ -70,29 +71,39 @@
 		<div class="ml-16 mr-16 mt-16 rounded-lg bg-gradient-to-tr from-green-500 to-emerald-400 p-2">
 			<h2 class="font-bold text-red-800 drop-shadow-xl">{formerror ? formerror : ''}</h2>
 			<h1 class="mb-2 text-3xl font-bold uppercase">{display} feltöltése</h1>
-			<form on:submit|preventDefault={() => upload()} enctype="multipart/form-data">
-				<input
-					class="file:text-black"
-					type="file"
-					name="file"
-					id="file"
-					accept="image/*"
-					required
-					multiple
-				/>
-				<button
-					type="submit"
-					class="from-taxi hover:bg-pos-100 bg-size-200 bg-pos-0 rounded-full bg-gradient-to-r via-amber-600 to-green-500 px-3 py-1 text-xl uppercase drop-shadow-lg transition-all duration-500"
-					>Feltöltés</button
-				>
-				<h2>
-					{warning}
-				</h2>
-			</form>
-			<h2 class="rounded-xl bg-red-600 px-2 text-xl font-bold">{''}</h2>
+			{#if agent.includes('Firefox')}
+				<h1 class="mb-2 text-xl font-bold">
+					Firefoxon (és az azon alapuló böngészőkön) jelenlegi állás szerint nem lehet elemeket
+					feltölteni. Ez idő alatt kérlek használj egy Chromium alapú böngészőt! (Pl. Chrome, Edge,
+					Brave, Arc, stb.)
+				</h1>
+			{:else}
+				<form on:submit|preventDefault={() => upload()} enctype="multipart/form-data">
+					<input
+						class="file:text-black"
+						type="file"
+						name="file"
+						id="file"
+						accept="image/*"
+						required
+						multiple
+					/>
+					<button
+						type="submit"
+						class="from-taxi hover:bg-pos-100 bg-size-200 bg-pos-0 rounded-full bg-gradient-to-r via-amber-600 to-green-500 px-3 py-1 text-xl uppercase drop-shadow-lg transition-all duration-500"
+						>Feltöltés</button
+					>
+					<h2>
+						{warning}
+					</h2>
+				</form>
+				<h2 class="rounded-xl bg-red-600 px-2 text-xl font-bold">{''}</h2>
+			{/if}
 		</div>
 		<div class="flex-row items-center justify-center align-middle">
-			<h2 class="font-bold">Ha sikeresen feltöltötted őket akkor itt fognak megjelenni:</h2>
+			{#if !agent.includes('Firefox')}
+				<h2 class="font-bold">Ha sikeresen feltöltötted őket akkor itt fognak megjelenni:</h2>
+			{/if}
 			<button
 				class="mb-2 hidden rounded-lg bg-red-600 px-2 transition-all duration-200 hover:bg-red-800"
 				on:click={switchTope}

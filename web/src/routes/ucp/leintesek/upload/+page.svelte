@@ -8,5 +8,6 @@
 	{data}
 	display="Leintés"
 	tipus="leintés"
-	warning="Egy leintés 2 képből áll, magyarul a 2 többszörösét fogadja el a rendszer! (Egyszerre több leintést is fel lehet tölteni)"
+	agent={data.agent}
+	warning="Egy leintés 2 képből áll! (Egyszerre több leintést is fel lehet tölteni)"
 />
