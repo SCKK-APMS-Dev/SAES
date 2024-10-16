@@ -1,6 +1,6 @@
 {
 	"rust-analyzer.linkedProjects": [
-		"overlay/src-tauri/Cargo.toml",
+		"gui/src-tauri/Cargo.toml",
 		"api/Cargo.toml",
 		"gbot/Cargo.toml"
 	],

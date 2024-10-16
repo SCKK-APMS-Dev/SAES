@@ -8,7 +8,7 @@ importers:
 
   .: {}
 
-  overlay:
+  gui:
     dependencies:
       '@tauri-apps/api':
         specifier: '>=2.0.0-rc.0'

@@ -1,14 +1,14 @@
 [package]
-name = "saes-overlay"
+name = "saes-gui"
 version = "0.1.0"
-description = "SCKK Átfedés"
+description = "SCKK GUI"
 authors = ["HVCsano"]
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [lib]
-name = "saes_overlay_lib"
+name = "saes_gui_lib"
 crate-type = ["staticlib", "cdylib", "rlib"]
 
 [build-dependencies]

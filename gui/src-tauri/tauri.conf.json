@@ -1,8 +1,8 @@
 {
 	"$schema": "https://schema.tauri.app/config/2.0.0-rc",
-	"productName": "SCKK Átfedés",
+	"productName": "SCKK GUI",
 	"version": "0.1.0",
-	"identifier": "hu.hvcsano.sckk-overlay",
+	"identifier": "hu.hvcsano.saes-gui",
 	"build": {
 		"beforeDevCommand": "pnpm dev",
 		"devUrl": "http://localhost:1420",
@@ -12,7 +12,7 @@
 	"app": {
 		"windows": [
 			{
-				"title": "SCKK Átfedés",
+				"title": "SCKK GUI",
 				"x": 30,
 				"y": 30,
 				"width": 190,

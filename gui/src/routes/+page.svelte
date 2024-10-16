@@ -38,7 +38,7 @@
 <div class="flex h-screen">
 	<img class="m-auto ml-2 h-[40px]" src="/icon.png" alt="" />
 </div>
-<p class="absolute left-[55px] top-0 text-lg uppercase text-white">SCKK Átfedés</p>
+<p class="absolute left-[55px] top-0 text-lg uppercase text-white">SCKK GUI</p>
 <p class="absolute bottom-0 left-[55px] text-lg text-gray-400">Betöltés</p>
 <!-- <p class="absolute bottom-0 left-[55px] text-lg text-green-400">Szolgálatban</p> -->
 <!-- <p class="absolute bottom-0 left-[55px] text-lg text-red-600">Nem aktív</p> -->
