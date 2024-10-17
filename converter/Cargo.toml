@@ -5,3 +5,10 @@ edition = "2021"
 
 [dependencies]
 saes_api = { path = "../api" }
+sea-orm = { version = "0.12.15", features = [
+    "sqlx-mysql",
+    "runtime-tokio-native-tls",
+    "macros",
+] }
+tokio = { version = "1.37.0", features = ["full"] }
+dotenvy = "0.15.7"

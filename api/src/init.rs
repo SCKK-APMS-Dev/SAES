@@ -21,11 +21,19 @@ fn stores_init() {
 fn image_init() {
     let image_dir = Path::new("public");
     if !image_dir.exists() {
-        fs::create_dir(image_dir).expect("Image dir létrehozása sikertelen")
+        fs::create_dir(image_dir).expect("Image dir létrehozása sikertelen");
+    }
+}
+
+fn image_tmp_init() {
+    let image_tmp_dir = Path::new("public/tmp");
+    if !image_tmp_dir.exists() {
+        fs::create_dir(image_tmp_dir).expect("image_tmp_dir létrehozása sikertelen")
     }
 }
 
 pub fn main() {
     stores_init();
     image_init();
+    image_tmp_init();
 }

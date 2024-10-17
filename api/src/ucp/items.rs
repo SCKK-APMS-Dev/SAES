@@ -88,7 +88,7 @@ pub async fn items_post(
             if data.is_ok() {
                 let db = get_conn().await;
                 let mut file =
-                    File::create(format!("./public/{}-{}", ext.name, file_name)).unwrap();
+                    File::create(format!("./public/tmp/{}-{}", ext.name, file_name)).unwrap();
                 file.write(&data.unwrap()).unwrap();
                 if cucc.tipus.clone() == String::from("leintés") {
                     if files_for_leintes.len().eq(&1) {
@@ -100,7 +100,7 @@ pub async fn items_post(
                             owner: Set(ext.name.clone()),
                             r#type: Set(String::from(cucc.tipus.clone())),
                             kep: Set(format!(
-                                "['{}','{}-{}']",
+                                "['{}','tmp/{}-{}']",
                                 files_for_leintes[0], ext.name, file_name
                             )),
                             ..Default::default()
@@ -112,7 +112,7 @@ pub async fn items_post(
                         file_ids.push(newitem.last_insert_id);
                         files_for_leintes.clear();
                     } else {
-                        files_for_leintes.push(format!("{}-{}", ext.name, file_name))
+                        files_for_leintes.push(format!("tmp/{}-{}", ext.name, file_name))
                     }
                 } else {
                     let iten = Data::ActiveModel {
@@ -122,7 +122,7 @@ pub async fn items_post(
                         ),
                         owner: Set(ext.name.clone()),
                         r#type: Set(String::from(cucc.tipus.clone())),
-                        kep: Set(format!("{}-{}", ext.name, file_name)),
+                        kep: Set(format!("tmp/{}-{}", ext.name, file_name)),
                         ..Default::default()
                     };
                     let newitem = Data::Entity::insert(iten)
