@@ -1,10 +1,12 @@
 use std::{env, fs, process::Command, thread, time::Duration};
 
 use dotenvy::dotenv;
-use saes_api::db::data::{self as Data, ActiveModel, Model};
 use sea_orm::{ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter, SelectColumns, Set};
 use utils::{ffmpeg::get_ffmpeg, sql::get_conn};
 
+use db::data::{self as Data, ActiveModel, Model};
+
+mod db;
 mod init;
 mod utils;
 

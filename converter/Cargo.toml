@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-saes-api = { path = "../api" }
+serde = { version = "1.0.198", features = ["derive"] }
 sea-orm = { version = "0.12.15", features = [
     "sqlx-mysql",
     "runtime-tokio-native-tls",
