@@ -1,5 +1,5 @@
 [package]
-name = "saes_gbot"
+name = "saes-gbot"
 version = "0.1.0"
 edition = "2021"
 

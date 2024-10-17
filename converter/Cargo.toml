@@ -1,10 +1,10 @@
 [package]
-name = "saes_converter"
+name = "saes-converter"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-saes_api = { path = "../api" }
+saes-api = { path = "../api" }
 sea-orm = { version = "0.12.15", features = [
     "sqlx-mysql",
     "runtime-tokio-native-tls",

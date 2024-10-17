@@ -1,10 +1,9 @@
 FROM rust
 
-WORKDIR /usr/src/gbot
+WORKDIR /usr/src/converter
 
 COPY . .
 
 RUN cargo install --path .
 RUN touch .env
-EXPOSE 3000
-CMD ["saes-gbot"]
+CMD ["saes-converter"]
