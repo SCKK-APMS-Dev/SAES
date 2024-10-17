@@ -1,5 +1,5 @@
 [package]
-name = "saes-gui"
+name = "saes_gui"
 version = "0.1.0"
 description = "SCKK GUI"
 authors = ["HVCsano"]

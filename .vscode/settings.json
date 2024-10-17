@@ -1,8 +1,12 @@
 {
-	"rust-analyzer.linkedProjects": [
-		"gui/src-tauri/Cargo.toml",
-		"api/Cargo.toml",
-		"gbot/Cargo.toml"
-	],
-	"discord.enabled": false
+	"[json]": {
+		"editor.quickSuggestions": {
+			"strings": true
+		},
+		"editor.suggest.insertMode": "replace",
+		"editor.defaultFormatter": "tamasfe.even-better-toml"
+	},
+	"[rust]": {
+		"editor.defaultFormatter": "rust-lang.rust-analyzer"
+	}
 }

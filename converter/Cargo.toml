@@ -1,0 +1,7 @@
+[package]
+name = "saes_converter"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+saes_api = { path = "../api" }

@@ -1,0 +1,3 @@
+[workspace]
+members = ["api", "gui/src-tauri", "gbot", "converter"]
+resolver = "2"

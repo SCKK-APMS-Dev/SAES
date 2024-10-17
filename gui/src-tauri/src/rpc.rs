@@ -20,15 +20,11 @@ pub fn main() {
     loop {
         // Set the activity
         drpc.set_activity(|act| {
-            act.state("Nehogy elhidd, hogy ez real. Még csak tesztfázis! 😉")
-                .details(state_message)
+            act
+                // .state("Nehogy elhidd, hogy ez real. Még csak tesztfázis! 😉")
+                // .details(state_message)
                 .timestamps(|tim| tim.start(now))
-                .assets(|ass| {
-                    ass.large_image("sckk")
-                        .large_text("SeeMTA v4 - SCKK")
-                        .small_image("offline")
-                        .small_text(state_message)
-                })
+                .assets(|ass| ass.large_image("sckk").large_text("SeeMTA v4 - SCKK"))
         })
         .expect("Failed to set activity");
 
