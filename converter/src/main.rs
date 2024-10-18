@@ -76,7 +76,7 @@ async fn convert(modl: Vec<Model>, ffmpeg: String, dir: &String, db: &DatabaseCo
                 if convert.unwrap().status.code().unwrap() == 0 {
                     let activem = ActiveModel {
                         id: Set(item.id),
-                        kep: Set(kep_rebuilt),
+                        kep: Set(kep_rebuilt.clone()),
                         ..Default::default()
                     };
                     let dbupdate = Data::Entity::update(activem).exec(db).await;
@@ -84,12 +84,18 @@ async fn convert(modl: Vec<Model>, ffmpeg: String, dir: &String, db: &DatabaseCo
                         fs::remove_file(format!("{}/{}", dir, item.kep))
                             .expect("Fájltörlés sikertelen");
                     } else {
-                        fs::write(format!("error/db-{}", item.id), "")
-                            .expect("error db lementése sikertelen");
+                        fs::write(
+                            format!("error/db-{}", item.id),
+                            format!("{} ---> {}", item.kep, kep_rebuilt),
+                        )
+                        .expect("error db lementése sikertelen");
                     }
                 } else {
-                    fs::write(format!("error/{}", item.id), "")
-                        .expect("error lementése sikertelen");
+                    fs::write(
+                        format!("error/{}", item.id),
+                        format!("{} ---> {}", item.kep, kep_rebuilt),
+                    )
+                    .expect("error lementése sikertelen");
                 }
             }
         }
