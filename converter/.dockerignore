@@ -5,3 +5,4 @@ Dockerfile
 .gitignore
 .env
 .env.example
+error

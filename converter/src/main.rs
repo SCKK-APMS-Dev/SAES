@@ -1,4 +1,4 @@
-use std::{env, fs, process::Command, thread, time::Duration};
+use std::{env, fs, path::Path, process::Command, thread, time::Duration};
 
 use dotenvy::dotenv;
 use sea_orm::{ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter, SelectColumns, Set};
@@ -26,11 +26,14 @@ async fn main() {
         let ffmpeg = get_ffmpeg();
         convert(data, ffmpeg, &dir, &db).await;
         println!("===== DONE =====");
-        thread::sleep(Duration::from_secs(60 * 60 * 6));
+        thread::sleep(Duration::from_secs(60 * 60 * 1));
     }
 }
 async fn convert(modl: Vec<Model>, ffmpeg: String, dir: &String, db: &DatabaseConnection) {
     for item in modl.iter() {
+        if !Path::new(&format!("error/{}", item.id)).exists()
+            && !Path::new(&format!("error/db-{}", item.id)).exists()
+        {}
         if item.r#type != "leintés" {
             if !item.kep.ends_with(".avif") {
                 let kep_rename = item.kep.split(".").collect::<Vec<&str>>();
@@ -57,25 +60,32 @@ async fn convert(modl: Vec<Model>, ffmpeg: String, dir: &String, db: &DatabaseCo
                     kep_rebuilt.remove(0); // remove p
                     kep_rebuilt.remove(0); // remove /
                 }
-                Command::new(ffmpeg.clone())
+                let convert = Command::new(ffmpeg.clone())
                     .arg("-y")
                     .arg("-i")
                     .arg(format!("{}/{}", dir, item.kep))
                     .arg(format!("{}/{}", dir, kep_rebuilt))
                     .spawn()
                     .expect("ffmpeg nem sikerült")
-                    .wait_with_output()
-                    .unwrap();
-                let activem = ActiveModel {
-                    id: Set(item.id),
-                    kep: Set(kep_rebuilt),
-                    ..Default::default()
-                };
-                Data::Entity::update(activem)
-                    .exec(db)
-                    .await
-                    .expect("UPDATE sikertelen");
-                fs::remove_file(format!("{}/{}", dir, item.kep)).expect("Fájltörlés sikertelen");
+                    .wait_with_output();
+                if convert.unwrap().status.code().unwrap() == 0 {
+                    let activem = ActiveModel {
+                        id: Set(item.id),
+                        kep: Set(kep_rebuilt),
+                        ..Default::default()
+                    };
+                    let dbupdate = Data::Entity::update(activem).exec(db).await;
+                    if dbupdate.is_ok() {
+                        fs::remove_file(format!("{}/{}", dir, item.kep))
+                            .expect("Fájltörlés sikertelen");
+                    } else {
+                        fs::write(format!("error/db-{}", item.id), "")
+                            .expect("error db lementése sikertelen");
+                    }
+                } else {
+                    fs::write(format!("error/{}", item.id), "")
+                        .expect("error lementése sikertelen");
+                }
             }
         }
     }

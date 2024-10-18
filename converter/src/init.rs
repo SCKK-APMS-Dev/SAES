@@ -3,6 +3,7 @@ use std::{env, fs, path::Path, process::Command};
 pub fn main() {
     init_dir();
     init_ffmpeg();
+    init_error_dir();
 }
 
 fn init_dir() {
@@ -20,5 +21,12 @@ fn init_ffmpeg() {
         }
     } else if Command::new("ffmpeg").spawn().is_err() {
         panic!("ffmpeg nincs telepítve")
+    }
+}
+
+fn init_error_dir() {
+    let error_dir = Path::new("error");
+    if !error_dir.exists() {
+        fs::create_dir(error_dir).expect("error dir létrehozása sikertelen")
     }
 }
