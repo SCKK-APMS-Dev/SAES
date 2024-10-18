@@ -12,3 +12,4 @@ sea-orm = { version = "0.12.15", features = [
 ] }
 tokio = { version = "1.37.0", features = ["full"] }
 dotenvy = "0.15.7"
+chrono = "0.4.38"

@@ -1,5 +1,6 @@
 use std::{env, fs, path::Path, process::Command, thread, time::Duration};
 
+use chrono::{Timelike, Utc};
 use dotenvy::dotenv;
 use sea_orm::{ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter, SelectColumns, Set};
 use utils::{ffmpeg::get_ffmpeg, sql::get_conn};
@@ -24,8 +25,12 @@ async fn main() {
             .await
             .expect("Adatbázis lekérés sikertelen");
         let ffmpeg = get_ffmpeg();
-        convert(data, ffmpeg, &dir, &db).await;
-        println!("===== DONE =====");
+        if Utc::now().hour() < 20 && Utc::now().hour() >= 8 {
+            convert(data, ffmpeg, &dir, &db).await;
+            println!("===== DONE =====");
+        } else {
+            println!("===== NINCS CONVERT, PATRIK ALSZIK =====");
+        }
         thread::sleep(Duration::from_secs(60 * 60 * 1));
     }
 }
