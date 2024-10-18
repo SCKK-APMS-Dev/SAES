@@ -73,7 +73,9 @@ async fn convert(modl: Vec<Model>, ffmpeg: String, dir: &String, db: &DatabaseCo
                     .spawn()
                     .expect("ffmpeg nem sikerült")
                     .wait_with_output();
-                if convert.unwrap().status.code().unwrap() == 0 {
+                if convert.unwrap().status.code().unwrap() == 0
+                    || Path::new(&format!("{}/{}", dir, kep_rebuilt)).exists()
+                {
                     let activem = ActiveModel {
                         id: Set(item.id),
                         kep: Set(kep_rebuilt.clone()),
