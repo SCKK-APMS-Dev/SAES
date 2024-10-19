@@ -65,33 +65,51 @@ async fn convert(modl: Vec<Model>, ffmpeg: String, dir: &String, db: &DatabaseCo
                     kep_rebuilt.remove(0); // remove p
                     kep_rebuilt.remove(0); // remove /
                 }
-                let convert = Command::new(ffmpeg.clone())
-                    .arg("-y")
-                    .arg("-i")
-                    .arg(format!("{}/{}", dir, item.kep))
-                    .arg(format!("{}/{}", dir, kep_rebuilt))
-                    .spawn()
-                    .expect("ffmpeg nem sikerült")
-                    .wait_with_output();
-                if convert.unwrap().status.code().unwrap() == 0
-                    || Path::new(&format!("{}/{}", dir, kep_rebuilt)).exists()
-                {
+                if Path::new(&format!("{}/{}", dir, item.kep)).exists() {
+                    let convert = Command::new(ffmpeg.clone())
+                        .arg("-y")
+                        .arg("-i")
+                        .arg(format!("{}/{}", dir, item.kep))
+                        .arg(format!("{}/{}", dir, kep_rebuilt))
+                        .spawn()
+                        .expect("ffmpeg nem sikerült")
+                        .wait_with_output();
+                    if convert.unwrap().status.code().unwrap() == 0 {
+                        let activem = ActiveModel {
+                            id: Set(item.id),
+                            kep: Set(kep_rebuilt.clone()),
+                            ..Default::default()
+                        };
+                        let dbupdate = Data::Entity::update(activem).exec(db).await;
+                        if dbupdate.is_ok() {
+                            fs::remove_file(format!("{}/{}", dir, item.kep))
+                                .expect("Fájltörlés sikertelen");
+                        } else {
+                            fs::write(
+                                format!("error/db-{}", item.id),
+                                format!("{} ---> {}", item.kep, kep_rebuilt),
+                            )
+                            .expect("error db lementése sikertelen");
+                        }
+                    } else {
+                        fs::write(
+                            format!("error/{}", item.id),
+                            format!("{} ---> {}", item.kep, kep_rebuilt),
+                        )
+                        .expect("error lementése sikertelen");
+                    }
+                } else if Path::new(&format!("{}/{}", dir, kep_rebuilt)).exists() {
+                    println!("{} már konvertálva, db-be átírás", item.id);
                     let activem = ActiveModel {
                         id: Set(item.id),
                         kep: Set(kep_rebuilt.clone()),
                         ..Default::default()
                     };
-                    let dbupdate = Data::Entity::update(activem).exec(db).await;
-                    if dbupdate.is_ok() {
-                        fs::remove_file(format!("{}/{}", dir, item.kep))
-                            .expect("Fájltörlés sikertelen");
-                    } else {
-                        fs::write(
-                            format!("error/db-{}", item.id),
-                            format!("{} ---> {}", item.kep, kep_rebuilt),
-                        )
-                        .expect("error db lementése sikertelen");
-                    }
+                    Data::Entity::update(activem)
+                        .exec(db)
+                        .await
+                        .expect("Meglévő átírása db-be sikertelen");
+                    println!("{} kész", item.id);
                 } else {
                     fs::write(
                         format!("error/{}", item.id),
