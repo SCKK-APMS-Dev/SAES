@@ -15,6 +15,7 @@ pub async fn list_get(quer: Query<ListQuery>) -> Result<impl IntoResponse, (Stat
         let cuccok = data::Entity::find()
             .filter(data::Column::Owner.eq(quer.driver.clone()))
             .filter(data::Column::Date.gt(friday.laster))
+            .filter(data::Column::Status.eq("elfogadva"))
             .filter(data::Column::Date.lt(friday.last))
             .filter(data::Column::Extra.eq(if quer.tipus == "potlek_de" {
                 "délelőtti"
@@ -37,6 +38,7 @@ pub async fn list_get(quer: Query<ListQuery>) -> Result<impl IntoResponse, (Stat
             .filter(data::Column::Owner.eq(quer.driver.clone()))
             .filter(data::Column::Date.gt(friday.laster))
             .filter(data::Column::Date.lt(friday.last))
+            .filter(data::Column::Status.eq("elfogadva"))
             .filter(data::Column::Type.eq(if quer.tipus == "leintes" {
                 "leintés"
             } else if quer.tipus == "szamla" {
