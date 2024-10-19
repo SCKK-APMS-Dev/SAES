@@ -256,6 +256,14 @@ async fn convert(modl: Vec<Model>, ffmpeg: String, dir: &String, db: &DatabaseCo
                         ..Default::default()
                     };
                     Data::Entity::update(activem).exec(db).await.unwrap();
+                    if !first_elem.ends_with(".avif") {
+                        fs::remove_file(format!("{}/{}", dir, first_elem))
+                            .expect("Fájltörlés sikertelen");
+                    }
+                    if !second_elem.ends_with(".avif") {
+                        fs::remove_file(format!("{}/{}", dir, second_elem))
+                            .expect("Fájltörlés sikertelen");
+                    }
                 }
             }
         }
