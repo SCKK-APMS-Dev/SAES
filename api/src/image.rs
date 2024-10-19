@@ -29,7 +29,17 @@ pub async fn image_get(cucc: Query<ImgQuery>) -> Response {
         let _ = kep_file.read_to_end(&mut contents).await;
         let body = Body::from(contents);
         Response::builder()
-            .header("Content-Type", "image/png")
+            .header(
+                "Content-Type",
+                format!(
+                    "image/{}",
+                    if fel_kep.kep.starts_with("tmp/") {
+                        "png"
+                    } else {
+                        "avif"
+                    }
+                ),
+            )
             .body(body)
             .unwrap()
     } else {
@@ -69,7 +79,17 @@ pub async fn leintes_image_get(cucc: Query<ImgLeintQuery>) -> Response {
         let _ = kep_file.read_to_end(&mut contents).await;
         let body = Body::from(contents);
         Response::builder()
-            .header("Content-Type", "image/png")
+            .header(
+                "Content-Type",
+                format!(
+                    "image/{}",
+                    if actual.starts_with("tmp/") {
+                        "png"
+                    } else {
+                        "avif"
+                    }
+                ),
+            )
             .body(body)
             .unwrap()
     } else {
