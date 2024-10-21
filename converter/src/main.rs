@@ -23,7 +23,7 @@ async fn main() {
             .await
             .expect("Adatbázis lekérés sikertelen");
         let ffmpeg = get_ffmpeg();
-        if Utc::now().hour() < 20 && Utc::now().hour() >= 8 {
+        if (Utc::now().hour() < 20 && Utc::now().hour() >= 8) || env::var("TIME_BYPASS").is_ok() {
             convert(data, ffmpeg, &dir, &db).await;
             println!("===== DONE =====");
         } else {
