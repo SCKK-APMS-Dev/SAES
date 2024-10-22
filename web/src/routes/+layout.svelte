@@ -26,7 +26,7 @@
 	left-1/2 top-1/2 h-96 w-96 -translate-x-1/2 -translate-y-1/2 transform cursor-progress content-center overflow-hidden rounded-full border-2 shadow-lg"
 		>
 			<!-- <span class="loader"></span> -->
-			<img src="/macska.gif" alt="loading" class=" z-50 block w-[1000px] object-top" />
+			<img src="/macska.avif" alt="loading" class=" z-50 block w-[1000px] object-top" />
 		</div>
 	</div>
 {/if}
