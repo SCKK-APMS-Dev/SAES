@@ -17,7 +17,11 @@
 	<div class="ml-2 flex flex-shrink items-center gap-2 xl:ml-[10vw]">
 		<h1 class="hidden text-3xl font-bold drop-shadow-xl md:block">Műszakvezetés</h1>
 		<h1 class="text-3xl font-bold drop-shadow-xl md:hidden">Műszakv.</h1>
-		<a href="/ucp/mv/tools" aria-label="tools" class="icon-[tabler--tool] min-h-6 min-w-6"></a>
+		<a
+			href="/ucp/mv/tools"
+			aria-label="tools"
+			class="icon-[tabler--tool] hover:text-taxi min-h-6 min-w-6 transition-colors duration-500"
+		></a>
 		<Tooltip placement="bottom">Eszközök megnyitása</Tooltip>
 	</div>
 	<button
