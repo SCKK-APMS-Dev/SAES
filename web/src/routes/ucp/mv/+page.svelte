@@ -94,4 +94,10 @@
 			<h2 class="text-3xl font-bold">{data.stat.szamla.elutasitva}</h2>
 		</div>
 	</div>
+	<div class="mt-4 text-white">
+		<h1 class="text-2xl">Mivel nincs ilyen menő cuccom erre így ide kiírom a változásokat:</h1>
+		<h2>- Weboldal némítása ideiglenes kikerült megint, addig a zene se szól.</h2>
+		<h2>- Hívásszámláló átkerült az eszközökhöz.</h2>
+		<h1 class="text-xl font-bold">Érdemes a "Műszakvezetés" címtől jobbra nézni! 😉</h1>
+	</div>
 </div>

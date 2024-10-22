@@ -60,7 +60,7 @@
 
 	const playmusic = () => {
 		if (!played && !music_muted) {
-			audio?.play();
+			// audio?.play();
 		}
 	};
 	const switchMute = async () => {
@@ -165,7 +165,7 @@
 		{/if}
 		{#if initial_socket}
 			<div class="relative z-20 border-b bg-white dark:bg-gray-700 dark:text-white">
-				<div class="px-6 lg:container md:px-12 lg:mx-auto lg:px-6 lg:py-4">
+				<div class="mx-0 px-0 lg:container lg:mx-auto lg:py-4 xl:px-12">
 					<div class="flex items-center justify-between">
 						<div class="relative z-20 flex items-center gap-3">
 							<img
@@ -190,7 +190,7 @@
 							/>
 							<label
 								for="hamburger"
-								class="peer-checked:hamburger relative z-20 -mr-6 block cursor-pointer p-6 lg:hidden"
+								class="peer-checked:hamburger relative z-20 mr-6 block cursor-pointer p-6 lg:hidden"
 							>
 								<div
 									aria-hidden="true"
@@ -266,11 +266,6 @@
 												>
 													Műszakvezetés
 												</a>
-												<button
-													on:click={switchMute}
-													class="icon-[mdi--mute] text-3xl"
-													class:text-red-600={music_muted}
-												></button>
 											</div>
 										{/if}
 									</div>

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { Tooltip } from 'flowbite-svelte';
 	import MaterialSymbolsMenu from '~icons/material-symbols/menu';
 	let nav: HTMLDivElement;
 	const tognav = () => {
@@ -13,9 +14,11 @@
 </script>
 
 <nav class="grid grid-cols-2 items-center justify-between bg-emerald-700 text-white lg:flex">
-	<div class="ml-[10vw] flex items-center gap-2">
-		<h1 class="hidden text-3xl font-bold drop-shadow-xl xl:block">Műszakvezetés</h1>
-		<h1 class="text-3xl font-bold drop-shadow-xl xl:hidden">Műszakv.</h1>
+	<div class="ml-2 flex flex-shrink items-center gap-2 xl:ml-[10vw]">
+		<h1 class="hidden text-3xl font-bold drop-shadow-xl md:block">Műszakvezetés</h1>
+		<h1 class="text-3xl font-bold drop-shadow-xl md:hidden">Műszakv.</h1>
+		<a href="/ucp/mv/tools" aria-label="tools" class="icon-[tabler--tool] min-h-6 min-w-6"></a>
+		<Tooltip placement="bottom">Eszközök megnyitása</Tooltip>
 	</div>
 	<button
 		class="mr-[10vw] cursor-pointer self-center justify-self-end text-3xl font-semibold transition-all duration-200 hover:text-emerald-500 lg:hidden"
@@ -25,7 +28,7 @@
 	</button>
 	<div
 		bind:this={nav}
-		class="child:px-2 child:rounded-lg child:drop-shadow-xl col-span-2 hidden flex-col items-center justify-center text-center text-xl md:flex-row lg:z-auto lg:col-span-1 lg:mr-[10vw] lg:!flex"
+		class="child:px-2 child:rounded-lg child:drop-shadow-xl col-span-2 hidden flex-col items-center justify-center text-center text-xl md:flex-row lg:z-auto lg:col-span-1 lg:!flex xl:mr-[10vw]"
 	>
 		<a href="/ucp/mv" class="transition-all duration-200 hover:bg-emerald-600">Főoldal</a>
 		<a href="/ucp/mv/stat/current" class="transition-all duration-200 hover:bg-emerald-600"
@@ -33,8 +36,6 @@
 		>
 		<a href="/ucp/mv/stat/previous" class="transition-all duration-200 hover:bg-emerald-600"
 			>Előző hét</a
-		>
-		<a href="/ucp/mv/call" class="transition-all duration-200 hover:bg-emerald-600">Hívásszámláló</a
 		>
 		<a href="/ucp/mv/potlekok" class="transition-all duration-200 hover:bg-emerald-600">Pótlékok</a>
 		<a href="/ucp/mv/leintesek" class="transition-all duration-200 hover:bg-emerald-600"

@@ -224,6 +224,7 @@
 		/>
 	{/if}
 	<button
+		aria-label="Kép megnézése"
 		class="absolute right-16 top-2 flex items-center justify-center rounded-xl bg-black bg-opacity-40 p-2 text-3xl font-bold text-blue-600 duration-150 hover:bg-opacity-90"
 		on:click={() => {
 			if (bindEdit.custombg) {
@@ -234,6 +235,7 @@
 		}}><span class="icon-[mdi--image] m-auto"></span></button
 	>
 	<button
+		aria-label="Bezárás"
 		class="absolute right-4 top-2 flex items-center justify-center rounded-xl bg-black bg-opacity-40 p-2 text-3xl font-bold text-red-600 duration-150 hover:bg-opacity-90"
 		on:click={() => closeModal()}><span class="icon-[carbon--close-filled] m-auto"></span></button
 	>
@@ -442,6 +444,7 @@
 	<div class="mb-5 mt-5 flex items-center justify-center gap-4">
 		{#if pagee > 0}
 			<button
+				aria-label="Előző oldal"
 				on:click={() => switchPage('prev')}
 				class="hover:bg-pos-100 bg-size-200 bg-pos-0 rounded-full bg-gradient-to-r from-emerald-500 via-teal-600 to-red-500 text-white duration-300"
 				style="width: calc(5vw*2.5); height: 5vh;"
@@ -450,6 +453,7 @@
 		{/if}
 		{#if Math.ceil(originallength / 10) - 1 > pagee}
 			<button
+				aria-label="Következő oldal"
 				on:click={() => switchPage('next')}
 				class="hover:bg-pos-100 bg-size-200 bg-pos-0 rounded-full bg-gradient-to-r from-emerald-500 via-teal-600 to-red-500 text-white duration-300"
 				style="width: calc(5vw*2.5); height: 5vh;"
