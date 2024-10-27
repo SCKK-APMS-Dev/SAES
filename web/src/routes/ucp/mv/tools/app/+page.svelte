@@ -17,6 +17,10 @@
 	let all: allmuszak = {};
 	let hivasok = [0, 0, 0];
 	const handle = () => {
+		n = {};
+		a = {};
+		b = {};
+		hivasok = [0, 0, 0];
 		let rows = code.split('\n');
 		for (let row of rows) {
 			if (row.length > 0) {
