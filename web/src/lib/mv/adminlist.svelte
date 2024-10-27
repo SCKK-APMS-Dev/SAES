@@ -349,7 +349,7 @@
 							<TableBodyCell
 								>{new Date(potle.date).getUTCFullYear()}.{new Date(potle.date).getUTCMonth() +
 									1}.{new Date(potle.date).getUTCDate()}. {new Date(potle.date).getUTCHours() +
-									2}:{new Date(potle.date).getUTCMinutes()}</TableBodyCell
+									1}:{new Date(potle.date).getUTCMinutes()}</TableBodyCell
 							>
 							<TableBodyCell
 								>{potle.owner}

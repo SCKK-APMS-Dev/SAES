@@ -68,7 +68,7 @@
 						<h1 class="text-gray-200 drop-shadow-xl">
 							{new Date(potle.date).getUTCFullYear()}.{new Date(potle.date).getUTCMonth() +
 								1}.{new Date(potle.date).getUTCDate()}. {new Date(potle.date).getUTCHours() +
-								2}:{new Date(potle.date).getUTCMinutes()}
+								1}:{new Date(potle.date).getUTCMinutes()}
 						</h1>
 						{#if potle.reason}
 							<h1 class="drop-shadow-xl">Megjegyzés: {potle.reason}</h1>
