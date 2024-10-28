@@ -3,12 +3,12 @@
 	import { navigating } from '$app/stores';
 	import { loading } from '$lib/loading';
 	// biome-ignore lint/suspicious/noConfusingLabels: <explanation>
-	$: $loading = !!$navigating;
+	$: $loading = !!$navigating;	
 	// $: $loading = true; // testing
 </script>
 
 <svelte:head>
-	<title>SAES Web</title>
+	<title>SCKK Weboldal</title>
 	<meta name="description" content="A See City Közlekedési Központ weboldala" />
 	<meta content="SCKK Weboldal" property="og:title" />
 	<meta content="https://sckk.hu" property="og:url" />

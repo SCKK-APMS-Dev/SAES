@@ -4,10 +4,15 @@
 	export let data: PageData;
 	import Error from '$lib/error.svelte';
 	import { onMount } from 'svelte';
+	import { tz } from '@date-fns/tz';
+	import { hu } from 'date-fns/locale';
 	import type { PageData } from '../../routes/ucp/potlekok/$types';
+	import { formatRelative } from 'date-fns';
+	import { mainTimeFormatLocale } from '$lib/time';
 	let multipage = false;
 	export let tipus = '';
 	export let display = '';
+	const tzOffsetMs = new Date().getTimezoneOffset() * 60 * 1000;
 	let handled_potleks: any = [];
 	let pagee = data.page as number;
 	function switchPage(mode: 'next' | 'prev') {
@@ -41,6 +46,11 @@
 	onMount(() => {
 		render();
 	});
+	const locale = {
+		...hu,
+		//@ts-expect-error
+		formatRelative: (token) => mainTimeFormatLocale[token]
+	};
 </script>
 
 <Error {data}>
@@ -66,9 +76,9 @@
 					>
 						<h1 class="-mb-2 text-2xl font-bold drop-shadow-xl">{potle.status.toUpperCase()}</h1>
 						<h1 class="text-gray-200 drop-shadow-xl">
-							{new Date(potle.date).getUTCFullYear()}.{new Date(potle.date).getUTCMonth() +
-								1}.{new Date(potle.date).getUTCDate()}. {new Date(potle.date).getUTCHours() +
-								1}:{new Date(potle.date).getUTCMinutes()}
+							{formatRelative(new Date(new Date(potle.date).valueOf() - tzOffsetMs), new Date(), {
+								locale
+							})}
 						</h1>
 						{#if potle.reason}
 							<h1 class="drop-shadow-xl">Megjegyzés: {potle.reason}</h1>
@@ -148,6 +158,7 @@
 		<div class="mb-3 flex items-center justify-center gap-4">
 			{#if pagee > 0}
 				<button
+					aria-label="Előző oldal"
 					on:click={() => switchPage('prev')}
 					class="hover:bg-pos-100 bg-size-200 bg-pos-0 rounded-full bg-gradient-to-r from-emerald-500 via-teal-600 to-red-500 text-white duration-300"
 					style="width: calc(5vw*2.5); height: 5vh;"
@@ -156,6 +167,7 @@
 			{/if}
 			{#if Math.ceil(data.potlekok.length / 10) - 1 > pagee}
 				<button
+					aria-label="Következő oldal"
 					on:click={() => switchPage('next')}
 					class="hover:bg-pos-100 bg-size-200 bg-pos-0 rounded-full bg-gradient-to-r from-emerald-500 via-teal-600 to-red-500 text-white duration-300"
 					style="width: calc(5vw*2.5); height: 5vh;"
