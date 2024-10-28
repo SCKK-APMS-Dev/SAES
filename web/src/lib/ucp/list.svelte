@@ -68,8 +68,6 @@
 						class:to-gray-700={potle.status === 'feltöltve'}
 					>
 						<h1 class="-mb-2 text-2xl font-bold drop-shadow-xl">{potle.status.toUpperCase()}</h1>
-						<h1>{potle.date}</h1>
-						<h1>{new Date(potle.date).getTimezoneOffset()}</h1>
 						<h1 class="text-gray-200 drop-shadow-xl">
 							{formatRelative(new Date(new Date(potle.date).valueOf() - data.offset!), new Date(), {
 								locale

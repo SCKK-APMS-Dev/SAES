@@ -17,7 +17,6 @@ export const load = (async ({ cookies, url }) => {
 			try {
 				return {
 					potlekok: await aha.json(),
-					offset: new Date().getTimezoneOffset() * 60 * 1000,
 					page: url.searchParams.get("page")
 						? url.searchParams.get("page")
 						: 0,
