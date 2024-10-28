@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { loading } from '$lib/loading';
 	import { onMount } from 'svelte';
+	import { formatRelative } from 'date-fns';
+	import { locale, tzOffsetMs } from '$lib/time';
 	import {
 		Tooltip,
 		Button,
@@ -347,9 +349,11 @@
 					{#each potleks.data.items as potle}
 						<TableBodyRow>
 							<TableBodyCell
-								>{new Date(potle.date).getUTCFullYear()}.{new Date(potle.date).getUTCMonth() +
-									1}.{new Date(potle.date).getUTCDate()}. {new Date(potle.date).getUTCHours() +
-									1}:{new Date(potle.date).getUTCMinutes()}</TableBodyCell
+								>{formatRelative(
+									new Date(new Date(potle.date).valueOf() - tzOffsetMs),
+									new Date(),
+									{ locale }
+								)}</TableBodyCell
 							>
 							<TableBodyCell
 								>{potle.owner}

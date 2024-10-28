@@ -4,15 +4,12 @@
 	export let data: PageData;
 	import Error from '$lib/error.svelte';
 	import { onMount } from 'svelte';
-	import { tz } from '@date-fns/tz';
-	import { hu } from 'date-fns/locale';
 	import type { PageData } from '../../routes/ucp/potlekok/$types';
 	import { formatRelative } from 'date-fns';
-	import { mainTimeFormatLocale } from '$lib/time';
+	import { locale, tzOffsetMs } from '$lib/time';
 	let multipage = false;
 	export let tipus = '';
 	export let display = '';
-	const tzOffsetMs = new Date().getTimezoneOffset() * 60 * 1000;
 	let handled_potleks: any = [];
 	let pagee = data.page as number;
 	function switchPage(mode: 'next' | 'prev') {
@@ -46,11 +43,6 @@
 	onMount(() => {
 		render();
 	});
-	const locale = {
-		...hu,
-		//@ts-expect-error
-		formatRelative: (token) => mainTimeFormatLocale[token]
-	};
 </script>
 
 <Error {data}>
