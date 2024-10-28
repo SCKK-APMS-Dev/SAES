@@ -6,7 +6,8 @@
 	import { onMount } from 'svelte';
 	import type { PageData } from '../../routes/ucp/potlekok/$types';
 	import { formatRelative } from 'date-fns';
-	import { locale, tzOffsetMs } from '$lib/time';
+	import { locale } from '$lib/time';
+	import { tz } from '@date-fns/tz';
 	let multipage = false;
 	export let tipus = '';
 	export let display = '';
@@ -67,8 +68,10 @@
 						class:to-gray-700={potle.status === 'feltöltve'}
 					>
 						<h1 class="-mb-2 text-2xl font-bold drop-shadow-xl">{potle.status.toUpperCase()}</h1>
+						<h1>{potle.date}</h1>
+						<h1>{new Date(potle.date).getTimezoneOffset()}</h1>
 						<h1 class="text-gray-200 drop-shadow-xl">
-							{formatRelative(new Date(new Date(potle.date).valueOf() - tzOffsetMs), new Date(), {
+							{formatRelative(new Date(new Date(potle.date).valueOf() - data.offset!), new Date(), {
 								locale
 							})}
 						</h1>

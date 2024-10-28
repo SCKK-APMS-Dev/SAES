@@ -9,7 +9,6 @@ const mainTimeFormatLocale = {
     other: "yyyy.MM.dd HH:mm",
 };
 
-export const tzOffsetMs = new Date().getTimezoneOffset() * 60 * 1000;
 export const locale = {
     ...hu,
     //@ts-expect-error

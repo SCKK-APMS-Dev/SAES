@@ -2,7 +2,7 @@
 	import { loading } from '$lib/loading';
 	import { onMount } from 'svelte';
 	import { formatRelative } from 'date-fns';
-	import { locale, tzOffsetMs } from '$lib/time';
+	import { locale } from '$lib/time';
 	import {
 		Tooltip,
 		Button,
@@ -350,7 +350,7 @@
 						<TableBodyRow>
 							<TableBodyCell
 								>{formatRelative(
-									new Date(new Date(potle.date).valueOf() - tzOffsetMs),
+									new Date(new Date(potle.date).valueOf() - data.offset!),
 									new Date(),
 									{ locale }
 								)}</TableBodyCell
