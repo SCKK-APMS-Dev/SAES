@@ -1,10 +1,10 @@
 import { hu } from "date-fns/locale";
 
 const mainTimeFormatLocale = {
-    lastWeek: "'Múlt hét' EEEE HH:mm",
-    yesterday: "'Tegnap' HH:mm",
-    today: "'Ma' HH:mm",
-    tomorrow: "'Holnap' HH:mm",
+    lastWeek: "EEEE HH:mm",
+    yesterday: "'tegnap' HH:mm",
+    today: "'ma' HH:mm",
+    tomorrow: "'holnap' HH:mm",
     nextWeek: "dddd 'um' LT",
     other: "yyyy.MM.dd HH:mm",
 };
