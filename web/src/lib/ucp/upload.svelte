@@ -140,18 +140,25 @@
 				{#if tipus === 'leintés'}
 					<div class="flex flex-col">
 						<img
+							loading="lazy"
 							src={`${data.api}/limg?id=${nyam}&ver=0`}
 							alt=""
 							class="max-h-5xl m-auto max-w-5xl py-3"
 						/>
 						<img
+							loading="lazy"
 							src={`${data.api}/limg?id=${nyam}&ver=1`}
 							alt=""
 							class="max-h-5xl m-auto max-w-5xl py-3"
 						/>
 					</div>
 				{:else}
-					<img src={`${data.api}/img?id=${nyam}`} alt="" class="max-h-5xl m-auto max-w-5xl py-3" />
+					<img
+						loading="lazy"
+						src={`${data.api}/img?id=${nyam}`}
+						alt=""
+						class="max-h-5xl m-auto max-w-5xl py-3"
+					/>
 				{/if}
 			{/each}
 		</div>

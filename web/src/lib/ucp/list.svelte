@@ -7,7 +7,6 @@
 	import type { PageData } from '../../routes/ucp/potlekok/$types';
 	import { formatRelative } from 'date-fns';
 	import { locale } from '$lib/time';
-	import { tz } from '@date-fns/tz';
 	let multipage = false;
 	export let tipus = '';
 	export let display = '';
@@ -30,9 +29,9 @@
 	}
 	function render() {
 		handled_potleks = [];
-		if (data.potlekok.length > 10 && data.potlekok.length > 0) {
+		if (data.potlekok.length > 20 && data.potlekok.length > 0) {
 			multipage = true;
-			for (let i = (pagee as number) * 10; i < (pagee as number) * 10 + 10; i++) {
+			for (let i = (pagee as number) * 20; i < (pagee as number) * 20 + 20; i++) {
 				if (data.potlekok[i]) {
 					handled_potleks.push(data.potlekok[i]);
 				}
@@ -86,6 +85,7 @@
 									on:mouseleave={() => (potle.focus1 = false)}
 								>
 									<img
+										loading="lazy"
 										src={`${data.api}/limg?id=${potle.id}&ver=0`}
 										alt=""
 										class="max-h-xl m-auto max-w-xl py-2 drop-shadow-xl"
@@ -104,6 +104,7 @@
 									on:mouseleave={() => (potle.focus2 = false)}
 								>
 									<img
+										loading="lazy"
 										src={`${data.api}/limg?id=${potle.id}&ver=1`}
 										alt=""
 										class="max-h-xl m-auto max-w-xl py-2 drop-shadow-xl"
@@ -124,6 +125,7 @@
 								on:mouseleave={() => (potle.focus = false)}
 							>
 								<img
+									loading="lazy"
 									src={`${data.api}/img?id=${potle.id}`}
 									alt=""
 									class="max-h-xl m-auto max-w-xl py-2 drop-shadow-xl"

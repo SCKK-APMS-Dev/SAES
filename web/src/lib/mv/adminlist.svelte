@@ -65,9 +65,9 @@
 			potleks.data.items = [];
 			let ret = await fatcs.json();
 
-			if (ret.data.items.length > 10 && ret.data.items.length > 0) {
+			if (ret.data.items.length > 20 && ret.data.items.length > 0) {
 				multipage = true;
-				for (let i = pagee * 10; i < (pagee as number) * 10 + 10; i++) {
+				for (let i = pagee * 20; i < (pagee as number) * 20 + 20; i++) {
 					if (ret.data.items[i]) {
 						handled.push(ret.data.items[i]);
 					}
@@ -366,6 +366,7 @@
 									<div class="flex flex-col xl:flex-row">
 										<a href={`${potleks.api}/limg?id=${potle.id}&ver=0`} target="”_blank”"
 											><img
+												loading="lazy"
 												src={`${potleks.api}/limg?id=${potle.id}&ver=0`}
 												alt=""
 												class="lg:w-52"
@@ -373,6 +374,7 @@
 										>
 										<a href={`${potleks.api}/limg?id=${potle.id}&ver=1`} target="”_blank”"
 											><img
+												loading="lazy"
 												src={`${potleks.api}/limg?id=${potle.id}&ver=1`}
 												alt=""
 												class="lg:w-52"
@@ -381,7 +383,12 @@
 									</div>
 								{:else}
 									<a href={`${potleks.api}/img?id=${potle.id}`} target="”_blank”"
-										><img src={`${potleks.api}/img?id=${potle.id}`} alt="" class="lg:w-52" /></a
+										><img
+											loading="lazy"
+											src={`${potleks.api}/img?id=${potle.id}`}
+											alt=""
+											class="lg:w-52"
+										/></a
 									>
 								{/if}
 							</TableBodyCell>
