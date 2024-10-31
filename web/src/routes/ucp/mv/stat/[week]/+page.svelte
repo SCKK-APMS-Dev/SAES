@@ -105,6 +105,7 @@
 										{/if}
 									</button>
 									<a
+										aria-label="Link megnyitása"
 										class="ml-1 flex items-center justify-center rounded-full bg-gray-600 p-1 transition-colors duration-200 hover:bg-gray-800"
 										href={`${$page.url.origin}/list/${key2.replace(' ', '_')}/${getAlterText(key)}`}
 										target="”_blank”"

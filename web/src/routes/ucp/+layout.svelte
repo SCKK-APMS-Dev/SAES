@@ -8,7 +8,7 @@
 	import { loading } from '$lib/loading.js';
 	import { io } from 'socket.io-client';
 	import { socket } from '$lib/socket.js';
-	import { fly } from 'svelte/transition';
+	import ViewTransition from '$lib/navigation.svelte';
 	let maintenance = false;
 	let initial_socket = false;
 	let announcement = false;
@@ -294,6 +294,7 @@
 					>!
 				</h2>
 			</header>
+			<ViewTransition />
 			<main>
 				<slot />
 			</main>
