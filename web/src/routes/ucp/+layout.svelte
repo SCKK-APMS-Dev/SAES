@@ -14,7 +14,7 @@
 	let initial_socket = false;
 	let announcement = false;
 	let nosocket: boolean | string = 'Socket csatlakozás';
-	let tip = !data.error ? (data.layout.am ? 'TOW' : 'TAXI') : 'SCKK';
+	let tip = !data.error && !data.noaccess ? (data.layout.am ? 'TOW' : 'TAXI') : 'SCKK';
 	onMount(() => {
 		if (!data.noaccess) {
 			$socket = io(data.api as string, {
