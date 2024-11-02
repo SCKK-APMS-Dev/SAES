@@ -1,0 +1,116 @@
+<script lang="ts">
+	export let tip;
+	export let isAdmin = false;
+	export let am = false;
+</script>
+
+<header>
+	<div class="relative z-20 border-b bg-white dark:bg-gray-700 dark:text-white">
+		<div class="mx-0 px-0 lg:container lg:mx-auto lg:py-4 xl:px-12">
+			<div class="flex items-center justify-between">
+				<div class="relative z-20 flex items-center gap-3">
+					<img
+						src="/favicon.png"
+						class="pointer-events-none ml-5 drop-shadow-xl"
+						width="40"
+						height="40"
+						alt="SCKK Logó"
+					/>
+					<h1 class="text-3xl font-bold drop-shadow-xl">
+						{tip}
+					</h1>
+				</div>
+
+				<div class="flex items-center justify-end border-l lg:border-l-0">
+					<input type="checkbox" name="hamburger" id="hamburger" class="peer opacity-0" hidden />
+					<label
+						for="hamburger"
+						class="peer-checked:hamburger relative z-20 mr-6 block cursor-pointer p-6 lg:hidden"
+					>
+						<div
+							aria-hidden="true"
+							class="m-auto h-0.5 w-6 rounded bg-white transition duration-300"
+						></div>
+						<div
+							aria-hidden="true"
+							class="m-auto mt-2 h-0.5 w-6 rounded bg-white transition duration-300"
+						></div>
+					</label>
+
+					<div
+						class="fixed inset-0 w-[calc(100%-4.5rem)] translate-x-[-100%] border-r bg-white shadow-xl transition duration-300 peer-checked:translate-x-0 lg:static lg:w-auto lg:translate-x-0 lg:border-r-0 lg:shadow-none dark:bg-gray-700"
+					>
+						<div class="flex h-full flex-col justify-between lg:flex-row lg:items-center">
+							<ul
+								class="items-center space-y-8 px-6 pt-32 text-center text-gray-700 md:px-12 lg:flex lg:space-x-12 lg:space-y-0 lg:pt-0"
+							>
+								<li>
+									<a
+										href="/ucp"
+										class="before:bg-taxi group relative before:absolute before:inset-x-0 before:-bottom-1.5 before:h-2 before:origin-right before:scale-x-0 before:transition before:duration-200 hover:before:origin-left hover:before:scale-x-100"
+									>
+										<span class="relative text-black dark:text-white">Kezdőlap</span>
+									</a>
+								</li>
+								<li>
+									<a
+										href="/ucp/szabalyzat"
+										class="before:bg-taxi group relative before:absolute before:inset-x-0 before:-bottom-1.5 before:h-2 before:origin-right before:scale-x-0 before:transition before:duration-200 hover:before:origin-left hover:before:scale-x-100"
+									>
+										<span class="relative text-black dark:text-white">Szabályzat</span>
+									</a>
+								</li>
+								<li>
+									<a
+										href="/ucp/potlekok"
+										class="before:bg-taxi group relative before:absolute before:inset-x-0 before:-bottom-1.5 before:h-2 before:origin-right before:scale-x-0 before:transition before:duration-200 hover:before:origin-left hover:before:scale-x-100"
+									>
+										<span class="relative text-black dark:text-white">Pótlékok</span>
+									</a>
+								</li>
+								<li>
+									<a
+										href="/ucp/leintesek"
+										class="before:bg-taxi group relative before:absolute before:inset-x-0 before:-bottom-1.5 before:h-2 before:origin-right before:scale-x-0 before:transition before:duration-200 hover:before:origin-left hover:before:scale-x-100"
+									>
+										<span class="relative text-black dark:text-white"
+											>Leintések {#if am}/ Bejelentések{/if}</span
+										>
+									</a>
+								</li>
+								<li>
+									<a
+										href="/ucp/szamlak"
+										class="before:bg-taxi group relative before:absolute before:inset-x-0 before:-bottom-1.5 before:h-2 before:origin-right before:scale-x-0 before:transition before:duration-200 hover:before:origin-left hover:before:scale-x-100"
+									>
+										<span class="relative text-black dark:text-white">Szereltetési számlák</span>
+									</a>
+								</li>
+							</ul>
+
+							<div
+								class="border-t px-6 py-8 md:px-12 md:py-16 lg:border-l lg:border-t-0 lg:py-0 lg:pl-6 lg:pr-0"
+							>
+								{#if isAdmin}
+									<div class="flex items-center gap-3">
+										<a
+											href="/ucp/mv"
+											class="from-taxi hover:bg-pos-100 bg-size-200 bg-pos-0 block rounded-full bg-gradient-to-r via-amber-600 to-red-500 px-6 py-3 text-center font-bold text-white drop-shadow-lg transition-all duration-500"
+										>
+											Műszakvezetés
+										</a>
+									</div>
+								{/if}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<h2 class="bg-gradient-to-r from-rose-600 to-amber-600 py-1 text-center text-xl text-white">
+		Nem vagy biztos valamiben? Nézd meg a <a href="/ucp/szabalyzat" class="text-taxi font-bold"
+			>szabályzatot</a
+		>!
+	</h2>
+</header>
