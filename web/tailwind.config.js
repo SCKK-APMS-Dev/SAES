@@ -3,14 +3,12 @@ import flowbite from 'flowbite/plugin';
 
 /** @type {import('tailwindcss').Config} */
 export default {
-	content: [
-		'./src/**/*.{html,js,svelte,ts}',
-		'./node_modules/flowbite/**/*.js',
-	],
+	content: ['./src/**/*.{html,js,svelte,ts}', './node_modules/flowbite/**/*.js'],
 	theme: {
 		extend: {
 			fontFamily: {
-				sans: ['Poppins']
+				sans: ['Poppins'],
+				itim: ['Itim']
 			},
 			colors: {
 				taxi: '#fece01'
@@ -30,5 +28,6 @@ export default {
 			addVariant('child-hover', '& > *:hover');
 		},
 		addDynamicIconSelectors(),
-		flowbite	]
+		flowbite
+	]
 };
