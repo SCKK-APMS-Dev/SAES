@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Dropzone, Checkbox, Tooltip } from 'flowbite-svelte';
+	import { Dropzone, Label, Checkbox, Tooltip } from 'flowbite-svelte';
 
 	let files: FileList;
 	interface Drivers {
@@ -46,7 +46,6 @@
 <div class="mt-5 items-center justify-center text-center text-white">
 	<h1 class=" mb-2 text-3xl font-bold">SCKK Log alapú hívás számláló</h1>
 	{#if active}
-		<h2 class="font-itim text-gray-400">Kérlek húzd ide a logokat:</h2>
 		<div class="mb-2 mt-1 flex items-center justify-center gap-2">
 			<Checkbox bind:checked={samecall} />
 			<h2>Ismétlődő hívásszám engedélyezése</h2>
@@ -56,8 +55,9 @@
 				fájl esetében automatikusan engedélyezve van, több fájlnál csak azonos embertől ajánlott.</Tooltip
 			>
 		</div>
+		<Label class="text-white">Kattints a gombra, hogy kiválaszd a fájlokat</Label>
 		<Dropzone
-			class="m-auto h-[30vh] w-[30vw]"
+			class="m-auto h-12 w-96"
 			multiple={true}
 			accept=".log"
 			on:change={zoneChange}
