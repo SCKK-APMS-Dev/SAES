@@ -31,7 +31,7 @@
 				dates.push((Number(files.files[i].lastModified.toString()) + offsetMs).toString());
 			}
 			formerror = '';
-			const mama = await fetch('/api/upload', {
+			const mama = await fetch('/web-api/upload', {
 				method: 'POST',
 				headers: {
 					tip: tipus,

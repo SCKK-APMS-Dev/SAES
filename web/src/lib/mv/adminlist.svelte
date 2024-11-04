@@ -53,7 +53,7 @@
 	let editid = 0;
 	async function render() {
 		$loading = true;
-		const fatcs = await fetch('/api/admin', {
+		const fatcs = await fetch('/web-api/admin', {
 			headers: {
 				status: jona as string,
 				am: String(am),
@@ -116,7 +116,7 @@
 		editing = true;
 	}
 	async function quickTools(type: string, id: number) {
-		const fatcs = await fetch('/api/admin', {
+		const fatcs = await fetch('/web-api/admin', {
 			headers: {
 				'Content-Type': 'application/json'
 			},
@@ -180,7 +180,7 @@
 		bindbtn.classList.add('cursor-not-allowed');
 		bindbtn.classList.add('bg-emerald-700');
 		bindbtn.disabled = true;
-		const fatcs = await fetch('/api/admin', {
+		const fatcs = await fetch('/web-api/admin', {
 			headers: {
 				'Content-Type': 'application/json'
 			},
