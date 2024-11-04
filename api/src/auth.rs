@@ -97,6 +97,7 @@ pub async fn callback(Query(query): Query<Code>, cookies: Cookies) -> Redirect {
         Cookie::build(("auth_token", object.access_token))
             .max_age(Duration::seconds(object.expires_in))
             .domain(ds.domain.clone())
+            .path("/")
             .build(),
     );
 
