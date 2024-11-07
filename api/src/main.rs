@@ -29,7 +29,7 @@ async fn main() {
     let (layer, io) = SocketIo::new_layer();
     init::main();
     io.ns(
-        "/api",
+        "/",
         move |socket: SocketRef, Data(data): Data<InitialData>| socket::on_connect(socket, data),
     );
     let app = Router::new()
