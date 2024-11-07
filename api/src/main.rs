@@ -34,19 +34,19 @@ async fn main() {
     );
     let app = Router::new()
         .route(
-            "/api",
+            "/",
             get(|| async { "SAES API V2 Axum & SQLx használatával" }),
         )
         .route(
-            "/api/auth",
+            "/auth",
             get(|| async { Redirect::to(&auth::get_auth_url()) }),
         )
-        .route("/api/cb", get(auth::callback))
-        .route("/api/img", get(image_get))
-        .route("/api/list", get(list::list_get))
-        .route("/api/limg", get(leintes_image_get))
-        .route("/api/shorts", get(shorts::get_shorts))
-        .nest("/api/ucp", ucp::routes())
+        .route("/cb", get(auth::callback))
+        .route("/img", get(image_get))
+        .route("/list", get(list::list_get))
+        .route("/limg", get(leintes_image_get))
+        .route("/shorts", get(shorts::get_shorts))
+        .nest("/ucp", ucp::routes())
         .layer(
             ServiceBuilder::new()
                 .layer(CorsLayer::permissive())
