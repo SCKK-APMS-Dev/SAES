@@ -6,26 +6,24 @@ use serde::Serialize;
 
 use crate::{
     db::data,
-    utils::{middle::Tag, sql::get_conn},
+    utils::{middle::Tag, sql::get_db_conn},
 };
 
 #[derive(Debug, Serialize)]
-pub struct HomeStat {
+pub struct MVStat {
     feltoltve: i32,
     elfogadva: i32,
     elutasitva: i32,
 }
 #[derive(Debug, Serialize)]
-pub struct HomeStatReturn {
-    potlek: HomeStat,
-    leintes: HomeStat,
-    szamla: HomeStat,
+pub struct MVStatReturn {
+    potlek: MVStat,
+    leintes: MVStat,
+    szamla: MVStat,
 }
 
-pub async fn admin_home_stat(
-    ext: Extension<Tag>,
-) -> Result<impl IntoResponse, (StatusCode, String)> {
-    let db = get_conn().await;
+pub async fn mv_home_stat(ext: Extension<Tag>) -> Result<impl IntoResponse, (StatusCode, String)> {
+    let db = get_db_conn().await;
     let statreturn = data::Entity::find()
         .filter(data::Column::Am.eq(if ext.am == true { 1 } else { 0 }))
         .all(&db)
@@ -69,18 +67,18 @@ pub async fn admin_home_stat(
             }
         }
     }
-    Ok(Json(HomeStatReturn {
-        potlek: HomeStat {
+    Ok(Json(MVStatReturn {
+        potlek: MVStat {
             elfogadva: potlekok[1],
             elutasitva: potlekok[2],
             feltoltve: potlekok[0],
         },
-        leintes: HomeStat {
+        leintes: MVStat {
             elfogadva: leintesek[1],
             elutasitva: leintesek[2],
             feltoltve: leintesek[0],
         },
-        szamla: HomeStat {
+        szamla: MVStat {
             elfogadva: szamlak[1],
             elutasitva: szamlak[2],
             feltoltve: szamlak[0],

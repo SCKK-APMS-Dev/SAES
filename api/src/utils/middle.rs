@@ -1,6 +1,11 @@
 #![allow(non_snake_case)]
 
-use axum::{extract::Request, http::HeaderMap, middleware::Next, response::IntoResponse};
+use axum::{
+    extract::Request,
+    http::HeaderMap,
+    middleware::Next,
+    response::{IntoResponse, Redirect},
+};
 use reqwest::StatusCode;
 use serde::{Deserialize, Serialize};
 
@@ -28,7 +33,7 @@ pub struct Tag {
     pub am: bool,
 }
 
-pub async fn basic_auth(
+pub async fn ucp_auth(
     headers: HeaderMap,
     mut request: Request,
     next: Next,
@@ -134,22 +139,22 @@ pub async fn basic_auth(
                 return Err((StatusCode::BAD_REQUEST, "Érvénytelen lekérés!".to_string()));
             }
         } else {
-            return Err((StatusCode::NOT_ACCEPTABLE, "Sikertelen lekérés".to_string()));
+            return Ok(Redirect::to("/auth").into_response());
         }
     } else {
         return Err((StatusCode::NOT_FOUND, "Nincs kuki".to_string()));
     };
 }
 
-pub async fn admin_auth(
+pub async fn mv_auth(
     mut req: Request,
     next: Next,
 ) -> Result<impl IntoResponse, (StatusCode, String)> {
     let exts: Option<&Tag> = req.extensions_mut().get();
-    let uwrp = exts.expect("Tag lekérése sikertelen, basic_auth megtörtént?");
+    let uwrp = exts.expect("Tag lekérése sikertelen, ucp_auth megtörtént?");
     if uwrp.admin == true {
         return Ok(next.run(req).await);
     } else {
-        return Err((StatusCode::FORBIDDEN, "Nem vagy admin".to_string()));
+        return Err((StatusCode::FORBIDDEN, "Nem vagy műszakvezető".to_string()));
     }
 }

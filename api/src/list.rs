@@ -4,13 +4,15 @@ use sea_orm::{ColumnTrait, EntityTrait, Order, QueryFilter, QueryOrder};
 
 use crate::{
     db::data,
-    utils::{functions::get_fridays, queries::ListQuery, sql::get_conn},
+    utils::{functions::get_fridays, queries::BaseListQuery, sql::get_db_conn},
 };
 
 #[debug_handler]
-pub async fn list_get(quer: Query<ListQuery>) -> Result<impl IntoResponse, (StatusCode, String)> {
+pub async fn base_list_get(
+    quer: Query<BaseListQuery>,
+) -> Result<impl IntoResponse, (StatusCode, String)> {
     let friday = get_fridays();
-    let db = get_conn().await;
+    let db = get_db_conn().await;
     if quer.tipus.starts_with("potlek") {
         let cuccok = data::Entity::find()
             .filter(data::Column::Owner.eq(quer.driver.clone()))

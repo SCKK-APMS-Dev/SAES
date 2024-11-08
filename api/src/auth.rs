@@ -70,7 +70,7 @@ struct TokenResponse {
 }
 
 #[debug_handler]
-pub async fn callback(Query(query): Query<Code>, cookies: Cookies) -> Redirect {
+pub async fn base_callback(Query(query): Query<Code>, cookies: Cookies) -> Redirect {
     let client = reqwest::Client::new();
     let ds = get_discord_envs();
     let data = [

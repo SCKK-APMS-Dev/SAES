@@ -1,6 +1,6 @@
 use axum::{middleware, routing::get, Router};
 
-use crate::utils::middle::basic_auth;
+use crate::utils::middle::ucp_auth;
 
 mod base;
 mod calls;
@@ -9,9 +9,9 @@ mod mv;
 
 pub fn routes() -> Router {
     Router::new()
-        .route("/", get(base::user_home))
-        .route("/calls", get(calls::calls))
+        .route("/", get(base::ucp_home))
+        .route("/calls", get(calls::ucp_calls))
         .nest("/items", items::routes())
         .nest("/mv", mv::routes())
-        .layer(middleware::from_fn(basic_auth))
+        .layer(middleware::from_fn(ucp_auth))
 }

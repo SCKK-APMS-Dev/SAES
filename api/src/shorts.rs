@@ -2,15 +2,17 @@ use axum::{debug_handler, response::IntoResponse, Json};
 use http::{HeaderMap, StatusCode};
 use sea_orm::EntityTrait;
 
-use crate::{auth::get_discord_envs, db::shorts, utils::sql::get_conn};
+use crate::{auth::get_discord_envs, db::shorts, utils::sql::get_db_conn};
 
 #[debug_handler]
-pub async fn get_shorts(headers: HeaderMap) -> Result<impl IntoResponse, (StatusCode, String)> {
+pub async fn base_get_shorts(
+    headers: HeaderMap,
+) -> Result<impl IntoResponse, (StatusCode, String)> {
     let key = get_discord_envs();
     let headerkey = headers.get("secret-key");
     if headerkey.is_some() {
         if headerkey.unwrap().to_str().unwrap() == key.secret_key {
-            let db = get_conn().await;
+            let db = get_db_conn().await;
             let shorts = shorts::Entity::find()
                 .all(&db)
                 .await

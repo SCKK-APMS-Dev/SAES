@@ -1,40 +1,40 @@
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
-pub struct TypeQuery {
-    pub tipus: String,
-}
-
-#[derive(Debug, Deserialize)]
-pub struct TypeExtraQuery {
-    pub tipus: String,
-    pub dates: String,
-}
-
-#[derive(Debug, Deserialize)]
-pub struct ImgQuery {
+pub struct BaseImgQuery {
     pub id: String,
 }
 
 #[derive(Debug, Deserialize)]
-pub struct ImgLeintQuery {
+pub struct BaseImgLeintQuery {
     pub id: String,
     pub ver: String,
 }
 
 #[derive(Debug, Deserialize)]
-pub struct StatQuery {
+pub struct BaseListQuery {
+    pub tipus: String,
+    pub driver: String,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct UCPTypeQuery {
+    pub tipus: String,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct UCPTypeExtraQuery {
+    pub tipus: String,
+    pub dates: String,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct MVStatQuery {
     pub week: String,
 }
 
 #[derive(Debug, Deserialize)]
-pub struct AdminItemsQuery {
+pub struct MVItemsQuery {
     pub tipus: String,
     pub status: String,
-}
-
-#[derive(Debug, Deserialize)]
-pub struct ListQuery {
-    pub tipus: String,
-    pub driver: String,
 }
