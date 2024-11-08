@@ -160,7 +160,7 @@
 					><span class="icon-[solar--map-arrow-left-bold] h-full w-full"></span></button
 				>
 			{/if}
-			{#if Math.ceil(data.potlekok.length / 10) - 1 > pagee}
+			{#if Math.ceil(data.potlekok.length / 20) - 1 > pagee}
 				<button
 					aria-label="Következő oldal"
 					on:click={() => switchPage('next')}
