@@ -8,18 +8,22 @@
 	<div class="relative z-20 border-b bg-white dark:bg-gray-700 dark:text-white">
 		<div class="mx-0 px-0 lg:container lg:mx-auto lg:py-4 xl:px-12">
 			<div class="flex items-center justify-between">
-				<div class="relative z-20 flex items-center gap-3">
+				<a class="group relative z-20 flex items-center gap-3" href="/ucp">
 					<img
 						src="/favicon.png"
-						class="pointer-events-none ml-5 drop-shadow-xl"
+						class={`pointer-events-none ml-5 rounded-full border-2 border-solid drop-shadow-xl transition-colors duration-200 ${am ? 'group-hover:border-tow' : 'group-hover:border-taxi'}`}
 						width="40"
 						height="40"
 						alt="SCKK Logó"
 					/>
-					<h1 class="text-3xl font-bold drop-shadow-xl">
+					<h1
+						class={`text-3xl font-bold drop-shadow-xl transition-colors duration-200 ${
+							am ? 'group-hover:text-tow' : 'group-hover:text-taxi'
+						}`}
+					>
 						{tip}
 					</h1>
-				</div>
+				</a>
 
 				<div class="flex items-center justify-end border-l lg:border-l-0">
 					<input type="checkbox" name="hamburger" id="hamburger" class="peer opacity-0" hidden />
@@ -47,7 +51,7 @@
 								<li>
 									<a
 										href="/ucp"
-										class="before:bg-taxi group relative before:absolute before:inset-x-0 before:-bottom-1.5 before:h-2 before:origin-right before:scale-x-0 before:transition before:duration-200 hover:before:origin-left hover:before:scale-x-100"
+										class={`${am ? 'before:bg-tow' : 'before:bg-taxi'} group relative before:absolute before:inset-x-0 before:-bottom-1.5 before:h-2 before:origin-right before:scale-x-0 before:transition before:duration-200 hover:before:origin-left hover:before:scale-x-100`}
 									>
 										<span class="relative text-black dark:text-white">Kezdőlap</span>
 									</a>
@@ -55,7 +59,7 @@
 								<li>
 									<a
 										href="/ucp/szabalyzat"
-										class="before:bg-taxi group relative before:absolute before:inset-x-0 before:-bottom-1.5 before:h-2 before:origin-right before:scale-x-0 before:transition before:duration-200 hover:before:origin-left hover:before:scale-x-100"
+										class={`${am ? 'before:bg-tow' : 'before:bg-taxi'} group relative before:absolute before:inset-x-0 before:-bottom-1.5 before:h-2 before:origin-right before:scale-x-0 before:transition before:duration-200 hover:before:origin-left hover:before:scale-x-100`}
 									>
 										<span class="relative text-black dark:text-white">Szabályzat</span>
 									</a>
@@ -63,7 +67,7 @@
 								<li>
 									<a
 										href="/ucp/potlekok"
-										class="before:bg-taxi group relative before:absolute before:inset-x-0 before:-bottom-1.5 before:h-2 before:origin-right before:scale-x-0 before:transition before:duration-200 hover:before:origin-left hover:before:scale-x-100"
+										class={`${am ? 'before:bg-tow' : 'before:bg-taxi'} group relative before:absolute before:inset-x-0 before:-bottom-1.5 before:h-2 before:origin-right before:scale-x-0 before:transition before:duration-200 hover:before:origin-left hover:before:scale-x-100`}
 									>
 										<span class="relative text-black dark:text-white">Pótlékok</span>
 									</a>
@@ -71,7 +75,7 @@
 								<li>
 									<a
 										href="/ucp/leintesek"
-										class="before:bg-taxi group relative before:absolute before:inset-x-0 before:-bottom-1.5 before:h-2 before:origin-right before:scale-x-0 before:transition before:duration-200 hover:before:origin-left hover:before:scale-x-100"
+										class={`${am ? 'before:bg-tow' : 'before:bg-taxi'} group relative before:absolute before:inset-x-0 before:-bottom-1.5 before:h-2 before:origin-right before:scale-x-0 before:transition before:duration-200 hover:before:origin-left hover:before:scale-x-100`}
 									>
 										<span class="relative text-black dark:text-white"
 											>Leintések {#if am}/ Bejelentések{/if}</span
@@ -81,7 +85,7 @@
 								<li>
 									<a
 										href="/ucp/szamlak"
-										class="before:bg-taxi group relative before:absolute before:inset-x-0 before:-bottom-1.5 before:h-2 before:origin-right before:scale-x-0 before:transition before:duration-200 hover:before:origin-left hover:before:scale-x-100"
+										class={`${am ? 'before:bg-tow' : 'before:bg-taxi'} group relative before:absolute before:inset-x-0 before:-bottom-1.5 before:h-2 before:origin-right before:scale-x-0 before:transition before:duration-200 hover:before:origin-left hover:before:scale-x-100`}
 									>
 										<span class="relative text-black dark:text-white">Szereltetési számlák</span>
 									</a>
@@ -95,7 +99,7 @@
 									<div class="flex items-center gap-3">
 										<a
 											href="/ucp/mv"
-											class="from-taxi hover:bg-pos-100 bg-size-200 bg-pos-0 block rounded-full bg-gradient-to-r via-amber-600 to-red-500 px-6 py-3 text-center font-bold text-white drop-shadow-lg transition-all duration-500"
+											class={`${am ? 'from-tow via-blue-600 to-emerald-400' : 'from-taxi via-amber-600 to-red-500'} hover:bg-pos-100 bg-size-200 bg-pos-0 block rounded-full bg-gradient-to-r px-6 py-3 text-center font-bold text-white drop-shadow-lg transition-all duration-500`}
 										>
 											Műszakvezetés
 										</a>
