@@ -16,8 +16,8 @@ use crate::{
     db::data as Data,
     utils::{
         middle::Tag,
-        queries::{TypeExtraQuery, TypeQuery},
-        sql::get_conn,
+        queries::{UCPTypeExtraQuery, UCPTypeQuery},
+        sql::get_db_conn,
     },
 };
 
@@ -35,15 +35,14 @@ pub struct Items {
 
 pub fn routes() -> Router {
     Router::new()
-        .route("/get", get(items_get))
-        .route("/post", post(items_post))
-        .route("/custompost", post(items_custom_post))
+        .route("/get", get(ucp_items_get))
+        .route("/post", post(ucp_items_post))
         .layer(DefaultBodyLimit::max(64000000))
 }
 
 #[debug_handler]
-pub async fn items_get(ext: Extension<Tag>, cucc: Query<TypeQuery>) -> Json<Vec<Items>> {
-    let db = get_conn().await;
+pub async fn ucp_items_get(ext: Extension<Tag>, cucc: Query<UCPTypeQuery>) -> Json<Vec<Items>> {
+    let db = get_db_conn().await;
     let getitem = Data::Entity::find()
         .filter(Data::Column::Owner.eq(&ext.name))
         .filter(Data::Column::Type.eq(cucc.tipus.clone()))
@@ -70,9 +69,9 @@ pub async fn items_get(ext: Extension<Tag>, cucc: Query<TypeQuery>) -> Json<Vec<
 }
 
 #[debug_handler]
-pub async fn items_post(
+pub async fn ucp_items_post(
     ext: Extension<Tag>,
-    cucc: Query<TypeExtraQuery>,
+    cucc: Query<UCPTypeExtraQuery>,
     mut multipart: Multipart,
 ) -> Result<impl IntoResponse, (StatusCode, String)> {
     let mut file_ids: Vec<i32> = Vec::new();
@@ -86,7 +85,7 @@ pub async fn items_post(
             let file_name = field.file_name().unwrap().to_string();
             let data = field.bytes().await;
             if data.is_ok() {
-                let db = get_conn().await;
+                let db = get_db_conn().await;
                 let mut file =
                     File::create(format!("./public/tmp/{}-{}", ext.name, file_name)).unwrap();
                 file.write(&data.unwrap()).unwrap();
@@ -141,25 +140,4 @@ pub async fn items_post(
         }
     }
     Ok(Json(file_ids))
-}
-
-#[debug_handler]
-pub async fn items_custom_post(
-    ext: Extension<Tag>,
-    cucc: Query<TypeQuery>,
-    body: String,
-) -> impl IntoResponse {
-    let db = get_conn().await;
-    let iten = Data::ActiveModel {
-        am: Set(if ext.am.clone() { 1 } else { 0 }),
-        owner: Set(ext.name.clone()),
-        r#type: Set(String::from(cucc.tipus.clone())),
-        kep: Set(body),
-        ..Default::default()
-    };
-    Data::Entity::insert(iten)
-        .exec(&db)
-        .await
-        .expect("Adatbázisba mentés sikertelen");
-    ""
 }

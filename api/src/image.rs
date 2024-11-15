@@ -6,14 +6,14 @@ use tokio::{fs::File, io::AsyncReadExt};
 use crate::{
     db::data as Data,
     utils::{
-        queries::{ImgLeintQuery, ImgQuery},
-        sql::get_conn,
+        queries::{BaseImgLeintQuery, BaseImgQuery},
+        sql::get_db_conn,
     },
 };
 
 #[debug_handler]
-pub async fn image_get(cucc: Query<ImgQuery>) -> Response {
-    let db = get_conn().await;
+pub async fn base_image_get(cucc: Query<BaseImgQuery>) -> Response {
+    let db = get_db_conn().await;
     let kep = Data::Entity::find()
         .filter(Data::Column::Id.eq(cucc.id.clone()))
         .filter(Data::Column::Type.ne("leintés"))
@@ -51,8 +51,8 @@ pub async fn image_get(cucc: Query<ImgQuery>) -> Response {
 }
 
 #[debug_handler]
-pub async fn leintes_image_get(cucc: Query<ImgLeintQuery>) -> Response {
-    let db = get_conn().await;
+pub async fn base_leintes_image_get(cucc: Query<BaseImgLeintQuery>) -> Response {
+    let db = get_db_conn().await;
     let kep = Data::Entity::find()
         .filter(Data::Column::Id.eq(cucc.id.clone()))
         .filter(Data::Column::Type.eq("leintés"))

@@ -1,4 +1,4 @@
 packages:
   - 'web'
-  - 'api'
   - 'gui'
+  - 'central'

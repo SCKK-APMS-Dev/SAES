@@ -10,7 +10,7 @@ use sea_orm::{ColumnTrait, EntityTrait, Order, QueryFilter, QueryOrder, Set};
 
 use crate::{
     db::data::{self as Data, Model},
-    utils::{middle::Tag, queries::AdminItemsQuery, sql::get_conn},
+    utils::{middle::Tag, queries::MVItemsQuery, sql::get_db_conn},
 };
 
 #[derive(Debug, Serialize)]
@@ -19,7 +19,7 @@ pub struct StatDBAll {
 }
 
 #[derive(Debug, Deserialize)]
-pub struct AdminPostItemsBody {
+pub struct MVPostItemsBody {
     pub id: i32,
     pub status: String,
     pub extra: Option<String>,
@@ -28,11 +28,8 @@ pub struct AdminPostItemsBody {
 }
 
 #[debug_handler]
-pub async fn admin_items_get(
-    ext: Extension<Tag>,
-    quer: Query<AdminItemsQuery>,
-) -> impl IntoResponse {
-    let db = get_conn().await;
+pub async fn mv_items_get(ext: Extension<Tag>, quer: Query<MVItemsQuery>) -> impl IntoResponse {
+    let db = get_db_conn().await;
     let statreturn = Data::Entity::find()
         .filter(Data::Column::Status.eq(quer.status.clone()))
         .filter(Data::Column::Type.eq(quer.tipus.clone()))
@@ -45,11 +42,11 @@ pub async fn admin_items_get(
 }
 
 #[debug_handler]
-pub async fn admin_items_post(
+pub async fn mv_items_post(
     ext: Extension<Tag>,
-    extract::Json(body): extract::Json<AdminPostItemsBody>,
+    extract::Json(body): extract::Json<MVPostItemsBody>,
 ) -> impl IntoResponse {
-    let db = get_conn().await;
+    let db = get_db_conn().await;
     let activemodel = Data::ActiveModel {
         id: Set(body.id),
         am: Set(body.am),

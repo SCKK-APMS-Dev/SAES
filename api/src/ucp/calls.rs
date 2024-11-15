@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::from_str;
 
 use crate::utils::functions::get_fridays;
-use crate::utils::{api::get_api_envs, middle::Tag, sql::get_conn};
+use crate::utils::{api::get_api_envs, middle::Tag, sql::get_db_conn};
 
 use crate::db::data as Data;
 
@@ -27,10 +27,10 @@ pub struct Potlek {
 }
 
 #[debug_handler]
-pub async fn calls(mut request: Request) -> Json<Callz> {
+pub async fn ucp_calls(mut request: Request) -> Json<Callz> {
     let exts: Option<&Tag> = request.extensions_mut().get();
     let client = reqwest::Client::new();
-    let db = get_conn().await;
+    let db = get_db_conn().await;
     let envs = get_api_envs();
     let calls = client
         .get(format!("{}/api/log/status/current", envs.erik))

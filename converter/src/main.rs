@@ -3,7 +3,7 @@ use std::{env, fs, path::Path, process::Command, thread, time::Duration};
 use chrono::{Timelike, Utc};
 use dotenvy::dotenv;
 use sea_orm::{DatabaseConnection, EntityTrait, Set};
-use utils::{ffmpeg::get_ffmpeg, sql::get_conn};
+use utils::{ffmpeg::get_ffmpeg, sql::get_db_conn};
 
 use db::data::{self as Data, ActiveModel, Model};
 
@@ -16,7 +16,7 @@ async fn main() {
     dotenv().expect(".env fájl nem található");
     init::main();
     let dir = env::var("CONVERT_DIR").expect("CONVERT_DIR lekérdezése sikertelen");
-    let db = get_conn().await;
+    let db = get_db_conn().await;
     loop {
         let data = Data::Entity::find()
             .all(&db)

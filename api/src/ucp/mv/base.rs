@@ -11,11 +11,11 @@ use serde::Serialize;
 
 use crate::{
     db::data::{self, Model},
-    utils::{functions::get_fridays, middle::Tag, queries::StatQuery, sql::get_conn},
+    utils::{functions::get_fridays, middle::Tag, queries::MVStatQuery, sql::get_db_conn},
 };
 
 #[debug_handler]
-pub async fn admin_home(mut request: Request) -> Json<Tag> {
+pub async fn mv_home(mut request: Request) -> Json<Tag> {
     let exts: Option<&Tag> = request.extensions_mut().get();
     Json(exts.unwrap().clone())
 }
@@ -40,13 +40,13 @@ pub struct StatReturn {
 }
 
 #[debug_handler]
-pub async fn admin_stat(
+pub async fn mv_stat(
     ext: Extension<Tag>,
-    quer: Query<StatQuery>,
+    quer: Query<MVStatQuery>,
 ) -> Result<impl IntoResponse, (StatusCode, String)> {
     if quer.week == "current".to_string() {
         let friday = get_fridays();
-        let db = get_conn().await;
+        let db = get_db_conn().await;
         let statreturn = data::Entity::find()
             .filter(data::Column::Status.eq("elfogadva"))
             .filter(data::Column::Date.gt(friday.last))
@@ -82,7 +82,7 @@ pub async fn admin_stat(
         }))
     } else if quer.week == "previous" {
         let friday = get_fridays();
-        let db = get_conn().await;
+        let db = get_db_conn().await;
         let statreturn = data::Entity::find()
             .filter(data::Column::Status.eq("elfogadva"))
             .filter(data::Column::Date.gt(friday.laster))
