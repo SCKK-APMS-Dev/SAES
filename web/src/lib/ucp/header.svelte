@@ -58,10 +58,10 @@
 								</li>
 								<li>
 									<a
-										href="/ucp/szabalyzat"
+										href="/ucp/segedlet"
 										class={`${am ? 'before:bg-tow' : 'before:bg-taxi'} group relative before:absolute before:inset-x-0 before:-bottom-1.5 before:h-2 before:origin-right before:scale-x-0 before:transition before:duration-200 hover:before:origin-left hover:before:scale-x-100`}
 									>
-										<span class="relative text-black dark:text-white">Szabályzat</span>
+										<span class="relative text-black dark:text-white">Segédlet</span>
 									</a>
 								</li>
 								<li>
@@ -113,8 +113,8 @@
 		</div>
 	</div>
 	<h2 class="bg-gradient-to-r from-rose-600 to-amber-600 py-1 text-center text-xl text-white">
-		Nem vagy biztos valamiben? Nézd meg a <a href="/ucp/szabalyzat" class="text-taxi font-bold"
-			>szabályzatot</a
+		Nem vagy biztos valamiben? Nézd meg a <a href="/ucp/segedlet" class="text-taxi font-bold"
+			>segédletet</a
 		>!
 	</h2>
 </header>

@@ -358,7 +358,7 @@
 							<TableBodyCell
 								>{potle.owner}
 								{#if potle.am}
-									(Autómentős)
+									(TOW)
 								{/if}</TableBodyCell
 							>
 							<TableBodyCell>

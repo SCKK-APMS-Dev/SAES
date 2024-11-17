@@ -3,7 +3,7 @@
 	import { navigating, page } from '$app/stores';
 	export let data;
 	import Error from '$lib/error.svelte';
-	import { Reeler_keys, Reeler_vals } from '$lib/public';
+	import { Reeler_keys, Reeler_vals } from '$lib/ucp/public.js';
 	import { onMount } from 'svelte';
 	import { loading } from '$lib/loading.js';
 	import { io } from 'socket.io-client';

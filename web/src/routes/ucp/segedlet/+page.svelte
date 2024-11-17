@@ -7,9 +7,9 @@
 </script>
 
 <div class="text-center text-black dark:text-white">
-	<h1 class="mb-4 mt-4 text-4xl font-bold">Szabályzat az oldal használatához</h1>
+	<h1 class="mb-4 mt-4 text-4xl font-bold">Segédlet az oldal használatához</h1>
 	<h2 class="text-black dark:text-white">
-		A szabályzat felépítése pontokra bontott, azon belül pedig alpontokra bontott.
+		A segédlet felépítése pontokra bontott, azon belül pedig alpontokra bontott.
 	</h2>
 	<h2 class="text-black dark:text-white">
 		Az itt feltüntetett pontok betartása kötelező, ellenkező esetben a feltöltött elem elutasításra
@@ -26,7 +26,11 @@
 				<h2 class="text-left text-xl font-bold">1.</h2>
 				<h2 class="text-xl">
 					{#if data.layout.am}
-						A fotónak tartalmaznia kell a kiadott számlát és a teljes játékot.
+						A fotónak tartalmaznia kell a kiadott számlát és a teljes játékot. <a
+							class="text-taxi text-xl font-bold uppercase"
+							target="_blank"
+							href="{data.api}/img?id=8740">példa</a
+						>
 					{:else}
 						A fuvar igazolásáról kell egy teljes képernyős képet készíteni. (4-es pont).
 					{/if}
@@ -56,7 +60,11 @@
 				<h2 class="text-xl font-bold">2.</h2>
 				<h2 class="text-xl">
 					{#if data.layout.am}
-						Az első képen a kiadott számlának kell látszódnia.
+						Az első képen a kiadott számlának kell látszódnia. <a
+							class="text-taxi text-xl font-bold uppercase"
+							target="_blank"
+							href="{data.api}/limg?id=1015&ver=1">példa</a
+						>
 					{:else}
 						Az első képen a 10-12 rádiózásának, vagy hívás átvételnél a rádió rp-nek kell
 						látszódnia.
@@ -80,6 +88,11 @@
 				<h2 class="text-xl">
 					{#if data.layout.am}
 						A második képen a fizetésről kell képet készíteni. (chat)
+						<a
+							class="text-taxi text-xl font-bold uppercase"
+							target="_blank"
+							href="{data.api}/limg?id=1015&ver=0">példa</a
+						>
 					{:else}
 						A második képen a hívást kell igazolni (4-es pont).
 					{/if}
@@ -103,39 +116,40 @@
 				</h2>
 			</li>
 		</ul>
-		<h1 class="ml-[20%] mt-5 text-left text-3xl font-bold">4. Hívások igazolása</h1>
-		<ul class="child:mx-[20%] child:text- ml-2">
-			<li class="flex gap-2">
-				<h2 class="text-xl font-bold">1.</h2>
-				<h2 class="text-xl">
-					Hívásokat az alábbi kétféleképpen lehet igazolni, más módot nem fogadunk el!
-				</h2>
-			</li>
-			<li class="flex gap-2">
-				<h2 class="text-xl font-bold">2.</h2>
-				<h2 class="text-xl">Lehetséges igazolni a fuvar végén kinyomtatott nyugta fotózásával.</h2>
-				{#if !data.layout.am}
+
+		{#if !data.layout.am}
+			<h1 class="ml-[20%] mt-5 text-left text-3xl font-bold">4. Hívások igazolása</h1>
+			<ul class="child:mx-[20%] child:text- ml-2">
+				<li class="flex gap-2">
+					<h2 class="text-xl font-bold">1.</h2>
+					<h2 class="text-xl">
+						Hívásokat az alábbi kétféleképpen lehet igazolni, más módot nem fogadunk el!
+					</h2>
+				</li>
+				<li class="flex gap-2">
+					<h2 class="text-xl font-bold">2.</h2>
+					<h2 class="text-xl">
+						Lehetséges igazolni a fuvar végén kinyomtatott nyugta fotózásával.
+					</h2>
 					<a
 						class="text-taxi text-xl font-bold uppercase"
 						target="_blank"
 						href="{data.api}/img?id=5544">példa</a
 					>
-				{/if}
-			</li>
-			<li class="flex gap-2">
-				<h2 class="text-xl font-bold">3.</h2>
-				<h2 class="text-xl">
-					Lehetséges igazolni a fuvar kifizetésénél felbukkanó kék dobozzal, vagy a chaten látható
-					azonos "kifizette az utazást" szöveget tartalmaztó chatsorral.
-				</h2>
-				{#if !data.layout.am}
+				</li>
+				<li class="flex gap-2">
+					<h2 class="text-xl font-bold">3.</h2>
+					<h2 class="text-xl">
+						Lehetséges igazolni a fuvar kifizetésénél felbukkanó kék dobozzal, vagy a chaten látható
+						azonos "kifizette az utazást" szöveget tartalmaztó chatsorral.
+					</h2>
 					<a
 						class="text-taxi text-xl font-bold uppercase"
 						target="_blank"
 						href="{data.api}/img?id=5883">példa</a
 					>
-				{/if}
-			</li>
-		</ul>
+				</li>
+			</ul>
+		{/if}
 	</div>
 </div>

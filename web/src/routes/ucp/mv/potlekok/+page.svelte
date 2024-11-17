@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Adminlist from '$lib/mv/adminlist.svelte';
+	import Adminlist from '$lib/mv/mvlist.svelte';
 	export let data;
 </script>
 

@@ -132,7 +132,7 @@
 			<div class="mt-4">
 				<h1 class="text-3xl font-bold">A műszak</h1>
 				<h2>Elfogadott: {hivasok[0]}</h2>
-				<h2 class="mb-2">Lemondott: {a['Lemondott']}</h2>
+				<h2 class="mb-2">Lemondott: {a['Lemondott'] ? a['Lemondott'] : 0}</h2>
 				{#each Object.keys(a) as ember}
 					{#if ember !== 'Lemondott'}
 						<h2>{ember}: {a[ember]}</h2>
@@ -144,7 +144,7 @@
 			<div class="mt-4">
 				<h1 class="text-3xl font-bold">B műszak</h1>
 				<h2>Elfogadott: {hivasok[1]}</h2>
-				<h2 class="mb-2">Lemondott: {b['Lemondott']}</h2>
+				<h2 class="mb-2">Lemondott: {b['Lemondott'] ? b['Lemondott'] : 0}</h2>
 				{#each Object.keys(b) as ember}
 					{#if ember !== 'Lemondott'}
 						<h2>{ember}: {b[ember]}</h2>
@@ -156,7 +156,7 @@
 			<div class="mt-4">
 				<h1 class="text-3xl font-bold">Műszakon kívül</h1>
 				<h2>Elfogadott: {hivasok[2]}</h2>
-				<h2 class="mb-2">Lemondott: {n['Lemondott']}</h2>
+				<h2 class="mb-2">Lemondott: {n['Lemondott'] ? n['Lemondott'] : 0}</h2>
 				{#each Object.keys(n) as ember}
 					{#if ember !== 'Lemondott'}
 						<h2>{ember}: {n[ember]}</h2>

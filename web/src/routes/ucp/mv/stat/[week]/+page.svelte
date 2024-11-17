@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { navigating, page } from '$app/stores';
 	import Error from '$lib/error.svelte';
-	import { getRealText, getAlterText } from '$lib/public';
+	import { getRealText, getAlterText } from '$lib/ucp/public.js';
 	interface calls {
 		[key: string]: number;
 	}
