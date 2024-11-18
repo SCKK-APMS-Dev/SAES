@@ -76,8 +76,8 @@
 			{#if agent.includes('Firefox')}
 				<h1 class="mb-2 text-xl font-bold">
 					Firefoxon (és az azon alapuló böngészőkön) jelenlegi állás szerint nem lehet elemeket
-					feltölteni. Ez idő alatt kérlek használj egy Chromium alapú böngészőt! (Pl. Chrome, Edge,
-					Brave, Arc, stb.)
+					feltölteni. Ez idő alatt kérlek használj egy Chromium alapú böngészőt! (Pl. Chrome, Opera,
+					Edge, Brave, Arc, stb.)
 				</h1>
 			{:else}
 				<form on:submit|preventDefault={() => upload()} enctype="multipart/form-data">
