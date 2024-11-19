@@ -23,6 +23,7 @@
 					>
 						{tip}
 					</h1>
+					<img src="/santa.svg" class="absolute bottom-2 left-3.5 w-14 -rotate-[24deg]" alt="" />
 				</a>
 
 				<div class="flex items-center justify-end border-l lg:border-l-0">
