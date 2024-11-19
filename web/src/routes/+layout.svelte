@@ -1,8 +1,10 @@
 <script>
 	import '../app.css';
+	import '../snow.css';
 	import { navigating } from '$app/stores';
 	import { loading } from '$lib/loading';
 	import { fade } from 'svelte/transition';
+	import Snow from '$lib/snow.svelte';
 	// biome-ignore lint/suspicious/noConfusingLabels: <explanation>
 	$: $loading = !!$navigating;
 	// $: $loading = true; // testing
@@ -18,6 +20,7 @@
 	<meta content="#fece01" data-react-helmet="true" name="theme-color" />
 </svelte:head>
 
+<Snow />
 <slot />
 
 {#if $loading}
