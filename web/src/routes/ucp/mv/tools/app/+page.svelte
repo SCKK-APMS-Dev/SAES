@@ -20,6 +20,7 @@
 		n = {};
 		a = {};
 		b = {};
+		all = {};
 		hivasok = [0, 0, 0];
 		let rows = code.split('\n');
 		for (let row of rows) {
