@@ -4,21 +4,16 @@ use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq, Serialize, Deserialize)]
-#[sea_orm(table_name = "data")]
+#[sea_orm(table_name = "logs")]
 pub struct Model {
     #[sea_orm(primary_key)]
     pub id: i32,
-    pub r#type: String,
     pub owner: String,
-    #[sea_orm(column_type = "custom(\"LONGTEXT\")")]
-    pub kep: String,
-    pub status: String,
-    pub extra: Option<String>,
-    pub reason: Option<String>,
-    pub admin: Option<String>,
-    pub am: i8,
+    pub item_id: i32,
+    pub r#type: String,
+    #[sea_orm(column_type = "Text")]
+    pub action: String,
     pub date: DateTimeUtc,
-    pub modified: DateTimeUtc,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
