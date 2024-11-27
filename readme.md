@@ -6,4 +6,5 @@ Mit tartalmaz ez a monorepo?
 - `api` a SAES api-ját,
 - `gbot` az SCKK hívásrögzítő botját,
 - `gui` a jelenleg korai státuszban lévő SCKK GUI-t,
-- `converter` az új, weboldalra feltöltött PNG képeket, AVIF formátumba konvertáló background scriptet.
+- `converter` az új, weboldalra feltöltött PNG képeket, AVIF formátumba konvertáló background scriptet,
+- `central` az új, központi teszt appot.
