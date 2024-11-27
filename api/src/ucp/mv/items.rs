@@ -10,6 +10,7 @@ use sea_orm::{ColumnTrait, EntityTrait, Order, QueryFilter, QueryOrder, Set};
 
 use crate::{
     db::data::{self as Data, Model},
+    logging::log_update,
     utils::{middle::Tag, queries::MVItemsQuery, sql::get_db_conn},
 };
 
@@ -47,6 +48,49 @@ pub async fn mv_items_post(
     extract::Json(body): extract::Json<MVPostItemsBody>,
 ) -> impl IntoResponse {
     let db = get_db_conn().await;
+    let old_model = Data::Entity::find()
+        .filter(Data::Column::Id.eq(body.id))
+        .one(&db)
+        .await
+        .expect("[ERROR] Régi lekérése sikertelen")
+        .unwrap();
+    let mut act = String::new();
+    if old_model.status != body.status {
+        act += format!(", status FROM {} TO {}", old_model.status, body.status).as_str();
+    }
+    if old_model.reason != body.reason {
+        act += format!(
+            ", reason FROM {} TO {}",
+            if old_model.reason.is_some() {
+                old_model.reason.unwrap()
+            } else {
+                String::from("null")
+            },
+            if body.reason.is_some() {
+                body.reason.clone().unwrap()
+            } else {
+                String::from("null")
+            }
+        )
+        .as_str();
+    }
+    if old_model.extra != body.extra {
+        act += format!(
+            ", extra FROM {} TO {}",
+            if old_model.extra.is_some() {
+                old_model.extra.unwrap()
+            } else {
+                String::from("null")
+            },
+            if body.extra.is_some() {
+                body.extra.clone().unwrap()
+            } else {
+                String::from("null")
+            }
+        )
+        .as_str();
+    }
+    log_update(ext.name.clone(), body.id.clone(), old_model.r#type, act).await;
     let activemodel = Data::ActiveModel {
         id: Set(body.id),
         am: Set(body.am),
