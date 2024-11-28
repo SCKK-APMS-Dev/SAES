@@ -7,4 +7,5 @@ Mit tartalmaz ez a monorepo?
 - `gbot` az SCKK hívásrögzítő botját,
 - `gui` a jelenleg korai státuszban lévő SCKK GUI-t,
 - `converter` az új, weboldalra feltöltött PNG képeket, AVIF formátumba konvertáló background scriptet,
-- `central` az új, központi teszt appot.
+- `central` az új, központi teszt appot,
+- `web-new` az új, leendő weboldalt.
