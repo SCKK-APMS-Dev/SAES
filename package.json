@@ -4,7 +4,7 @@
 	"description": "",
 	"scripts": {
 		"dev:web": "pnpm --filter ./web run dev",
-		"dev:webn": "cd web-new && cargo watch -x run",
+		"dev:webn": "cd webn && trunk serve",
 		"dev:api": "cd api && cargo watch -x run",
 		"dev:bot": "cd gbot && cargo watch -x run",
 		"dev:gui": "pnpm --filter ./gui run tauri dev",
@@ -17,7 +17,7 @@
 		"update:gui": "cd gui/src-tauri && cargo update",
 		"update:conv": "cd converter && cargo update",
 		"update:central": "cd central/src-tauri && cargo update",
-		"update:webn": "cd web-new && cargo update"
+		"update:webn": "cd webn && cargo update"
 	},
 	"keywords": [],
 	"author": "HVCsano",

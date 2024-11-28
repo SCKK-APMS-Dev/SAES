@@ -1,3 +1,10 @@
 [workspace]
-members = ["api", "gui/src-tauri", "gbot", "converter", "central/src-tauri", "web-new"]
+members = [
+    "api",
+    "gui/src-tauri",
+    "gbot",
+    "converter",
+    "central/src-tauri",
+    "webn",
+]
 resolver = "2"
