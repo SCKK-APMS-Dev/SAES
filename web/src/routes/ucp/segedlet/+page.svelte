@@ -111,8 +111,12 @@
 			</li>
 			<li class="flex gap-2">
 				<h2 class="text-xl font-bold">3.</h2>
-				<h2 class="text-xl font-bold">
-					Csak az aznap lefotózott számlákat tudjuk elfogadni! (biztonsági protokoll)
+				<h2 class="text-xl">Csak az aznap lefotózott számlákat tudjuk elfogadni!</h2>
+			</li>
+			<li class="flex gap-2">
+				<h2 class="text-xl font-bold">4.</h2>
+				<h2 class="text-xl">
+					Szereltetési számlák összege egy héten nem lehet több, mint 400.000$.
 				</h2>
 			</li>
 		</ul>
