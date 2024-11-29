@@ -2,10 +2,10 @@
 
 Mit tartalmaz ez a monorepo?
 
-- `web` az SCKK weboldalt. (sckk.hu),
+- `web` az SCKK weboldalt,
 - `api` a SAES api-ját,
 - `gbot` az SCKK hívásrögzítő botját,
 - `gui` a jelenleg korai státuszban lévő SCKK GUI-t,
-- `converter` az új, weboldalra feltöltött PNG képeket, AVIF formátumba konvertáló background scriptet,
+- `converter` az AVIF kép convertert,
 - `central` az új, központi teszt appot,
-- `web-new` az új, leendő weboldalt.
+- `webn` az új, leendő weboldalt.
