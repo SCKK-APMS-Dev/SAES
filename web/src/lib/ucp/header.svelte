@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { snow } from '$lib/api';
+
 	export let tip;
 	export let isAdmin = false;
 	export let am = false;
@@ -23,7 +25,9 @@
 					>
 						{tip}
 					</h1>
-					<img src="/santa.svg" class="absolute bottom-2 left-3.5 w-14 -rotate-[24deg]" alt="" />
+					{#if snow}
+						<img src="/santa.svg" class="absolute bottom-2 left-3.5 w-14 -rotate-[24deg]" alt="" />
+					{/if}
 				</a>
 
 				<div class="flex items-center justify-end border-l lg:border-l-0">
@@ -103,8 +107,10 @@
 											class={`${am ? 'from-tow via-blue-600 to-emerald-400' : 'from-taxi via-amber-600 to-red-500'} hover:bg-pos-100 bg-size-200 bg-pos-0 block rounded-full bg-gradient-to-r px-6 py-3 text-center font-bold text-white drop-shadow-lg transition-all duration-500`}
 										>
 											Műszakvezetés
-											<span class="icon-[fluent-emoji--sled] absolute bottom-11 right-8 h-6 w-6"
-											></span>
+											{#if snow}
+												<span class="icon-[fluent-emoji--sled] absolute bottom-11 right-8 h-6 w-6"
+												></span>
+											{/if}
 										</a>
 									</div>
 								{/if}

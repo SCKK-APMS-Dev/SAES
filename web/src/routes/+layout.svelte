@@ -5,6 +5,7 @@
 	import { loading } from '$lib/loading';
 	import { fade } from 'svelte/transition';
 	import Snow from '$lib/snow.svelte';
+	import { snow } from '$lib/api';
 	// biome-ignore lint/suspicious/noConfusingLabels: <explanation>
 	$: $loading = !!$navigating;
 	// $: $loading = true; // testing
@@ -19,8 +20,9 @@
 	<meta content="https://sckk.hu/favicon.png" property="og:image" />
 	<meta content="#fece01" data-react-helmet="true" name="theme-color" />
 </svelte:head>
-
-<Snow />
+{#if snow}
+	<Snow />
+{/if}
 <slot />
 
 {#if $loading}
@@ -33,7 +35,11 @@
 	left-1/2 top-1/2 h-96 w-96 -translate-x-1/2 -translate-y-1/2 transform cursor-progress content-center overflow-hidden rounded-full border-2 shadow-lg"
 		>
 			<!-- <span class="loader"></span> -->
-			<img src="/miklos.gif" alt="loading" class=" z-50 block w-[1000px] object-top" />
+			{#if snow}
+				<img src="/miklos.gif" alt="loading" class=" z-50 block w-[1000px] object-top" />
+			{:else}
+				<img src="/macska.avif" alt="loading" class=" z-50 block w-[1000px] object-top" />
+			{/if}
 		</div>
 	</div>
 {/if}
