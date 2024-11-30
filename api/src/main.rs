@@ -17,6 +17,7 @@ mod db;
 mod image;
 mod init;
 mod list;
+mod logging;
 mod shorts;
 mod socket;
 mod ucp;

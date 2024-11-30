@@ -14,6 +14,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     db::data as Data,
+    logging::db_log,
     utils::{
         middle::Tag,
         queries::{UCPTypeExtraQuery, UCPTypeQuery},
@@ -108,6 +109,14 @@ pub async fn ucp_items_post(
                             .exec(&db)
                             .await
                             .expect("Adatbázisba mentés sikertelen");
+                        db_log(
+                            ext.name.clone(),
+                            Some(newitem.last_insert_id),
+                            Some(cucc.tipus.clone()),
+                            "CREATE",
+                            None,
+                        )
+                        .await;
                         file_ids.push(newitem.last_insert_id);
                         files_for_leintes.clear();
                     } else {
@@ -128,6 +137,14 @@ pub async fn ucp_items_post(
                         .exec(&db)
                         .await
                         .expect("Adatbázisba mentés sikertelen");
+                    db_log(
+                        ext.name.clone(),
+                        Some(newitem.last_insert_id),
+                        Some(cucc.tipus.clone()),
+                        "CREATE",
+                        None,
+                    )
+                    .await;
                     file_ids.push(newitem.last_insert_id)
                 }
                 i += 1
