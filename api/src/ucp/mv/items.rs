@@ -10,7 +10,7 @@ use sea_orm::{ColumnTrait, EntityTrait, Order, QueryFilter, QueryOrder, Set};
 
 use crate::{
     db::data::{self as Data, Model},
-    logging::log_update,
+    logging::db_log,
     utils::{middle::Tag, queries::MVItemsQuery, sql::get_db_conn},
 };
 
@@ -56,11 +56,18 @@ pub async fn mv_items_post(
         .unwrap();
     let mut act = String::new();
     if old_model.status != body.status {
-        act += format!(", status FROM {} TO {}", old_model.status, body.status).as_str();
+        act += format!(
+            "{}status FROM {} TO {}",
+            if act.len() > 0 { ", " } else { "" },
+            old_model.status,
+            body.status
+        )
+        .as_str();
     }
     if old_model.reason != body.reason {
         act += format!(
-            ", reason FROM {} TO {}",
+            "{}reason FROM {} TO {}",
+            if act.len() > 0 { ", " } else { "" },
             if old_model.reason.is_some() {
                 old_model.reason.unwrap()
             } else {
@@ -76,7 +83,8 @@ pub async fn mv_items_post(
     }
     if old_model.extra != body.extra {
         act += format!(
-            ", extra FROM {} TO {}",
+            "{}extra FROM {} TO {}",
+            if act.len() > 0 { ", " } else { "" },
             if old_model.extra.is_some() {
                 old_model.extra.unwrap()
             } else {
@@ -90,7 +98,14 @@ pub async fn mv_items_post(
         )
         .as_str();
     }
-    log_update(ext.name.clone(), body.id.clone(), old_model.r#type, act).await;
+    db_log(
+        ext.name.clone(),
+        Some(body.id.clone()),
+        Some(old_model.r#type),
+        "UPDATE",
+        Some(act),
+    )
+    .await;
     let activemodel = Data::ActiveModel {
         id: Set(body.id),
         am: Set(body.am),

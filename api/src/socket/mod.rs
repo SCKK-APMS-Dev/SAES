@@ -5,6 +5,7 @@ use tracing::{info, warn};
 
 use crate::{
     auth::get_discord_envs,
+    logging::db_log,
     utils::{
         api::get_api_envs,
         middle::{DiscordUser, GetUserRes, Tag},
@@ -71,6 +72,7 @@ pub async fn on_connect(socket: SocketRef, data: InitialData) {
                     "Socket {} authenticated: {} / {}",
                     socket.id, tag.name, tag.id,
                 );
+                db_log(tag.name.clone(), None, None, "LOGIN", None).await;
                 let mama = get_stores();
                 if tag.admin {
                     socket.join("mv").expect("MV Szobacsatlakozás sikertelen")
