@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { Tooltip } from 'flowbite-svelte';
-	import MaterialSymbolsMenu from '~icons/material-symbols/menu';
 	let nav: HTMLDivElement;
 	const tognav = () => {
 		if (nav.classList.contains('hidden')) {
@@ -25,10 +24,11 @@
 		<Tooltip placement="bottom">Eszközök megnyitása</Tooltip>
 	</div>
 	<button
+		aria-label="mv-menu"
 		class="mr-[10vw] cursor-pointer self-center justify-self-end text-3xl font-semibold transition-all duration-200 hover:text-emerald-500 lg:hidden"
 		on:click={tognav}
 	>
-		<MaterialSymbolsMenu />
+		<span class="icon-[material-symbols--menu]"></span>
 	</button>
 	<div
 		bind:this={nav}
