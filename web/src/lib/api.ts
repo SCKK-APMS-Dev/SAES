@@ -4,6 +4,6 @@ export const apiUrl = process.env.NODE_ENV === "development"
 
 export const snow = process.env.NODE_ENV === "development"
 	? false // * DEV SNOW true / false
-	: process.env.snow == "true"
+	: process.env.snow
 	? true
 	: false;
