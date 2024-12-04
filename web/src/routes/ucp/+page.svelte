@@ -2,8 +2,6 @@
 	export let data;
 	let hour = new Date().getHours();
 	let greet = '';
-	let reason = '';
-
 	let end = '!';
 	if (hour >= 19) {
 		greet = 'Szép estét';
@@ -61,10 +59,17 @@
 				</form>
 			{/if} -->
 			{#if !data.layout.am}
-				<h2 class="text-xl drop-shadow-lg md:text-2xl">
-					Hívásaid (app+leintés): {data.calls?.app}+{data.calls?.leintes}={Number(data.calls.app) +
-						Number(data.calls?.leintes)}
-				</h2>
+				{#if data.calls.app === null}
+					<h2 class="text-xl drop-shadow-lg md:text-2xl">
+						Hívásaid (app nem megy, csak leintés): {data.calls?.leintes}
+					</h2>
+				{:else}
+					<h2 class="text-xl drop-shadow-lg md:text-2xl">
+						Hívásaid (app+leintés): {data.calls?.app}+{data.calls?.leintes}={Number(
+							data.calls.app
+						) + Number(data.calls?.leintes)}
+					</h2>
+				{/if}
 			{/if}
 			<h2 class="text-xl drop-shadow-lg md:text-2xl">
 				Elfogadott pótlékaid: délelőtti: {data.calls?.potlek.de}, éjszakai: {data.calls?.potlek.du}
