@@ -1,30 +1,30 @@
 // import { sheet } from '$lib/server/google';
 // import { prisma } from '$lib/server/prisma';
-import type { PageServerLoad } from './$types';
-import { apiUrl } from '$lib/api';
+import type { PageServerLoad } from "./$types";
+import { apiUrl } from "$lib/api";
 
 export const load = (async ({ cookies }) => {
 	try {
 		const aha = await fetch(`${apiUrl}/ucp/calls`, {
-			mode: 'no-cors',
+			mode: "no-cors",
 			headers: {
-				cookie: cookies.get('auth_token') as string
-			}
+				cookie: cookies.get("auth_token") as string,
+			},
 		});
 		if (aha.status === 400) {
 			return {
-				error: 'Központi API szerver elérése sikertelen'
+				error: "Központi API szerver elérése sikertelen",
 			};
 		}
 		if (aha.ok) {
 			const text = await aha.json();
 			return {
-				calls: text
+				calls: text,
 			};
 		}
 	} catch {
 		return {
-			error: 'Weboldal API szervere elérése sikertelen'
+			error: "Weboldal API szervere elérése sikertelen",
 		};
 	}
 }) satisfies PageServerLoad;
