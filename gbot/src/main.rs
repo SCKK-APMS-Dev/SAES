@@ -37,9 +37,11 @@ async fn get_previous_week() -> Vec<DriverData> {
 #[tokio::main]
 async fn main() {
     dotenv().expect(".env fájl olvasása sikertelen");
-    let mut interval = interval(Duration::from_secs(120));
+    let interval_var = env::var("INTERVAL_SECS").expect("INTERVAL_SECS váltózó nem található!");
+    let invt: u64 = interval_var.parse().expect("INTERVAL_SECS nem u64");
+    let mut interval = interval(Duration::from_secs(invt));
     loop {
-        interval.tick().await; // This should go first.
+        interval.tick().await;
         println!(" ");
         println!("==== Taxi A műszak aktuális hét ====");
         println!(" ");
