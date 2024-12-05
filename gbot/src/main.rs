@@ -1,7 +1,7 @@
 use std::{env, time::Duration};
 
 use dotenvy::dotenv;
-use google_sheets4::{api::ValueRange, hyper, hyper_rustls, Sheets};
+use google_sheets4::{api::ValueRange, chrono::Local, hyper, hyper_rustls, Sheets};
 use serde::Deserialize;
 use serde_json::Value;
 use tokio::time::interval;
@@ -71,8 +71,41 @@ async fn main() {
         println!(" ");
         println!("=======================");
         println!(" ");
+        handle_now("Taxi A műszak", "O23").await;
     }
 }
+
+async fn handle_now(table: &str, cell: &str) {
+    let spread_id = env::var("SPREADSHEET_ID").expect("SPREADSHEET_ID lekérése sikertelen");
+    let token = auth::get_google_auth().await;
+    let sheets = Sheets::new(
+        hyper::Client::builder().build(
+            hyper_rustls::HttpsConnectorBuilder::new()
+                .with_native_roots()
+                .unwrap()
+                .https_or_http()
+                .enable_http1()
+                .build(),
+        ),
+        token,
+    );
+    let mut valrange = ValueRange::default();
+    let most = Local::now().format("%Y.%m.%d %T").to_string();
+    let recell: Vec<Vec<Value>> = vec![vec![most.into()]];
+    valrange.values = recell.into();
+    sheets
+        .spreadsheets()
+        .values_update(
+            valrange,
+            &spread_id,
+            &format!("{}!{}", table, cell).to_string(),
+        )
+        .value_input_option("USER_ENTERED")
+        .doit()
+        .await
+        .expect("Dátum beírása sikertelen");
+}
+
 async fn handle_tables(table: &str, read_range: &str, write_range: &str, week: &str) {
     if week == "current" {
         let spread_id = env::var("SPREADSHEET_ID").expect("SPREADSHEET_ID lekérése sikertelen");
@@ -89,6 +122,7 @@ async fn handle_tables(table: &str, read_range: &str, write_range: &str, week: &
             ),
             token,
         );
+
         let res = sheets
             .spreadsheets()
             .values_get(&spread_id, format!("{}!{}", table, read_range).as_str())
