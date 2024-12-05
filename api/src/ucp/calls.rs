@@ -37,12 +37,7 @@ pub async fn ucp_calls(mut request: Request) -> Result<Json<Callz>, (StatusCode,
     let calls = client
         .get(format!("{}/api/log/status/current", envs.erik))
         .send()
-        .await
-        .expect("Lekérés sikertelen")
-        .text()
-        .await
-        .expect("Átalakítás sikertelen");
-    let driver_records: Result<Vec<DriverRecord>, serde_json::Error> = from_str(&calls);
+        .await;
     let fridays = get_fridays();
     let dbreturn = Data::Entity::find()
         .filter(Data::Column::Owner.eq(&exts.unwrap().name))
@@ -69,31 +64,34 @@ pub async fn ucp_calls(mut request: Request) -> Result<Json<Callz>, (StatusCode,
             leintes.push(model)
         }
     }
-    if driver_records.is_ok() {
-        let drc = driver_records.unwrap();
-        let rec: Option<&DriverRecord> = drc
-            .iter()
-            .find(|record| record.driver == exts.unwrap().name);
-        Ok(Json(Callz {
-            app: if rec.is_some() {
-                Some(rec.unwrap().count)
-            } else {
-                Some(0)
-            },
-            leintes: leintes.len(),
-            potlek: Potlek {
-                de: de_potlek.len(),
-                du: du_potlek.len(),
-            },
-        }))
-    } else {
-        Ok(Json(Callz {
-            app: None,
-            leintes: leintes.len(),
-            potlek: Potlek {
-                de: de_potlek.len(),
-                du: du_potlek.len(),
-            },
-        }))
-    }
+    if calls.is_ok() {
+        let callsz = calls.unwrap().text().await.expect("Átalakítás sikertelen");
+        let driver_records: Result<Vec<DriverRecord>, serde_json::Error> = from_str(&callsz);
+        if driver_records.is_ok() {
+            let drc = driver_records.unwrap();
+            let rec: Option<&DriverRecord> = drc
+                .iter()
+                .find(|record| record.driver == exts.unwrap().name);
+            return Ok(Json(Callz {
+                app: if rec.is_some() {
+                    Some(rec.unwrap().count)
+                } else {
+                    Some(0)
+                },
+                leintes: leintes.len(),
+                potlek: Potlek {
+                    de: de_potlek.len(),
+                    du: du_potlek.len(),
+                },
+            }));
+        }
+    };
+    Ok(Json(Callz {
+        app: None,
+        leintes: leintes.len(),
+        potlek: Potlek {
+            de: de_potlek.len(),
+            du: du_potlek.len(),
+        },
+    }))
 }
