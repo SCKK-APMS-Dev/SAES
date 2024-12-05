@@ -1,29 +1,35 @@
 <script lang="ts">
+	import { snow } from '$lib/api.js';
+
 	export let data;
 	let hour = new Date().getHours();
 	let greet = '';
 	let end = '!';
-	if (hour >= 19) {
-		greet = 'Szép estét';
-	}
-	if (hour >= 13 && hour < 19) {
-		greet = 'Szép délutánt';
-	}
-	if (hour >= 12 && hour < 13) {
-		greet = 'Szép delet';
-	}
-	if (hour >= 8 && hour < 12) {
-		greet = 'Jó reggelt';
-	}
-	if (hour >= 4 && hour < 8) {
-		greet = 'Jó reggelt, bár nem kapsz pótlékot';
-	}
-	if (hour >= 0 && hour < 1) {
-		greet = 'Boldog új évet';
-	}
-	if (hour >= 1 && hour < 4) {
-		greet = 'Miért nem alszol';
-		end = '?';
+	if (snow) {
+		greet = 'Kellemes ünnepeket';
+	} else {
+		if (hour >= 19) {
+			greet = 'Szép estét';
+		}
+		if (hour >= 13 && hour < 19) {
+			greet = 'Szép délutánt';
+		}
+		if (hour >= 12 && hour < 13) {
+			greet = 'Szép delet';
+		}
+		if (hour >= 8 && hour < 12) {
+			greet = 'Jó reggelt';
+		}
+		if (hour >= 4 && hour < 8) {
+			greet = 'Jó reggelt, bár nem kapsz pótlékot';
+		}
+		if (hour >= 0 && hour < 1) {
+			greet = 'Boldog új évet';
+		}
+		if (hour >= 1 && hour < 4) {
+			greet = 'Miért nem alszol';
+			end = '?';
+		}
 	}
 	// const sendResponse = async () => {
 	// 	await fetch('/api/upload', {
