@@ -1,17 +1,24 @@
-FROM rust:alpine
-WORKDIR /usr/src/converter
+FROM rust:alpine AS build
+WORKDIR /usr/src/converter/dev
 
-#* ALPINE Cuccok
+#* Előkészítés
 
 RUN apk add build-base 
 RUN apk add pkgconfig 
 RUN apk add openssl-dev 
 RUN apk add openssl-libs-static
 
-#* Projekt
+#* Build
 
 COPY . .
+RUN cargo build --release
 
-RUN cargo install --path .
+#* Release
+
+FROM alpine
+
+RUN mkdir -p /usr/src/converter/prod
+COPY --from=build /usr/src/converter/dev/target/release/saes-converter /usr/src/converter/prod/
+
 RUN touch .env
-CMD ["saes-converter"]
+CMD ["/usr/src/converter/prod/saes-converter"]
