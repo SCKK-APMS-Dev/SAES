@@ -1,4 +1,4 @@
-FROM node:22-bookworm-slim
+FROM node:22-alpine
 WORKDIR /usr/src/app
 
 # install dependencies into temp directory
