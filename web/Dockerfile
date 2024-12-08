@@ -13,7 +13,6 @@ RUN pnpm install
 COPY ./ ./
 
 RUN pnpm build
-RUN pnpm prune --production
 
 FROM node:22-alpine
 
