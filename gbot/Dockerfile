@@ -1,4 +1,4 @@
-FROM rust
+FROM rust:alpine
 WORKDIR /usr/src/gbot
 
 #* ALPINE Cuccok
