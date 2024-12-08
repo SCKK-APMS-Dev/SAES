@@ -9,7 +9,6 @@ RUN apk add openssl-dev
 RUN apk add openssl-libs-static
 
 #* Build
-
 COPY . .
 
 RUN cargo build --release
@@ -17,10 +16,10 @@ RUN cargo build --release
 #* Release
 
 FROM alpine
+WORKDIR /usr/src/api/prod
 
-RUN mkdir -p /usr/src/api/prod
 COPY --from=build /usr/src/api/dev/target/release/saes-api /usr/src/api/prod/
 
 RUN touch .env
 EXPOSE 3000
-CMD ["/usr/src/api/prod/saes-api"]
+CMD ["./saes-api"]
