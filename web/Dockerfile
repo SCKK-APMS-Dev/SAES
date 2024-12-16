@@ -6,10 +6,8 @@ WORKDIR /usr/src/web/dev
 # this will cache them and speed up future builds
 
 COPY ./package.json ./
-COPY ./pnpm-lock.yaml ./
 
-
-RUN pnpm install --frozen-lockfile
+RUN pnpm install
 
 COPY ./ ./
 
