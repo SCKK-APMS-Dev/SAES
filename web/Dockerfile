@@ -1,4 +1,5 @@
 FROM node:22-alpine AS build
+RUN npm install pnpm -g
 WORKDIR /usr/src/web/dev
 
 # install dependencies into temp directory
@@ -7,11 +8,11 @@ WORKDIR /usr/src/web/dev
 COPY ./package.json ./
 
 
-RUN npm install --force
+RUN pnpm ci
 
 COPY ./ ./
 
-RUN npm run build
+RUN pnpm build
 RUN npm prune --production
 
 FROM node:22-alpine
