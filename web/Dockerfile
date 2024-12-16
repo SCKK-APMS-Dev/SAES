@@ -8,7 +8,7 @@ WORKDIR /usr/src/web/dev
 COPY ./package.json ./
 
 
-RUN pnpm ci
+RUN pnpm install --frozen-lockfile
 
 COPY ./ ./
 
