@@ -5,6 +5,7 @@
 	import { loading } from '$lib/loading';
 	import { fade } from 'svelte/transition';
 	import Snow from '$lib/snow.svelte';
+
 	import { snow } from '$lib/api';
 	// biome-ignore lint/suspicious/noConfusingLabels: <explanation>
 	$: $loading = !!$navigating;
