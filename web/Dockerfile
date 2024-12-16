@@ -7,7 +7,7 @@ WORKDIR /usr/src/web/dev
 COPY ./package.json ./
 
 
-RUN npm ci
+RUN npm install
 
 COPY ./ ./
 
