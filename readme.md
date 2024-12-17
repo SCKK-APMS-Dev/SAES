@@ -6,6 +6,3 @@ Mit tartalmaz ez a monorepo?
 - `api` a SAES api-ját, [![SAES API Build](https://github.com/SCKK-APMS-Dev/SAES/actions/workflows/build-api.yml/badge.svg)](https://github.com/SCKK-APMS-Dev/SAES/actions/workflows/build-api.yml)
 - `gbot` az SCKK hívásrögzítő botját, [![SAES GBot Build](https://github.com/SCKK-APMS-Dev/SAES/actions/workflows/build-gbot.yml/badge.svg)](https://github.com/SCKK-APMS-Dev/SAES/actions/workflows/build-gbot.yml)
 - `converter` az AVIF kép convertert, [![SAES Converter Build](https://github.com/SCKK-APMS-Dev/SAES/actions/workflows/build-converter.yml/badge.svg)](https://github.com/SCKK-APMS-Dev/SAES/actions/workflows/build-converter.yml)
-- `gui` a jelenleg korai státuszban lévő SCKK GUI-t,
-- `central` az új, központi teszt appot,
-- `webn` az új, leendő weboldalt.
