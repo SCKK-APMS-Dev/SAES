@@ -1,16 +1,16 @@
 <script lang="ts">
 	import { Dropzone, Label, Checkbox, Tooltip } from 'flowbite-svelte';
 
-	let files: FileList;
+	let files: FileList = $state();
 	interface Drivers {
 		[key: string]: Calls;
 	}
 	interface Calls {
 		[key: string]: Date;
 	}
-	let calls: Drivers = {};
-	let active = true;
-	let samecall = false;
+	let calls: Drivers = $state({});
+	let active = $state(true);
+	let samecall = $state(false);
 	const zoneChange = async () => {
 		active = false;
 		if (files.length === 1) {

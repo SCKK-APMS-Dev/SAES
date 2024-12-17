@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Textarea } from 'flowbite-svelte';
-	let code = '';
+	let code = $state('');
 	interface muszak {
 		[key: string]: number;
 	}
@@ -11,11 +11,11 @@
 			n: number;
 		};
 	}
-	let n: muszak = {};
-	let a: muszak = {};
-	let b: muszak = {};
-	let all: allmuszak = {};
-	let hivasok = [0, 0, 0];
+	let n: muszak = $state({});
+	let a: muszak = $state({});
+	let b: muszak = $state({});
+	let all: allmuszak = $state({});
+	let hivasok = $state([0, 0, 0]);
 	const handle = () => {
 		n = {};
 		a = {};
@@ -135,7 +135,7 @@
 		</h2>
 		<Textarea bind:value={code}></Textarea>
 		<button
-			on:click={handle}
+			onclick={handle}
 			class="hover:bg-pos-100 bg-size-200 bg-pos-0 w-full rounded-lg bg-gradient-to-r from-emerald-500 via-amber-400 to-rose-600 py-2 text-xl font-bold drop-shadow-lg transition-all duration-500"
 			>Feldolgozás</button
 		>

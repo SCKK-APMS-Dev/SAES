@@ -1,17 +1,21 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	export let data: PageData;
 	import Error from '$lib/error.svelte';
 	import { onMount } from 'svelte';
 	import type { PageData } from '../../routes/ucp/potlekok/$types';
 	import { formatRelative } from 'date-fns';
 	import { locale } from '$lib/time';
-	let multipage = false;
-	export let tipus = '';
-	export let display = '';
-	let handled_potleks: any = [];
-	let pagee = data.page as number;
+	let multipage = $state(false);
+	interface Props {
+		data: PageData;
+		tipus?: string;
+		display?: string;
+	}
+
+	let { data, tipus = '', display = '' }: Props = $props();
+	let handled_potleks: any = $state([]);
+	let pagee = $state(data.page as number);
 	function switchPage(mode: 'next' | 'prev') {
 		let url = new URL($page.url);
 		if (mode === 'next') {
@@ -81,8 +85,8 @@
 								<a
 									href={`${data.api}/limg?id=${potle.id}&ver=0`}
 									target="_blank"
-									on:mouseenter={() => (potle.focus1 = true)}
-									on:mouseleave={() => (potle.focus1 = false)}
+									onmouseenter={() => (potle.focus1 = true)}
+									onmouseleave={() => (potle.focus1 = false)}
 								>
 									<img
 										loading="lazy"
@@ -100,8 +104,8 @@
 								<a
 									href={`${data.api}/limg?id=${potle.id}&ver=1`}
 									target="_blank"
-									on:mouseenter={() => (potle.focus2 = true)}
-									on:mouseleave={() => (potle.focus2 = false)}
+									onmouseenter={() => (potle.focus2 = true)}
+									onmouseleave={() => (potle.focus2 = false)}
 								>
 									<img
 										loading="lazy"
@@ -121,8 +125,8 @@
 							<a
 								href={`${data.api}/img?id=${potle.id}`}
 								target="_blank"
-								on:mouseenter={() => (potle.focus = true)}
-								on:mouseleave={() => (potle.focus = false)}
+								onmouseenter={() => (potle.focus = true)}
+								onmouseleave={() => (potle.focus = false)}
 							>
 								<img
 									loading="lazy"
@@ -154,7 +158,7 @@
 			{#if pagee > 0}
 				<button
 					aria-label="Előző oldal"
-					on:click={() => switchPage('prev')}
+					onclick={() => switchPage('prev')}
 					class="hover:bg-pos-100 bg-size-200 bg-pos-0 rounded-full bg-gradient-to-r from-emerald-500 via-teal-600 to-red-500 text-white duration-300"
 					style="width: calc(5vw*2.5); height: 5vh;"
 					><span class="icon-[solar--map-arrow-left-bold] h-full w-full"></span></button
@@ -163,7 +167,7 @@
 			{#if Math.ceil(data.potlekok.length / 20) - 1 > pagee}
 				<button
 					aria-label="Következő oldal"
-					on:click={() => switchPage('next')}
+					onclick={() => switchPage('next')}
 					class="hover:bg-pos-100 bg-size-200 bg-pos-0 rounded-full bg-gradient-to-r from-emerald-500 via-teal-600 to-red-500 text-white duration-300"
 					style="width: calc(5vw*2.5); height: 5vh;"
 					><span class="icon-[solar--map-arrow-right-bold] h-full w-full"></span></button

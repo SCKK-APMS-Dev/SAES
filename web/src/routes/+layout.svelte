@@ -1,15 +1,15 @@
 <script>
 	import '../app.css';
 	import '../snow.css';
-	import { navigating } from '$app/stores';
-	import { loading } from '$lib/loading';
+	import { navigating } from '$app/state';
+	import { loading } from '$lib/loading.svelte';
 	import { fade } from 'svelte/transition';
 	import Snow from '$lib/snow.svelte';
-
 	import { snow } from '$lib/api';
-	// biome-ignore lint/suspicious/noConfusingLabels: <explanation>
-	$: $loading = !!$navigating;
-	// $: $loading = true; // testing
+	let { children } = $props();
+	$effect(() => {
+		loading.value = !!navigating.to;
+	})
 </script>
 
 <svelte:head>
@@ -24,9 +24,9 @@
 {#if snow}
 	<Snow />
 {/if}
-<slot />
+{@render children?.()}
 
-{#if $loading}
+{#if loading.value}
 	<div
 		class="fixed top-0 z-50 h-full w-full bg-[rgba(0,0,0,0.4)]"
 		transition:fade={{ duration: 300 }}

@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { snow } from '$lib/api.js';
 
-	export let data;
+	let { data } = $props();
 	let hour = new Date().getHours();
-	let greet = '';
-	let end = '!';
+	let greet = $state('');
+	let end = $state('!');
 	if (snow) {
 		greet = 'Kellemes ünnepeket';
 	} else {

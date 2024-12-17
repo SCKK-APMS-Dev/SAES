@@ -96,22 +96,25 @@ importers:
 
   web:
     dependencies:
-      '@sveltejs/adapter-node':
-        specifier: ^5.2.10
-        version: 5.2.10(@sveltejs/kit@2.12.1(@sveltejs/vite-plugin-svelte@5.0.2(svelte@5.14.1)(vite@6.0.3(@types/node@22.10.2)(jiti@1.21.6)(yaml@2.6.1)))(svelte@5.14.1)(vite@6.0.3(@types/node@22.10.2)(jiti@1.21.6)(yaml@2.6.1)))
-      socket.io-client:
-        specifier: ^4.8.1
-        version: 4.8.1
-      svelte-markdown:
-        specifier: ^0.4.1
-        version: 0.4.1(svelte@5.14.1)
-    devDependencies:
       '@date-fns/tz':
         specifier: ^1.2.0
         version: 1.2.0
       '@iconify/json':
         specifier: ^2.2.284
         version: 2.2.284
+      '@sveltejs/adapter-node':
+        specifier: ^5.2.10
+        version: 5.2.10(@sveltejs/kit@2.12.1(@sveltejs/vite-plugin-svelte@5.0.2(svelte@5.14.1)(vite@6.0.3(@types/node@22.10.2)(jiti@1.21.6)(yaml@2.6.1)))(svelte@5.14.1)(vite@6.0.3(@types/node@22.10.2)(jiti@1.21.6)(yaml@2.6.1)))
+      date-fns:
+        specifier: ^4.1.0
+        version: 4.1.0
+      marked:
+        specifier: ^15.0.4
+        version: 15.0.4
+      socket.io-client:
+        specifier: ^4.8.1
+        version: 4.8.1
+    devDependencies:
       '@iconify/tailwind':
         specifier: ^1.2.0
         version: 1.2.0
@@ -136,9 +139,6 @@ importers:
       autoprefixer:
         specifier: ^10.4.20
         version: 10.4.20(postcss@8.4.49)
-      date-fns:
-        specifier: ^4.1.0
-        version: 4.1.0
       eslint:
         specifier: ^9.17.0
         version: 9.17.0(jiti@1.21.6)
@@ -986,9 +986,6 @@ packages:
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
 
-  '@types/marked@5.0.2':
-    resolution: {integrity: sha512-OucS4KMHhFzhz27KxmWg7J+kIYqyqoW5kdIEI319hqARQQUTqhao3M/F+uFnDXD0Rg72iDDZxZNxq5gvctmLlg==}
-
   '@types/node@22.10.2':
     resolution: {integrity: sha512-Xxr6BBRCAOQixvonOye19wnzyDiUtTeqldOOmj3CkeblonbccA12PFwlufvRdrpjXxqnmUaeiU5EOA+7s5diUQ==}
 
@@ -1602,9 +1599,9 @@ packages:
   magic-string@0.30.17:
     resolution: {integrity: sha512-sNPKHvyjVf7gyjwS4xGTaW/mCnF8wnjtifKBEhxfZ7E/S8tQ0rssrwGNn6q8JH/ohItJfSQp9mBtQYuTlH5QnA==}
 
-  marked@5.1.2:
-    resolution: {integrity: sha512-ahRPGXJpjMjwSOlBoTMZAK7ATXkli5qCPxZ21TG44rx1KEo44bii4ekgTDQPNRQ4Kh7JMb9Ub1PVk1NxRSsorg==}
-    engines: {node: '>= 16'}
+  marked@15.0.4:
+    resolution: {integrity: sha512-TCHvDqmb3ZJ4PWG7VEGVgtefA5/euFmsIhxtD0XsBxI39gUSKL81mIRFdt0AiNQozUahd4ke98ZdirExd/vSEw==}
+    engines: {node: '>= 18'}
     hasBin: true
 
   mdn-data@2.0.30:
@@ -2050,11 +2047,6 @@ packages:
     engines: {node: ^12.20 || ^14.13.1 || >= 16}
     peerDependencies:
       svelte: ^3.19.0 || ^4.0.0
-
-  svelte-markdown@0.4.1:
-    resolution: {integrity: sha512-pOlLY6EruKJaWI9my/2bKX8PdTeP5CM0s4VMmwmC2prlOkjAf+AOmTM4wW/l19Y6WZ87YmP8+ZCJCCwBChWjYw==}
-    peerDependencies:
-      svelte: ^4.0.0
 
   svelte-preprocess@5.1.4:
     resolution: {integrity: sha512-IvnbQ6D6Ao3Gg6ftiM5tdbR6aAETwjhHV+UKGf5bHGYR69RQvF1ho0JKPcbUON4vy4R7zom13jPjgdOWCQ5hDA==}
@@ -2968,8 +2960,6 @@ snapshots:
 
   '@types/json-schema@7.0.15': {}
 
-  '@types/marked@5.0.2': {}
-
   '@types/node@22.10.2':
     dependencies:
       undici-types: 6.20.0
@@ -3660,7 +3650,7 @@ snapshots:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.0
 
-  marked@5.1.2: {}
+  marked@15.0.4: {}
 
   mdn-data@2.0.30: {}
 
@@ -4084,12 +4074,6 @@ snapshots:
   svelte-hmr@0.16.0(svelte@4.2.19):
     dependencies:
       svelte: 4.2.19
-
-  svelte-markdown@0.4.1(svelte@5.14.1):
-    dependencies:
-      '@types/marked': 5.0.2
-      marked: 5.1.2
-      svelte: 5.14.1
 
   svelte-preprocess@5.1.4(postcss-load-config@4.0.2(postcss@8.4.49))(postcss@8.4.49)(svelte@4.2.19)(typescript@5.7.2):
     dependencies:

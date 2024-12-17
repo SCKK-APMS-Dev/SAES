@@ -1,5 +1,5 @@
 <script lang="ts">
-	export let data;
+	let { data } = $props();
 	const supportCountries = ['HU', 'SK', 'RO'];
 	let color = supportCountries.includes(data.country as string) ? data.country : 'HU';
 </script>

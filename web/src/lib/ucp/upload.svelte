@@ -1,16 +1,26 @@
 <script lang="ts">
 	import { beforeNavigate } from '$app/navigation';
 	import Error from '$lib/error.svelte';
-	import { loading } from '$lib/loading';
-	export let data;
-	let formerror = '';
-	export let display = '';
-	export let tipus = '';
-	export let warning = '';
-	export let agent = '';
+	import { loading } from '$lib/loading.svelte';
+	let formerror = $state('');
+	interface Props {
+		data: any;
+		display?: string;
+		tipus?: string;
+		warning?: string;
+		agent?: string;
+	}
+
+	let {
+		data,
+		display = '',
+		tipus = '',
+		warning = '',
+		agent = ''
+	}: Props = $props();
 	let seli: string[][] = [];
-	let fileas: string[] = [];
-	let tope = 'col';
+	let fileas: string[] = $state([]);
+	let tope = $state('col');
 	let uploading = false;
 	beforeNavigate((ev) => {
 		if (uploading) {
@@ -18,7 +28,7 @@
 		}
 	});
 	async function upload() {
-		$loading = true;
+		loading.value = true;
 		uploading = true;
 		let files = document.getElementById('file') as HTMLInputElement;
 		if (files.files) {
@@ -39,7 +49,7 @@
 				},
 				body: formData
 			});
-			$loading = false;
+			loading.value = false;
 			uploading = false;
 			const ret = await mama.json();
 			if (ret.error === 'toobig') {
@@ -80,7 +90,7 @@
 					Edge, Brave, Arc, stb.)
 				</h1>
 			{:else}
-				<form on:submit|preventDefault={() => upload()} enctype="multipart/form-data">
+				<form onsubmit={() => upload()} enctype="multipart/form-data">
 					<input
 						class="file:text-black"
 						type="file"
@@ -108,7 +118,7 @@
 			{/if}
 			<button
 				class="mb-2 hidden rounded-lg bg-red-600 px-2 transition-all duration-200 hover:bg-red-800"
-				on:click={switchTope}
+				onclick={switchTope}
 				>{#if tope === 'row'}
 					Sorban
 				{:else}

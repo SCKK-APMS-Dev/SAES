@@ -12,8 +12,6 @@
 		"format": "prettier --write ."
 	},
 	"devDependencies": {
-		"@date-fns/tz": "^1.2.0",
-		"@iconify/json": "^2.2.284",
 		"@iconify/tailwind": "^1.2.0",
 		"@sveltejs/kit": "^2.12.1",
 		"@sveltejs/vite-plugin-svelte": "^5.0.2",
@@ -22,7 +20,6 @@
 		"@typescript-eslint/eslint-plugin": "^8.18.1",
 		"@typescript-eslint/parser": "^8.18.1",
 		"autoprefixer": "^10.4.20",
-		"date-fns": "^4.1.0",
 		"eslint": "^9.17.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-svelte": "^2.46.1",
@@ -41,8 +38,11 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@date-fns/tz": "^1.2.0",
+		"@iconify/json": "^2.2.284",
 		"@sveltejs/adapter-node": "^5.2.10",
-		"socket.io-client": "^4.8.1",
-		"svelte-markdown": "^0.4.1"
+		"date-fns": "^4.1.0",
+		"marked": "^15.0.4",
+		"socket.io-client": "^4.8.1"
 	}
 }

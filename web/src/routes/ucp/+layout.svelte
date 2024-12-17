@@ -1,19 +1,19 @@
 <script lang="ts">
-	import SvelteMarkdown from 'svelte-markdown';
-	import { navigating, page } from '$app/stores';
-	export let data;
+	import {marked} from 'marked';
+	import { navigating, page } from '$app/state';
 	import Error from '$lib/error.svelte';
 	import { Reeler_keys, Reeler_vals } from '$lib/ucp/public.js';
 	import { onMount } from 'svelte';
-	import { loading } from '$lib/loading.js';
+	import { loading } from '$lib/loading.svelte';
 	import { io } from 'socket.io-client';
 	import { socket } from '$lib/socket.js';
 	import ViewTransition from '$lib/navigation.svelte';
 	import Header from '$lib/ucp/header.svelte';
-	let maintenance = false;
-	let initial_socket = false;
-	let announcement = false;
-	let nosocket: boolean | string = 'Socket csatlakozás';
+	let { data, children } = $props();
+	let maintenance = $state(false);
+	let initial_socket = $state(false);
+	let announcement = $state(false);
+	let nosocket: boolean | string = $state('Socket csatlakozás');
 	let tip = !data.error && !data.noaccess ? (data.layout.am ? 'TOW' : 'TAXI') : 'SCKK';
 	onMount(() => {
 		if (!data.noaccess) {
@@ -40,15 +40,15 @@
 				console.log('Socket csatlakozva');
 				nosocket = false;
 				initial_socket = true;
-				$loading = false;
+				loading.value = false;
 			});
 			$socket.on('disconnect', () => {
 				nosocket = 'Socket csatlakozás sikertelen';
 			});
 			if (data.error) {
-				$loading = false;
+				loading.value = false;
 			} else {
-				$loading = true;
+				loading.value = true;
 			}
 		}
 	});
@@ -56,38 +56,38 @@
 
 <svelte:head>
 	{#if !maintenance || data.maintenance}
-		{#if !$navigating}
-			{#if $page.url.pathname.includes('mv')}
+		{#if !navigating}
+			{#if page.url.pathname.includes('mv')}
 				<title>Műszakvezetői felület - {tip}</title>
 				<meta content="https://sckk.hu/ucp/mv" property="og:url" />
 				<meta content="Műszakvezetői felület" property="og:description" />
-			{:else if Reeler_keys.some((el) => $page.url.pathname.includes(el))}
-				{#if $page.url.pathname.endsWith('/upload')}
+			{:else if Reeler_keys.some((el) => page.url.pathname.includes(el))}
+				{#if page.url.pathname.endsWith('/upload')}
 					<title
-						>{Reeler_vals[Reeler_keys.indexOf($page.url.pathname.split('/')[2])][2]} feltöltés - {tip}</title
+						>{Reeler_vals[Reeler_keys.indexOf(page.url.pathname.split('/')[2])][2]} feltöltés - {tip}</title
 					>
 					<meta
-						content="https://sckk.hu/ucp/{$page.url.pathname.split('/')[2]}"
+						content="https://sckk.hu/ucp/{page.url.pathname.split('/')[2]}"
 						property="og:url"
 					/>
 					<meta
 						content="{Reeler_vals[
-							Reeler_keys.indexOf($page.url.pathname.split('/')[2])
+							Reeler_keys.indexOf(page.url.pathname.split('/')[2])
 						][2]} feltöltés"
 						property="og:description"
 					/>
 				{:else}
 					<title
-						>{Reeler_vals[Reeler_keys.indexOf($page.url.pathname.split('/')[2])][1]} megtekintése - {tip}</title
+						>{Reeler_vals[Reeler_keys.indexOf(page.url.pathname.split('/')[2])][1]} megtekintése - {tip}</title
 					>
 					<meta
 						content="{Reeler_vals[
-							Reeler_keys.indexOf($page.url.pathname.split('/')[2])
+							Reeler_keys.indexOf(page.url.pathname.split('/')[2])
 						][1]} megtekintése"
 						property="og:description"
 					/>
 					<meta
-						content="https://sckk.hu/ucp/{$page.url.pathname.split('/')[2]}"
+						content="https://sckk.hu/ucp/{page.url.pathname.split('/')[2]}"
 						property="og:url"
 					/>
 				{/if}
@@ -151,7 +151,7 @@
 			{#if announcement}
 				<header>
 					<div class="flex items-center justify-center bg-blue-500 text-center text-2xl text-white">
-						<SvelteMarkdown source={announcement} />
+						{@html marked(announcement.toString())}
 					</div>
 				</header>
 			{/if}
@@ -160,7 +160,7 @@
 			<Header {tip} am={data.layout.am} isAdmin={data.layout.admin} />
 			<ViewTransition />
 			<main>
-				<slot />
+				{@render children?.()}
 			</main>
 		{/if}
 	{:else}
@@ -172,7 +172,7 @@
 						Jelenleg karbantartás zajlik, kérlek nézz vissza később!
 					</h1>
 					{#if typeof maintenance === 'string'}
-						<h1 class="text-2xl text-gray-300">Indoklás: {maintenance}</h1>
+						<h1 class="text-2xl text-gray-300">Indoklás: {@html marked(maintenance)}</h1>
 					{/if}
 					{#if data.layout?.admin}
 						<a

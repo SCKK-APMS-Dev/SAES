@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Adminlist from '$lib/mv/mvlist.svelte';
-	export let data;
+	let { data } = $props();
 </script>
 
 <Adminlist

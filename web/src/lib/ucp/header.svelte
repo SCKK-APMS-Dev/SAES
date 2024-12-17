@@ -1,9 +1,13 @@
 <script lang="ts">
 	import { snow } from '$lib/api';
 
-	export let tip;
-	export let isAdmin = false;
-	export let am = false;
+	interface Props {
+		tip: any;
+		isAdmin?: boolean;
+		am?: boolean;
+	}
+
+	let { tip, isAdmin = false, am = false }: Props = $props();
 </script>
 
 <header class="z-20">

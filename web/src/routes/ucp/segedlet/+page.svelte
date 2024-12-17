@@ -1,9 +1,13 @@
 <script lang="ts">
-	export let data: {
+	interface Props {
+		data: {
 		api?: string | undefined;
 		layout: { am: boolean };
 		error?: string | undefined;
 	};
+	}
+
+	let { data }: Props = $props();
 </script>
 
 <div class="text-center text-black dark:text-white">

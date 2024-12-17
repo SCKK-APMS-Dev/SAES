@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import { navigating, page } from '$app/stores';
 	import Error from '$lib/error.svelte';
 	import { getRealText, getAlterText } from '$lib/ucp/public.js';
@@ -8,13 +10,12 @@
 	interface Copy {
 		[key: string]: boolean;
 	}
-	let copied: Copy = {};
+	let copied: Copy = $state({});
 	interface tipus {
 		[key: string]: calls;
 	}
-	export let data;
-	let aha: tipus = {};
-	$: if (!$navigating) render();
+	let { data } = $props();
+	let aha: tipus = $state({});
 	function render() {
 		aha = {};
 		if (data.date) {
@@ -63,6 +64,9 @@
 			copied[id] = false;
 		}, 3000);
 	}
+	run(() => {
+		if (!$navigating) render();
+	});
 </script>
 
 <Error {data}>
@@ -93,7 +97,7 @@
 									</h2>
 									<button
 										class="ml-1 flex items-center justify-center rounded-full bg-gray-600 p-1 transition-colors duration-200 hover:bg-gray-800"
-										on:click={() =>
+										onclick={() =>
 											copyClip(
 												`${$page.url.origin}/list/${key2.replace(' ', '_')}/${getAlterText(key)}`,
 												`${key}_${key2}`

@@ -1,6 +1,11 @@
 <script lang="ts">
 	import { Tooltip } from 'flowbite-svelte';
-	let nav: HTMLDivElement;
+	interface Props {
+		children?: import('svelte').Snippet;
+	}
+
+	let { children }: Props = $props();
+	let nav: HTMLDivElement = $state();
 	const tognav = () => {
 		if (nav.classList.contains('hidden')) {
 			nav.classList.remove('hidden');
@@ -26,7 +31,7 @@
 	<button
 		aria-label="mv-menu"
 		class="mr-[10vw] cursor-pointer self-center justify-self-end text-3xl font-semibold transition-all duration-200 hover:text-emerald-500 lg:hidden"
-		on:click={tognav}
+		onclick={tognav}
 	>
 		<span class="icon-[material-symbols--menu]"></span>
 	</button>
@@ -50,4 +55,4 @@
 		>
 	</div>
 </nav>
-<slot />
+{@render children?.()}

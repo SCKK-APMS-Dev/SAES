@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { loading } from '$lib/loading';
+	import { loading } from '$lib/loading.svelte';
 	import { onMount } from 'svelte';
 	import { formatRelative } from 'date-fns';
 	import { locale } from '$lib/time';
@@ -17,19 +17,32 @@
 	import { page } from '$app/stores';
 	import { beforeNavigate, goto } from '$app/navigation';
 	import type { PageData } from '../../routes/ucp/mv/leintesek/$types';
-	export let title = '';
-	export let data: PageData;
-	export let type = '';
-	export let editdes = '';
-	export let extraText = '';
-	export let des = '';
-	let haveadmin = false;
-	export let tools: string[] = [];
-	export let am: boolean = false;
-	let modal: HTMLDialogElement;
-	let bindbtn: HTMLButtonElement;
+	let haveadmin = $state(false);
+	interface Props {
+		title?: string;
+		data: PageData;
+		type?: string;
+		editdes?: string;
+		extraText?: string;
+		des?: string;
+		tools?: string[];
+		am?: boolean;
+	}
+
+	let {
+		title = '',
+		data,
+		type = '',
+		editdes = '',
+		extraText = '',
+		des = '',
+		tools = [],
+		am = false
+	}: Props = $props();
+	let modal: HTMLDialogElement|undefined = $state();
+	let bindbtn: HTMLButtonElement|undefined = $state();
 	let editing = false;
-	let originallength = 0;
+	let originallength = $state(0);
 	let potleks: {
 		data: {
 			items: {
@@ -46,13 +59,13 @@
 
 		api: string;
 		error: boolean;
-	} = { data: { items: [] }, api: '', error: false };
-	let jona = data.status;
-	let multipage = false;
-	let bindEdit: any = {};
+	} = $state({ data: { items: [] }, api: '', error: false });
+	let jona = $state(data.status);
+	let multipage = $state(false);
+	let bindEdit: any = $state({});
 	let editid = 0;
 	async function render() {
-		$loading = true;
+		loading.value = true;
 		const fatcs = await fetch('/web-api/admin', {
 			headers: {
 				status: jona as string,
@@ -95,7 +108,7 @@
 				haveadmin = false;
 			}
 			originallength = ret.data.items.length;
-			$loading = false;
+			loading.value = false;
 		}
 	}
 	onMount(() => {
@@ -109,7 +122,7 @@
 	});
 
 	function edit(id: number) {
-		modal.showModal();
+		modal?.showModal();
 		bindEdit = potleks.data.items[id];
 		bindEdit.custombg = false;
 		editid = id;
@@ -139,7 +152,7 @@
 		});
 		if (fatcs.ok) {
 			const cucc = await fatcs.json();
-			modal.close();
+			modal?.close();
 			if (jona === cucc.status) {
 				potleks.data.items[id] = cucc;
 			} else {
@@ -147,7 +160,7 @@
 			}
 		}
 	}
-	let pagee = data.page as number;
+	let pagee = $state(data.page as number);
 	function switchPage(mode: 'next' | 'prev') {
 		let url = new URL($page.url);
 		if (mode === 'next') {
@@ -177,9 +190,9 @@
 		}
 	}
 	async function editDone() {
-		bindbtn.classList.add('cursor-not-allowed');
-		bindbtn.classList.add('bg-emerald-700');
-		bindbtn.disabled = true;
+		bindbtn?.classList.add('cursor-not-allowed');
+		bindbtn?.classList.add('bg-emerald-700');
+		bindbtn!.disabled = true;
 		const fatcs = await fetch('/web-api/admin', {
 			headers: {
 				'Content-Type': 'application/json'
@@ -196,7 +209,7 @@
 		});
 		if (fatcs.ok) {
 			const cucc = await fatcs.json();
-			modal.close();
+			modal?.close();
 			editing = false;
 			if (jona === cucc.status) {
 				potleks.data.items[editid] = cucc;
@@ -204,12 +217,12 @@
 				await render();
 			}
 		}
-		bindbtn.classList.remove('cursor-not-allowed');
-		bindbtn.classList.remove('bg-emerald-700');
-		bindbtn.disabled = false;
+		bindbtn?.classList.remove('cursor-not-allowed');
+		bindbtn?.classList.remove('bg-emerald-700');
+		bindbtn!.disabled = false;
 	}
 	function closeModal() {
-		modal.close();
+		modal?.close();
 		editing = false;
 	}
 </script>
@@ -228,7 +241,7 @@
 	<button
 		aria-label="Kép megnézése"
 		class="absolute right-16 top-2 flex items-center justify-center rounded-xl bg-black bg-opacity-40 p-2 text-3xl font-bold text-blue-600 duration-150 hover:bg-opacity-90"
-		on:click={() => {
+		onclick={() => {
 			if (bindEdit.custombg) {
 				bindEdit.custombg = false;
 			} else {
@@ -239,11 +252,11 @@
 	<button
 		aria-label="Bezárás"
 		class="absolute right-4 top-2 flex items-center justify-center rounded-xl bg-black bg-opacity-40 p-2 text-3xl font-bold text-red-600 duration-150 hover:bg-opacity-90"
-		on:click={() => closeModal()}><span class="icon-[carbon--close-filled] m-auto"></span></button
+		onclick={() => closeModal()}><span class="icon-[carbon--close-filled] m-auto"></span></button
 	>
 	{#if !bindEdit.custombg}
 		<div class="z-20 m-auto h-max w-max rounded-3xl bg-black bg-opacity-25 p-5 lg:w-[500px]">
-			<form on:submit|preventDefault={() => editDone()}>
+			<form onsubmit={() => editDone()}>
 				<div class="grid grid-cols-2 items-center gap-3">
 					<h1 class=" col-span-2 mx-2 text-3xl font-bold">
 						{bindEdit.owner}
@@ -456,7 +469,7 @@
 		{#if pagee > 0}
 			<button
 				aria-label="Előző oldal"
-				on:click={() => switchPage('prev')}
+				onclick={() => switchPage('prev')}
 				class="hover:bg-pos-100 bg-size-200 bg-pos-0 rounded-full bg-gradient-to-r from-emerald-500 via-teal-600 to-red-500 text-white duration-300"
 				style="width: calc(5vw*2.5); height: 5vh;"
 				><span class="icon-[solar--map-arrow-left-bold] h-full w-full"></span></button
@@ -465,7 +478,7 @@
 		{#if Math.ceil(originallength / 20) - 1 > pagee}
 			<button
 				aria-label="Következő oldal"
-				on:click={() => switchPage('next')}
+				onclick={() => switchPage('next')}
 				class="hover:bg-pos-100 bg-size-200 bg-pos-0 rounded-full bg-gradient-to-r from-emerald-500 via-teal-600 to-red-500 text-white duration-300"
 				style="width: calc(5vw*2.5); height: 5vh;"
 				><span class="icon-[solar--map-arrow-right-bold] h-full w-full"></span></button

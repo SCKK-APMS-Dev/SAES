@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Upload from '$lib/ucp/upload.svelte';
 
-	export let data;
+	let { data } = $props();
 </script>
 
 <Upload
