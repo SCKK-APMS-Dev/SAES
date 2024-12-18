@@ -11,7 +11,7 @@ RUN npm install
 COPY ./ ./
 
 RUN npm run build
-RUN npm prune --production
+RUN npm prune --omit=dev
 
 FROM node:22-alpine
 WORKDIR /usr/src/web/prod
