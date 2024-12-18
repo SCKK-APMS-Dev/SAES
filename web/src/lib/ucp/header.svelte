@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { snow } from '$lib/api';
+	import { pages } from './public';
+	import { page as statepage } from '$app/state';
 
 	interface Props {
 		tip: any;
@@ -8,6 +10,8 @@
 	}
 
 	let { tip, isAdmin = false, am = false }: Props = $props();
+
+	let pagesz = pages(am);
 </script>
 
 <header class="z-20">
@@ -57,48 +61,16 @@
 							<ul
 								class="items-center space-y-8 px-6 pt-32 text-center text-gray-700 md:px-12 lg:flex lg:space-x-12 lg:space-y-0 lg:pt-0"
 							>
-								<li>
-									<a
-										href="/ucp"
-										class={`${am ? 'before:bg-tow' : 'before:bg-taxi'} group relative before:absolute before:inset-x-0 before:-bottom-1.5 before:h-2 before:origin-right before:scale-x-0 before:transition before:duration-200 hover:before:origin-left hover:before:scale-x-100`}
-									>
-										<span class="relative text-black dark:text-white">Kezdőlap</span>
-									</a>
-								</li>
-								<li>
-									<a
-										href="/ucp/segedlet"
-										class={`${am ? 'before:bg-tow' : 'before:bg-taxi'} group relative before:absolute before:inset-x-0 before:-bottom-1.5 before:h-2 before:origin-right before:scale-x-0 before:transition before:duration-200 hover:before:origin-left hover:before:scale-x-100`}
-									>
-										<span class="relative text-black dark:text-white">Segédlet</span>
-									</a>
-								</li>
-								<li>
-									<a
-										href="/ucp/potlekok"
-										class={`${am ? 'before:bg-tow' : 'before:bg-taxi'} group relative before:absolute before:inset-x-0 before:-bottom-1.5 before:h-2 before:origin-right before:scale-x-0 before:transition before:duration-200 hover:before:origin-left hover:before:scale-x-100`}
-									>
-										<span class="relative text-black dark:text-white">Pótlékok</span>
-									</a>
-								</li>
-								<li>
-									<a
-										href="/ucp/leintesek"
-										class={`${am ? 'before:bg-tow' : 'before:bg-taxi'} group relative before:absolute before:inset-x-0 before:-bottom-1.5 before:h-2 before:origin-right before:scale-x-0 before:transition before:duration-200 hover:before:origin-left hover:before:scale-x-100`}
-									>
-										<span class="relative text-black dark:text-white"
-											>Leintések {#if am}/ Bejelentések{/if}</span
+								{#each pagesz as page}
+									<li>
+										<a
+											href={page.url}
+											class={`${am ? 'before:bg-tow' : 'before:bg-taxi'} group relative before:absolute before:inset-x-0 before:-bottom-1.5 before:h-2 before:origin-right before:scale-x-0 before:transition before:duration-200 hover:before:origin-left ${statepage.url.pathname === page.url ? '' : 'hover:'}before:scale-x-100`}
 										>
-									</a>
-								</li>
-								<li>
-									<a
-										href="/ucp/szamlak"
-										class={`${am ? 'before:bg-tow' : 'before:bg-taxi'} group relative before:absolute before:inset-x-0 before:-bottom-1.5 before:h-2 before:origin-right before:scale-x-0 before:transition before:duration-200 hover:before:origin-left hover:before:scale-x-100`}
-									>
-										<span class="relative text-black dark:text-white">Szereltetési számlák</span>
-									</a>
-								</li>
+											<span class="relative text-black dark:text-white">{page.display}</span>
+										</a>
+									</li>
+								{/each}
 							</ul>
 
 							<div

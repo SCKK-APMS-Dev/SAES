@@ -8,8 +8,8 @@
 	import { snow } from '$lib/api';
 	let { children } = $props();
 	$effect(() => {
-		loading.value = !!navigating.to;
-	})
+		loading.value = !!navigating.type;
+	});
 </script>
 
 <svelte:head>

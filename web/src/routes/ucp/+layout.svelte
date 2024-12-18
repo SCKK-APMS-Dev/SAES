@@ -1,5 +1,5 @@
 <script lang="ts">
-	import {marked} from 'marked';
+	import { marked } from 'marked';
 	import { navigating, page } from '$app/state';
 	import Error from '$lib/error.svelte';
 	import { Reeler_keys, Reeler_vals } from '$lib/ucp/public.js';
@@ -56,7 +56,7 @@
 
 <svelte:head>
 	{#if !maintenance || data.maintenance}
-		{#if !navigating}
+		{#if !navigating.type}
 			{#if page.url.pathname.includes('mv')}
 				<title>Műszakvezetői felület - {tip}</title>
 				<meta content="https://sckk.hu/ucp/mv" property="og:url" />
@@ -66,10 +66,7 @@
 					<title
 						>{Reeler_vals[Reeler_keys.indexOf(page.url.pathname.split('/')[2])][2]} feltöltés - {tip}</title
 					>
-					<meta
-						content="https://sckk.hu/ucp/{page.url.pathname.split('/')[2]}"
-						property="og:url"
-					/>
+					<meta content="https://sckk.hu/ucp/{page.url.pathname.split('/')[2]}" property="og:url" />
 					<meta
 						content="{Reeler_vals[
 							Reeler_keys.indexOf(page.url.pathname.split('/')[2])
@@ -86,10 +83,7 @@
 						][1]} megtekintése"
 						property="og:description"
 					/>
-					<meta
-						content="https://sckk.hu/ucp/{page.url.pathname.split('/')[2]}"
-						property="og:url"
-					/>
+					<meta content="https://sckk.hu/ucp/{page.url.pathname.split('/')[2]}" property="og:url" />
 				{/if}
 			{:else}
 				<title>Felhasználói felület - {tip}</title>

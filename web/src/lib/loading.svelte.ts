@@ -1,1 +1,1 @@
-export const loading = $state({ value: false });
+export const loading = $state({ value: true });

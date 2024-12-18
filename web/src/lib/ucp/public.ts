@@ -32,3 +32,39 @@ const Reeler = {
 
 export const Reeler_keys = Object.keys(Reeler);
 export const Reeler_vals = Object.values(Reeler);
+
+interface Page {
+	[key: string]: {
+		url: string;
+		display: string;
+	};
+}
+
+export const pages = (am: boolean) => {
+	return [
+		{
+			url: "/ucp",
+			display: "Kezdőlap",
+		},
+		{
+			url: "/ucp/segedlet",
+			display: "Segédlet",
+		},
+		{
+			url: "/ucp/links",
+			display: "Hasznos linkek",
+		},
+		{
+			url: "/ucp/potlekok",
+			display: "Pótlékok",
+		},
+		{
+			url: "/ucp/leintesek",
+			display: `Leintések${am ? " / Bejelentések" : ""}`,
+		},
+		{
+			url: "/ucp/szamlak",
+			display: "Szereltetési számlák",
+		},
+	];
+};
