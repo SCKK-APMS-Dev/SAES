@@ -9,6 +9,7 @@
 			{#if !data.layout.am}
 				<a
 					href="/s/app"
+					target="_blank"
 					class="border-taxi hover:bg-taxi w-1/2 rounded-3xl border-4 p-5 transition-colors duration-500 lg:w-1/4"
 				>
 					<h1 class="text-2xl font-bold">SCKK Application letöltése</h1>
@@ -19,6 +20,7 @@
 			{/if}
 			<a
 				href="/s/montage"
+				target="_blank"
 				class="col-span-2 w-1/2 rounded-3xl border-4 border-emerald-600 p-5 transition-colors duration-500 hover:bg-emerald-600 lg:w-1/4"
 			>
 				<h1 class="text-2xl font-bold">Montage klipp beküldés</h1>
