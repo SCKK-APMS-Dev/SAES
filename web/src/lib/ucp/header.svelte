@@ -65,7 +65,7 @@
 									<li>
 										<a
 											href={page.url}
-											class={`${am ? 'before:bg-tow' : 'before:bg-taxi'} group relative before:absolute before:inset-x-0 before:-bottom-1.5 before:h-2 before:origin-right before:scale-x-0 before:transition before:duration-200 hover:before:origin-left ${statepage.url.pathname === page.url ? '' : 'hover:'}before:scale-x-100`}
+											class={`${am ? 'before:bg-tow' : 'before:bg-taxi'} group relative before:absolute before:inset-x-0 before:-bottom-1.5 before:h-2 before:origin-right before:scale-x-0 before:transition before:duration-200 hover:before:origin-left ${statepage.url.pathname === page.url ? 'before:scale-x-100' : 'hover:before:scale-x-100'}`}
 										>
 											<span class="relative text-black dark:text-white">{page.display}</span>
 										</a>
