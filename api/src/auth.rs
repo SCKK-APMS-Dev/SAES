@@ -2,11 +2,13 @@ use std::env;
 
 use axum::extract::Query;
 use axum::{debug_handler, response::Redirect};
+use base64::engine::general_purpose;
+use base64::Engine;
 use tower_cookies::cookie::time::Duration;
 use tower_cookies::{Cookie, Cookies};
 use url_builder::URLBuilder;
 
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 pub struct DiscordStuff {
     pub api_endpoint: String,
@@ -44,21 +46,10 @@ pub fn get_discord_envs() -> DiscordStuff {
     }
 }
 
-pub fn get_auth_url() -> String {
-    let mut ub = URLBuilder::new();
-    let ds = get_discord_envs();
-    ub.set_protocol("https")
-        .set_host(&ds.discord_base.as_str())
-        .add_param("response_type", "code")
-        .add_param("client_id", &ds.discord_id)
-        .add_param("scope", "identify")
-        .add_param("redirect_uri", &ds.redirect_url);
-    ub.build()
-}
-
 #[derive(Deserialize)]
 pub struct Code {
     code: String,
+    state: String,
 }
 
 #[derive(Debug, Deserialize)]
@@ -100,7 +91,34 @@ pub async fn base_callback(Query(query): Query<Code>, cookies: Cookies) -> Redir
             .path("/")
             .build(),
     );
+    let path = String::from_utf8(general_purpose::STANDARD.decode(query.state).unwrap()).unwrap();
+    let path_full: AuthHomeCode = serde_json::from_str(&path).expect("Nem megy");
+    Redirect::to(&format!("{}{}", &ds.fdomain, path_full.path))
+}
 
-    let red = Redirect::to(&ds.fdomain);
-    red
+fn base_path() -> String {
+    "/ucp".to_string()
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct AuthHomeCode {
+    #[serde(default = "base_path")]
+    path: String,
+}
+
+#[debug_handler]
+pub async fn auth_home(Query(q): Query<AuthHomeCode>) -> Redirect {
+    let mut ub = URLBuilder::new();
+    let state = AuthHomeCode { path: q.path };
+    let state_str = serde_json::to_string(&state).expect("Sikertelen átalakítás");
+    let ds = get_discord_envs();
+    ub.set_protocol("https")
+        .set_host(&ds.discord_base.as_str())
+        .add_param("response_type", "code")
+        .add_param("state", &general_purpose::STANDARD.encode(state_str))
+        .add_param("client_id", &ds.discord_id)
+        .add_param("scope", "identify")
+        .add_param("redirect_uri", &ds.redirect_url);
+    let built_url = ub.build();
+    Redirect::to(&built_url)
 }

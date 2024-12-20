@@ -1,4 +1,4 @@
-use axum::{response::Redirect, routing::get, Router};
+use axum::{routing::get, Router};
 use dotenvy::dotenv;
 use image::{base_image_get, base_leintes_image_get};
 use socket::InitialData;
@@ -38,11 +38,8 @@ async fn main() {
             "/",
             get(|| async { "SAES API V2 Axum & SQLx használatával" }),
         )
-        .route(
-            "/auth",
-            get(|| async { Redirect::to(&auth::get_auth_url()) }),
-        )
-        .route("/cb", get(auth::base_callback))
+        .route("/auth", get(auth::auth_home))
+        .route("/auth/cb", get(auth::base_callback))
         .route("/img", get(base_image_get))
         .route("/list", get(list::base_list_get))
         .route("/limg", get(base_leintes_image_get))

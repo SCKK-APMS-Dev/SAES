@@ -2,9 +2,9 @@ import { type Redirect, redirect } from "@sveltejs/kit";
 import type { LayoutServerLoad } from "./$types";
 import { apiUrl } from "$lib/api";
 
-export const load = (async ({ cookies, request }) => {
+export const load = (async ({ cookies, request, url }) => {
 	if (!cookies.get("auth_token")) {
-		throw redirect(302, `${apiUrl}/auth`);
+		throw redirect(302, `${apiUrl}/auth?path=${url.pathname}`);
 	}
 	try {
 		const aha = await fetch(`${apiUrl}/ucp`, {
@@ -15,7 +15,7 @@ export const load = (async ({ cookies, request }) => {
 		if (aha.status === 404 || aha.status === 406) {
 			throw redirect(
 				302,
-				`${apiUrl}/ucp`,
+				`${apiUrl}/auth?path=${url.pathname}`,
 			);
 		}
 		if (aha.status === 403) {
