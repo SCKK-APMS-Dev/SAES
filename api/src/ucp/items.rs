@@ -16,7 +16,7 @@ use crate::{
     db::items as Items,
     logging::db_log,
     utils::{
-        db_bindgen::get_item_status_int,
+        db_bindgen::{get_item_status_int, get_item_type_int},
         middle::Tag,
         queries::{UCPTypeExtraQuery, UCPTypeQuery},
         sql::get_db_conn,
@@ -94,8 +94,7 @@ pub async fn ucp_items_post(
                 let mut file =
                     File::create(format!("./public/tmp/{}-{}", ext.name, file_name)).unwrap();
                 file.write(&data.unwrap()).unwrap();
-                if cucc.tipus.clone() == get_item_status_int("leintés".to_string()).await.unwrap()
-                {
+                if cucc.tipus.clone() == get_item_type_int("leintés".to_string()).await.unwrap() {
                     if files_for_leintes.len().eq(&1) {
                         let iten = Items::ActiveModel {
                             am: Set(if ext.am.clone() { 1 } else { 0 }),
@@ -104,6 +103,9 @@ pub async fn ucp_items_post(
                             ),
                             owner: Set(ext.name.clone()),
                             r#type: Set(cucc.tipus.clone()),
+                            status: Set(get_item_status_int("feltöltve".to_string())
+                                .await
+                                .unwrap()),
                             image: Set(format!(
                                 "['{}','tmp/{}-{}']",
                                 files_for_leintes[0], ext.name, file_name
@@ -134,6 +136,7 @@ pub async fn ucp_items_post(
                         ),
                         owner: Set(ext.name.clone()),
                         r#type: Set(cucc.tipus.clone()),
+                        status: Set(get_item_status_int("feltöltve".to_string()).await.unwrap()),
                         image: Set(format!("tmp/{}-{}", ext.name, file_name)),
                         ..Default::default()
                     };
