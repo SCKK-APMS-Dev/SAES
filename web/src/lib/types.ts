@@ -3,9 +3,9 @@ export interface FullDBType {
 	date: Date;
 	extra: null | string;
 	id: number;
-	kep: string;
+	image: string;
 	owner: string;
 	reason: null | string;
-	status: 'feltöltve' | 'elfogadva' | 'elutasítva';
-	type: 'pótlék' | 'leintés' | 'számla';
+	status: number;
+	type: number;
 }

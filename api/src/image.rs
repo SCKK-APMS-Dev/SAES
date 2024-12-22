@@ -4,7 +4,7 @@ use sea_orm::{ColumnTrait, EntityTrait, QueryFilter};
 use tokio::{fs::File, io::AsyncReadExt};
 
 use crate::{
-    db::data as Data,
+    db::items as Items,
     utils::{
         queries::{BaseImgLeintQuery, BaseImgQuery},
         sql::get_db_conn,
@@ -14,15 +14,15 @@ use crate::{
 #[debug_handler]
 pub async fn base_image_get(cucc: Query<BaseImgQuery>) -> Response {
     let db = get_db_conn().await;
-    let kep = Data::Entity::find()
-        .filter(Data::Column::Id.eq(cucc.id.clone()))
-        .filter(Data::Column::Type.ne("leintés"))
+    let kep = Items::Entity::find()
+        .filter(Items::Column::Id.eq(cucc.id.clone()))
+        .filter(Items::Column::Type.ne("leintés"))
         .one(&db)
         .await
         .unwrap();
     if kep.is_some() {
         let fel_kep = kep.unwrap();
-        let mut kep_file = File::open(format!("./public/{}", fel_kep.kep))
+        let mut kep_file = File::open(format!("./public/{}", fel_kep.image))
             .await
             .expect("[ERROR] Nem létező fájl megnyitása sikertelen");
         let mut contents = vec![];
@@ -33,7 +33,7 @@ pub async fn base_image_get(cucc: Query<BaseImgQuery>) -> Response {
                 "Content-Type",
                 format!(
                     "image/{}",
-                    if fel_kep.kep.starts_with("tmp/") {
+                    if fel_kep.image.starts_with("tmp/") {
                         "png"
                     } else {
                         "avif"
@@ -53,15 +53,15 @@ pub async fn base_image_get(cucc: Query<BaseImgQuery>) -> Response {
 #[debug_handler]
 pub async fn base_leintes_image_get(cucc: Query<BaseImgLeintQuery>) -> Response {
     let db = get_db_conn().await;
-    let kep = Data::Entity::find()
-        .filter(Data::Column::Id.eq(cucc.id.clone()))
-        .filter(Data::Column::Type.eq("leintés"))
+    let kep = Items::Entity::find()
+        .filter(Items::Column::Id.eq(cucc.id.clone()))
+        .filter(Items::Column::Type.eq("leintés"))
         .one(&db)
         .await
         .unwrap();
     if kep.is_some() {
         let fel_kep = kep.unwrap();
-        let arraj = fel_kep.kep.split_once(",").unwrap();
+        let arraj = fel_kep.image.split_once(",").unwrap();
         let mut first_elem = arraj.0.to_string();
         first_elem.pop();
         first_elem = first_elem.chars().skip(2).collect();

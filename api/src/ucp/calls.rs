@@ -4,10 +4,11 @@ use sea_orm::{ColumnTrait, EntityTrait, QueryFilter};
 use serde::{Deserialize, Serialize};
 use serde_json::from_str;
 
+use crate::utils::db_bindgen::get_item_type_int;
 use crate::utils::functions::get_fridays;
 use crate::utils::{api::get_api_envs, middle::Tag, sql::get_db_conn};
 
-use crate::db::data as Data;
+use crate::db::items as Items;
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct DriverRecord {
@@ -39,12 +40,12 @@ pub async fn ucp_calls(mut request: Request) -> Result<Json<Callz>, (StatusCode,
         .send()
         .await;
     let fridays = get_fridays();
-    let dbreturn = Data::Entity::find()
-        .filter(Data::Column::Owner.eq(&exts.unwrap().name))
-        .filter(Data::Column::Type.ne("számla"))
-        .filter(Data::Column::Status.eq("elfogadva"))
-        .filter(Data::Column::Date.gt(fridays.last))
-        .filter(Data::Column::Date.lt(fridays.next))
+    let dbreturn = Items::Entity::find()
+        .filter(Items::Column::Owner.eq(&exts.unwrap().name))
+        .filter(Items::Column::Type.ne("számla"))
+        .filter(Items::Column::Status.eq("elfogadva"))
+        .filter(Items::Column::Date.gt(fridays.last))
+        .filter(Items::Column::Date.lt(fridays.next))
         .all(&db)
         .await
         .expect("Leintések lekérése sikertelen az adatbázisból");
@@ -52,7 +53,7 @@ pub async fn ucp_calls(mut request: Request) -> Result<Json<Callz>, (StatusCode,
     let mut de_potlek = vec![];
     let mut du_potlek = vec![];
     for model in dbreturn.iter() {
-        if model.r#type == "pótlék" {
+        if model.r#type == get_item_type_int("pótlék".to_string()).await.unwrap() {
             if model.extra == "délelőtti".to_string().into() {
                 de_potlek.push(model)
             }
@@ -60,7 +61,7 @@ pub async fn ucp_calls(mut request: Request) -> Result<Json<Callz>, (StatusCode,
                 du_potlek.push(model)
             }
         }
-        if model.r#type == "leintés" {
+        if model.r#type == get_item_type_int("leintés".to_string()).await.unwrap() {
             leintes.push(model)
         }
     }

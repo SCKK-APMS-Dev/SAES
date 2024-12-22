@@ -19,12 +19,12 @@ pub struct BaseListQuery {
 
 #[derive(Debug, Deserialize)]
 pub struct UCPTypeQuery {
-    pub tipus: String,
+    pub tipus: i32,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct UCPTypeExtraQuery {
-    pub tipus: String,
+    pub tipus: i32,
     pub dates: String,
 }
 
@@ -35,6 +35,6 @@ pub struct MVStatQuery {
 
 #[derive(Debug, Deserialize)]
 pub struct MVItemsQuery {
-    pub tipus: String,
+    pub tipus: i32,
     pub status: String,
 }

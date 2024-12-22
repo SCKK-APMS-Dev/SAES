@@ -1,14 +1,18 @@
 import { type Redirect, redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import { apiUrl } from "$lib/api";
+import { get_type_number } from "$lib/ucp/types";
 
 export const load = (async ({ cookies, url }) => {
 	try {
-		const aha = await fetch(`${apiUrl}/ucp/items/get?tipus=szamla`, {
-			headers: {
-				cookie: cookies.get("auth_token") as string,
+		const aha = await fetch(
+			`${apiUrl}/ucp/items/get?tipus=${get_type_number("számla")}`,
+			{
+				headers: {
+					cookie: cookies.get("auth_token") as string,
+				},
 			},
-		});
+		);
 		if (aha.status === 401) {
 			throw redirect(302, "noaccess");
 		}

@@ -9,7 +9,7 @@ use serde::{Deserialize, Serialize};
 use sea_orm::{ColumnTrait, EntityTrait, Order, QueryFilter, QueryOrder, Set};
 
 use crate::{
-    db::data::{self as Data, Model},
+    db::items::{self as Items, Model},
     logging::db_log,
     utils::{middle::Tag, queries::MVItemsQuery, sql::get_db_conn},
 };
@@ -22,7 +22,7 @@ pub struct StatDBAll {
 #[derive(Debug, Deserialize)]
 pub struct MVPostItemsBody {
     pub id: i32,
-    pub status: String,
+    pub status: i32,
     pub extra: Option<String>,
     pub reason: Option<String>,
     pub am: i8,
@@ -31,11 +31,11 @@ pub struct MVPostItemsBody {
 #[debug_handler]
 pub async fn mv_items_get(ext: Extension<Tag>, quer: Query<MVItemsQuery>) -> impl IntoResponse {
     let db = get_db_conn().await;
-    let statreturn = Data::Entity::find()
-        .filter(Data::Column::Status.eq(quer.status.clone()))
-        .filter(Data::Column::Type.eq(quer.tipus.clone()))
-        .order_by(Data::Column::Date, Order::Desc)
-        .filter(Data::Column::Am.eq(if ext.am == true { 1 } else { 0 }))
+    let statreturn = Items::Entity::find()
+        .filter(Items::Column::Status.eq(quer.status.clone()))
+        .filter(Items::Column::Type.eq(quer.tipus.clone()))
+        .order_by(Items::Column::Date, Order::Desc)
+        .filter(Items::Column::Am.eq(if ext.am == true { 1 } else { 0 }))
         .all(&db)
         .await
         .expect("[ERROR] Statisztika lekérés sikertelen");
@@ -48,8 +48,8 @@ pub async fn mv_items_post(
     extract::Json(body): extract::Json<MVPostItemsBody>,
 ) -> impl IntoResponse {
     let db = get_db_conn().await;
-    let old_model = Data::Entity::find()
-        .filter(Data::Column::Id.eq(body.id))
+    let old_model = Items::Entity::find()
+        .filter(Items::Column::Id.eq(body.id))
         .one(&db)
         .await
         .expect("[ERROR] Régi lekérése sikertelen")
@@ -98,24 +98,17 @@ pub async fn mv_items_post(
         )
         .as_str();
     }
-    db_log(
-        ext.name.clone(),
-        Some(body.id.clone()),
-        Some(old_model.r#type),
-        "UPDATE",
-        Some(act),
-    )
-    .await;
-    let activemodel = Data::ActiveModel {
+    db_log(ext.name.clone(), Some(body.id.clone()), "UPDATE", Some(act)).await;
+    let activemodel = Items::ActiveModel {
         id: Set(body.id),
         am: Set(body.am),
         status: Set(body.status),
         reason: Set(body.reason),
         extra: Set(body.extra),
-        admin: Set(Some(ext.name.clone())),
+        handled_by: Set(Some(ext.name.clone())),
         ..Default::default()
     };
-    let statreturn = Data::Entity::update(activemodel)
+    let statreturn = Items::Entity::update(activemodel)
         .exec(&db)
         .await
         .expect("[ERROR] Módosítás sikertelen");

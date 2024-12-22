@@ -33,13 +33,6 @@ const Reeler = {
 export const Reeler_keys = Object.keys(Reeler);
 export const Reeler_vals = Object.values(Reeler);
 
-interface Page {
-	[key: string]: {
-		url: string;
-		display: string;
-	};
-}
-
 export const pages = (am: boolean) => {
 	return [
 		{

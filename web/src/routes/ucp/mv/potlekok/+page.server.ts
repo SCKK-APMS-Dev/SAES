@@ -1,3 +1,4 @@
+import { get_status_number } from "$lib/ucp/types";
 import type { PageServerLoad } from "./$types";
 
 export const load = (async ({ url }) => {
@@ -5,6 +6,6 @@ export const load = (async ({ url }) => {
 		page: url.searchParams.get("page") ? url.searchParams.get("page") : 0,
 		status: url.searchParams.get("status")
 			? url.searchParams.get("status")
-			: "feltöltve",
+			: get_status_number("feltöltve").toString(),
 	};
 }) satisfies PageServerLoad;

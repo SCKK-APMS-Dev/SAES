@@ -6,14 +6,21 @@
 	import type { PageData } from '../../routes/ucp/potlekok/$types';
 	import { formatRelative } from 'date-fns';
 	import { locale } from '$lib/time';
+	import {
+		get_status_number,
+		get_status_string,
+		get_type_number,
+		item_statuses,
+		item_types
+	} from './types';
 	let multipage = $state(false);
 	interface Props {
 		data: PageData;
-		tipus?: string;
+		tipus: number;
 		display?: string;
 	}
 
-	let { data, tipus = '', display = '' }: Props = $props();
+	let { data, tipus, display = '' }: Props = $props();
 	let handled_potleks: any = $state([]);
 	let pagee = $state(data.page as number);
 	function switchPage(mode: 'next' | 'prev') {
@@ -63,14 +70,16 @@
 				{#each handled_potleks as potle}
 					<div
 						class="rounded-lg bg-gradient-to-bl p-2 drop-shadow-xl"
-						class:from-teal-500={potle.status === 'elfogadva'}
-						class:to-green-600={potle.status === 'elfogadva'}
-						class:from-amber-500={potle.status === 'elutasítva'}
-						class:to-red-600={potle.status === 'elutasítva'}
-						class:from-cyan-800={potle.status === 'feltöltve'}
-						class:to-gray-700={potle.status === 'feltöltve'}
+						class:from-teal-500={get_status_string(potle.status) === 'elfogadva'}
+						class:to-green-600={get_status_string(potle.status) === 'elfogadva'}
+						class:from-amber-500={get_status_string(potle.status) === 'elutasítva'}
+						class:to-red-600={get_status_string(potle.status) === 'elutasítva'}
+						class:from-cyan-800={get_status_string(potle.status) === 'feltöltve'}
+						class:to-gray-700={get_status_string(potle.status) === 'feltöltve'}
 					>
-						<h1 class="-mb-2 text-2xl font-bold drop-shadow-xl">{potle.status.toUpperCase()}</h1>
+						<h1 class="-mb-2 text-2xl font-bold drop-shadow-xl">
+							{get_status_string(potle.status).toUpperCase()}
+						</h1>
 						<h1 class="text-gray-200 drop-shadow-xl">
 							{formatRelative(new Date(new Date(potle.date).valueOf() - data.offset!), new Date(), {
 								locale
@@ -80,7 +89,7 @@
 							<h1 class="drop-shadow-xl">Megjegyzés: {potle.reason}</h1>
 						{/if}
 
-						{#if tipus === 'leintés'}
+						{#if tipus === get_type_number('leintés')}
 							<div class="flex flex-col xl:flex-row">
 								<a
 									href={`${data.api}/limg?id=${potle.id}&ver=0`}

@@ -13,9 +13,10 @@ use sea_orm::{ColumnTrait, EntityTrait, Order, QueryFilter, QueryOrder, Set};
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    db::data as Data,
+    db::items as Items,
     logging::db_log,
     utils::{
+        db_bindgen::get_item_status_int,
         middle::Tag,
         queries::{UCPTypeExtraQuery, UCPTypeQuery},
         sql::get_db_conn,
@@ -23,14 +24,14 @@ use crate::{
 };
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct Items {
+pub struct ItemsStruct {
     pub id: i32,
     pub owner: String,
-    pub kep: String,
-    pub status: String,
+    pub image: String,
+    pub status: i32,
     pub reason: Option<String>,
     pub am: i8,
-    pub admin: Option<String>,
+    pub handled_by: Option<String>,
     pub date: chrono::DateTime<Utc>,
 }
 
@@ -42,27 +43,30 @@ pub fn routes() -> Router {
 }
 
 #[debug_handler]
-pub async fn ucp_items_get(ext: Extension<Tag>, cucc: Query<UCPTypeQuery>) -> Json<Vec<Items>> {
+pub async fn ucp_items_get(
+    ext: Extension<Tag>,
+    cucc: Query<UCPTypeQuery>,
+) -> Json<Vec<ItemsStruct>> {
     let db = get_db_conn().await;
-    let getitem = Data::Entity::find()
-        .filter(Data::Column::Owner.eq(&ext.name))
-        .filter(Data::Column::Type.eq(cucc.tipus.clone()))
-        .order_by(Data::Column::Date, Order::Desc)
+    let getitem = Items::Entity::find()
+        .filter(Items::Column::Owner.eq(&ext.name))
+        .filter(Items::Column::Type.eq(cucc.tipus.clone()))
+        .order_by(Items::Column::Date, Order::Desc)
         .all(&db)
         .await
         .expect("Leintések lekérése sikertelen az adatbázisból");
-    let another: Vec<Items> = getitem
+    let another: Vec<ItemsStruct> = getitem
         .iter()
-        .map(|strucc| -> Items {
-            Items {
+        .map(|strucc| -> ItemsStruct {
+            ItemsStruct {
                 am: strucc.am.clone(),
                 owner: strucc.owner.clone(),
-                kep: strucc.kep.clone(),
+                image: strucc.image.clone(),
                 reason: strucc.reason.clone(),
                 status: strucc.status.clone(),
                 date: strucc.date.clone(),
                 id: strucc.id.clone(),
-                admin: strucc.admin.clone(),
+                handled_by: strucc.handled_by.clone(),
             }
         })
         .collect();
@@ -90,29 +94,29 @@ pub async fn ucp_items_post(
                 let mut file =
                     File::create(format!("./public/tmp/{}-{}", ext.name, file_name)).unwrap();
                 file.write(&data.unwrap()).unwrap();
-                if cucc.tipus.clone() == String::from("leintés") {
+                if cucc.tipus.clone() == get_item_status_int("leintés".to_string()).await.unwrap()
+                {
                     if files_for_leintes.len().eq(&1) {
-                        let iten = Data::ActiveModel {
+                        let iten = Items::ActiveModel {
                             am: Set(if ext.am.clone() { 1 } else { 0 }),
                             date: Set(
                                 DateTime::from_timestamp_millis(ditas[i].parse().unwrap()).unwrap()
                             ),
                             owner: Set(ext.name.clone()),
-                            r#type: Set(String::from(cucc.tipus.clone())),
-                            kep: Set(format!(
+                            r#type: Set(cucc.tipus.clone()),
+                            image: Set(format!(
                                 "['{}','tmp/{}-{}']",
                                 files_for_leintes[0], ext.name, file_name
                             )),
                             ..Default::default()
                         };
-                        let newitem = Data::Entity::insert(iten)
+                        let newitem = Items::Entity::insert(iten)
                             .exec(&db)
                             .await
                             .expect("Adatbázisba mentés sikertelen");
                         db_log(
                             ext.name.clone(),
                             Some(newitem.last_insert_id),
-                            Some(cucc.tipus.clone()),
                             "CREATE",
                             None,
                         )
@@ -123,24 +127,23 @@ pub async fn ucp_items_post(
                         files_for_leintes.push(format!("tmp/{}-{}", ext.name, file_name))
                     }
                 } else {
-                    let iten = Data::ActiveModel {
+                    let iten = Items::ActiveModel {
                         am: Set(if ext.am.clone() { 1 } else { 0 }),
                         date: Set(
                             DateTime::from_timestamp_millis(ditas[i].parse().unwrap()).unwrap()
                         ),
                         owner: Set(ext.name.clone()),
-                        r#type: Set(String::from(cucc.tipus.clone())),
-                        kep: Set(format!("tmp/{}-{}", ext.name, file_name)),
+                        r#type: Set(cucc.tipus.clone()),
+                        image: Set(format!("tmp/{}-{}", ext.name, file_name)),
                         ..Default::default()
                     };
-                    let newitem = Data::Entity::insert(iten)
+                    let newitem = Items::Entity::insert(iten)
                         .exec(&db)
                         .await
                         .expect("Adatbázisba mentés sikertelen");
                     db_log(
                         ext.name.clone(),
                         Some(newitem.last_insert_id),
-                        Some(cucc.tipus.clone()),
                         "CREATE",
                         None,
                     )

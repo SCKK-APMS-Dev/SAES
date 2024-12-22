@@ -5,7 +5,7 @@ use dotenvy::dotenv;
 use sea_orm::{DatabaseConnection, EntityTrait, Set};
 use utils::{ffmpeg::get_ffmpeg, sql::get_db_conn};
 
-use db::data::{self as Data, ActiveModel, Model};
+use db::items::{self as Items, ActiveModel, Model};
 
 mod db;
 mod init;
@@ -18,7 +18,7 @@ async fn main() {
     let dir = env::var("CONVERT_DIR").expect("CONVERT_DIR lekérdezése sikertelen");
     let db = get_db_conn().await;
     loop {
-        let data = Data::Entity::find()
+        let data = Items::Entity::find()
             .all(&db)
             .await
             .expect("Adatbázis lekérés sikertelen");
@@ -37,9 +37,9 @@ async fn convert(modl: Vec<Model>, ffmpeg: String, dir: &String, db: &DatabaseCo
         if !Path::new(&format!("error/{}", item.id)).exists()
             && !Path::new(&format!("error/db-{}", item.id)).exists()
         {
-            if item.r#type != "leintés" {
-                if !item.kep.ends_with(".avif") {
-                    let kep_rename = item.kep.split(".").collect::<Vec<&str>>();
+            if item.r#type != 2 {
+                if !item.image.ends_with(".avif") {
+                    let kep_rename = item.image.split(".").collect::<Vec<&str>>();
                     let mut kep_rebuilt: String;
                     if kep_rename.len() > 2 {
                         let mut vect = Vec::new();
@@ -63,11 +63,11 @@ async fn convert(modl: Vec<Model>, ffmpeg: String, dir: &String, db: &DatabaseCo
                         kep_rebuilt.remove(0); // remove p
                         kep_rebuilt.remove(0); // remove /
                     }
-                    if Path::new(&format!("{}/{}", dir, item.kep)).exists() {
+                    if Path::new(&format!("{}/{}", dir, item.image)).exists() {
                         let convert = Command::new(ffmpeg.clone())
                             .arg("-y")
                             .arg("-i")
-                            .arg(format!("{}/{}", dir, item.kep))
+                            .arg(format!("{}/{}", dir, item.image))
                             .arg(format!("{}/{}", dir, kep_rebuilt))
                             .spawn()
                             .expect("ffmpeg nem sikerült")
@@ -75,24 +75,24 @@ async fn convert(modl: Vec<Model>, ffmpeg: String, dir: &String, db: &DatabaseCo
                         if convert.unwrap().status.code().unwrap() == 0 {
                             let activem = ActiveModel {
                                 id: Set(item.id),
-                                kep: Set(kep_rebuilt.clone()),
+                                image: Set(kep_rebuilt.clone()),
                                 ..Default::default()
                             };
-                            let dbupdate = Data::Entity::update(activem).exec(db).await;
+                            let dbupdate = Items::Entity::update(activem).exec(db).await;
                             if dbupdate.is_ok() {
-                                fs::remove_file(format!("{}/{}", dir, item.kep))
+                                fs::remove_file(format!("{}/{}", dir, item.image))
                                     .expect("Fájltörlés sikertelen");
                             } else {
                                 fs::write(
                                     format!("error/db-{}", item.id),
-                                    format!("{} ---> {}", item.kep, kep_rebuilt),
+                                    format!("{} ---> {}", item.image, kep_rebuilt),
                                 )
                                 .expect("error db lementése sikertelen");
                             }
                         } else {
                             fs::write(
                                 format!("error/{}", item.id),
-                                format!("{} ---> {}", item.kep, kep_rebuilt),
+                                format!("{} ---> {}", item.image, kep_rebuilt),
                             )
                             .expect("error lementése sikertelen");
                         }
@@ -100,10 +100,10 @@ async fn convert(modl: Vec<Model>, ffmpeg: String, dir: &String, db: &DatabaseCo
                         println!("{} már konvertálva, db-be átírás", item.id);
                         let activem = ActiveModel {
                             id: Set(item.id),
-                            kep: Set(kep_rebuilt.clone()),
+                            image: Set(kep_rebuilt.clone()),
                             ..Default::default()
                         };
-                        Data::Entity::update(activem)
+                        Items::Entity::update(activem)
                             .exec(db)
                             .await
                             .expect("Meglévő átírása db-be sikertelen");
@@ -111,13 +111,13 @@ async fn convert(modl: Vec<Model>, ffmpeg: String, dir: &String, db: &DatabaseCo
                     } else {
                         fs::write(
                             format!("error/{}", item.id),
-                            format!("{} ---> {}", item.kep, kep_rebuilt),
+                            format!("{} ---> {}", item.image, kep_rebuilt),
                         )
                         .expect("error lementése sikertelen");
                     }
                 }
             } else {
-                let arraj = item.kep.split_once(",").unwrap();
+                let arraj = item.image.split_once(",").unwrap();
                 let mut first_elem = arraj.0.to_string();
                 first_elem.pop();
                 first_elem = first_elem.chars().skip(2).collect();
@@ -249,13 +249,13 @@ async fn convert(modl: Vec<Model>, ffmpeg: String, dir: &String, db: &DatabaseCo
                 if needdb_update {
                     let activem = ActiveModel {
                         id: Set(item.id),
-                        kep: Set(format!(
+                        image: Set(format!(
                             "['{}','{}']",
                             first_kep_rebuilt, second_kep_rebuilt
                         )),
                         ..Default::default()
                     };
-                    Data::Entity::update(activem).exec(db).await.unwrap();
+                    Items::Entity::update(activem).exec(db).await.unwrap();
                     if !first_elem.ends_with(".avif") {
                         fs::remove_file(format!("{}/{}", dir, first_elem))
                             .expect("Fájltörlés sikertelen");

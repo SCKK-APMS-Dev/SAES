@@ -17,11 +17,17 @@
 	import { page } from '$app/stores';
 	import { beforeNavigate, goto } from '$app/navigation';
 	import type { PageData } from '../../routes/ucp/mv/leintesek/$types';
+	import {
+		get_status_number,
+		get_status_string,
+		get_type_number,
+		get_type_string
+	} from '$lib/ucp/types';
 	let haveadmin = $state(false);
 	interface Props {
 		title?: string;
 		data: PageData;
-		type?: string;
+		type: number;
 		editdes?: string;
 		extraText?: string;
 		des?: string;
@@ -32,15 +38,15 @@
 	let {
 		title = '',
 		data,
-		type = '',
+		type,
 		editdes = '',
 		extraText = '',
 		des = '',
 		tools = [],
 		am = false
 	}: Props = $props();
-	let modal: HTMLDialogElement|undefined = $state();
-	let bindbtn: HTMLButtonElement|undefined = $state();
+	let modal: HTMLDialogElement | undefined = $state();
+	let bindbtn: HTMLButtonElement | undefined = $state();
 	let editing = false;
 	let originallength = $state(0);
 	let potleks: {
@@ -50,9 +56,9 @@
 				id: number;
 				owner: string;
 				reason: string | null;
-				status: string;
+				status: number;
 				extra: string | null;
-				admin: string | null;
+				handled_by: string | null;
 				am: boolean;
 			}[];
 		};
@@ -70,7 +76,7 @@
 			headers: {
 				status: jona as string,
 				am: String(am),
-				type: type
+				type: type.toString()
 			}
 		});
 		if (fatcs.ok) {
@@ -96,7 +102,7 @@
 				potleks = ret;
 			}
 			for (const elem of potleks.data.items) {
-				if (elem.admin !== null) {
+				if (elem.handled_by !== null) {
 					haveadmin = true;
 					break;
 				}
@@ -109,6 +115,8 @@
 			}
 			originallength = ret.data.items.length;
 			loading.value = false;
+		} else {
+			console.log('baj');
 		}
 	}
 	onMount(() => {
@@ -127,6 +135,7 @@
 		bindEdit.custombg = false;
 		editid = id;
 		editing = true;
+		console.log(bindEdit);
 	}
 	async function quickTools(type: string, id: number) {
 		const fatcs = await fetch('/web-api/admin', {
@@ -139,11 +148,11 @@
 				id: potleks.data.items[id].id,
 				status:
 					type === 'accept'
-						? 'elfogadva'
+						? get_status_number('elfogadva')
 						: type === 'decline'
-							? 'elutasítva'
+							? get_status_number('elutasítva')
 							: type === 'de' || 'du'
-								? 'elfogadva'
+								? get_status_number('elfogadva')
 								: potleks.data.items[id].status,
 				reason: potleks.data.items[id].reason,
 				extra:
@@ -269,9 +278,9 @@
 						class="bg-emerald-600 text-xl text-white opacity-80 focus:opacity-100"
 						bind:value={bindEdit.status}
 					>
-						<option value="feltöltve">feltöltve</option>
-						<option value="elfogadva">elfogadva</option>
-						<option value="elutasítva">elutasítva</option>
+						<option value={1}>feltöltve</option>
+						<option value={2}>elfogadva</option>
+						<option value={3}>elutasítva</option>
 					</Select>
 
 					<label for="reason" class="text-xl">Megjegyzés</label>
@@ -284,7 +293,7 @@
 					/>
 					{#if extraText}
 						<label for="extra" class="text-xl">{extraText}</label>
-						{#if type === 'pótlék'}
+						{#if type === get_type_number('pótlék')}
 							<Select
 								placeholder="Kérlek válassz"
 								name="potlek-type"
@@ -336,9 +345,9 @@
 					bind:value={jona}
 					on:input={(e) => changestatus(e)}
 				>
-					<option value="feltöltve" class="font-bold">Feltöltve</option>
-					<option value="elfogadva" class="font-bold">Elfogadva</option>
-					<option value="elutasítva" class="font-bold">Elutasítva</option>
+					<option value="1" class="font-bold">Feltöltve</option>
+					<option value="2" class="font-bold">Elfogadva</option>
+					<option value="3" class="font-bold">Elutasítva</option>
 				</Select>
 			</div>
 			<Table class="mt-5 table-auto p-10 text-center text-white">
@@ -375,7 +384,7 @@
 								{/if}</TableBodyCell
 							>
 							<TableBodyCell>
-								{#if type == 'leintés'}
+								{#if type == get_type_number('leintés')}
 									<div class="flex flex-col xl:flex-row">
 										<a href={`${potleks.api}/limg?id=${potle.id}&ver=0`} target="”_blank”"
 											><img
@@ -405,50 +414,54 @@
 									>
 								{/if}
 							</TableBodyCell>
-							<TableBodyCell>{potle.status}</TableBodyCell>
+							<TableBodyCell>{get_status_string(potle.status)}</TableBodyCell>
 							<TableBodyCell>{potle.reason ? potle.reason : 'nincs'}</TableBodyCell>
 							{#if extraText}
 								<TableBodyCell>{potle.extra ? potle.extra : 'nincs'}</TableBodyCell>
 							{/if}
 							{#if haveadmin}
-								<TableBodyCell>{potle.admin ? potle.admin : '-'}</TableBodyCell>
+								<TableBodyCell>{potle.handled_by ? potle.handled_by : '-'}</TableBodyCell>
 							{/if}
 							{#if tools.length > 0}
 								<TableBodyCell>
-									{#if tools.includes('délelőtti') && jona === 'feltöltve'}
+									{#if tools.includes('délelőtti') && jona === get_status_number('feltöltve').toString()}
 										<Button
 											class="icon-[lucide--sun] h-6 w-6 rounded-xl bg-white font-bold transition-all duration-150 hover:bg-yellow-300"
 											on:click={() => quickTools('de', potleks.data.items.indexOf(potle))}
 										></Button>
-										<Tooltip class="bg-slate-500">{type} elfogadása délelőttiként</Tooltip>
+										<Tooltip class="bg-slate-500"
+											>{get_type_string(type)} elfogadása délelőttiként</Tooltip
+										>
 									{/if}
-									{#if tools.includes('éjszakai') && jona === 'feltöltve'}
+									{#if tools.includes('éjszakai') && jona === get_status_number('feltöltve').toString()}
 										<Button
 											class="icon-[lucide--moon] h-6 w-6 rounded-xl bg-white font-bold transition-all duration-150 hover:bg-blue-800"
 											on:click={() => quickTools('du', potleks.data.items.indexOf(potle))}
 										></Button>
-										<Tooltip class="bg-slate-500">{type} elfogadása éjszakaiként</Tooltip>
+										<Tooltip class="bg-slate-500"
+											>{get_type_string(type)} elfogadása éjszakaiként</Tooltip
+										>
 									{/if}
-									{#if tools.includes('accept') && jona === 'feltöltve'}
+									{#if tools.includes('accept') && jona === get_status_number('feltöltve').toString()}
 										<Button
 											class="icon-[lucide--check] h-6 w-6 rounded-xl bg-white font-bold transition-all duration-150 hover:bg-green-500"
 											on:click={() => quickTools('accept', potleks.data.items.indexOf(potle))}
 										></Button>
-										<Tooltip class="bg-slate-500">{type} elfogadása</Tooltip>
+										<Tooltip class="bg-slate-500">{get_type_string(type)} elfogadása</Tooltip>
 									{/if}
-									{#if tools.includes('decline') && jona === 'feltöltve'}
+									{#if tools.includes('decline') && jona === get_status_number('feltöltve').toString()}
 										<Button
 											class="icon-[lucide--x] h-6 w-6 rounded-xl bg-white font-bold transition-all duration-150 hover:bg-red-600"
 											on:click={() => quickTools('decline', potleks.data.items.indexOf(potle))}
 										></Button>
-										<Tooltip class="bg-slate-500">{type} elutasítása</Tooltip>
+										<Tooltip class="bg-slate-500">{get_type_string(type)} elutasítása</Tooltip>
 									{/if}
 									{#if tools.includes('edit')}
 										<Button
 											class="icon-[lucide--edit] h-6 w-6 rounded-xl bg-white font-bold transition-all duration-150 hover:bg-slate-500"
 											on:click={() => edit(potleks.data.items.indexOf(potle))}
 										></Button>
-										<Tooltip class="bg-slate-500">{type} szerkesztése</Tooltip>
+										<Tooltip class="bg-slate-500">{get_type_string(type)} szerkesztése</Tooltip>
 									{/if}
 								</TableBodyCell>
 							{/if}
