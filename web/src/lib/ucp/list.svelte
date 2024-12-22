@@ -152,8 +152,8 @@
 							</a>
 						{/if}
 
-						{#if potle.admin}
-							<h1 class="drop-shadow-xl">Kezelte: {potle.admin}</h1>
+						{#if potle.handled_by}
+							<h1 class="drop-shadow-xl">Kezelte: {potle.handled_by}</h1>
 						{/if}
 					</div>
 				{/each}
