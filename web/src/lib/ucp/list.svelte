@@ -40,9 +40,9 @@
 	}
 	function render() {
 		handled_potleks = [];
-		if (data.potlekok.length > 20 && data.potlekok.length > 0) {
+		if (data.potlekok.length > 10 && data.potlekok.length > 0) {
 			multipage = true;
-			for (let i = (pagee as number) * 20; i < (pagee as number) * 20 + 20; i++) {
+			for (let i = (pagee as number) * 10; i < (pagee as number) * 10 + 10; i++) {
 				if (data.potlekok[i]) {
 					handled_potleks.push(data.potlekok[i]);
 				}
@@ -173,7 +173,7 @@
 					><span class="icon-[solar--map-arrow-left-bold] h-full w-full"></span></button
 				>
 			{/if}
-			{#if Math.ceil(data.potlekok.length / 20) - 1 > pagee}
+			{#if Math.ceil(data.potlekok.length / 10) - 1 > pagee}
 				<button
 					aria-label="Következő oldal"
 					onclick={() => switchPage('next')}

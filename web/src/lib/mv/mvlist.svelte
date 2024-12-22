@@ -84,9 +84,9 @@
 			potleks.data.items = [];
 			let ret = await fatcs.json();
 
-			if (ret.data.items.length > 20 && ret.data.items.length > 0) {
+			if (ret.data.items.length > 10 && ret.data.items.length > 0) {
 				multipage = true;
-				for (let i = pagee * 20; i < (pagee as number) * 20 + 20; i++) {
+				for (let i = pagee * 10; i < (pagee as number) * 10 + 10; i++) {
 					if (ret.data.items[i]) {
 						handled.push(ret.data.items[i]);
 					}
@@ -488,7 +488,7 @@
 				><span class="icon-[solar--map-arrow-left-bold] h-full w-full"></span></button
 			>
 		{/if}
-		{#if Math.ceil(originallength / 20) - 1 > pagee}
+		{#if Math.ceil(originallength / 10) - 1 > pagee}
 			<button
 				aria-label="Következő oldal"
 				onclick={() => switchPage('next')}
