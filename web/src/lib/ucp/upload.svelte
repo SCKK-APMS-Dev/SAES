@@ -2,22 +2,17 @@
 	import { beforeNavigate } from '$app/navigation';
 	import Error from '$lib/error.svelte';
 	import { loading } from '$lib/loading.svelte';
+	import { get_type_number } from './types';
 	let formerror = $state('');
 	interface Props {
 		data: any;
 		display?: string;
-		tipus?: string;
+		tipus: number;
 		warning?: string;
 		agent?: string;
 	}
 
-	let {
-		data,
-		display = '',
-		tipus = '',
-		warning = '',
-		agent = ''
-	}: Props = $props();
+	let { data, display = '', tipus, warning = '', agent = '' }: Props = $props();
 	let seli: string[][] = [];
 	let fileas: string[] = $state([]);
 	let tope = $state('col');
@@ -44,7 +39,7 @@
 			const mama = await fetch('/web-api/upload', {
 				method: 'POST',
 				headers: {
-					tip: tipus,
+					tip: tipus.toString(),
 					dates: JSON.stringify(dates)
 				},
 				body: formData
@@ -147,7 +142,7 @@
 				</div>
 			{/each}
 			{#each fileas as nyam}
-				{#if tipus === 'leintés'}
+				{#if tipus === get_type_number('leintés')}
 					<div class="flex flex-col">
 						<img
 							loading="lazy"

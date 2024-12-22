@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { get_type_number } from '$lib/ucp/types.js';
 	import Upload from '$lib/ucp/upload.svelte';
 
 	let { data } = $props();
@@ -7,7 +8,7 @@
 <Upload
 	{data}
 	display="Pótlék"
-	tipus="pótlék"
+	tipus={get_type_number('pótlék')}
 	agent={data.agent}
 	warning={data.layout.am
 		? '8:00-16:00: Délelőtti pótlék, 20:00-4:00: Éjszakai pótlék'
