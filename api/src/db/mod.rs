@@ -4,7 +4,4 @@ pub mod hailes;
 pub mod logs;
 pub mod service_bills;
 pub mod shorts;
-pub mod statuses;
-pub mod supplement_types;
 pub mod supplements;
-pub mod types;

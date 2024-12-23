@@ -4,49 +4,73 @@ use sea_orm::{ColumnTrait, EntityTrait, QueryFilter};
 use tokio::{fs::File, io::AsyncReadExt};
 
 use crate::{
-    db::items as Items,
+    db::{hailes, service_bills, supplements},
     utils::{
         db_bindgen::get_item_type_int,
         queries::{BaseImgLeintQuery, BaseImgQuery},
         sql::get_db_conn,
+        types::{get_type_by_id, Potlek},
     },
 };
 
 #[debug_handler]
 pub async fn base_image_get(cucc: Query<BaseImgQuery>) -> Response {
     let db = get_db_conn().await;
-    let kep = Items::Entity::find()
-        .filter(Items::Column::Id.eq(cucc.id.clone()))
-        .filter(Items::Column::Type.ne(get_item_type_int("leintés".to_string()).await.unwrap()))
-        .one(&db)
-        .await
-        .unwrap();
-    if kep.is_some() {
-        let fel_kep = kep.unwrap();
-        let mut kep_file = File::open(format!("./public/{}", fel_kep.image))
-            .await
-            .expect("[ERROR] Nem létező fájl megnyitása sikertelen");
-        let mut contents = vec![];
-        let _ = kep_file.read_to_end(&mut contents).await;
-        let body = Body::from(contents);
-        Response::builder()
-            .header(
-                "Content-Type",
-                format!(
-                    "image/{}",
-                    if fel_kep.image.starts_with("tmp/") {
-                        "png"
-                    } else {
-                        "avif"
-                    }
-                ),
-            )
-            .body(body)
-            .unwrap()
+    let tip = get_type_by_id(cucc.r#type);
+    if tip.is_some() {
+        let kep = if tip.unwrap() == "potlek".to_string() {
+            supplements::Entity::find()
+                .filter(supplements::Column::Id.eq(cucc.id.clone()))
+                .filter(
+                    supplements::Column::Type
+                        .ne(get_item_type_int("leintés".to_string()).await.unwrap()),
+                )
+                .one(&db)
+                .await
+                .unwrap()
+        } else {
+            service_bills::Entity::find()
+                .filter(service_bills::Column::Id.eq(cucc.id.clone()))
+                .filter(
+                    service_bills::Column::Type
+                        .ne(get_item_type_int("leintés".to_string()).await.unwrap()),
+                )
+                .one(&db)
+                .await
+                .unwrap()
+        };
+        if kep.is_some() {
+            let fel_kep = kep.unwrap();
+            let mut kep_file = File::open(format!("./public/{}", fel_kep.image))
+                .await
+                .expect("[ERROR] Nem létező fájl megnyitása sikertelen");
+            let mut contents = vec![];
+            let _ = kep_file.read_to_end(&mut contents).await;
+            let body = Body::from(contents);
+            Response::builder()
+                .header(
+                    "Content-Type",
+                    format!(
+                        "image/{}",
+                        if fel_kep.image.starts_with("tmp/") {
+                            "png"
+                        } else {
+                            "avif"
+                        }
+                    ),
+                )
+                .body(body)
+                .unwrap()
+        } else {
+            Response::builder()
+                .status(StatusCode::NOT_FOUND)
+                .body(Body::empty())
+                .unwrap()
+        }
     } else {
         Response::builder()
             .status(StatusCode::NOT_FOUND)
-            .body(Body::empty())
+            .body("Ilyen típus nem létezik!".into())
             .unwrap()
     }
 }
