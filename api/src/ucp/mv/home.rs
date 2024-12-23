@@ -7,9 +7,9 @@ use serde::Serialize;
 use crate::{
     db::items,
     utils::{
-        db_bindgen::{get_item_status_int, get_item_type_int},
         middle::Tag,
         sql::get_db_conn,
+        types_statuses::{get_statuses, get_types},
     },
 };
 
@@ -36,43 +36,39 @@ pub async fn mv_home_stat(ext: Extension<Tag>) -> Result<impl IntoResponse, (Sta
     let mut potlekok = [0, 0, 0];
     let mut leintesek = [0, 0, 0];
     let mut szamlak = [0, 0, 0];
-    let potlek_num = get_item_type_int("pótlék".to_string()).await.unwrap();
-    let leintes_num = get_item_type_int("leintés".to_string()).await.unwrap();
-    let szamla_num = get_item_type_int("számla".to_string()).await.unwrap();
-    let elfogadva_num = get_item_status_int("elfogadva".to_string()).await.unwrap();
-    let elutasitva_num = get_item_status_int("elutasítva".to_string()).await.unwrap();
-    let feltoltve_num = get_item_status_int("feltöltve".to_string()).await.unwrap();
+    let types = get_types();
+    let statuses = get_statuses();
     for item in statreturn.iter() {
-        if item.r#type == potlek_num {
-            if item.status == elfogadva_num {
+        if item.r#type == types.supplements.id {
+            if item.status == statuses.accepted.id {
                 potlekok[1] += 1
             }
-            if item.status == elutasitva_num {
+            if item.status == statuses.rejected.id {
                 potlekok[2] += 1
             }
-            if item.status == feltoltve_num {
+            if item.status == statuses.uploaded.id {
                 potlekok[0] += 1
             }
         }
-        if item.r#type == leintes_num {
-            if item.status == elfogadva_num {
+        if item.r#type == types.hails.id {
+            if item.status == statuses.accepted.id {
                 leintesek[1] += 1
             }
-            if item.status == elutasitva_num {
+            if item.status == statuses.rejected.id {
                 leintesek[2] += 1
             }
-            if item.status == feltoltve_num {
+            if item.status == statuses.uploaded.id {
                 leintesek[0] += 1
             }
         }
-        if item.r#type == szamla_num {
-            if item.status == elfogadva_num {
+        if item.r#type == types.bills.id {
+            if item.status == statuses.accepted.id {
                 szamlak[1] += 1
             }
-            if item.status == elutasitva_num {
+            if item.status == statuses.rejected.id {
                 szamlak[2] += 1
             }
-            if item.status == feltoltve_num {
+            if item.status == statuses.uploaded.id {
                 szamlak[0] += 1
             }
         }

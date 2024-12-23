@@ -4,8 +4,8 @@ use sea_orm::{ColumnTrait, EntityTrait, QueryFilter};
 use serde::{Deserialize, Serialize};
 use serde_json::from_str;
 
-use crate::utils::db_bindgen::get_item_type_int;
 use crate::utils::functions::get_fridays;
+use crate::utils::types_statuses::get_types;
 use crate::utils::{api::get_api_envs, middle::Tag, sql::get_db_conn};
 
 use crate::db::items as Items;
@@ -52,8 +52,9 @@ pub async fn ucp_calls(mut request: Request) -> Result<Json<Callz>, (StatusCode,
     let mut leintes = vec![];
     let mut de_potlek = vec![];
     let mut du_potlek = vec![];
+    let types = get_types();
     for model in dbreturn.iter() {
-        if model.r#type == get_item_type_int("pótlék".to_string()).await.unwrap() {
+        if model.r#type == types.supplements.id {
             if model.extra == "délelőtti".to_string().into() {
                 de_potlek.push(model)
             }
@@ -61,7 +62,7 @@ pub async fn ucp_calls(mut request: Request) -> Result<Json<Callz>, (StatusCode,
                 du_potlek.push(model)
             }
         }
-        if model.r#type == get_item_type_int("leintés".to_string()).await.unwrap() {
+        if model.r#type == types.hails.id {
             leintes.push(model)
         }
     }

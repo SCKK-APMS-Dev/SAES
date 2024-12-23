@@ -12,11 +12,11 @@ use serde::Serialize;
 use crate::{
     db::items::{self, Model},
     utils::{
-        db_bindgen::{get_item_status_int, get_item_type_int},
         functions::get_fridays,
         middle::Tag,
         queries::MVStatQuery,
         sql::get_db_conn,
+        types_statuses::{get_statuses, get_types},
     },
 };
 
@@ -50,15 +50,13 @@ pub async fn mv_stat(
     ext: Extension<Tag>,
     quer: Query<MVStatQuery>,
 ) -> Result<impl IntoResponse, (StatusCode, String)> {
-    let potlek_num = get_item_type_int("pótlék".to_string()).await.unwrap();
-    let leintes_num = get_item_type_int("leintés".to_string()).await.unwrap();
-    let szamla_num = get_item_type_int("számla".to_string()).await.unwrap();
-    let elfogadva_num = get_item_status_int("elfogadva".to_string()).await.unwrap();
+    let types = get_types();
+    let statuses = get_statuses();
     if quer.week == "current".to_string() {
         let friday = get_fridays();
         let db = get_db_conn().await;
         let statreturn = items::Entity::find()
-            .filter(items::Column::Status.eq(elfogadva_num))
+            .filter(items::Column::Status.eq(statuses.accepted.id))
             .filter(items::Column::Date.gt(friday.last))
             .filter(items::Column::Date.lt(friday.next))
             .filter(items::Column::Am.eq(if ext.am == true { 1 } else { 0 }))
@@ -69,13 +67,13 @@ pub async fn mv_stat(
         let mut leintesek = vec![];
         let mut szamlak = vec![];
         for item in statreturn.iter() {
-            if item.r#type == potlek_num {
+            if item.r#type == types.supplements.id {
                 potlekok.push(item.clone())
             }
-            if item.r#type == leintes_num {
+            if item.r#type == types.hails.id {
                 leintesek.push(item.clone())
             }
-            if item.r#type == szamla_num {
+            if item.r#type == types.bills.id {
                 szamlak.push(item.clone())
             }
         }
@@ -94,7 +92,7 @@ pub async fn mv_stat(
         let friday = get_fridays();
         let db = get_db_conn().await;
         let statreturn = items::Entity::find()
-            .filter(items::Column::Status.eq(elfogadva_num))
+            .filter(items::Column::Status.eq(statuses.accepted.id))
             .filter(items::Column::Date.gt(friday.laster))
             .filter(items::Column::Date.lt(friday.last))
             .filter(items::Column::Am.eq(if ext.am == true { 1 } else { 0 }))
@@ -105,13 +103,13 @@ pub async fn mv_stat(
         let mut leintesek = vec![];
         let mut szamlak = vec![];
         for item in statreturn.iter() {
-            if item.r#type == potlek_num {
+            if item.r#type == types.supplements.id {
                 potlekok.push(item.clone())
             }
-            if item.r#type == leintes_num {
+            if item.r#type == types.hails.id {
                 leintesek.push(item.clone())
             }
-            if item.r#type == szamla_num {
+            if item.r#type == types.bills.id {
                 szamlak.push(item.clone())
             }
         }
