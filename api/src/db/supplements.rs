@@ -4,7 +4,7 @@ use sea_orm::entity::prelude::*;
 use serde::Serialize;
 
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq, Serialize)]
-#[sea_orm(table_name = "items")]
+#[sea_orm(table_name = "supplements")]
 pub struct Model {
     #[sea_orm(primary_key)]
     pub id: i32,
@@ -13,7 +13,7 @@ pub struct Model {
     #[sea_orm(column_type = "custom(\"LONGTEXT\")")]
     pub image: String,
     pub status: i32,
-    pub extra: Option<String>,
+    pub supplement_type: i32,
     pub reason: Option<String>,
     pub handled_by: Option<String>,
     pub am: i8,
