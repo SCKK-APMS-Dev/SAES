@@ -1,10 +1,12 @@
-#[derive(Debug)]
+use serde::Serialize;
+
+#[derive(Debug, Serialize)]
 pub struct Status {
     pub id: i32,
     pub display: String,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize)]
 pub struct Statuses {
     pub uploaded: Status,
     pub accepted: Status,
@@ -28,14 +30,14 @@ pub fn get_statuses() -> Statuses {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize)]
 pub struct Tip {
     pub id: i32,
     pub display: String,
     pub plural: String,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize)]
 pub struct Types {
     pub supplements: Tip, // pótlék
     pub hails: Tip,       // leintés
