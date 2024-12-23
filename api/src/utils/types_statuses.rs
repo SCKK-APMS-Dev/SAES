@@ -64,10 +64,10 @@ pub fn get_types() -> Types {
     }
 }
 
-pub fn get_types_as_list() -> Vec<String> {
-    vec![
-        "pótlék".to_string(),
-        "leintés".to_string(),
-        "számla".to_string(),
-    ]
+pub fn get_types_as_list() -> Vec<i32> {
+    vec![1, 2, 3]
+}
+
+pub fn get_statuses_as_list() -> Vec<i32> {
+    vec![1, 2, 3]
 }

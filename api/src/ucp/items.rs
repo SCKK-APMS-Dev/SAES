@@ -19,7 +19,7 @@ use crate::{
         middle::Tag,
         queries::{UCPTypeExtraQuery, UCPTypeQuery},
         sql::get_db_conn,
-        types_statuses::{get_statuses, get_types},
+        types_statuses::{get_statuses, get_types, get_types_as_list},
     },
 };
 
@@ -85,19 +85,53 @@ pub async fn ucp_items_post(
     let ditas: Vec<&str> = dates.split(",").collect();
     let types = get_types();
     let statuses = get_statuses();
+    let types_list = get_types_as_list();
     let mut i = 0;
-    while let Some(field) = multipart.next_field().await.unwrap() {
-        let field_name = field.name().unwrap().to_string();
-        if field_name == "files" {
-            let file_name = field.file_name().unwrap().to_string();
-            let data = field.bytes().await;
-            if data.is_ok() {
-                let db = get_db_conn().await;
-                let mut file =
-                    File::create(format!("./public/tmp/{}-{}", ext.name, file_name)).unwrap();
-                file.write(&data.unwrap()).unwrap();
-                if cucc.tipus.clone() == types.hails.id {
-                    if files_for_leintes.len().eq(&1) {
+    if types_list.contains(&cucc.tipus.clone()) {
+        while let Some(field) = multipart.next_field().await.unwrap() {
+            let field_name = field.name().unwrap().to_string();
+            if field_name == "files" {
+                let file_name = field.file_name().unwrap().to_string();
+                let data = field.bytes().await;
+                if data.is_ok() {
+                    let db = get_db_conn().await;
+                    let mut file =
+                        File::create(format!("./public/tmp/{}-{}", ext.name, file_name)).unwrap();
+                    file.write(&data.unwrap()).unwrap();
+                    if cucc.tipus.clone() == types.hails.id {
+                        if files_for_leintes.len().eq(&1) {
+                            let iten = Items::ActiveModel {
+                                am: Set(if ext.am.clone() { 1 } else { 0 }),
+                                date: Set(DateTime::from_timestamp_millis(
+                                    ditas[i].parse().unwrap(),
+                                )
+                                .unwrap()),
+                                owner: Set(ext.name.clone()),
+                                r#type: Set(cucc.tipus.clone()),
+                                status: Set(statuses.uploaded.id),
+                                image: Set(format!(
+                                    "['{}','tmp/{}-{}']",
+                                    files_for_leintes[0], ext.name, file_name
+                                )),
+                                ..Default::default()
+                            };
+                            let newitem = Items::Entity::insert(iten)
+                                .exec(&db)
+                                .await
+                                .expect("Adatbázisba mentés sikertelen");
+                            db_log(
+                                ext.name.clone(),
+                                Some(newitem.last_insert_id),
+                                "CREATE",
+                                None,
+                            )
+                            .await;
+                            file_ids.push(newitem.last_insert_id);
+                            files_for_leintes.clear();
+                        } else {
+                            files_for_leintes.push(format!("tmp/{}-{}", ext.name, file_name))
+                        }
+                    } else {
                         let iten = Items::ActiveModel {
                             am: Set(if ext.am.clone() { 1 } else { 0 }),
                             date: Set(
@@ -106,10 +140,7 @@ pub async fn ucp_items_post(
                             owner: Set(ext.name.clone()),
                             r#type: Set(cucc.tipus.clone()),
                             status: Set(statuses.uploaded.id),
-                            image: Set(format!(
-                                "['{}','tmp/{}-{}']",
-                                files_for_leintes[0], ext.name, file_name
-                            )),
+                            image: Set(format!("tmp/{}-{}", ext.name, file_name)),
                             ..Default::default()
                         };
                         let newitem = Items::Entity::insert(iten)
@@ -123,44 +154,19 @@ pub async fn ucp_items_post(
                             None,
                         )
                         .await;
-                        file_ids.push(newitem.last_insert_id);
-                        files_for_leintes.clear();
-                    } else {
-                        files_for_leintes.push(format!("tmp/{}-{}", ext.name, file_name))
+                        file_ids.push(newitem.last_insert_id)
                     }
+                    i += 1
                 } else {
-                    let iten = Items::ActiveModel {
-                        am: Set(if ext.am.clone() { 1 } else { 0 }),
-                        date: Set(
-                            DateTime::from_timestamp_millis(ditas[i].parse().unwrap()).unwrap()
-                        ),
-                        owner: Set(ext.name.clone()),
-                        r#type: Set(cucc.tipus.clone()),
-                        status: Set(statuses.uploaded.id),
-                        image: Set(format!("tmp/{}-{}", ext.name, file_name)),
-                        ..Default::default()
-                    };
-                    let newitem = Items::Entity::insert(iten)
-                        .exec(&db)
-                        .await
-                        .expect("Adatbázisba mentés sikertelen");
-                    db_log(
-                        ext.name.clone(),
-                        Some(newitem.last_insert_id),
-                        "CREATE",
-                        None,
-                    )
-                    .await;
-                    file_ids.push(newitem.last_insert_id)
+                    return Err((StatusCode::NOT_ACCEPTABLE, "toobig".to_string()));
                 }
-                i += 1
             } else {
-                return Err((StatusCode::NOT_ACCEPTABLE, "toobig".to_string()));
+                let data = field.text().await.unwrap();
+                println!("field: {}   value: {}", field_name, data)
             }
-        } else {
-            let data = field.text().await.unwrap();
-            println!("field: {}   value: {}", field_name, data)
         }
+        Ok(Json(file_ids))
+    } else {
+        return Err((StatusCode::NOT_ACCEPTABLE, "invalid_type".to_string()));
     }
-    Ok(Json(file_ids))
 }
