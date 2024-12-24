@@ -6,7 +6,7 @@
 	let greet = $state('');
 	let end = $state('!');
 	if (snow) {
-		greet = 'Kellemes ünnepeket';
+		greet = 'Boldog karácsonyt';
 	} else {
 		if (hour >= 19) {
 			greet = 'Szép estét';
