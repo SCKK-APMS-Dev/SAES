@@ -2,13 +2,20 @@
 	import { snow } from '$lib/api.js';
 
 	let { data } = $props();
-	let hour = new Date().getHours();
+	let date = new Date();
+	let hour = date.getHours();
 	let greet = $state('');
 	let end = $state('!');
 	if (snow) {
-		greet = 'Boldog karácsonyt';
+		greet = 'Kellemes ünnepeket';
+		if (date.getMonth() === 11 && date.getDate() === 24) {
+			greet = 'Boldog karácsonyt';
+		}
+		if (date.getMonth() === 0 && date.getDate() === 1) {
+			greet = 'Boldog, és sikerekben gazdag új évet kívánok';
+		}
 	} else {
-		if (hour >= 19) {
+		if (hour >= 19 || (hour >= 0 && hour < 2)) {
 			greet = 'Szép estét';
 		}
 		if (hour >= 13 && hour < 19) {
@@ -23,10 +30,7 @@
 		if (hour >= 4 && hour < 8) {
 			greet = 'Jó reggelt, bár nem kapsz pótlékot';
 		}
-		if (hour >= 0 && hour < 1) {
-			greet = 'Boldog új évet';
-		}
-		if (hour >= 1 && hour < 4) {
+		if (hour >= 2 && hour < 4) {
 			greet = 'Miért nem alszol';
 			end = '?';
 		}
