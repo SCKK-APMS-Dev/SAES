@@ -4,6 +4,7 @@ export const apiUrl = process.env.NODE_ENV === "development"
 
 let date = new Date();
 
+// * Hó engedélyezése Mikulás-naptól vízkeresztig
 export const snow = (date.getMonth() === 11 && date.getDate() >= 6) ||
 		(date.getMonth() == 0 && date.getDate() <= 6)
 	? true
