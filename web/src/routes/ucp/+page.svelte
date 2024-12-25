@@ -8,7 +8,7 @@
 	let end = $state('!');
 	if (snow) {
 		greet = 'Kellemes ünnepeket';
-		if (date.getMonth() === 11 && date.getDate() === 24) {
+		if (date.getMonth() === 11 && (date.getDate() === 24 || date.getDate() === 25)) {
 			greet = 'Boldog karácsonyt';
 		}
 		if (date.getMonth() === 0 && date.getDate() === 1) {
