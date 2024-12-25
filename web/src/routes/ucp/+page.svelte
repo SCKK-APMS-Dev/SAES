@@ -14,6 +14,9 @@
 		if (date.getMonth() === 0 && date.getDate() === 1) {
 			greet = 'Boldog, és sikerekben gazdag új évet kívánok';
 		}
+		if (date.getMonth() === 0 && (date.getDate() === 6 || date.getDate() === 7)) {
+			greet = 'Boldog ortodox karácsonyt';
+		}
 	} else {
 		if (hour >= 19 || (hour >= 0 && hour < 2)) {
 			greet = 'Szép estét';
