@@ -26,12 +26,7 @@
 		for (let row of rows) {
 			if (row.length > 0) {
 				let row_g = row.split('\t');
-				let call_date = new Date(row_g[3]);
-				if (row_g[3].includes('/')) {
-					let date = row_g[3].split(' ')[0].split('/');
-					let time = row_g[3].split(' ')[1];
-					call_date = new Date(`${date[2]}. ${date[1]}. ${date[0]}. ${time}`);
-				}
+				let call_date = new Date(Date.parse(row_g[3]));
 				if (call_date.getHours() < 15) {
 					if (row_g[0] !== 'Lemondott') {
 						hivasok[2]++;
