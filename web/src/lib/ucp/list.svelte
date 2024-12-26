@@ -6,13 +6,8 @@
 	import type { PageData } from '../../routes/ucp/potlekok/$types';
 	import { formatRelative } from 'date-fns';
 	import { locale } from '$lib/time';
-	import {
-		get_status_number,
-		get_status_string,
-		get_type_number,
-		item_statuses,
-		item_types
-	} from './types';
+	import { get_status_string, get_type_number, get_type_string } from './types';
+	import { Tooltip } from 'flowbite-svelte';
 	let multipage = $state(false);
 	interface Props {
 		data: PageData;
@@ -57,14 +52,24 @@
 </script>
 
 <Error {data}>
-	<div class="grid grid-cols-1 text-center text-black dark:text-white">
-		<a
-			href={`${$page.url.pathname}/upload`}
-			class="from-taxi hover:bg-pos-100 bg-size-200 bg-pos-0 mb-5 ml-5 mr-5 mt-5 block rounded-full bg-gradient-to-r via-teal-400 to-green-600 px-6 py-3 text-center text-xl font-bold text-white drop-shadow-lg transition-all duration-500"
-			>Feltöltés</a
-		>
-		<h1 class="text-5xl font-bold drop-shadow-xl">{display}:</h1>
-		<h2 class="mb-3 text-black dark:text-gray-400">(összesen {data.potlekok.length} darab)</h2>
+	<div
+		class="grid grid-cols-1 content-center items-center justify-center text-center text-black dark:text-white"
+	>
+		<h1 class="mt-5 text-5xl font-bold drop-shadow-xl">{display}:</h1>
+		<div class="m-auto mb-5 flex gap-5">
+			<h2 class="m-auto text-black dark:text-gray-400">
+				(összesen {data.potlekok.length} darab)
+			</h2>
+			<a
+				href={`${$page.url.pathname}/upload`}
+				aria-label="Feltöltés"
+				class="from-taxi hover:bg-pos-100 bg-size-200 bg-pos-0 h-8 w-16 rounded-full bg-gradient-to-r via-teal-400 to-green-600 text-center text-xl font-bold text-white shadow-2xl drop-shadow-lg transition-all duration-500"
+				><span class="icon-[material-symbols--upload] h-full w-full"></span></a
+			>
+			<Tooltip class="bg-slate-500">
+				Új {get_type_string(tipus)} feltöltése
+			</Tooltip>
+		</div>
 		<div class="mb-3 flex flex-auto flex-wrap items-center justify-center gap-3 align-middle">
 			{#if handled_potleks}
 				{#each handled_potleks as potle}
