@@ -430,7 +430,8 @@
 											on:click={() => quickTools('de', potleks.data.items.indexOf(potle))}
 										></Button>
 										<Tooltip class="bg-slate-500"
-											>{get_type_string(type)} elfogadása délelőttiként</Tooltip
+											>{get_type_string(type)[0].toUpperCase() + get_type_string(type).substring(1)}
+											elfogadása délelőttiként</Tooltip
 										>
 									{/if}
 									{#if tools.includes('éjszakai') && jona === get_status_number('feltöltve').toString()}
@@ -439,7 +440,8 @@
 											on:click={() => quickTools('du', potleks.data.items.indexOf(potle))}
 										></Button>
 										<Tooltip class="bg-slate-500"
-											>{get_type_string(type)} elfogadása éjszakaiként</Tooltip
+											>{get_type_string(type)[0].toUpperCase() + get_type_string(type).substring(1)}
+											elfogadása éjszakaiként</Tooltip
 										>
 									{/if}
 									{#if tools.includes('accept') && jona === get_status_number('feltöltve').toString()}
@@ -447,21 +449,30 @@
 											class="icon-[lucide--check] h-6 w-6 rounded-xl bg-white font-bold transition-all duration-150 hover:bg-green-500"
 											on:click={() => quickTools('accept', potleks.data.items.indexOf(potle))}
 										></Button>
-										<Tooltip class="bg-slate-500">{get_type_string(type)} elfogadása</Tooltip>
+										<Tooltip class="bg-slate-500"
+											>{get_type_string(type)[0].toUpperCase() + get_type_string(type).substring(1)}
+											elfogadása</Tooltip
+										>
 									{/if}
 									{#if tools.includes('decline') && jona === get_status_number('feltöltve').toString()}
 										<Button
 											class="icon-[lucide--x] h-6 w-6 rounded-xl bg-white font-bold transition-all duration-150 hover:bg-red-600"
 											on:click={() => quickTools('decline', potleks.data.items.indexOf(potle))}
 										></Button>
-										<Tooltip class="bg-slate-500">{get_type_string(type)} elutasítása</Tooltip>
+										<Tooltip class="bg-slate-500"
+											>{get_type_string(type)[0].toUpperCase() + get_type_string(type).substring(1)}
+											elutasítása</Tooltip
+										>
 									{/if}
 									{#if tools.includes('edit')}
 										<Button
 											class="icon-[lucide--edit] h-6 w-6 rounded-xl bg-white font-bold transition-all duration-150 hover:bg-slate-500"
 											on:click={() => edit(potleks.data.items.indexOf(potle))}
 										></Button>
-										<Tooltip class="bg-slate-500">{get_type_string(type)} szerkesztése</Tooltip>
+										<Tooltip class="bg-slate-500"
+											>{get_type_string(type)[0].toUpperCase() + get_type_string(type).substring(1)}
+											szerkesztése</Tooltip
+										>
 									{/if}
 								</TableBodyCell>
 							{/if}
