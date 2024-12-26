@@ -57,8 +57,8 @@
 	>
 		<h1 class="mt-5 text-5xl font-bold drop-shadow-xl">{display}:</h1>
 		<div class="m-auto mb-5 flex gap-5">
-			<h2 class="m-auto text-black dark:text-gray-400">
-				(összesen {data.potlekok.length} darab)
+			<h2 class="m-auto text-black dark:text-white">
+				Összesen {data.potlekok.length} darab.
 			</h2>
 			<a
 				href={`${$page.url.pathname}/upload`}
