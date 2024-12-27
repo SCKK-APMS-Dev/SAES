@@ -1,8 +1,7 @@
 use axum::{
-    body::Body,
     debug_handler,
     extract::{self, Query},
-    response::{IntoResponse, Response},
+    response::IntoResponse,
     Extension, Json,
 };
 use chrono::Utc;
@@ -18,7 +17,7 @@ use crate::{
         middle::Tag,
         queries::MVItemsQuery,
         sql::get_db_conn,
-        types_statuses::{get_statuses_as_list, get_types},
+        types_statuses::{get_statuses_as_list, get_types, get_types_as_list},
     },
 };
 
@@ -26,8 +25,10 @@ use crate::{
 pub struct MVPostItemsBody {
     pub id: i32,
     pub status: i8,
-    pub extra: Option<String>,
+    pub price: Option<i32>,
+    pub supp_type: Option<i8>,
     pub reason: Option<String>,
+    pub tipus: i8,
     pub am: i8,
 }
 
@@ -151,80 +152,260 @@ pub async fn mv_items_get(
 pub async fn mv_items_post(
     ext: Extension<Tag>,
     extract::Json(body): extract::Json<MVPostItemsBody>,
-) -> impl IntoResponse {
+) -> Result<impl IntoResponse, (StatusCode, String)> {
     let status_list = get_statuses_as_list();
-    if status_list.contains(&body.status) {
+    let types_list = get_types_as_list();
+    if status_list.contains(&body.status) && types_list.contains(&body.tipus) {
+        let types = get_types();
         let db = get_db_conn().await;
-        let old_model = Items::Entity::find()
-            .filter(Items::Column::Id.eq(body.id))
-            .one(&db)
-            .await
-            .expect("[ERROR] Régi lekérése sikertelen")
-            .unwrap();
-        let mut act = String::new();
-        if old_model.status != body.status {
-            act += format!(
-                "{}status FROM {} TO {}",
-                if act.len() > 0 { ", " } else { "" },
-                old_model.status,
-                body.status
+        if body.tipus == types.supplements.id {
+            let old_model = supplements::Entity::find()
+                .filter(supplements::Column::Id.eq(body.id))
+                .one(&db)
+                .await
+                .expect("[ERROR] Régi lekérése sikertelen")
+                .unwrap();
+            let mut act = String::new();
+            if old_model.status != body.status {
+                act += format!(
+                    "{}status FROM {} TO {}",
+                    if act.len() > 0 { ", " } else { "" },
+                    old_model.status,
+                    body.status
+                )
+                .as_str();
+            }
+            if old_model.reason != body.reason {
+                act += format!(
+                    "{}reason FROM {} TO {}",
+                    if act.len() > 0 { ", " } else { "" },
+                    if old_model.reason.is_some() {
+                        old_model.reason.unwrap()
+                    } else {
+                        String::from("null")
+                    },
+                    if body.reason.is_some() {
+                        body.reason.clone().unwrap()
+                    } else {
+                        String::from("null")
+                    }
+                )
+                .as_str();
+            }
+            if old_model.r#type != body.supp_type {
+                act += format!(
+                    "{}supp_type FROM {} TO {}",
+                    if act.len() > 0 { ", " } else { "" },
+                    if old_model.r#type.is_some() {
+                        old_model.r#type.unwrap()
+                    } else {
+                        0
+                    },
+                    if body.supp_type.is_some() {
+                        body.supp_type.clone().unwrap()
+                    } else {
+                        0
+                    }
+                )
+                .as_str();
+            }
+            db_log(
+                ext.name.clone(),
+                Some(body.id.clone()),
+                Some(types.supplements.id),
+                "UPDATE",
+                Some(act),
             )
-            .as_str();
-        }
-        if old_model.reason != body.reason {
-            act += format!(
-                "{}reason FROM {} TO {}",
-                if act.len() > 0 { ", " } else { "" },
-                if old_model.reason.is_some() {
-                    old_model.reason.unwrap()
+            .await;
+            let activemodel = supplements::ActiveModel {
+                id: Set(body.id),
+                am: Set(body.am),
+                status: Set(body.status),
+                reason: Set(body.reason),
+                r#type: Set(if vec![1, 2].contains(&body.supp_type.unwrap()) {
+                    body.supp_type
                 } else {
-                    String::from("null")
-                },
-                if body.reason.is_some() {
-                    body.reason.clone().unwrap()
-                } else {
-                    String::from("null")
-                }
+                    None
+                }),
+                handled_by: Set(Some(ext.name.clone())),
+                ..Default::default()
+            };
+            let statreturn = supplements::Entity::update(activemodel)
+                .exec(&db)
+                .await
+                .expect("[ERROR] Módosítás sikertelen");
+            Ok(Json(MVGetItemsFull {
+                am: statreturn.am,
+                status: statreturn.status,
+                date: statreturn.date,
+                handled_by: statreturn.handled_by,
+                reason: statreturn.reason,
+                id: statreturn.id,
+                img_1: statreturn.image,
+                img_2: None,
+                owner: statreturn.owner,
+                price: None,
+                r#type: statreturn.r#type,
+            })
+            .into_response())
+        } else if body.tipus == types.hails.id {
+            let old_model = hails::Entity::find()
+                .filter(hails::Column::Id.eq(body.id))
+                .one(&db)
+                .await
+                .expect("[ERROR] Régi lekérése sikertelen")
+                .unwrap();
+            let mut act = String::new();
+            if old_model.status != body.status {
+                act += format!(
+                    "{}status FROM {} TO {}",
+                    if act.len() > 0 { ", " } else { "" },
+                    old_model.status,
+                    body.status
+                )
+                .as_str();
+            }
+            if old_model.reason != body.reason {
+                act += format!(
+                    "{}reason FROM {} TO {}",
+                    if act.len() > 0 { ", " } else { "" },
+                    if old_model.reason.is_some() {
+                        old_model.reason.unwrap()
+                    } else {
+                        String::from("null")
+                    },
+                    if body.reason.is_some() {
+                        body.reason.clone().unwrap()
+                    } else {
+                        String::from("null")
+                    }
+                )
+                .as_str();
+            }
+            db_log(
+                ext.name.clone(),
+                Some(body.id.clone()),
+                Some(types.hails.id),
+                "UPDATE",
+                Some(act),
             )
-            .as_str();
-        }
-        if old_model.extra != body.extra {
-            act += format!(
-                "{}extra FROM {} TO {}",
-                if act.len() > 0 { ", " } else { "" },
-                if old_model.extra.is_some() {
-                    old_model.extra.unwrap()
-                } else {
-                    String::from("null")
-                },
-                if body.extra.is_some() {
-                    body.extra.clone().unwrap()
-                } else {
-                    String::from("null")
-                }
+            .await;
+            let activemodel = hails::ActiveModel {
+                id: Set(body.id),
+                am: Set(body.am),
+                status: Set(body.status),
+                reason: Set(body.reason),
+                handled_by: Set(Some(ext.name.clone())),
+                ..Default::default()
+            };
+            let statreturn = hails::Entity::update(activemodel)
+                .exec(&db)
+                .await
+                .expect("[ERROR] Módosítás sikertelen");
+            Ok(Json(MVGetItemsFull {
+                am: statreturn.am,
+                status: statreturn.status,
+                date: statreturn.date,
+                handled_by: statreturn.handled_by,
+                reason: statreturn.reason,
+                id: statreturn.id,
+                img_1: statreturn.image_1,
+                img_2: Some(statreturn.image_2),
+                owner: statreturn.owner,
+                r#type: None,
+                price: None,
+            })
+            .into_response())
+        } else if body.tipus == types.bills.id {
+            let old_model = bills::Entity::find()
+                .filter(bills::Column::Id.eq(body.id))
+                .one(&db)
+                .await
+                .expect("[ERROR] Régi lekérése sikertelen")
+                .unwrap();
+            let mut act = String::new();
+            if old_model.status != body.status {
+                act += format!(
+                    "{}status FROM {} TO {}",
+                    if act.len() > 0 { ", " } else { "" },
+                    old_model.status,
+                    body.status
+                )
+                .as_str();
+            }
+            if old_model.reason != body.reason {
+                act += format!(
+                    "{}reason FROM {} TO {}",
+                    if act.len() > 0 { ", " } else { "" },
+                    if old_model.reason.is_some() {
+                        old_model.reason.unwrap()
+                    } else {
+                        String::from("null")
+                    },
+                    if body.reason.is_some() {
+                        body.reason.clone().unwrap()
+                    } else {
+                        String::from("null")
+                    }
+                )
+                .as_str();
+            }
+            if old_model.price != body.price {
+                act += format!(
+                    "{}price FROM {} TO {}",
+                    if act.len() > 0 { ", " } else { "" },
+                    if old_model.price.is_some() {
+                        old_model.price.unwrap()
+                    } else {
+                        0
+                    },
+                    if body.price.is_some() {
+                        body.price.clone().unwrap()
+                    } else {
+                        0
+                    }
+                )
+                .as_str();
+            }
+            db_log(
+                ext.name.clone(),
+                Some(body.id.clone()),
+                Some(types.supplements.id),
+                "UPDATE",
+                Some(act),
             )
-            .as_str();
+            .await;
+            let activemodel = bills::ActiveModel {
+                id: Set(body.id),
+                am: Set(body.am),
+                status: Set(body.status),
+                reason: Set(body.reason),
+                price: Set(body.price),
+                handled_by: Set(Some(ext.name.clone())),
+                ..Default::default()
+            };
+            let statreturn = bills::Entity::update(activemodel)
+                .exec(&db)
+                .await
+                .expect("[ERROR] Módosítás sikertelen");
+            Ok(Json(MVGetItemsFull {
+                am: statreturn.am,
+                status: statreturn.status,
+                date: statreturn.date,
+                handled_by: statreturn.handled_by,
+                reason: statreturn.reason,
+                id: statreturn.id,
+                img_1: statreturn.image,
+                img_2: None,
+                owner: statreturn.owner,
+                price: statreturn.price,
+                r#type: None,
+            })
+            .into_response())
+        } else {
+            Err((StatusCode::BAD_REQUEST, "Érvénytelen típus".to_string()))
         }
-        db_log(ext.name.clone(), Some(body.id.clone()), "UPDATE", Some(act)).await;
-        let activemodel = Items::ActiveModel {
-            id: Set(body.id),
-            am: Set(body.am),
-            status: Set(body.status),
-            reason: Set(body.reason),
-            extra: Set(body.extra),
-            handled_by: Set(Some(ext.name.clone())),
-            ..Default::default()
-        };
-        let statreturn = Items::Entity::update(activemodel)
-            .exec(&db)
-            .await
-            .expect("[ERROR] Módosítás sikertelen");
-        Json(Model { ..statreturn }).into_response()
     } else {
-        Response::builder()
-            .status(StatusCode::NOT_FOUND)
-            .body(Body::from("invalid_type"))
-            .unwrap()
-            .into_response()
+        Err((StatusCode::NOT_FOUND, "Ejnye!".to_string()))
     }
 }

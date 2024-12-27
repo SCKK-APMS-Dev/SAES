@@ -191,6 +191,7 @@ pub async fn ucp_items_post(
                             db_log(
                                 ext.name.clone(),
                                 Some(newitem.last_insert_id),
+                                Some(types.hails.id),
                                 "CREATE",
                                 None,
                             )
@@ -247,6 +248,7 @@ pub async fn ucp_items_post(
                         db_log(
                             ext.name.clone(),
                             Some(newitem.last_insert_id),
+                            Some(types.supplements.id),
                             "CREATE",
                             None,
                         )
@@ -284,6 +286,7 @@ pub async fn ucp_items_post(
                         db_log(
                             ext.name.clone(),
                             Some(newitem.last_insert_id),
+                            Some(types.bills.id),
                             "CREATE",
                             None,
                         )

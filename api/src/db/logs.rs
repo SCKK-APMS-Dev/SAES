@@ -9,6 +9,7 @@ pub struct Model {
     pub id: i32,
     pub owner: String,
     pub item_id: Option<i32>,
+    pub item_type: Option<i8>,
     pub action: String,
     pub message: Option<String>,
     pub date: DateTimeUtc,

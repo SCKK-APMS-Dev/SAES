@@ -10,7 +10,6 @@ pub struct Model {
     pub id: i32,
     pub r#type: Option<i8>,
     pub owner: String,
-    #[sea_orm(column_type = "custom(\"LONGTEXT\")")]
     pub image: i32,
     pub status: i8,
     pub reason: Option<String>,
