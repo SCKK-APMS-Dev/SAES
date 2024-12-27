@@ -3,14 +3,16 @@
 use sea_orm::entity::prelude::*;
 
 #[derive(Clone, Debug, PartialEq, DeriveEntityModel, Eq)]
-#[sea_orm(table_name = "logs")]
+#[sea_orm(table_name = "images")]
 pub struct Model {
     #[sea_orm(primary_key)]
     pub id: i32,
+    #[sea_orm(column_type = "Text")]
+    pub filename: String,
     pub owner: String,
-    pub item_id: Option<i32>,
-    pub action: String,
-    pub message: Option<String>,
+    pub usage: i8,
+    pub tmp: i8,
+    pub converted: i8,
     pub date: DateTimeUtc,
 }
 
