@@ -35,7 +35,7 @@ pub async fn base_image_get(cucc: Query<BaseImgQuery>) -> Response {
                 "Content-Type",
                 format!(
                     "image/{}",
-                    if fel_kep.converted > 0 { "png" } else { "avif" }
+                    if fel_kep.converted > 0 { "avif" } else { "png" }
                 ),
             )
             .body(body)

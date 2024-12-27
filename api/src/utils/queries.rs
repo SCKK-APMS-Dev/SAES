@@ -3,13 +3,6 @@ use serde::Deserialize;
 #[derive(Debug, Deserialize)]
 pub struct BaseImgQuery {
     pub id: String,
-    pub r#type: i32,
-}
-
-#[derive(Debug, Deserialize)]
-pub struct BaseImgLeintQuery {
-    pub id: String,
-    pub ver: String,
 }
 
 #[derive(Debug, Deserialize)]
@@ -20,12 +13,12 @@ pub struct BaseListQuery {
 
 #[derive(Debug, Deserialize)]
 pub struct UCPTypeQuery {
-    pub tipus: i32,
+    pub tipus: i8,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct UCPTypeExtraQuery {
-    pub tipus: i32,
+    pub tipus: i8,
     pub dates: String,
 }
 
@@ -36,6 +29,6 @@ pub struct MVStatQuery {
 
 #[derive(Debug, Deserialize)]
 pub struct MVItemsQuery {
-    pub tipus: i32,
-    pub status: String,
+    pub tipus: i8,
+    pub status: i8,
 }

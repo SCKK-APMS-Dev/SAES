@@ -2,7 +2,7 @@ use serde::Serialize;
 
 #[derive(Debug, Serialize)]
 pub struct Status {
-    pub id: i32,
+    pub id: i8,
     pub display: String,
 }
 
@@ -32,7 +32,7 @@ pub fn get_statuses() -> Statuses {
 
 #[derive(Debug, Serialize)]
 pub struct Tip {
-    pub id: i32,
+    pub id: i8,
     pub display: String,
     pub plural: String,
 }
@@ -64,10 +64,10 @@ pub fn get_types() -> Types {
     }
 }
 
-pub fn get_types_as_list() -> Vec<i32> {
+pub fn get_types_as_list() -> Vec<i8> {
     vec![1, 2, 3]
 }
 
-pub fn get_statuses_as_list() -> Vec<i32> {
+pub fn get_statuses_as_list() -> Vec<i8> {
     vec![1, 2, 3]
 }

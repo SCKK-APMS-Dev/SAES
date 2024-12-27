@@ -1,7 +1,7 @@
 export interface FullDBType {
 	am: 0 | 1;
 	date: Date;
-	extra: null | string;
+	price: null | number;
 	id: number;
 	image: string;
 	owner: string;

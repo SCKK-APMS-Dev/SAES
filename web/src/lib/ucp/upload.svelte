@@ -54,23 +54,10 @@
 				formerror = 'Leintéshez kérlek 2-vel osztható mennyiségű képet tölts fel!';
 			} else {
 				fileas = ret;
+				console.log(fileas);
 			}
-			// for (let i = 0; i < files.files.length / 2; i++) {
-			// 	seli.push([]);
-			// 	seli[i].push(URL.createObjectURL(files.files[i]));
-			// 	seli[i].push(URL.createObjectURL(files.files[i + 1]));
-			// 	seli = seli;
-			// }
-			// $loading = false;
 		}
 	}
-	const switchTope = () => {
-		if (tope === 'col') {
-			tope = 'row';
-		} else {
-			tope = 'col';
-		}
-	};
 </script>
 
 <Error {data}>
@@ -111,48 +98,18 @@
 			{#if !agent.includes('Firefox')}
 				<h2 class="font-bold">Ha sikeresen feltöltötted őket akkor itt fognak megjelenni:</h2>
 			{/if}
-			<button
-				class="mb-2 hidden rounded-lg bg-red-600 px-2 transition-all duration-200 hover:bg-red-800"
-				onclick={switchTope}
-				>{#if tope === 'row'}
-					Sorban
-				{:else}
-					Oszlopban
-				{/if}</button
-			>
-			{#each seli as asd}
-				<div
-					class="flex items-center justify-center bg-slate-500 py-4 align-middle"
-					class:flex-col={tope === 'col'}
-					class:flex-row={tope === 'row'}
-				>
-					<div>
-						<button class="bg-slate-900 p-2">
-							<img src={asd[0]} alt="asd" class="max-h-5xl m-auto max-w-5xl" />
-						</button>
-						<h2>Kép a 10-12-ről</h2>
-					</div>
-					<h1 class="text-5xl font-bold">+</h1>
-					<div>
-						<button class="bg-slate-900 p-2">
-							<img src={asd[1]} alt="asd" class="max-h-5xl m-auto max-w-5xl" />
-						</button>
-						<h2>Kép a "xy kifizette az utazást"-ról</h2>
-					</div>
-				</div>
-			{/each}
 			{#each fileas as nyam}
 				{#if tipus === get_type_number('leintés')}
 					<div class="flex flex-col">
 						<img
 							loading="lazy"
-							src={`${data.api}/limg?id=${nyam}&ver=0`}
+							src={`${data.api}/img?id=${nyam[0]}`}
 							alt=""
 							class="max-h-5xl m-auto max-w-5xl py-3"
 						/>
 						<img
 							loading="lazy"
-							src={`${data.api}/limg?id=${nyam}&ver=1`}
+							src={`${data.api}/img?id=${nyam[1]}`}
 							alt=""
 							class="max-h-5xl m-auto max-w-5xl py-3"
 						/>
@@ -160,7 +117,7 @@
 				{:else}
 					<img
 						loading="lazy"
-						src={`${data.api}/img?id=${nyam}`}
+						src={`${data.api}/img?id=${nyam[0]}`}
 						alt=""
 						class="max-h-5xl m-auto max-w-5xl py-3"
 					/>

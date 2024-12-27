@@ -29,7 +29,7 @@ pub struct ItemsStruct {
     pub owner: String,
     pub img_1: i32,
     pub img_2: Option<i32>,
-    pub status: i32,
+    pub status: i8,
     pub reason: Option<String>,
     pub am: i8,
     pub handled_by: Option<String>,
@@ -136,8 +136,8 @@ pub async fn ucp_items_post(
     cucc: Query<UCPTypeExtraQuery>,
     mut multipart: Multipart,
 ) -> Result<impl IntoResponse, (StatusCode, String)> {
-    let mut file_ids: Vec<i32> = Vec::new();
-    let mut files_for_leintes: Vec<String> = Vec::new();
+    let mut file_ids: Vec<[i32; 2]> = Vec::new();
+    let mut files_for_leintes: Vec<i32> = vec![];
     let dates = cucc.dates.clone();
     let ditas: Vec<&str> = dates.split(",").collect();
     let types = get_types();
@@ -155,63 +155,143 @@ pub async fn ucp_items_post(
                     let mut file =
                         File::create(format!("./public/tmp/{}-{}", ext.name, file_name)).unwrap();
                     file.write(&data.unwrap()).unwrap();
-                    if cucc.tipus.clone() == types.hails.id {
+                    if cucc.tipus == types.hails.id {
                         if files_for_leintes.len().eq(&1) {
-                            let iten = Items::ActiveModel {
+                            let img = images::ActiveModel {
+                                owner: Set(ext.name.clone()),
+                                tmp: Set(1),
+                                filename: Set(format!("{}-{}", ext.name, file_name)),
+                                date: Set(DateTime::from_timestamp_millis(
+                                    ditas[i].parse().unwrap(),
+                                )
+                                .unwrap()),
+                                usage: Set(types.hails.id),
+                                ..Default::default()
+                            };
+                            let new_img = images::Entity::insert(img)
+                                .exec(&db)
+                                .await
+                                .expect("Fájl mentése sikertelen");
+                            let iten = hails::ActiveModel {
                                 am: Set(if ext.am.clone() { 1 } else { 0 }),
                                 date: Set(DateTime::from_timestamp_millis(
                                     ditas[i].parse().unwrap(),
                                 )
                                 .unwrap()),
                                 owner: Set(ext.name.clone()),
-                                r#type: Set(cucc.tipus.clone()),
                                 status: Set(statuses.uploaded.id),
-                                image: Set(format!(
-                                    "['{}','tmp/{}-{}']",
-                                    files_for_leintes[0], ext.name, file_name
-                                )),
+                                image_1: Set(files_for_leintes[0]),
+                                image_2: Set(new_img.last_insert_id),
                                 ..Default::default()
                             };
-                            let newitem = Items::Entity::insert(iten)
+                            let newitem = hails::Entity::insert(iten)
                                 .exec(&db)
                                 .await
                                 .expect("Adatbázisba mentés sikertelen");
                             db_log(
                                 ext.name.clone(),
                                 Some(newitem.last_insert_id),
+                                Some(types.hails.id),
                                 "CREATE",
                                 None,
                             )
                             .await;
-                            file_ids.push(newitem.last_insert_id);
+                            file_ids.push([new_img.last_insert_id, files_for_leintes[0]]);
                             files_for_leintes.clear();
                         } else {
-                            files_for_leintes.push(format!("tmp/{}-{}", ext.name, file_name))
+                            let img = images::ActiveModel {
+                                owner: Set(ext.name.clone()),
+                                filename: Set(format!("{}-{}", ext.name, file_name)),
+                                tmp: Set(1),
+                                date: Set(DateTime::from_timestamp_millis(
+                                    ditas[i].parse().unwrap(),
+                                )
+                                .unwrap()),
+                                usage: Set(types.hails.id),
+                                ..Default::default()
+                            };
+                            let new_img = images::Entity::insert(img)
+                                .exec(&db)
+                                .await
+                                .expect("Fájl mentése sikertelen");
+                            files_for_leintes.push(new_img.last_insert_id)
                         }
-                    } else {
-                        let iten = Items::ActiveModel {
+                    } else if cucc.tipus == types.supplements.id {
+                        let img = images::ActiveModel {
+                            owner: Set(ext.name.clone()),
+                            tmp: Set(1),
+                            filename: Set(format!("{}-{}", ext.name, file_name)),
+                            date: Set(
+                                DateTime::from_timestamp_millis(ditas[i].parse().unwrap()).unwrap()
+                            ),
+                            usage: Set(types.supplements.id),
+                            ..Default::default()
+                        };
+                        let new_img = images::Entity::insert(img)
+                            .exec(&db)
+                            .await
+                            .expect("Fájl mentése sikertelen");
+                        let iten = supplements::ActiveModel {
                             am: Set(if ext.am.clone() { 1 } else { 0 }),
                             date: Set(
                                 DateTime::from_timestamp_millis(ditas[i].parse().unwrap()).unwrap()
                             ),
                             owner: Set(ext.name.clone()),
-                            r#type: Set(cucc.tipus.clone()),
                             status: Set(statuses.uploaded.id),
-                            image: Set(format!("tmp/{}-{}", ext.name, file_name)),
+                            image: Set(new_img.last_insert_id),
                             ..Default::default()
                         };
-                        let newitem = Items::Entity::insert(iten)
+                        let newitem = supplements::Entity::insert(iten)
                             .exec(&db)
                             .await
                             .expect("Adatbázisba mentés sikertelen");
                         db_log(
                             ext.name.clone(),
                             Some(newitem.last_insert_id),
+                            Some(types.supplements.id),
                             "CREATE",
                             None,
                         )
                         .await;
-                        file_ids.push(newitem.last_insert_id)
+                        file_ids.push([new_img.last_insert_id, 0])
+                    } else if cucc.tipus == types.bills.id {
+                        let img = images::ActiveModel {
+                            owner: Set(ext.name.clone()),
+                            tmp: Set(1),
+                            filename: Set(format!("{}-{}", ext.name, file_name)),
+                            date: Set(
+                                DateTime::from_timestamp_millis(ditas[i].parse().unwrap()).unwrap()
+                            ),
+                            usage: Set(types.bills.id),
+                            ..Default::default()
+                        };
+                        let new_img = images::Entity::insert(img)
+                            .exec(&db)
+                            .await
+                            .expect("Fájl mentése sikertelen");
+                        let iten = bills::ActiveModel {
+                            am: Set(if ext.am.clone() { 1 } else { 0 }),
+                            date: Set(
+                                DateTime::from_timestamp_millis(ditas[i].parse().unwrap()).unwrap()
+                            ),
+                            owner: Set(ext.name.clone()),
+                            status: Set(statuses.uploaded.id),
+                            image: Set(new_img.last_insert_id),
+                            ..Default::default()
+                        };
+                        let newitem = bills::Entity::insert(iten)
+                            .exec(&db)
+                            .await
+                            .expect("Adatbázisba mentés sikertelen");
+                        db_log(
+                            ext.name.clone(),
+                            Some(newitem.last_insert_id),
+                            Some(types.bills.id),
+                            "CREATE",
+                            None,
+                        )
+                        .await;
+                        file_ids.push([new_img.last_insert_id, 0])
                     }
                     i += 1
                 } else {
