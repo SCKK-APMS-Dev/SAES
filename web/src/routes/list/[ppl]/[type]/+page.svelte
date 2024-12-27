@@ -16,9 +16,12 @@
 		{/if}
 		{#if data.type === 'leintes'}
 			<img src={`${data.api}/img?id=${puszedli.img_1}`} alt="kép" />
+			<h2 class="text-gray-400">Kép ID: {puszedli.img_1}</h2>
 			<img src={`${data.api}/img?id=${puszedli.img_2}`} alt="kép" />
+			<h2 class="text-gray-400">Kép ID: {puszedli.img_2}</h2>
 		{:else}
 			<img src={`${data.api}/img?id=${puszedli.img_1}`} alt="kép" />
+			<h2 class="text-gray-400">Kép ID: {puszedli.img_1}</h2>
 		{/if}
 		<h2 class="text-gray-400">ID: {puszedli.id}</h2>
 	{/each}
