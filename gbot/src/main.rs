@@ -55,6 +55,10 @@ async fn main() {
         println!(" ");
         handle_tables("Taxi C műszak", "B3:C22", "C3", "current").await;
         println!(" ");
+        println!("==== Taxi műszakfüggetlen aktuális hét ====");
+        println!(" ");
+        handle_tables("Taxi műszakfüggetlen", "B3:C26", "C3", "current").await;
+        println!(" ");
         println!("=======================");
         println!(" ");
         println!("==== Taxi A műszak előző hét ====");
@@ -68,6 +72,10 @@ async fn main() {
         println!("==== Taxi C műszak előző hét ====");
         println!(" ");
         handle_tables("Taxi C műszak", "H3:I22", "I3", "previous").await;
+        println!(" ");
+        println!("==== Taxi műszakfüggetlen előző hét ====");
+        println!(" ");
+        handle_tables("Taxi műszakfüggetlen", "H3:I26", "I3", "previous").await;
         println!(" ");
         println!("=======================");
         println!(" ");
