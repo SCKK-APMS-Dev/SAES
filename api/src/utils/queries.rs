@@ -3,6 +3,7 @@ use serde::Deserialize;
 #[derive(Debug, Deserialize)]
 pub struct BaseImgQuery {
     pub id: String,
+    pub r#type: i32,
 }
 
 #[derive(Debug, Deserialize)]

@@ -13,7 +13,7 @@ use sea_orm::{ColumnTrait, EntityTrait, Order, QueryFilter, QueryOrder, Set};
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    db::items as Items,
+    db::{bills, hails, images, supplements},
     logging::db_log,
     utils::{
         middle::Tag,
@@ -27,7 +27,8 @@ use crate::{
 pub struct ItemsStruct {
     pub id: i32,
     pub owner: String,
-    pub image: String,
+    pub img_1: i32,
+    pub img_2: Option<i32>,
     pub status: i32,
     pub reason: Option<String>,
     pub am: i8,
@@ -46,31 +47,87 @@ pub fn routes() -> Router {
 pub async fn ucp_items_get(
     ext: Extension<Tag>,
     cucc: Query<UCPTypeQuery>,
-) -> Json<Vec<ItemsStruct>> {
+) -> Result<impl IntoResponse, (StatusCode, String)> {
     let db = get_db_conn().await;
-    let getitem = Items::Entity::find()
-        .filter(Items::Column::Owner.eq(&ext.name))
-        .filter(Items::Column::Type.eq(cucc.tipus.clone()))
-        .order_by(Items::Column::Date, Order::Desc)
-        .all(&db)
-        .await
-        .expect("Leintések lekérése sikertelen az adatbázisból");
-    let another: Vec<ItemsStruct> = getitem
-        .iter()
-        .map(|strucc| -> ItemsStruct {
-            ItemsStruct {
-                am: strucc.am.clone(),
-                owner: strucc.owner.clone(),
-                image: strucc.image.clone(),
-                reason: strucc.reason.clone(),
-                status: strucc.status.clone(),
-                date: strucc.date.clone(),
-                id: strucc.id.clone(),
-                handled_by: strucc.handled_by.clone(),
-            }
-        })
-        .collect();
-    Json(another)
+    let types = get_types();
+    if cucc.tipus == types.supplements.id {
+        let items = supplements::Entity::find()
+            .filter(supplements::Column::Owner.eq(&ext.name))
+            .order_by(supplements::Column::Date, Order::Desc)
+            .all(&db)
+            .await
+            .expect("Pótlékok lekérése sikertelen az adatbázisból");
+        let another: Vec<ItemsStruct> = items
+            .iter()
+            .map(|strucc| -> ItemsStruct {
+                ItemsStruct {
+                    am: strucc.am,
+                    owner: strucc.owner.clone(),
+                    img_1: strucc.image,
+                    img_2: None,
+                    reason: strucc.reason.clone(),
+                    status: strucc.status,
+                    date: strucc.date,
+                    id: strucc.id,
+                    handled_by: strucc.handled_by.clone(),
+                }
+            })
+            .collect();
+        return Ok(Json(another));
+    } else if cucc.tipus == types.hails.id {
+        let items = hails::Entity::find()
+            .filter(hails::Column::Owner.eq(&ext.name))
+            .order_by(hails::Column::Date, Order::Desc)
+            .all(&db)
+            .await
+            .expect("Pótlékok lekérése sikertelen az adatbázisból");
+        let another: Vec<ItemsStruct> = items
+            .iter()
+            .map(|strucc| -> ItemsStruct {
+                ItemsStruct {
+                    am: strucc.am,
+                    owner: strucc.owner.clone(),
+                    img_1: strucc.image_1,
+                    img_2: Some(strucc.image_2),
+                    reason: strucc.reason.clone(),
+                    status: strucc.status,
+                    date: strucc.date,
+                    id: strucc.id,
+                    handled_by: strucc.handled_by.clone(),
+                }
+            })
+            .collect();
+        return Ok(Json(another));
+    } else if cucc.tipus == types.bills.id {
+        let items = bills::Entity::find()
+            .filter(bills::Column::Owner.eq(&ext.name))
+            .order_by(bills::Column::Date, Order::Desc)
+            .all(&db)
+            .await
+            .expect("Pótlékok lekérése sikertelen az adatbázisból");
+        let another: Vec<ItemsStruct> = items
+            .iter()
+            .map(|strucc| -> ItemsStruct {
+                ItemsStruct {
+                    am: strucc.am,
+                    owner: strucc.owner.clone(),
+                    img_1: strucc.image,
+                    img_2: None,
+                    reason: strucc.reason.clone(),
+                    status: strucc.status,
+                    date: strucc.date,
+                    id: strucc.id,
+                    handled_by: strucc.handled_by.clone(),
+                }
+            })
+            .collect();
+        return Ok(Json(another));
+    } else {
+        return Err((
+            StatusCode::NOT_FOUND,
+            "Ilyen típus nem található!".to_string(),
+        ));
+    }
 }
 
 #[debug_handler]
