@@ -136,8 +136,8 @@ pub async fn ucp_items_post(
     cucc: Query<UCPTypeExtraQuery>,
     mut multipart: Multipart,
 ) -> Result<impl IntoResponse, (StatusCode, String)> {
-    let mut file_ids: Vec<i32> = Vec::new();
-    let mut files_for_leintes: Vec<i32> = Vec::new();
+    let mut file_ids: Vec<[i32; 2]> = Vec::new();
+    let mut files_for_leintes: Vec<i32> = vec![];
     let dates = cucc.dates.clone();
     let ditas: Vec<&str> = dates.split(",").collect();
     let types = get_types();
@@ -196,7 +196,7 @@ pub async fn ucp_items_post(
                                 None,
                             )
                             .await;
-                            file_ids.push(newitem.last_insert_id);
+                            file_ids.push([new_img.last_insert_id, files_for_leintes[0]]);
                             files_for_leintes.clear();
                         } else {
                             let img = images::ActiveModel {
@@ -253,7 +253,7 @@ pub async fn ucp_items_post(
                             None,
                         )
                         .await;
-                        file_ids.push(newitem.last_insert_id)
+                        file_ids.push([new_img.last_insert_id, 0])
                     } else if cucc.tipus == types.bills.id {
                         let img = images::ActiveModel {
                             owner: Set(ext.name.clone()),
@@ -291,7 +291,7 @@ pub async fn ucp_items_post(
                             None,
                         )
                         .await;
-                        file_ids.push(newitem.last_insert_id)
+                        file_ids.push([new_img.last_insert_id, 0])
                     }
                     i += 1
                 } else {

@@ -97,14 +97,14 @@
 						{#if tipus === get_type_number('leintés')}
 							<div class="flex flex-col xl:flex-row">
 								<a
-									href={`${data.api}/limg?id=${potle.id}&ver=0`}
+									href={`${data.api}/img?id=${potle.img_1}`}
 									target="_blank"
 									onmouseenter={() => (potle.focus1 = true)}
 									onmouseleave={() => (potle.focus1 = false)}
 								>
 									<img
 										loading="lazy"
-										src={`${data.api}/limg?id=${potle.id}&ver=0`}
+										src={`${data.api}/img?id=${potle.img_1}`}
 										alt=""
 										class="max-h-xl m-auto max-w-xl py-2 drop-shadow-xl"
 										class:blur={potle.focus1}
@@ -116,14 +116,14 @@
 									{/if}
 								</a>
 								<a
-									href={`${data.api}/limg?id=${potle.id}&ver=1`}
+									href={`${data.api}/img?id=${potle.img_2}`}
 									target="_blank"
 									onmouseenter={() => (potle.focus2 = true)}
 									onmouseleave={() => (potle.focus2 = false)}
 								>
 									<img
 										loading="lazy"
-										src={`${data.api}/limg?id=${potle.id}&ver=1`}
+										src={`${data.api}/img?id=${potle.img_2}`}
 										alt=""
 										class="max-h-xl m-auto max-w-xl py-2 drop-shadow-xl"
 										class:blur={potle.focus2}
@@ -137,14 +137,14 @@
 							</div>
 						{:else}
 							<a
-								href={`${data.api}/img?id=${potle.id}`}
+								href={`${data.api}/img?id=${potle.img_1}`}
 								target="_blank"
 								onmouseenter={() => (potle.focus = true)}
 								onmouseleave={() => (potle.focus = false)}
 							>
 								<img
 									loading="lazy"
-									src={`${data.api}/img?id=${potle.id}`}
+									src={`${data.api}/img?id=${potle.img_1}`}
 									alt=""
 									class="max-h-xl m-auto max-w-xl py-2 drop-shadow-xl"
 									class:blur={potle.focus}

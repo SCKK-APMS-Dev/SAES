@@ -57,7 +57,10 @@
 				owner: string;
 				reason: string | null;
 				status: number;
-				extra: string | null;
+				type: number;
+				img_1: number;
+				img_2: null | number;
+				price: null | number;
 				handled_by: string | null;
 				am: boolean;
 			}[];
@@ -137,7 +140,7 @@
 		editing = true;
 		console.log(bindEdit);
 	}
-	async function quickTools(type: string, id: number) {
+	async function quickTools(timpo: string, id: number) {
 		const fatcs = await fetch('/web-api/admin', {
 			headers: {
 				'Content-Type': 'application/json'
@@ -147,16 +150,16 @@
 				am: potleks.data.items[id].am,
 				id: potleks.data.items[id].id,
 				status:
-					type === 'accept'
+					timpo === 'accept'
 						? get_status_number('elfogadva')
-						: type === 'decline'
+						: timpo === 'decline'
 							? get_status_number('elutasítva')
-							: type === 'de' || 'du'
+							: timpo === 'de' || 'du'
 								? get_status_number('elfogadva')
 								: potleks.data.items[id].status,
 				reason: potleks.data.items[id].reason,
-				extra:
-					type === 'de' ? 'délelőtti' : type === 'du' ? 'éjszakai' : potleks.data.items[id].extra
+				tipus: type,
+				supp_type: timpo === 'de' ? 1 : timpo === 'du' ? 2 : 0
 			})
 		});
 		if (fatcs.ok) {
@@ -211,9 +214,11 @@
 			body: JSON.stringify({
 				id: bindEdit.id,
 				am: bindEdit.am,
+				tipus: type,
 				status: bindEdit.status,
 				reason: bindEdit.reason,
-				extra: bindEdit.extra
+				supp_type: bindEdit.type,
+				price: bindEdit.price
 			})
 		});
 		if (fatcs.ok) {
@@ -298,18 +303,18 @@
 								placeholder="Kérlek válassz"
 								name="potlek-type"
 								class="bg-emerald-600 text-xl text-white opacity-80 focus:opacity-100"
-								bind:value={bindEdit.extra}
+								bind:value={bindEdit.type}
 							>
-								<option value="délelőtti">délelőtti</option>
-								<option value="éjszakai">éjszakai</option>
+								<option value={1}>délelőtti</option>
+								<option value={2}>éjszakai</option>
 							</Select>
 						{:else}
 							<input
-								type="text"
+								type="number"
 								name="extra"
 								id="extra"
 								class="text-xl text-black opacity-80 focus:opacity-100"
-								bind:value={bindEdit.extra}
+								bind:value={bindEdit.price}
 							/>
 						{/if}
 					{/if}
@@ -352,6 +357,7 @@
 			</div>
 			<Table class="mt-5 table-auto p-10 text-center text-white">
 				<TableHead class="rounded-xl">
+					<TableHeadCell>ID</TableHeadCell>
 					<TableHeadCell>Dátum</TableHeadCell>
 					<TableHeadCell>IG Név</TableHeadCell>
 					<TableHeadCell>Kép (Kattints rá)</TableHeadCell>
@@ -370,6 +376,7 @@
 				<TableBody>
 					{#each potleks.data.items as potle}
 						<TableBodyRow>
+							<TableBodyCell>{potle.id}</TableBodyCell>
 							<TableBodyCell
 								>{formatRelative(
 									new Date(new Date(potle.date).valueOf() - data.offset!),
@@ -386,28 +393,28 @@
 							<TableBodyCell>
 								{#if type == get_type_number('leintés')}
 									<div class="flex flex-col xl:flex-row">
-										<a href={`${potleks.api}/limg?id=${potle.id}&ver=0`} target="”_blank”"
+										<a href={`${potleks.api}/img?id=${potle.img_1}`} target="”_blank”"
 											><img
 												loading="lazy"
-												src={`${potleks.api}/limg?id=${potle.id}&ver=0`}
+												src={`${potleks.api}/img?id=${potle.img_1}`}
 												alt=""
 												class="lg:w-52"
 											/></a
 										>
-										<a href={`${potleks.api}/limg?id=${potle.id}&ver=1`} target="”_blank”"
+										<a href={`${potleks.api}/img?id=${potle.img_2}`} target="”_blank”"
 											><img
 												loading="lazy"
-												src={`${potleks.api}/limg?id=${potle.id}&ver=1`}
+												src={`${potleks.api}/img?id=${potle.img_2}`}
 												alt=""
 												class="lg:w-52"
 											/></a
 										>
 									</div>
 								{:else}
-									<a href={`${potleks.api}/img?id=${potle.id}`} target="”_blank”"
+									<a href={`${potleks.api}/img?id=${potle.img_1}`} target="”_blank”"
 										><img
 											loading="lazy"
-											src={`${potleks.api}/img?id=${potle.id}`}
+											src={`${potleks.api}/img?id=${potle.img_1}`}
 											alt=""
 											class="lg:w-52"
 										/></a
@@ -417,7 +424,15 @@
 							<TableBodyCell>{get_status_string(potle.status)}</TableBodyCell>
 							<TableBodyCell>{potle.reason ? potle.reason : 'nincs'}</TableBodyCell>
 							{#if extraText}
-								<TableBodyCell>{potle.extra ? potle.extra : 'nincs'}</TableBodyCell>
+								<TableBodyCell
+									>{potle.price
+										? potle.price
+										: potle.type == 1
+											? 'délelőtti'
+											: potle.type == 2
+												? 'éjszakai'
+												: 'nincs'}</TableBodyCell
+								>
 							{/if}
 							{#if haveadmin}
 								<TableBodyCell>{potle.handled_by ? potle.handled_by : '-'}</TableBodyCell>

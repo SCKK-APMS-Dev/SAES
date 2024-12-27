@@ -370,7 +370,7 @@ pub async fn mv_items_post(
             db_log(
                 ext.name.clone(),
                 Some(body.id.clone()),
-                Some(types.supplements.id),
+                Some(types.bills.id),
                 "UPDATE",
                 Some(act),
             )

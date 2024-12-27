@@ -20,7 +20,7 @@
 		aha = {};
 		if (data.date) {
 			for (const potlek of data.stats.potlekok) {
-				if (potlek.extra === 'délelőtti') {
+				if (potlek.type === 1) {
 					if (!aha['pótlék_délelőtti']) aha['pótlék_délelőtti'] = {};
 					if (aha['pótlék_délelőtti'][potlek.owner]) {
 						aha['pótlék_délelőtti'][potlek.owner]++;
@@ -28,7 +28,7 @@
 						aha['pótlék_délelőtti'][potlek.owner] = 1;
 					}
 				}
-				if (potlek.extra === 'éjszakai') {
+				if (potlek.type === 2) {
 					if (!aha['pótlék_éjszakai']) aha['pótlék_éjszakai'] = {};
 					if (aha['pótlék_éjszakai'][potlek.owner]) {
 						aha['pótlék_éjszakai'][potlek.owner]++;
@@ -50,9 +50,9 @@
 			for (const szamla of data.stats.szamlak) {
 				if (!aha['számla']) aha['számla'] = {};
 				if (aha['számla'][szamla.owner]) {
-					aha['számla'][szamla.owner] += Number(szamla.extra);
+					aha['számla'][szamla.owner] += Number(szamla.price);
 				} else {
-					aha['számla'][szamla.owner] = Number(szamla.extra);
+					aha['számla'][szamla.owner] = Number(szamla.price);
 				}
 			}
 		}
