@@ -16,7 +16,7 @@ use crate::{
 #[derive(Debug, Serialize)]
 pub struct ListReturn {
     pub id: i32,
-    pub r#type: i32,
+    pub r#type: i8,
     pub img_1: i32,
     pub img_2: Option<i32>,
     pub desc: Option<String>,

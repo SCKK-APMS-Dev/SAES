@@ -11,7 +11,7 @@ pub struct Model {
     pub owner: String,
     pub image_1: i32,
     pub image_2: i32,
-    pub status: i32,
+    pub status: i8,
     pub reason: Option<String>,
     pub handled_by: Option<String>,
     pub am: i8,

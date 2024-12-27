@@ -5,45 +5,146 @@ use axum::{
     response::{IntoResponse, Response},
     Extension, Json,
 };
+use chrono::Utc;
 use http::StatusCode;
 use serde::{Deserialize, Serialize};
 
 use sea_orm::{ColumnTrait, EntityTrait, Order, QueryFilter, QueryOrder, Set};
 
 use crate::{
-    db::items::{self as Items, Model},
+    db::{bills, hails, supplements},
     logging::db_log,
     utils::{
-        middle::Tag, queries::MVItemsQuery, sql::get_db_conn, types_statuses::get_statuses_as_list,
+        middle::Tag,
+        queries::MVItemsQuery,
+        sql::get_db_conn,
+        types_statuses::{get_statuses_as_list, get_types},
     },
 };
-
-#[derive(Debug, Serialize)]
-pub struct StatDBAll {
-    items: Vec<Model>,
-}
 
 #[derive(Debug, Deserialize)]
 pub struct MVPostItemsBody {
     pub id: i32,
-    pub status: i32,
+    pub status: i8,
     pub extra: Option<String>,
     pub reason: Option<String>,
     pub am: i8,
 }
 
+#[derive(Debug, Serialize)]
+pub struct MVGetItemsFull {
+    pub id: i32,
+    pub owner: String,
+    pub img_1: i32,
+    pub img_2: Option<i32>,
+    pub status: i8,
+    pub reason: Option<String>,
+    pub r#type: Option<i8>,
+    pub price: Option<i32>,
+    pub am: i8,
+    pub handled_by: Option<String>,
+    pub date: chrono::DateTime<Utc>,
+}
+
+#[derive(Debug, Serialize)]
+pub struct StatDBAll {
+    pub items: Vec<MVGetItemsFull>,
+}
+
 #[debug_handler]
-pub async fn mv_items_get(ext: Extension<Tag>, quer: Query<MVItemsQuery>) -> impl IntoResponse {
+pub async fn mv_items_get(
+    ext: Extension<Tag>,
+    quer: Query<MVItemsQuery>,
+) -> Result<impl IntoResponse, (StatusCode, String)> {
     let db = get_db_conn().await;
-    let statreturn = Items::Entity::find()
-        .filter(Items::Column::Status.eq(quer.status.clone()))
-        .filter(Items::Column::Type.eq(quer.tipus.clone()))
-        .order_by(Items::Column::Date, Order::Desc)
-        .filter(Items::Column::Am.eq(if ext.am == true { 1 } else { 0 }))
-        .all(&db)
-        .await
-        .expect("[ERROR] Statisztika lekérés sikertelen");
-    Json(StatDBAll { items: statreturn })
+    let types = get_types();
+    if quer.tipus == types.supplements.id {
+        let statreturn = supplements::Entity::find()
+            .filter(supplements::Column::Status.eq(quer.status.clone()))
+            .order_by(supplements::Column::Date, Order::Desc)
+            .filter(supplements::Column::Am.eq(if ext.am == true { 1 } else { 0 }))
+            .all(&db)
+            .await
+            .expect("[ERROR] Statisztika lekérés sikertelen");
+        let ret: Vec<MVGetItemsFull> = statreturn
+            .iter()
+            .map(|item| -> MVGetItemsFull {
+                MVGetItemsFull {
+                    id: item.id,
+                    img_1: item.image,
+                    img_2: None,
+                    am: item.am,
+                    status: item.status,
+                    date: item.date,
+                    price: None,
+                    r#type: item.r#type,
+                    handled_by: item.handled_by.clone(),
+                    reason: item.reason.clone(),
+                    owner: item.owner.clone(),
+                }
+            })
+            .collect();
+        return Ok(Json(StatDBAll { items: ret }));
+    } else if quer.tipus == types.hails.id {
+        let statreturn = hails::Entity::find()
+            .filter(hails::Column::Status.eq(quer.status.clone()))
+            .order_by(hails::Column::Date, Order::Desc)
+            .filter(hails::Column::Am.eq(if ext.am == true { 1 } else { 0 }))
+            .all(&db)
+            .await
+            .expect("[ERROR] Statisztika lekérés sikertelen");
+        let ret: Vec<MVGetItemsFull> = statreturn
+            .iter()
+            .map(|item| -> MVGetItemsFull {
+                MVGetItemsFull {
+                    id: item.id,
+                    img_1: item.image_1,
+                    img_2: Some(item.image_2),
+                    am: item.am,
+                    status: item.status,
+                    date: item.date,
+                    price: None,
+                    r#type: None,
+                    handled_by: item.handled_by.clone(),
+                    reason: item.reason.clone(),
+                    owner: item.owner.clone(),
+                }
+            })
+            .collect();
+        return Ok(Json(StatDBAll { items: ret }));
+    } else if quer.tipus == types.bills.id {
+        let statreturn = bills::Entity::find()
+            .filter(bills::Column::Status.eq(quer.status.clone()))
+            .order_by(bills::Column::Date, Order::Desc)
+            .filter(bills::Column::Am.eq(if ext.am == true { 1 } else { 0 }))
+            .all(&db)
+            .await
+            .expect("[ERROR] Statisztika lekérés sikertelen");
+        let ret: Vec<MVGetItemsFull> = statreturn
+            .iter()
+            .map(|item| -> MVGetItemsFull {
+                MVGetItemsFull {
+                    id: item.id,
+                    img_1: item.image,
+                    img_2: None,
+                    am: item.am,
+                    price: item.price,
+                    r#type: None,
+                    status: item.status,
+                    date: item.date,
+                    handled_by: item.handled_by.clone(),
+                    reason: item.reason.clone(),
+                    owner: item.owner.clone(),
+                }
+            })
+            .collect();
+        return Ok(Json(StatDBAll { items: ret }));
+    } else {
+        return Err((
+            StatusCode::NOT_FOUND,
+            "Ilyen típus nem található!".to_string(),
+        ));
+    }
 }
 
 #[debug_handler]

@@ -4,11 +4,10 @@ use sea_orm::{ColumnTrait, EntityTrait, QueryFilter};
 use serde::{Deserialize, Serialize};
 use serde_json::from_str;
 
+use crate::db::{hails, supplements};
 use crate::utils::functions::get_fridays;
-use crate::utils::types_statuses::get_types;
+use crate::utils::types_statuses::get_statuses;
 use crate::utils::{api::get_api_envs, middle::Tag, sql::get_db_conn};
-
-use crate::db::items as Items;
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct DriverRecord {
@@ -34,37 +33,44 @@ pub async fn ucp_calls(mut request: Request) -> Result<Json<Callz>, (StatusCode,
     let exts: Option<&Tag> = request.extensions_mut().get();
     let client = reqwest::Client::new();
     let db = get_db_conn().await;
+    let statuses = get_statuses();
     let envs = get_api_envs();
     let calls = client
         .get(format!("{}/api/log/status/current", envs.erik))
         .send()
         .await;
     let fridays = get_fridays();
-    let dbreturn = Items::Entity::find()
-        .filter(Items::Column::Owner.eq(&exts.unwrap().name))
-        .filter(Items::Column::Type.ne("számla"))
-        .filter(Items::Column::Status.eq("elfogadva"))
-        .filter(Items::Column::Date.gt(fridays.last))
-        .filter(Items::Column::Date.lt(fridays.next))
+    let dbreturn_supp = supplements::Entity::find()
+        .filter(supplements::Column::Owner.eq(&exts.unwrap().name))
+        .filter(supplements::Column::Status.eq(statuses.accepted.id))
+        .filter(supplements::Column::Date.gt(fridays.last))
+        .filter(supplements::Column::Date.lt(fridays.next))
         .all(&db)
         .await
         .expect("Leintések lekérése sikertelen az adatbázisból");
-    let mut leintes = vec![];
-    let mut de_potlek = vec![];
-    let mut du_potlek = vec![];
-    let types = get_types();
-    for model in dbreturn.iter() {
-        if model.r#type == types.supplements.id {
-            if model.extra == "délelőtti".to_string().into() {
-                de_potlek.push(model)
+    let dbreturn_hails = hails::Entity::find()
+        .filter(hails::Column::Owner.eq(&exts.unwrap().name))
+        .filter(hails::Column::Status.eq(statuses.accepted.id))
+        .filter(hails::Column::Date.gt(fridays.last))
+        .filter(hails::Column::Date.lt(fridays.next))
+        .all(&db)
+        .await
+        .expect("Leintések lekérése sikertelen az adatbázisból");
+    let mut leintes = 0;
+    let mut de_potlek = 0;
+    let mut du_potlek = 0;
+    for model in dbreturn_supp.iter() {
+        if model.r#type.is_some() {
+            if model.r#type.unwrap() == 1 {
+                de_potlek += 1
             }
-            if model.extra == "éjszakai".to_string().into() {
-                du_potlek.push(model)
+            if model.r#type.unwrap() == 2 {
+                du_potlek += 1
             }
         }
-        if model.r#type == types.hails.id {
-            leintes.push(model)
-        }
+    }
+    for _ in dbreturn_hails.iter() {
+        leintes += 1
     }
     if calls.is_ok() {
         let callsz = calls.unwrap().text().await.expect("Átalakítás sikertelen");
@@ -80,20 +86,20 @@ pub async fn ucp_calls(mut request: Request) -> Result<Json<Callz>, (StatusCode,
                 } else {
                     Some(0)
                 },
-                leintes: leintes.len(),
+                leintes: leintes,
                 potlek: Potlek {
-                    de: de_potlek.len(),
-                    du: du_potlek.len(),
+                    de: de_potlek,
+                    du: du_potlek,
                 },
             }));
         }
     };
     Ok(Json(Callz {
         app: None,
-        leintes: leintes.len(),
+        leintes: leintes,
         potlek: Potlek {
-            de: de_potlek.len(),
-            du: du_potlek.len(),
+            de: de_potlek,
+            du: du_potlek,
         },
     }))
 }
