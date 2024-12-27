@@ -122,6 +122,8 @@ async fn convert(modl: Vec<Model>, ffmpeg: String, dir: &String, db: &DatabaseCo
                 let activem = ActiveModel {
                     id: Set(item.id),
                     filename: Set(kep_rebuilt.clone()),
+                    tmp: Set(0),
+                    converted: Set(1),
                     ..Default::default()
                 };
                 Images::Entity::update(activem)
