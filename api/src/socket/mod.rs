@@ -41,7 +41,7 @@ pub async fn on_connect(socket: SocketRef, data: InitialData) {
         if parsed_user.is_ok() {
             let real_user: DiscordUser = parsed_user.unwrap();
             let getuser: String = client
-                .get(format!("{}/appauth/login/{}", envs.patrik, real_user.id))
+                .get(format!("{}/appauth/login/{}", envs.samt, real_user.id))
                 .send()
                 .await
                 .expect("Lekérés sikertelen")

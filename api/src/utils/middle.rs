@@ -52,7 +52,7 @@ pub async fn ucp_auth(
         let getuser: String = client
             .get(format!(
                 "{}/appauth/login/{}",
-                envs.patrik,
+                envs.samt,
                 special_id.unwrap().to_str().unwrap()
             ))
             .send()
@@ -103,7 +103,7 @@ pub async fn ucp_auth(
             if parsed_user.is_ok() {
                 let real_user: DiscordUser = parsed_user.unwrap();
                 let getuser: String = client
-                    .get(format!("{}/appauth/login/{}", envs.patrik, real_user.id))
+                    .get(format!("{}/appauth/login/{}", envs.samt, real_user.id))
                     .send()
                     .await
                     .expect("Lekérés sikertelen")

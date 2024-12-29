@@ -36,7 +36,7 @@ pub async fn ucp_calls(mut request: Request) -> Result<Json<Callz>, (StatusCode,
     let statuses = get_statuses();
     let envs = get_api_envs();
     let calls = client
-        .get(format!("{}/api/log/status/current", envs.erik))
+        .get(format!("{}/api/log/status/current", envs.sckkapp))
         .send()
         .await;
     let fridays = get_fridays();
