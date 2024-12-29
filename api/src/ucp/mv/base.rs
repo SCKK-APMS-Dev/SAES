@@ -12,14 +12,14 @@ use serde::Serialize;
 use crate::{
     db::{bills, hails, supplements},
     utils::{
-        functions::get_fridays, middle::Tag, queries::MVStatQuery, sql::get_db_conn,
+        functions::get_fridays, middle::Driver, queries::MVStatQuery, sql::get_db_conn,
         types_statuses::get_statuses,
     },
 };
 
 #[debug_handler]
-pub async fn mv_home(mut request: Request) -> Json<Tag> {
-    let exts: Option<&Tag> = request.extensions_mut().get();
+pub async fn mv_home(mut request: Request) -> Json<Driver> {
+    let exts: Option<&Driver> = request.extensions_mut().get();
     Json(exts.unwrap().clone())
 }
 
@@ -44,7 +44,7 @@ pub struct StatReturn {
 
 #[debug_handler]
 pub async fn mv_stat(
-    ext: Extension<Tag>,
+    ext: Extension<Driver>,
     quer: Query<MVStatQuery>,
 ) -> Result<impl IntoResponse, (StatusCode, String)> {
     let statuses = get_statuses();
@@ -53,24 +53,24 @@ pub async fn mv_stat(
         let db = get_db_conn().await;
         let statreturn_supp = supplements::Entity::find()
             .filter(supplements::Column::Status.eq(statuses.accepted.id))
-            .filter(supplements::Column::Date.gt(friday.last))
-            .filter(supplements::Column::Date.lt(friday.next))
+            .filter(supplements::Column::Date.gt(friday.last_friday))
+            .filter(supplements::Column::Date.lt(friday.next_friday))
             .filter(supplements::Column::Am.eq(if ext.am == true { 1 } else { 0 }))
             .all(&db)
             .await
             .expect("[ERROR] Statisztika lekérés sikertelen");
         let statreturn_hails = hails::Entity::find()
             .filter(hails::Column::Status.eq(statuses.accepted.id))
-            .filter(hails::Column::Date.gt(friday.last))
-            .filter(hails::Column::Date.lt(friday.next))
+            .filter(hails::Column::Date.gt(friday.last_friday))
+            .filter(hails::Column::Date.lt(friday.next_friday))
             .filter(hails::Column::Am.eq(if ext.am == true { 1 } else { 0 }))
             .all(&db)
             .await
             .expect("[ERROR] Statisztika lekérés sikertelen");
         let statreturn_bills = bills::Entity::find()
             .filter(bills::Column::Status.eq(statuses.accepted.id))
-            .filter(bills::Column::Date.gt(friday.last))
-            .filter(bills::Column::Date.lt(friday.next))
+            .filter(bills::Column::Date.gt(friday.last_friday))
+            .filter(bills::Column::Date.lt(friday.next_friday))
             .filter(bills::Column::Am.eq(if ext.am == true { 1 } else { 0 }))
             .all(&db)
             .await
@@ -94,8 +94,8 @@ pub async fn mv_stat(
                 szamlak,
             },
             date: Date {
-                next: friday.next,
-                prev: friday.last,
+                next: friday.next_friday,
+                prev: friday.last_friday,
             },
         }))
     } else if quer.week == "previous" {
@@ -103,24 +103,24 @@ pub async fn mv_stat(
         let db = get_db_conn().await;
         let statreturn_supp = supplements::Entity::find()
             .filter(supplements::Column::Status.eq(statuses.accepted.id))
-            .filter(supplements::Column::Date.gt(friday.laster))
-            .filter(supplements::Column::Date.lt(friday.last))
+            .filter(supplements::Column::Date.gt(friday.before_last_friday))
+            .filter(supplements::Column::Date.lt(friday.last_friday))
             .filter(supplements::Column::Am.eq(if ext.am == true { 1 } else { 0 }))
             .all(&db)
             .await
             .expect("[ERROR] Statisztika lekérés sikertelen");
         let statreturn_hails = hails::Entity::find()
             .filter(hails::Column::Status.eq(statuses.accepted.id))
-            .filter(hails::Column::Date.gt(friday.laster))
-            .filter(hails::Column::Date.lt(friday.last))
+            .filter(hails::Column::Date.gt(friday.before_last_friday))
+            .filter(hails::Column::Date.lt(friday.last_friday))
             .filter(hails::Column::Am.eq(if ext.am == true { 1 } else { 0 }))
             .all(&db)
             .await
             .expect("[ERROR] Statisztika lekérés sikertelen");
         let statreturn_bills = bills::Entity::find()
             .filter(bills::Column::Status.eq(statuses.accepted.id))
-            .filter(bills::Column::Date.gt(friday.laster))
-            .filter(bills::Column::Date.lt(friday.last))
+            .filter(bills::Column::Date.gt(friday.before_last_friday))
+            .filter(bills::Column::Date.lt(friday.last_friday))
             .filter(bills::Column::Am.eq(if ext.am == true { 1 } else { 0 }))
             .all(&db)
             .await
@@ -144,8 +144,8 @@ pub async fn mv_stat(
                 szamlak,
             },
             date: Date {
-                next: friday.last,
-                prev: friday.laster,
+                next: friday.last_friday,
+                prev: friday.before_last_friday,
             },
         }))
     } else {

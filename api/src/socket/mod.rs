@@ -8,7 +8,7 @@ use crate::{
     logging::db_log,
     utils::{
         api::get_api_envs,
-        middle::{DiscordUser, GetUserRes, Tag},
+        middle::{DiscordUser, Driver, GetUserRes},
     },
 };
 
@@ -52,7 +52,7 @@ pub async fn on_connect(socket: SocketRef, data: InitialData) {
             if parsed_tag.is_ok() {
                 let real_tag: GetUserRes = parsed_tag.unwrap();
                 let am_admins: [i8; 10] = [35, 36, 37, 43, 44, 45, 46, 47, 48, 49];
-                let tag = Tag {
+                let tag = Driver {
                     id: real_user.id,
                     name: real_tag.PlayerName,
                     admin: if real_tag.PermissionGroup.is_some_and(|x| x == 1)

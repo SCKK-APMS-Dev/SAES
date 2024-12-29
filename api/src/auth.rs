@@ -10,7 +10,7 @@ use url_builder::URLBuilder;
 
 use serde::{Deserialize, Serialize};
 
-pub struct DiscordStuff {
+pub struct DiscordAuth {
     pub api_endpoint: String,
     pub discord_base: String,
     pub discord_id: String,
@@ -21,7 +21,7 @@ pub struct DiscordStuff {
     pub secret_key: String,
 }
 
-pub fn get_discord_envs() -> DiscordStuff {
+pub fn get_discord_envs() -> DiscordAuth {
     let id = env::var("DISCORD_ID")
         .expect("DISCORD_ID .env fájlból betöltése sikertelen. Létre van hozva?");
     let secret = env::var("DISCORD_SECRET")
@@ -34,7 +34,7 @@ pub fn get_discord_envs() -> DiscordStuff {
         .expect("FULL_DOMAIN .env fájlból betöltése sikertelen. Létre van hozva?");
     let secret_key = env::var("SECRET_KEY")
         .expect("SECRET_KEY .env fájlból betöltése sikertelen. Létre van hozva?");
-    DiscordStuff {
+    DiscordAuth {
         api_endpoint: String::from("https://discord.com/api/v10"),
         discord_id: id,
         discord_secret: secret,

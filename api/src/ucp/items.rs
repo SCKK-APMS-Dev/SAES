@@ -16,7 +16,7 @@ use crate::{
     db::{bills, hails, images, supplements},
     logging::db_log,
     utils::{
-        middle::Tag,
+        middle::Driver,
         queries::{UCPTypeExtraQuery, UCPTypeQuery},
         sql::get_db_conn,
         types_statuses::{get_statuses, get_types, get_types_as_list},
@@ -45,7 +45,7 @@ pub fn routes() -> Router {
 
 #[debug_handler]
 pub async fn ucp_items_get(
-    ext: Extension<Tag>,
+    ext: Extension<Driver>,
     cucc: Query<UCPTypeQuery>,
 ) -> Result<impl IntoResponse, (StatusCode, String)> {
     let db = get_db_conn().await;
@@ -132,7 +132,7 @@ pub async fn ucp_items_get(
 
 #[debug_handler]
 pub async fn ucp_items_post(
-    ext: Extension<Tag>,
+    ext: Extension<Driver>,
     cucc: Query<UCPTypeExtraQuery>,
     mut multipart: Multipart,
 ) -> Result<impl IntoResponse, (StatusCode, String)> {
