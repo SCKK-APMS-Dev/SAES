@@ -14,9 +14,10 @@
 	let initial_socket = $state(false);
 	let announcement = $state(false);
 	let nosocket: boolean | string = $state('Socket csatlakozás');
-	let tip = !data.error && !data.noaccess ? (data.layout.am ? 'TOW' : 'TAXI') : 'SCKK';
+	let tip =
+		!data.error && !data.noaccess && !data.noauth ? (data.layout.am ? 'TOW' : 'TAXI') : 'SCKK';
 	onMount(() => {
-		if (!data.noaccess) {
+		if (!data.noaccess && !data.noauth) {
 			$socket = io(data.api as string, {
 				auth: {
 					auth_token: data.auth
@@ -55,7 +56,7 @@
 </script>
 
 <svelte:head>
-	{#if !maintenance || data.maintenance}
+	{#if !maintenance || data.maintenance || !data.noauth}
 		{#if !navigating.type}
 			{#if page.url.pathname.includes('mv')}
 				<title>Műszakvezetői felület - {tip}</title>
@@ -100,7 +101,22 @@
 	<meta content="#fece01" data-react-helmet="true" name="theme-color" />
 </svelte:head>
 <Error {data}>
-	{#if data.noaccess}
+	{#if data.noauth}
+		<main>
+			<div class="flex h-screen">
+				<div class="m-auto text-center">
+					<h2 class="text-center text-3xl font-bold text-white">
+						A weboldal használatához kérlek lépj be
+					</h2>
+					<a
+						href={`${data.apiUrl}/auth?path=${page.url.pathname}`}
+						class="hover:bg-pos-100 bg-size-200 bg-pos-0 to-tow via-taxi mb-5 ml-5 mr-5 mt-5 block rounded-full bg-gradient-to-r from-emerald-500 px-2 py-1 text-center text-lg font-bold text-white drop-shadow-lg transition-all duration-500"
+						>Belépés</a
+					>
+				</div>
+			</div>
+		</main>
+	{:else if data.noaccess}
 		<main>
 			<div class="flex h-screen">
 				<div class="m-auto text-center">

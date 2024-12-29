@@ -1,10 +1,11 @@
 <script lang="ts">
+	import { page } from '$app/state';
 	import { Tooltip } from 'flowbite-svelte';
 	interface Props {
 		children?: import('svelte').Snippet;
 	}
 
-	let { children }: Props = $props();
+	let { data, children }: Props = $props();
 	let nav: HTMLDivElement = $state();
 	const tognav = () => {
 		if (nav.classList.contains('hidden')) {
@@ -17,42 +18,61 @@
 	};
 </script>
 
-<nav class="grid grid-cols-2 items-center justify-between bg-emerald-700 text-white lg:flex">
-	<div class="ml-2 flex flex-shrink items-center gap-2 xl:ml-[10vw]">
-		<h1 class="hidden text-3xl font-bold drop-shadow-xl md:block">Műszakvezetés</h1>
-		<h1 class="text-3xl font-bold drop-shadow-xl md:hidden">Műszakv.</h1>
-		<a
-			href="/ucp/mv/tools"
-			aria-label="tools"
-			class="icon-[tabler--tool] hover:text-taxi min-h-6 min-w-6 transition-colors duration-500"
-		></a>
-		<Tooltip placement="bottom">Eszközök megnyitása</Tooltip>
-	</div>
-	<button
-		aria-label="mv-menu"
-		class="mr-[10vw] cursor-pointer self-center justify-self-end text-3xl font-semibold transition-all duration-200 hover:text-emerald-500 lg:hidden"
-		onclick={tognav}
-	>
-		<span class="icon-[material-symbols--menu]"></span>
-	</button>
-	<div
-		bind:this={nav}
-		class="child:px-2 child:rounded-lg child:drop-shadow-xl col-span-2 hidden flex-col items-center justify-center text-center text-xl md:flex-row lg:z-auto lg:col-span-1 lg:!flex xl:mr-[10vw]"
-	>
-		<a href="/ucp/mv" class="transition-all duration-200 hover:bg-emerald-600">Főoldal</a>
-		<a href="/ucp/mv/stat/current" class="transition-all duration-200 hover:bg-emerald-600"
-			>Jelenlegi hét</a
+{#if data.noauth}
+	<main>
+		<div class="flex h-screen">
+			<div class="m-auto text-center">
+				<h2 class="text-center text-3xl font-bold text-white">
+					A weboldal használatához kérlek lépj be
+				</h2>
+				<a
+					href={`${data.apiUrl}/auth?path=${page.url.pathname}`}
+					class="hover:bg-pos-100 bg-size-200 bg-pos-0 to-tow via-taxi mb-5 ml-5 mr-5 mt-5 block rounded-full bg-gradient-to-r from-emerald-500 px-2 py-1 text-center text-lg font-bold text-white drop-shadow-lg transition-all duration-500"
+					>Belépés</a
+				>
+			</div>
+		</div>
+	</main>
+{:else}
+	<nav class="grid grid-cols-2 items-center justify-between bg-emerald-700 text-white lg:flex">
+		<div class="ml-2 flex flex-shrink items-center gap-2 xl:ml-[10vw]">
+			<h1 class="hidden text-3xl font-bold drop-shadow-xl md:block">Műszakvezetés</h1>
+			<h1 class="text-3xl font-bold drop-shadow-xl md:hidden">Műszakv.</h1>
+			<a
+				href="/ucp/mv/tools"
+				aria-label="tools"
+				class="icon-[tabler--tool] hover:text-taxi min-h-6 min-w-6 transition-colors duration-500"
+			></a>
+			<Tooltip placement="bottom">Eszközök megnyitása</Tooltip>
+		</div>
+		<button
+			aria-label="mv-menu"
+			class="mr-[10vw] cursor-pointer self-center justify-self-end text-3xl font-semibold transition-all duration-200 hover:text-emerald-500 lg:hidden"
+			onclick={tognav}
 		>
-		<a href="/ucp/mv/stat/previous" class="transition-all duration-200 hover:bg-emerald-600"
-			>Előző hét</a
+			<span class="icon-[material-symbols--menu]"></span>
+		</button>
+		<div
+			bind:this={nav}
+			class="child:px-2 child:rounded-lg child:drop-shadow-xl col-span-2 hidden flex-col items-center justify-center text-center text-xl md:flex-row lg:z-auto lg:col-span-1 lg:!flex xl:mr-[10vw]"
 		>
-		<a href="/ucp/mv/potlekok" class="transition-all duration-200 hover:bg-emerald-600">Pótlékok</a>
-		<a href="/ucp/mv/leintesek" class="transition-all duration-200 hover:bg-emerald-600"
-			>Leintések</a
-		>
-		<a href="/ucp/mv/szamlak" class="transition-all duration-200 hover:bg-emerald-600"
-			>Szereltetési számlák</a
-		>
-	</div>
-</nav>
-{@render children?.()}
+			<a href="/ucp/mv" class="transition-all duration-200 hover:bg-emerald-600">Főoldal</a>
+			<a href="/ucp/mv/stat/current" class="transition-all duration-200 hover:bg-emerald-600"
+				>Jelenlegi hét</a
+			>
+			<a href="/ucp/mv/stat/previous" class="transition-all duration-200 hover:bg-emerald-600"
+				>Előző hét</a
+			>
+			<a href="/ucp/mv/potlekok" class="transition-all duration-200 hover:bg-emerald-600"
+				>Pótlékok</a
+			>
+			<a href="/ucp/mv/leintesek" class="transition-all duration-200 hover:bg-emerald-600"
+				>Leintések</a
+			>
+			<a href="/ucp/mv/szamlak" class="transition-all duration-200 hover:bg-emerald-600"
+				>Szereltetési számlák</a
+			>
+		</div>
+	</nav>
+	{@render children?.()}
+{/if}
