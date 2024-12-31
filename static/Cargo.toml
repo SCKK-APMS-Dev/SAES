@@ -1,5 +1,5 @@
 [package]
-name = "saes-img"
+name = "saes-static"
 version = "1.0.0"
 edition = "2021"
 

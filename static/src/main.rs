@@ -15,7 +15,7 @@ async fn main() {
     dotenv().expect(".env fájl nem található");
     tracing::subscriber::set_global_default(FmtSubscriber::default()).unwrap();
     let app = Router::new()
-        .route("/", get(|| async { "SAES IMG Szerver" }))
+        .route("/", get(|| async { "SAES Static szerver" }))
         .route("/get", get(image_get))
         .layer(ServiceBuilder::new().layer(CorsLayer::permissive()))
         .layer(TraceLayer::new_for_http());

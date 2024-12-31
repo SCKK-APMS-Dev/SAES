@@ -1,4 +1,4 @@
-name: SAES Img Build
+name: SAES Static Build
 
 # This workflow uses actions that are not certified by GitHub.
 # They are provided by a third-party and are governed by
@@ -9,8 +9,8 @@ on:
   push:
     branches: ['main', 'test']
     paths:
-      - 'img/**/*'
-      - '.github/workflows/build-img.yml'
+      - 'static/**/*'
+      - '.github/workflows/build-static.yml'
 
 env:
   # Use docker.io for Docker Hub if empty
@@ -62,7 +62,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@96383f45573cb7f253c731d3b3ab81c87ef81934 # v5.0.0
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-img
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-static
 
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
@@ -70,7 +70,7 @@ jobs:
         id: build-and-push
         uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # v5.0.0
         with:
-          context: img
+          context: static
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
