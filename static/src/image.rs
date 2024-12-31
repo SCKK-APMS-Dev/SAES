@@ -40,7 +40,7 @@ pub async fn image_get(q: Query<ImgQuery>) -> Response {
                 "Content-Type",
                 format!(
                     "image/{}",
-                    if fel_image.converted > 0 {
+                    if fel_image.filename.ends_with(".avif") {
                         "avif"
                     } else {
                         "png"
