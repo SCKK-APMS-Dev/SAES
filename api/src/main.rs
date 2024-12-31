@@ -1,6 +1,5 @@
 use axum::{routing::get, Router};
 use dotenvy::dotenv;
-use image::base_image_get;
 use socket::InitialData;
 use socketioxide::{
     extract::{Data, SocketRef},
@@ -14,7 +13,6 @@ use tracing_subscriber::FmtSubscriber;
 
 mod auth;
 mod db;
-mod image;
 mod init;
 mod list;
 mod logging;
@@ -36,11 +34,10 @@ async fn main() {
     let app = Router::new()
         .route(
             "/",
-            get(|| async { "SAES API V2 Axum & SQLx használatával" }),
+            get(|| async { "SAES API V2 Axum & Sea-ORM használatával" }),
         )
         .route("/auth", get(auth::auth_home))
         .route("/auth/cb", get(auth::base_callback))
-        .route("/img", get(base_image_get))
         .route("/list", get(list::base_list_get))
         .route("/shorts", get(shorts::base_get_shorts))
         .nest("/ucp", ucp::routes())

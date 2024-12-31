@@ -1,5 +1,5 @@
 import type { LayoutServerLoad } from "./$types";
-import { apiUrl } from "$lib/api";
+import { apiUrl, imageUrl } from "$lib/api";
 
 export const load = (async ({ cookies, request }) => {
 	if (!cookies.get("auth_token")) {
@@ -30,6 +30,7 @@ export const load = (async ({ cookies, request }) => {
 			return {
 				layout: jeson,
 				api: apiUrl,
+				image: imageUrl,
 				country: process.env.NODE_ENV === "development"
 					? "HU"
 					: (request.headers.get("cf-ipcountry") as string),
