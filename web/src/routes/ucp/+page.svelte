@@ -8,14 +8,14 @@
 	let end = $state('!');
 	if (snow) {
 		greet = 'Kellemes ünnepeket';
-		if (date.getMonth() === 11 && (date.getDate() === 24 || date.getDate() === 25)) {
+		if (
+			(date.getMonth() === 11 && (date.getDate() === 24 || date.getDate() === 25)) ||
+			(date.getMonth() === 0 && (date.getDate() === 6 || date.getDate() === 7))
+		) {
 			greet = 'Boldog karácsonyt';
 		}
-		if (date.getMonth() === 0 && date.getDate() === 1) {
+		if (date.getMonth() === 0 && date.getDate() <= 2) {
 			greet = 'Boldog, és sikerekben gazdag új évet kívánok';
-		}
-		if (date.getMonth() === 0 && (date.getDate() === 6 || date.getDate() === 7)) {
-			greet = 'Boldog ortodox karácsonyt';
 		}
 	} else {
 		if (hour >= 19 || (hour >= 0 && hour < 2)) {
