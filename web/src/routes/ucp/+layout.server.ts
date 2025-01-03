@@ -22,7 +22,7 @@ export const load = (async ({ cookies, request }) => {
 		}
 		if (aha.status === 403) {
 			return {
-				noaccess: true,
+				noaccess: await aha.text(),
 			};
 		}
 		if (aha.ok) {

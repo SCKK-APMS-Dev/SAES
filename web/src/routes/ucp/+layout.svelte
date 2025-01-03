@@ -140,7 +140,7 @@
 		<main>
 			<div class="flex h-screen">
 				<div class="m-auto text-center">
-					<h1 class="text-3xl font-bold text-red-600">Nincs jogosultságod!</h1>
+					<h1 class="text-3xl font-bold text-red-600">{data.noaccess}</h1>
 					<a
 						href="/logout"
 						class="hover:bg-pos-100 bg-size-200 bg-pos-0 mb-5 ml-5 mr-5 mt-5 block rounded-full bg-gradient-to-r from-red-500 via-amber-400 to-rose-600 px-2 py-1 text-center text-lg font-bold text-white drop-shadow-lg transition-all duration-500"

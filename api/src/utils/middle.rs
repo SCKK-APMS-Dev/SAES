@@ -6,7 +6,7 @@ use axum::{
     middleware::Next,
     response::{IntoResponse, Redirect},
 };
-use reqwest::{Body, StatusCode};
+use reqwest::StatusCode;
 use serde::{Deserialize, Serialize};
 
 use crate::auth::get_discord_envs;
@@ -30,11 +30,16 @@ pub struct FactionRecord {
 
 #[derive(Debug, Deserialize, Clone)]
 pub struct GetUserRes {
-    pub permissions: Vec<String>,
-    pub username: String,
-    pub userid: i8,
-    pub issysadmin: bool,
     pub factionrecords: Vec<FactionRecord>,
+    pub issysadmin: bool,
+    pub permissions: Vec<String>,
+    pub userid: i8,
+    pub username: String,
+}
+
+#[derive(Debug, Serialize)]
+pub struct SAMTAuth {
+    pub userdiscordid: String,
 }
 
 #[derive(Debug, Deserialize, Clone, Serialize)]
@@ -74,12 +79,9 @@ pub async fn ucp_auth(
                 let real_user: DiscordUser = parsed_user.unwrap();
                 let getuser: String = client
                     .post(format!("{}/saes/authenticate", envs.samt))
-                    .body(Body::wrap(format!(
-                        "{{
-                        userdiscordid: {},
-                    }}",
-                        real_user.id
-                    )))
+                    .json(&SAMTAuth {
+                        userdiscordid: real_user.id.clone(),
+                    })
                     .basic_auth("dev", envs.testpass)
                     .send()
                     .await
@@ -90,27 +92,35 @@ pub async fn ucp_auth(
                 let parsed_tag = serde_json::from_str(&getuser);
                 if parsed_tag.is_ok() {
                     let real_tag: GetUserRes = parsed_tag.unwrap();
-                    let tag = Driver {
-                        discordid: real_user.id,
-                        name: real_tag.username,
-                        driverid: real_tag.userid,
-                        admin: real_tag.issysadmin,
-                        perms: real_tag.permissions,
-                        taxi: real_tag
-                            .factionrecords
-                            .iter()
-                            .find(|fact| fact.factionid == 1)
-                            .cloned(),
-                        tow: real_tag
-                            .factionrecords
-                            .iter()
-                            .find(|fact| fact.factionid == 3)
-                            .cloned(),
-                    };
-                    request.extensions_mut().insert(tag);
-                    return Ok(next.run(request).await);
+                    if real_tag.permissions.contains(&"saes.login".to_string()) {
+                        let tag = Driver {
+                            discordid: real_user.id,
+                            name: real_tag.username,
+                            driverid: real_tag.userid,
+                            admin: real_tag.issysadmin,
+                            perms: real_tag.permissions,
+                            taxi: real_tag
+                                .factionrecords
+                                .iter()
+                                .find(|fact| fact.factionid == 1)
+                                .cloned(),
+                            tow: real_tag
+                                .factionrecords
+                                .iter()
+                                .find(|fact| fact.factionid == 3)
+                                .cloned(),
+                        };
+                        request.extensions_mut().insert(tag);
+                        return Ok(next.run(request).await);
+                    } else {
+                        return Err((
+                            StatusCode::FORBIDDEN,
+                            "Nincs jogod a belépéshez!".to_string(),
+                        ));
+                    }
                 } else {
-                    return Err((StatusCode::FORBIDDEN, "Nincs jogod!".to_string()));
+                    println!("{:?}", parsed_tag);
+                    return Err((StatusCode::FORBIDDEN, "Nincs jogod ehhez!".to_string()));
                 }
             } else {
                 return Err((StatusCode::BAD_REQUEST, "Érvénytelen lekérés!".to_string()));

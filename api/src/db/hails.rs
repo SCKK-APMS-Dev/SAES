@@ -14,7 +14,7 @@ pub struct Model {
     pub status: i8,
     pub reason: Option<String>,
     pub handled_by: Option<String>,
-    pub am: i8,
+    pub faction: i8,
     pub date: DateTimeUtc,
     pub modified: DateTimeUtc,
 }
