@@ -60,7 +60,7 @@
 		{#if !navigating.type}
 			{#if page.url.pathname.includes('mv')}
 				<title>Műszakvezetői felület - {tip}</title>
-				<meta content="https://sckk.hu/ucp/mv" property="og:url" />
+				<meta content="https://sckk.hu/ucp/sm" property="og:url" />
 				<meta content="Műszakvezetői felület" property="og:description" />
 			{:else if Reeler_keys.some((el) => page.url.pathname.includes(el))}
 				{#if page.url.pathname.endsWith('/upload')}

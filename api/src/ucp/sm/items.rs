@@ -15,14 +15,14 @@ use crate::{
     logging::db_log,
     utils::{
         middle::Driver,
-        queries::MVItemsQuery,
+        queries::SMItemsQuery,
         sql::get_db_conn,
         types_statuses::{get_statuses_as_list, get_types, get_types_as_list},
     },
 };
 
 #[derive(Debug, Deserialize)]
-pub struct MVPostItemsBody {
+pub struct SMPostItemsBody {
     pub id: i32,
     pub status: i8,
     pub price: Option<i32>,
@@ -33,7 +33,7 @@ pub struct MVPostItemsBody {
 }
 
 #[derive(Debug, Serialize)]
-pub struct MVGetItemsFull {
+pub struct SMGetItemsFull {
     pub id: i32,
     pub owner: String,
     pub img_1: i32,
@@ -49,13 +49,13 @@ pub struct MVGetItemsFull {
 
 #[derive(Debug, Serialize)]
 pub struct StatDBAll {
-    pub items: Vec<MVGetItemsFull>,
+    pub items: Vec<SMGetItemsFull>,
 }
 
 #[debug_handler]
-pub async fn mv_items_get(
+pub async fn sm_items_get(
     ext: Extension<Driver>,
-    quer: Query<MVItemsQuery>,
+    quer: Query<SMItemsQuery>,
 ) -> Result<impl IntoResponse, (StatusCode, String)> {
     let db = get_db_conn().await;
     let types = get_types();
@@ -67,10 +67,10 @@ pub async fn mv_items_get(
             .all(&db)
             .await
             .expect("[ERROR] Statisztika lekérés sikertelen");
-        let ret: Vec<MVGetItemsFull> = statreturn
+        let ret: Vec<SMGetItemsFull> = statreturn
             .iter()
-            .map(|item| -> MVGetItemsFull {
-                MVGetItemsFull {
+            .map(|item| -> SMGetItemsFull {
+                SMGetItemsFull {
                     id: item.id,
                     img_1: item.image,
                     img_2: None,
@@ -94,10 +94,10 @@ pub async fn mv_items_get(
             .all(&db)
             .await
             .expect("[ERROR] Statisztika lekérés sikertelen");
-        let ret: Vec<MVGetItemsFull> = statreturn
+        let ret: Vec<SMGetItemsFull> = statreturn
             .iter()
-            .map(|item| -> MVGetItemsFull {
-                MVGetItemsFull {
+            .map(|item| -> SMGetItemsFull {
+                SMGetItemsFull {
                     id: item.id,
                     img_1: item.image_1,
                     img_2: Some(item.image_2),
@@ -121,10 +121,10 @@ pub async fn mv_items_get(
             .all(&db)
             .await
             .expect("[ERROR] Statisztika lekérés sikertelen");
-        let ret: Vec<MVGetItemsFull> = statreturn
+        let ret: Vec<SMGetItemsFull> = statreturn
             .iter()
-            .map(|item| -> MVGetItemsFull {
-                MVGetItemsFull {
+            .map(|item| -> SMGetItemsFull {
+                SMGetItemsFull {
                     id: item.id,
                     img_1: item.image,
                     img_2: None,
@@ -149,9 +149,9 @@ pub async fn mv_items_get(
 }
 
 #[debug_handler]
-pub async fn mv_items_post(
+pub async fn sm_items_post(
     ext: Extension<Driver>,
-    extract::Json(body): extract::Json<MVPostItemsBody>,
+    extract::Json(body): extract::Json<SMPostItemsBody>,
 ) -> Result<impl IntoResponse, (StatusCode, String)> {
     let status_list = get_statuses_as_list();
     let types_list = get_types_as_list();
@@ -234,7 +234,7 @@ pub async fn mv_items_post(
                 .exec(&db)
                 .await
                 .expect("[ERROR] Módosítás sikertelen");
-            Ok(Json(MVGetItemsFull {
+            Ok(Json(SMGetItemsFull {
                 am: statreturn.am,
                 status: statreturn.status,
                 date: statreturn.date,
@@ -302,7 +302,7 @@ pub async fn mv_items_post(
                 .exec(&db)
                 .await
                 .expect("[ERROR] Módosítás sikertelen");
-            Ok(Json(MVGetItemsFull {
+            Ok(Json(SMGetItemsFull {
                 am: statreturn.am,
                 status: statreturn.status,
                 date: statreturn.date,
@@ -388,7 +388,7 @@ pub async fn mv_items_post(
                 .exec(&db)
                 .await
                 .expect("[ERROR] Módosítás sikertelen");
-            Ok(Json(MVGetItemsFull {
+            Ok(Json(SMGetItemsFull {
                 am: statreturn.am,
                 status: statreturn.status,
                 date: statreturn.date,

@@ -1,10 +1,10 @@
 <script lang="ts">
-	import MVList from '$lib/mv/mvlist.svelte';
+	import SMList from '$lib/sm/smlist.svelte';
 	import { get_type_number } from '$lib/ucp/types.js';
 	let { data } = $props();
 </script>
 
-<MVList
+<SMList
 	title="Leintések"
 	type={get_type_number('leintés')}
 	editdes="leintésének"

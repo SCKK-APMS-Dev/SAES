@@ -16,7 +16,7 @@
 	} from 'flowbite-svelte';
 	import { page } from '$app/stores';
 	import { beforeNavigate, goto } from '$app/navigation';
-	import type { PageData } from '../../routes/ucp/mv/leintesek/$types';
+	import type { PageData } from '../../routes/ucp/sm/leintesek/$types';
 	import {
 		get_status_number,
 		get_status_string,

@@ -79,7 +79,7 @@
 								{#if isAdmin}
 									<div class="flex items-center gap-3">
 										<a
-											href="/ucp/mv"
+											href="/ucp/sm"
 											class={`${am ? 'from-tow via-blue-600 to-emerald-400' : 'from-taxi via-amber-600 to-red-500'} hover:bg-pos-100 bg-size-200 bg-pos-0 block rounded-full bg-gradient-to-r px-6 py-3 text-center font-bold text-white drop-shadow-lg transition-all duration-500`}
 										>
 											Műszakvezetés

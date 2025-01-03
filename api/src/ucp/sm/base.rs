@@ -12,13 +12,13 @@ use serde::Serialize;
 use crate::{
     db::{bills, hails, supplements},
     utils::{
-        functions::get_fridays, middle::Driver, queries::MVStatQuery, sql::get_db_conn,
+        functions::get_fridays, middle::Driver, queries::SMStatQuery, sql::get_db_conn,
         types_statuses::get_statuses,
     },
 };
 
 #[debug_handler]
-pub async fn mv_home(mut request: Request) -> Json<Driver> {
+pub async fn sm_home(mut request: Request) -> Json<Driver> {
     let exts: Option<&Driver> = request.extensions_mut().get();
     Json(exts.unwrap().clone())
 }
@@ -43,9 +43,9 @@ pub struct StatReturn {
 }
 
 #[debug_handler]
-pub async fn mv_stat(
+pub async fn sm_stat(
     ext: Extension<Driver>,
-    quer: Query<MVStatQuery>,
+    quer: Query<SMStatQuery>,
 ) -> Result<impl IntoResponse, (StatusCode, String)> {
     let statuses = get_statuses();
     if quer.week == "current".to_string() {

@@ -8,7 +8,7 @@ export const load = (async ({ cookies }) => {
 			apiUrl,
 		};
 	}
-	const fetcs = await fetch(`${apiUrl}/ucp/mv/home`, {
+	const fetcs = await fetch(`${apiUrl}/ucp/sm/home`, {
 		headers: {
 			cookie: cookies.get("auth_token")!,
 		},

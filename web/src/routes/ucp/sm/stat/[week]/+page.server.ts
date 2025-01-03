@@ -1,6 +1,6 @@
-import { apiUrl } from '$lib/api';
-import type { FullDBType } from '$lib/types';
-import type { PageServerLoad } from './$types';
+import { apiUrl } from "$lib/api";
+import type { FullDBType } from "$lib/types";
+import type { PageServerLoad } from "./$types";
 
 interface returnstat {
 	stats: {
@@ -15,17 +15,18 @@ interface returnstat {
 }
 
 export const load = (async ({ cookies, params }) => {
-	const weektypes = ['current', 'previous'];
-	if (!weektypes.includes(params.week))
+	const weektypes = ["current", "previous"];
+	if (!weektypes.includes(params.week)) {
 		return {
-			error: 'Ilyen hét nincs!'
+			error: "Ilyen hét nincs!",
 		};
-	const dcauth = cookies.get('auth_token');
+	}
+	const dcauth = cookies.get("auth_token");
 	if (dcauth) {
-		const mama = await fetch(`${apiUrl}/ucp/mv/stat?week=${params.week}`, {
+		const mama = await fetch(`${apiUrl}/ucp/sm/stat?week=${params.week}`, {
 			headers: {
-				cookie: dcauth
-			}
+				cookie: dcauth,
+			},
 		});
 		if (mama.ok) {
 			const ret: returnstat = await mama.json();
@@ -34,8 +35,8 @@ export const load = (async ({ cookies, params }) => {
 				week: params.week,
 				date: {
 					next: ret.date.next,
-					prev: ret.date.prev
-				}
+					prev: ret.date.prev,
+				},
 			};
 		}
 	}

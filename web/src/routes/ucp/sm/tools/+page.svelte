@@ -8,7 +8,7 @@
 		<div class="flex w-screen items-center justify-center gap-5">
 			{#if !data.layout.am}
 				<a
-					href="/ucp/mv/tools/app"
+					href="/ucp/sm/tools/app"
 					class="border-taxi hover:bg-taxi w-1/2 rounded-3xl border-4 p-5 transition-colors duration-500 lg:w-1/4"
 				>
 					<h1 class="text-2xl font-bold">APP Feldolgozó</h1>
@@ -19,7 +19,7 @@
 				</a>
 			{/if}
 			<a
-				href="/ucp/mv/tools/call"
+				href="/ucp/sm/tools/call"
 				class="col-span-2 w-1/2 rounded-3xl border-4 border-blue-600 p-5 transition-colors duration-500 hover:bg-blue-600 lg:w-1/4"
 			>
 				<h1 class="text-2xl font-bold">Hívásszámláló</h1>

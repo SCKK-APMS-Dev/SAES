@@ -10,19 +10,19 @@ use crate::{
 };
 
 #[derive(Debug, Serialize)]
-pub struct MVStat {
+pub struct SMStat {
     feltoltve: i32,
     elfogadva: i32,
     elutasitva: i32,
 }
 #[derive(Debug, Serialize)]
-pub struct MVStatReturn {
+pub struct SMStatReturn {
     potlek: MVStat,
     leintes: MVStat,
     szamla: MVStat,
 }
 
-pub async fn mv_home_stat(
+pub async fn sm_home_stat(
     ext: Extension<Driver>,
 ) -> Result<impl IntoResponse, (StatusCode, String)> {
     let db = get_db_conn().await;
@@ -78,18 +78,18 @@ pub async fn mv_home_stat(
             szamlak[0] += 1
         }
     }
-    Ok(Json(MVStatReturn {
-        potlek: MVStat {
+    Ok(Json(SMStatReturn {
+        potlek: SMStat {
             elfogadva: potlekok[1],
             elutasitva: potlekok[2],
             feltoltve: potlekok[0],
         },
-        leintes: MVStat {
+        leintes: SMStat {
             elfogadva: leintesek[1],
             elutasitva: leintesek[2],
             feltoltve: leintesek[0],
         },
-        szamla: MVStat {
+        szamla: SMStat {
             elfogadva: szamlak[1],
             elutasitva: szamlak[2],
             feltoltve: szamlak[0],

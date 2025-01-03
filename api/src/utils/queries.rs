@@ -18,12 +18,12 @@ pub struct UCPTypeExtraQuery {
 }
 
 #[derive(Debug, Deserialize)]
-pub struct MVStatQuery {
+pub struct SMStatQuery {
     pub week: String,
 }
 
 #[derive(Debug, Deserialize)]
-pub struct MVItemsQuery {
+pub struct SMItemsQuery {
     pub tipus: i8,
     pub status: i8,
 }
