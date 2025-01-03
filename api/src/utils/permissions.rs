@@ -1,8 +1,12 @@
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Deserialize, Serialize, Clone, Copy)]
 pub enum Factions {
     SCKK,
     TOW,
 }
 
+#[derive(Debug, Deserialize, Serialize)]
 pub enum Permissions {
     SaesLogin,
     SaesMaintenance,

@@ -87,6 +87,8 @@ pub async fn base_callback(Query(query): Query<Code>, cookies: Cookies) -> Redir
     cookies.add(
         Cookie::build(("auth_token", object.access_token))
             .max_age(Duration::seconds(object.expires_in))
+            .http_only(true)
+            .secure(true)
             .domain(ds.domain.clone())
             .path("/")
             .build(),

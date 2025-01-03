@@ -14,8 +14,15 @@
 	let initial_socket = $state(false);
 	let announcement = $state(false);
 	let nosocket: boolean | string = $state('Socket csatlakozás');
-	let tip =
-		!data.error && !data.noaccess && !data.noauth ? (data.layout.am ? 'TOW' : 'TAXI') : 'SCKK';
+	let tip = $state('SCKK');
+	if (!data.error && !data.noaccess && !data.noauth) {
+		if (data.layout.taxi) {
+			tip = 'TAXI';
+		}
+		if (data.layout.tow) {
+			tip = 'TOW';
+		}
+	}
 	console.log(data);
 	onMount(() => {
 		if (!data.noaccess && !data.noauth) {
@@ -147,6 +154,49 @@
 						class="hover:bg-pos-100 bg-size-200 bg-pos-0 mb-5 ml-5 mr-5 mt-5 block rounded-full bg-gradient-to-r from-red-500 via-amber-400 to-rose-600 px-2 py-1 text-center text-lg font-bold text-white drop-shadow-lg transition-all duration-500"
 						>Kijelentkezés</a
 					>
+				</div>
+			</div>
+		</main>
+	{:else if data.nofact}
+		<main>
+			<div class="flex h-screen items-center justify-center text-center text-white">
+				<div class="grid grid-cols-2 items-center justify-center gap-5">
+					{#if data.layout.taxi || data.layout.admin}
+						<a
+							href="?select_faction=SCKK"
+							data-sveltekit-reload
+							class="group m-auto items-center justify-center rounded-xl bg-black bg-opacity-60 p-5"
+						>
+							<img
+								src="/favicon.png"
+								class="group-hover:border-taxi m-auto rounded-full border-4 border-solid border-white transition-colors duration-300"
+								alt="SCKK Logo"
+							/>
+							<h1
+								class="group-hover:text-taxi text-3xl font-bold tracking-wider transition-colors duration-300"
+							>
+								TAXI
+							</h1>
+						</a>
+					{/if}
+					{#if data.layout.tow || data.layout.admin}
+						<a
+							href="?select_faction=TOW"
+							data-sveltekit-reload
+							class="group m-auto items-center justify-center rounded-xl bg-black bg-opacity-60 p-5"
+						>
+							<img
+								src="/favicon.png"
+								class="group-hover:border-tow m-auto rounded-full border-4 border-solid border-white transition-colors duration-300"
+								alt="SCKK Logo"
+							/>
+							<h1
+								class="group-hover:text-tow text-3xl font-bold tracking-wider transition-colors duration-300"
+							>
+								TOW
+							</h1>
+						</a>
+					{/if}
 				</div>
 			</div>
 		</main>
