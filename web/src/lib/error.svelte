@@ -1,9 +1,10 @@
 <script lang="ts">
+	import { page } from '$app/state';
+
 	interface Props {
-		data: { error?: any };
+		data: { error?: any; noauth?: any; apiUrl?: any };
 		children?: import('svelte').Snippet;
 	}
-
 	let { data, children }: Props = $props();
 </script>
 

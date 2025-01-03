@@ -14,9 +14,10 @@
 	let initial_socket = $state(false);
 	let announcement = $state(false);
 	let nosocket: boolean | string = $state('Socket csatlakozás');
-	let tip = !data.error && !data.noaccess ? (data.layout.am ? 'TOW' : 'TAXI') : 'SCKK';
+	let tip =
+		!data.error && !data.noaccess && !data.noauth ? (data.layout.am ? 'TOW' : 'TAXI') : 'SCKK';
 	onMount(() => {
-		if (!data.noaccess) {
+		if (!data.noaccess && !data.noauth) {
 			$socket = io(data.api as string, {
 				auth: {
 					auth_token: data.auth
@@ -55,7 +56,7 @@
 </script>
 
 <svelte:head>
-	{#if !maintenance || data.maintenance}
+	{#if !maintenance || data.maintenance || data.noauth}
 		{#if !navigating.type}
 			{#if page.url.pathname.includes('mv')}
 				<title>Műszakvezetői felület - {tip}</title>
@@ -100,7 +101,42 @@
 	<meta content="#fece01" data-react-helmet="true" name="theme-color" />
 </svelte:head>
 <Error {data}>
-	{#if data.noaccess}
+	{#if data.noauth}
+		<main>
+			<div class="flex h-screen">
+				<div class="m-auto text-center">
+					<h1 class="animate-pulse text-3xl font-bold text-black dark:text-white">
+						Az oldal használatához kérlek lépj be
+					</h1>
+					<button
+						class="from-taxi hover:bg-pos-100 bg-size-200 bg-pos-0 group relative m-auto mt-3 flex h-12 animate-bounce items-center space-x-2 overflow-hidden rounded-full bg-gradient-to-r via-rose-500 to-red-600 px-6 transition-all duration-500"
+					>
+						<a href={`${data.apiUrl}/auth?path=${page.url.pathname}`}>
+							<span
+								class="relative text-xl font-bold text-white transition-colors duration-300 group-hover:text-black"
+								>Belépés Discordal</span
+							>
+						</a>
+						<div class="flex translate-x-3 items-center -space-x-3">
+							<div
+								class="h-[1.6px] w-2.5 origin-left scale-x-0 rounded bg-white transition duration-300 group-hover:scale-x-100 group-hover:bg-black"
+							></div>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								class="h-5 w-5 -translate-x-2 stroke-white transition duration-300 group-hover:translate-x-0 group-hover:stroke-black"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+								stroke-width="2"
+							>
+								<path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+							</svg>
+						</div>
+					</button>
+				</div>
+			</div>
+		</main>
+	{:else if data.noaccess}
 		<main>
 			<div class="flex h-screen">
 				<div class="m-auto text-center">

@@ -1,10 +1,10 @@
 <script lang="ts">
-	import Adminlist from '$lib/mv/mvlist.svelte';
+	import MVList from '$lib/mv/mvlist.svelte';
 	import { get_type_number } from '$lib/ucp/types.js';
 	let { data } = $props();
 </script>
 
-<Adminlist
+<MVList
 	title="Számlák"
 	type={get_type_number('számla')}
 	{data}

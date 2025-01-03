@@ -1,10 +1,12 @@
-import { type Redirect, redirect } from "@sveltejs/kit";
 import type { LayoutServerLoad } from "./$types";
-import { apiUrl } from "$lib/api";
+import { apiUrl, imageUrl } from "$lib/api";
 
-export const load = (async ({ cookies, request, url }) => {
+export const load = (async ({ cookies, request }) => {
 	if (!cookies.get("auth_token")) {
-		throw redirect(302, `${apiUrl}/auth?path=${url.pathname}`);
+		return {
+			noauth: true,
+			apiUrl,
+		};
 	}
 	try {
 		const aha = await fetch(`${apiUrl}/ucp`, {
@@ -13,10 +15,10 @@ export const load = (async ({ cookies, request, url }) => {
 			},
 		});
 		if (aha.status === 404 || aha.status === 406) {
-			throw redirect(
-				302,
-				`${apiUrl}/auth?path=${url.pathname}`,
-			);
+			return {
+				noauth: true,
+				apiUrl,
+			};
 		}
 		if (aha.status === 403) {
 			return {
@@ -28,6 +30,7 @@ export const load = (async ({ cookies, request, url }) => {
 			return {
 				layout: jeson,
 				api: apiUrl,
+				image: imageUrl,
 				country: process.env.NODE_ENV === "development"
 					? "HU"
 					: (request.headers.get("cf-ipcountry") as string),
@@ -45,12 +48,6 @@ export const load = (async ({ cookies, request, url }) => {
 			};
 		}
 	} catch (err) {
-		if ((err as Redirect).status) {
-			throw redirect(
-				(err as Redirect).status,
-				(err as Redirect).location,
-			);
-		}
 		return {
 			error: "Weboldal API szerverét nem sikerült elérni",
 		};

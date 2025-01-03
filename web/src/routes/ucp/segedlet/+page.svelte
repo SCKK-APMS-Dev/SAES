@@ -1,10 +1,10 @@
 <script lang="ts">
 	interface Props {
 		data: {
-		api?: string | undefined;
-		layout: { am: boolean };
-		error?: string | undefined;
-	};
+			api?: string | undefined;
+			layout: { am: boolean };
+			error?: string | undefined;
+		};
 	}
 
 	let { data }: Props = $props();
@@ -31,7 +31,7 @@
 				<h2 class="text-xl">
 					{#if data.layout.am}
 						A fotónak tartalmaznia kell a kiadott számlát és a teljes játékot. <a
-							class="text-taxi text-xl font-bold uppercase"
+							class="text-taxi hidden text-xl font-bold uppercase"
 							target="_blank"
 							href="{data.api}/img?id=8740">példa</a
 						>
@@ -65,7 +65,7 @@
 				<h2 class="text-xl">
 					{#if data.layout.am}
 						Az első képen a kiadott számlának kell látszódnia. <a
-							class="text-taxi text-xl font-bold uppercase"
+							class="text-taxi hidden text-xl font-bold uppercase"
 							target="_blank"
 							href="{data.api}/limg?id=1015&ver=1">példa</a
 						>
@@ -76,12 +76,12 @@
 				</h2>
 				{#if !data.layout.am}
 					<a
-						class="text-taxi text-xl font-bold uppercase"
+						class="text-taxi hidden text-xl font-bold uppercase"
 						target="_blank"
 						href="{data.api}/limg?id=5965&ver=0">példa a 10-12-ről</a
 					>
 					<a
-						class="text-taxi text-xl font-bold uppercase"
+						class="text-taxi hidden text-xl font-bold uppercase"
 						target="_blank"
 						href="{data.api}/limg?id=5509&ver=0">példa a rádió rpről</a
 					>
@@ -93,7 +93,7 @@
 					{#if data.layout.am}
 						A második képen a fizetésről kell képet készíteni. (chat)
 						<a
-							class="text-taxi text-xl font-bold uppercase"
+							class="text-taxi hidden text-xl font-bold uppercase"
 							target="_blank"
 							href="{data.api}/limg?id=1015&ver=0">példa</a
 						>
@@ -140,7 +140,7 @@
 						Lehetséges igazolni a fuvar végén kinyomtatott nyugta fotózásával.
 					</h2>
 					<a
-						class="text-taxi text-xl font-bold uppercase"
+						class="text-taxi hidden text-xl font-bold uppercase"
 						target="_blank"
 						href="{data.api}/img?id=5544">példa</a
 					>
@@ -152,7 +152,7 @@
 						azonos "kifizette az utazást" szöveget tartalmaztó chatsorral.
 					</h2>
 					<a
-						class="text-taxi text-xl font-bold uppercase"
+						class="text-taxi hidden text-xl font-bold uppercase"
 						target="_blank"
 						href="{data.api}/img?id=5883">példa</a
 					>

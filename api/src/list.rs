@@ -33,11 +33,11 @@ pub async fn base_list_get(
     let statuses = get_statuses();
     let types = get_types();
     if quer.tipus.starts_with("potlek") {
-        let cuccok = supplements::Entity::find()
+        let supp_ret = supplements::Entity::find()
             .filter(supplements::Column::Owner.eq(quer.driver.clone()))
-            .filter(supplements::Column::Date.gt(friday.laster))
+            .filter(supplements::Column::Date.gt(friday.before_last_friday))
             .filter(supplements::Column::Status.eq(statuses.accepted.id))
-            .filter(supplements::Column::Date.lt(friday.last))
+            .filter(supplements::Column::Date.lt(friday.last_friday))
             .filter(supplements::Column::Type.eq(if quer.tipus == "potlek_de" {
                 1
             } else if quer.tipus == "potlek_ej" {
@@ -52,7 +52,7 @@ pub async fn base_list_get(
             .all(&db)
             .await
             .expect("[ERROR] List lekérés sikertelen");
-        let ret: Vec<ListReturn> = cuccok
+        let ret: Vec<ListReturn> = supp_ret
             .iter()
             .map(|item| -> ListReturn {
                 ListReturn {
@@ -68,16 +68,16 @@ pub async fn base_list_get(
             .collect();
         return Ok(Json(ret));
     } else if quer.tipus == "leintes".to_string() {
-        let cuccok = hails::Entity::find()
+        let hails_ret = hails::Entity::find()
             .filter(hails::Column::Owner.eq(quer.driver.clone()))
-            .filter(hails::Column::Date.gt(friday.laster))
-            .filter(hails::Column::Date.lt(friday.last))
+            .filter(hails::Column::Date.gt(friday.before_last_friday))
+            .filter(hails::Column::Date.lt(friday.last_friday))
             .filter(hails::Column::Status.eq(statuses.accepted.id))
             .order_by(hails::Column::Date, Order::Desc)
             .all(&db)
             .await
             .expect("[ERROR] List lekérés sikertelen");
-        let ret = cuccok
+        let ret = hails_ret
             .iter()
             .map(|item| -> ListReturn {
                 ListReturn {
@@ -93,17 +93,17 @@ pub async fn base_list_get(
             .collect();
         return Ok(Json(ret));
     } else if quer.tipus == "szamla".to_string() {
-        let cuccok = bills::Entity::find()
+        let bills_ret = bills::Entity::find()
             .filter(bills::Column::Owner.eq(quer.driver.clone()))
-            .filter(bills::Column::Date.gt(friday.laster))
-            .filter(bills::Column::Date.lt(friday.last))
+            .filter(bills::Column::Date.gt(friday.before_last_friday))
+            .filter(bills::Column::Date.lt(friday.last_friday))
             .filter(bills::Column::Status.eq(statuses.accepted.id))
             .order_by(bills::Column::Date, Order::Desc)
             .all(&db)
             .await
             .expect("[ERROR] List lekérés sikertelen");
 
-        let ret = cuccok
+        let ret = bills_ret
             .iter()
             .map(|item| -> ListReturn {
                 ListReturn {

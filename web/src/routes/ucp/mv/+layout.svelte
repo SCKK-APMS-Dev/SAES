@@ -1,10 +1,11 @@
 <script lang="ts">
+	import { page } from '$app/state';
 	import { Tooltip } from 'flowbite-svelte';
 	interface Props {
 		children?: import('svelte').Snippet;
 	}
 
-	let { children }: Props = $props();
+	let { data, children }: Props = $props();
 	let nav: HTMLDivElement = $state();
 	const tognav = () => {
 		if (nav.classList.contains('hidden')) {

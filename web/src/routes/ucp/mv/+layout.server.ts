@@ -1,8 +1,14 @@
-import { type Redirect, redirect } from "@sveltejs/kit";
+import { redirect } from "@sveltejs/kit";
 import type { LayoutServerLoad } from "./$types";
 import { apiUrl } from "$lib/api";
 
-export const load = (async ({ cookies, url }) => {
+export const load = (async ({ cookies }) => {
+	if (!cookies.get("auth_token")) {
+		return {
+			noauth: true,
+			apiUrl,
+		};
+	}
 	try {
 		const aha = await fetch(`${apiUrl}/ucp/mv`, {
 			mode: "no-cors",
@@ -11,25 +17,21 @@ export const load = (async ({ cookies, url }) => {
 			},
 		});
 		if (aha.status === 404) {
-			throw redirect(
-				302,
-				`${apiUrl}/auth?path=${url.pathname}`,
-			);
+			return {
+				noauth: true,
+				apiUrl,
+			};
 		}
 		if (aha.status === 403) {
 			throw redirect(302, "/ucp");
 		}
 
 		if (aha.ok) {
-			return {};
+			return {
+				success: true,
+			};
 		}
 	} catch (err) {
-		if ((err as Redirect).status) {
-			throw redirect(
-				(err as Redirect).status,
-				(err as Redirect).location,
-			);
-		}
 		return {
 			error: true,
 		};

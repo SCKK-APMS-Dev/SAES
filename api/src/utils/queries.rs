@@ -1,11 +1,6 @@
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
-pub struct BaseImgQuery {
-    pub id: String,
-}
-
-#[derive(Debug, Deserialize)]
 pub struct BaseListQuery {
     pub tipus: String,
     pub driver: String,

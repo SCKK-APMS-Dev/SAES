@@ -66,9 +66,8 @@
 			}[];
 		};
 
-		api: string;
 		error: boolean;
-	} = $state({ data: { items: [] }, api: '', error: false });
+	} = $state({ data: { items: [] }, error: false });
 	let jona = $state(data.status);
 	let multipage = $state(false);
 	let bindEdit: any = $state({});
@@ -95,7 +94,6 @@
 					}
 				}
 				potleks = {
-					api: ret.api,
 					error: ret.error,
 					data: {
 						items: handled
@@ -247,7 +245,7 @@
 >
 	{#if bindEdit.custombg}
 		<img
-			src={`${potleks.api}/img?id=${bindEdit.id}`}
+			src={`${data.image}/get?id=${bindEdit.id}`}
 			class="absolute left-1/2 top-1/2 h-full -translate-x-1/2 -translate-y-1/2 opacity-90"
 			alt=""
 		/>
@@ -393,28 +391,28 @@
 							<TableBodyCell>
 								{#if type == get_type_number('leintés')}
 									<div class="flex flex-col xl:flex-row">
-										<a href={`${potleks.api}/img?id=${potle.img_1}`} target="”_blank”"
+										<a href={`${data.image}/get?id=${potle.img_1}`} target="”_blank”"
 											><img
 												loading="lazy"
-												src={`${potleks.api}/img?id=${potle.img_1}`}
+												src={`${data.image}/get?id=${potle.img_1}`}
 												alt=""
 												class="lg:w-52"
 											/></a
 										>
-										<a href={`${potleks.api}/img?id=${potle.img_2}`} target="”_blank”"
+										<a href={`${data.image}/get?id=${potle.img_2}`} target="”_blank”"
 											><img
 												loading="lazy"
-												src={`${potleks.api}/img?id=${potle.img_2}`}
+												src={`${data.image}/get?id=${potle.img_2}`}
 												alt=""
 												class="lg:w-52"
 											/></a
 										>
 									</div>
 								{:else}
-									<a href={`${potleks.api}/img?id=${potle.img_1}`} target="”_blank”"
+									<a href={`${data.image}/get?id=${potle.img_1}`} target="”_blank”"
 										><img
 											loading="lazy"
-											src={`${potleks.api}/img?id=${potle.img_1}`}
+											src={`${data.image}/get?id=${potle.img_1}`}
 											alt=""
 											class="lg:w-52"
 										/></a

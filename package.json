@@ -7,11 +7,13 @@
 		"dev:api": "cd api && cargo watch -x run",
 		"dev:bot": "cd gbot && cargo watch -x run",
 		"dev:conv": "cd converter && cargo watch -x run",
-		"update": "pnpm update:pnpm && pnpm update:api && pnpm update:bot && pnpm update:gui && pnpm update:conv && pnpm update:central && pnpm update:webn",
+		"dev:static": "cd static && cargo watch -x run",
+		"update": "pnpm update:pnpm && pnpm update:api && pnpm update:bot && pnpm update:conv && pnpm update:static",
 		"update:pnpm": "pnpm update",
 		"update:api": "cd api && cargo update",
 		"update:bot": "cd gbot && cargo update",
-		"update:conv": "cd converter && cargo update"
+		"update:conv": "cd converter && cargo update",
+		"update:static": "cd img && cargo update"
 	},
 	"keywords": [],
 	"author": "HVCsano",

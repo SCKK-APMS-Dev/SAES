@@ -1,7 +1,8 @@
 use std::{env, time::Duration};
 
+use chrono::Local;
 use dotenvy::dotenv;
-use google_sheets4::{api::ValueRange, chrono::Local, hyper, hyper_rustls, Sheets};
+use google_sheets4::{api::ValueRange, hyper_rustls, hyper_util, Sheets};
 use serde::Deserialize;
 use serde_json::Value;
 use tokio::time::interval;
@@ -57,7 +58,7 @@ async fn main() {
         println!(" ");
         println!("==== Taxi műszakfüggetlen aktuális hét ====");
         println!(" ");
-        handle_tables("Taxi műszakfüggetlen", "B3:C26", "C3", "current").await;
+        handle_tables("Taxi műszakfüggetlen", "B3:C29", "C3", "current").await;
         println!(" ");
         println!("=======================");
         println!(" ");
@@ -75,7 +76,7 @@ async fn main() {
         println!(" ");
         println!("==== Taxi műszakfüggetlen előző hét ====");
         println!(" ");
-        handle_tables("Taxi műszakfüggetlen", "H3:I26", "I3", "previous").await;
+        handle_tables("Taxi műszakfüggetlen", "H3:I29", "I3", "previous").await;
         println!(" ");
         println!("=======================");
         println!(" ");
@@ -84,10 +85,11 @@ async fn main() {
 }
 
 async fn handle_now(table: &str, cell: &str) {
+    let client = hyper_util::client::legacy::Client::builder(hyper_util::rt::TokioExecutor::new());
     let spread_id = env::var("SPREADSHEET_ID").expect("SPREADSHEET_ID lekérése sikertelen");
     let token = auth::get_google_auth().await;
     let sheets = Sheets::new(
-        hyper::Client::builder().build(
+        client.build(
             hyper_rustls::HttpsConnectorBuilder::new()
                 .with_native_roots()
                 .unwrap()
@@ -115,12 +117,13 @@ async fn handle_now(table: &str, cell: &str) {
 }
 
 async fn handle_tables(table: &str, read_range: &str, write_range: &str, week: &str) {
+    let client = hyper_util::client::legacy::Client::builder(hyper_util::rt::TokioExecutor::new());
     if week == "current" {
         let spread_id = env::var("SPREADSHEET_ID").expect("SPREADSHEET_ID lekérése sikertelen");
         let token = auth::get_google_auth().await;
         let calls = get_current_week().await;
         let sheets = Sheets::new(
-            hyper::Client::builder().build(
+            client.build(
                 hyper_rustls::HttpsConnectorBuilder::new()
                     .with_native_roots()
                     .unwrap()
@@ -175,7 +178,7 @@ async fn handle_tables(table: &str, read_range: &str, write_range: &str, week: &
         let token = auth::get_google_auth().await;
         let calls = get_previous_week().await;
         let sheets = Sheets::new(
-            hyper::Client::builder().build(
+            client.build(
                 hyper_rustls::HttpsConnectorBuilder::new()
                     .with_native_roots()
                     .unwrap()

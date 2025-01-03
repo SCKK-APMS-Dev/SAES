@@ -26,7 +26,7 @@ pub struct GetUserRes {
 }
 
 #[derive(Debug, Deserialize, Clone, Serialize)]
-pub struct Tag {
+pub struct Driver {
     pub id: String,
     pub name: String,
     pub admin: bool,
@@ -52,7 +52,7 @@ pub async fn ucp_auth(
         let getuser: String = client
             .get(format!(
                 "{}/appauth/login/{}",
-                envs.patrik,
+                envs.samt,
                 special_id.unwrap().to_str().unwrap()
             ))
             .send()
@@ -65,7 +65,7 @@ pub async fn ucp_auth(
         if parsed_tag.is_ok() {
             let real_tag: GetUserRes = parsed_tag.unwrap();
             let am_admins: [i8; 10] = [35, 36, 37, 43, 44, 45, 46, 47, 48, 49];
-            let tag = Tag {
+            let tag = Driver {
                 id: special_id.unwrap().to_str().unwrap().to_string(),
                 name: real_tag.PlayerName,
                 admin: if real_tag.PermissionGroup.is_some_and(|x| x == 1)
@@ -103,7 +103,7 @@ pub async fn ucp_auth(
             if parsed_user.is_ok() {
                 let real_user: DiscordUser = parsed_user.unwrap();
                 let getuser: String = client
-                    .get(format!("{}/appauth/login/{}", envs.patrik, real_user.id))
+                    .get(format!("{}/appauth/login/{}", envs.samt, real_user.id))
                     .send()
                     .await
                     .expect("Lekérés sikertelen")
@@ -114,7 +114,7 @@ pub async fn ucp_auth(
                 if parsed_tag.is_ok() {
                     let real_tag: GetUserRes = parsed_tag.unwrap();
                     let am_admins: [i8; 10] = [35, 36, 37, 43, 44, 45, 46, 47, 48, 49];
-                    let tag = Tag {
+                    let tag = Driver {
                         id: real_user.id,
                         name: real_tag.PlayerName,
                         admin: if real_tag.PermissionGroup.is_some_and(|x| x == 1)
@@ -150,7 +150,7 @@ pub async fn mv_auth(
     mut req: Request,
     next: Next,
 ) -> Result<impl IntoResponse, (StatusCode, String)> {
-    let exts: Option<&Tag> = req.extensions_mut().get();
+    let exts: Option<&Driver> = req.extensions_mut().get();
     let uwrp = exts.expect("Tag lekérése sikertelen, ucp_auth megtörtént?");
     if uwrp.admin == true {
         return Ok(next.run(req).await);

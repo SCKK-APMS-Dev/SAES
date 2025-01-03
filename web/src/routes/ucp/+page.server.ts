@@ -4,6 +4,12 @@ import type { PageServerLoad } from "./$types";
 import { apiUrl } from "$lib/api";
 
 export const load = (async ({ cookies }) => {
+	if (!cookies.get("auth_token")) {
+		return {
+			noauth: true,
+			apiUrl,
+		};
+	}
 	try {
 		const aha = await fetch(`${apiUrl}/ucp/calls`, {
 			mode: "no-cors",

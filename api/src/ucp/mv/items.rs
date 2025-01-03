@@ -14,7 +14,7 @@ use crate::{
     db::{bills, hails, supplements},
     logging::db_log,
     utils::{
-        middle::Tag,
+        middle::Driver,
         queries::MVItemsQuery,
         sql::get_db_conn,
         types_statuses::{get_statuses_as_list, get_types, get_types_as_list},
@@ -54,7 +54,7 @@ pub struct StatDBAll {
 
 #[debug_handler]
 pub async fn mv_items_get(
-    ext: Extension<Tag>,
+    ext: Extension<Driver>,
     quer: Query<MVItemsQuery>,
 ) -> Result<impl IntoResponse, (StatusCode, String)> {
     let db = get_db_conn().await;
@@ -150,7 +150,7 @@ pub async fn mv_items_get(
 
 #[debug_handler]
 pub async fn mv_items_post(
-    ext: Extension<Tag>,
+    ext: Extension<Driver>,
     extract::Json(body): extract::Json<MVPostItemsBody>,
 ) -> Result<impl IntoResponse, (StatusCode, String)> {
     let status_list = get_statuses_as_list();

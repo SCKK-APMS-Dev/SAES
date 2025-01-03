@@ -7,7 +7,7 @@ use serde_json::from_str;
 use crate::db::{hails, supplements};
 use crate::utils::functions::get_fridays;
 use crate::utils::types_statuses::get_statuses;
-use crate::utils::{api::get_api_envs, middle::Tag, sql::get_db_conn};
+use crate::utils::{api::get_api_envs, middle::Driver, sql::get_db_conn};
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct DriverRecord {
@@ -30,29 +30,29 @@ pub struct Potlek {
 
 #[debug_handler]
 pub async fn ucp_calls(mut request: Request) -> Result<Json<Callz>, (StatusCode, String)> {
-    let exts: Option<&Tag> = request.extensions_mut().get();
+    let exts: Option<&Driver> = request.extensions_mut().get();
     let client = reqwest::Client::new();
     let db = get_db_conn().await;
     let statuses = get_statuses();
     let envs = get_api_envs();
     let calls = client
-        .get(format!("{}/api/log/status/current", envs.erik))
+        .get(format!("{}/api/log/status/current", envs.sckkapp))
         .send()
         .await;
     let fridays = get_fridays();
     let dbreturn_supp = supplements::Entity::find()
         .filter(supplements::Column::Owner.eq(&exts.unwrap().name))
         .filter(supplements::Column::Status.eq(statuses.accepted.id))
-        .filter(supplements::Column::Date.gt(fridays.last))
-        .filter(supplements::Column::Date.lt(fridays.next))
+        .filter(supplements::Column::Date.gt(fridays.last_friday))
+        .filter(supplements::Column::Date.lt(fridays.next_friday))
         .all(&db)
         .await
         .expect("Leintések lekérése sikertelen az adatbázisból");
     let dbreturn_hails = hails::Entity::find()
         .filter(hails::Column::Owner.eq(&exts.unwrap().name))
         .filter(hails::Column::Status.eq(statuses.accepted.id))
-        .filter(hails::Column::Date.gt(fridays.last))
-        .filter(hails::Column::Date.lt(fridays.next))
+        .filter(hails::Column::Date.gt(fridays.last_friday))
+        .filter(hails::Column::Date.lt(fridays.next_friday))
         .all(&db)
         .await
         .expect("Leintések lekérése sikertelen az adatbázisból");

@@ -6,7 +6,7 @@ use serde::Serialize;
 
 use crate::{
     db::{bills, hails, supplements},
-    utils::{middle::Tag, sql::get_db_conn, types_statuses::get_statuses},
+    utils::{middle::Driver, sql::get_db_conn, types_statuses::get_statuses},
 };
 
 #[derive(Debug, Serialize)]
@@ -22,7 +22,9 @@ pub struct MVStatReturn {
     szamla: MVStat,
 }
 
-pub async fn mv_home_stat(ext: Extension<Tag>) -> Result<impl IntoResponse, (StatusCode, String)> {
+pub async fn mv_home_stat(
+    ext: Extension<Driver>,
+) -> Result<impl IntoResponse, (StatusCode, String)> {
     let db = get_db_conn().await;
     let statreturn_supp = supplements::Entity::find()
         .filter(supplements::Column::Am.eq(if ext.am == true { 1 } else { 0 }))
