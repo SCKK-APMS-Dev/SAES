@@ -245,7 +245,7 @@
 >
 	{#if bindEdit.custombg}
 		<img
-			src={`${data.image}/get?id=${bindEdit.image}`}
+			src={`${data.image}/get?id=${bindEdit.img_1}`}
 			class="absolute left-1/2 top-1/2 h-full -translate-x-1/2 -translate-y-1/2 opacity-90"
 			alt=""
 		/>
