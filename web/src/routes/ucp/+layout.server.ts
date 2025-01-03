@@ -38,9 +38,6 @@ export const load = (async ({ cookies, request }) => {
 				offset: process.env.SUMMER_TIMEZONE === "true"
 					? -60 * 60 * 1000 * 2
 					: -60 * 60 * 1000,
-				music: jeson.admin
-					? (cookies.get("play_music") === "true" ? true : false)
-					: false,
 				agent: request.headers.get("user-agent") as string,
 				maintenance: cookies.get("maintenance")
 					? jeson.admin ? cookies.get("maintenance") : false

@@ -16,6 +16,7 @@
 	let nosocket: boolean | string = $state('Socket csatlakozás');
 	let tip =
 		!data.error && !data.noaccess && !data.noauth ? (data.layout.am ? 'TOW' : 'TAXI') : 'SCKK';
+	console.log(data);
 	onMount(() => {
 		if (!data.noaccess && !data.noauth) {
 			$socket = io(data.api as string, {

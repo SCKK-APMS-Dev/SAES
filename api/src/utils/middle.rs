@@ -1,5 +1,3 @@
-#![allow(non_snake_case)]
-
 use axum::{
     extract::Request,
     http::HeaderMap,
@@ -11,7 +9,10 @@ use serde::{Deserialize, Serialize};
 
 use crate::auth::get_discord_envs;
 
-use super::api::get_api_envs;
+use super::{
+    api::get_api_envs,
+    permissions::{get_perm, Factions, Permissions},
+};
 
 #[derive(Debug, Deserialize, Clone)]
 pub struct DiscordUser {
@@ -92,7 +93,11 @@ pub async fn ucp_auth(
                 let parsed_tag = serde_json::from_str(&getuser);
                 if parsed_tag.is_ok() {
                     let real_tag: GetUserRes = parsed_tag.unwrap();
-                    if real_tag.permissions.contains(&"saes.login".to_string()) {
+                    if real_tag
+                        .permissions
+                        .contains(&get_perm(Permissions::SaesLogin))
+                        || real_tag.issysadmin
+                    {
                         let tag = Driver {
                             discordid: real_user.id,
                             name: real_tag.username,
@@ -115,7 +120,7 @@ pub async fn ucp_auth(
                     } else {
                         return Err((
                             StatusCode::FORBIDDEN,
-                            "Nincs jogod a belépéshez!".to_string(),
+                            "Nincs jogod a belépéshez! (samt.login)".to_string(),
                         ));
                     }
                 } else {
@@ -139,7 +144,16 @@ pub async fn sm_auth(
 ) -> Result<impl IntoResponse, (StatusCode, String)> {
     let exts: Option<&Driver> = req.extensions_mut().get();
     let uwrp = exts.expect("Tag lekérése sikertelen, ucp_auth megtörtént?");
-    if uwrp.admin == true {
+    let fact = if uwrp.taxi.is_some() {
+        uwrp.perms
+            .contains(&get_perm(Permissions::SaesSm(Factions::SCKK)))
+    } else if uwrp.tow.is_some() {
+        uwrp.perms
+            .contains(&get_perm(Permissions::SaesSm(Factions::TOW)))
+    } else {
+        false
+    };
+    if uwrp.admin == true || fact {
         return Ok(next.run(req).await);
     } else {
         return Err((StatusCode::FORBIDDEN, "Nem vagy műszakvezető".to_string()));

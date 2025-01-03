@@ -71,6 +71,14 @@
 					>
 				</form>
 			{/if} -->
+			{#if data.layout.taxi || data.layout.tow}
+				<h2 class="text-xl drop-shadow-lg md:text-2xl">
+					Pozíciód: {`${data.layout.taxi.positionname ? data.layout.taxi.positionname : data.layout.tow.positionname ? data.layout.tow.positionname : 'nincs'}`}
+				</h2>
+				<h2 class="text-xl drop-shadow-lg md:text-2xl">
+					Műszakod: {`${data.layout.taxi.shiftname ? data.layout.taxi.shiftname : data.layout.tow.shiftname ? data.layout.tow.shiftname : 'nincs'}`}
+				</h2>
+			{/if}
 			{#if !data.layout.am}
 				{#if data.calls.app === null}
 					<h2 class="text-xl drop-shadow-lg md:text-2xl">
