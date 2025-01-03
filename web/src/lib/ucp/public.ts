@@ -33,7 +33,7 @@ const Reeler = {
 export const Reeler_keys = Object.keys(Reeler);
 export const Reeler_vals = Object.values(Reeler);
 
-export const pages = (am: boolean) => {
+export const pages = (fact: string) => {
 	return [
 		{
 			url: "/ucp",
@@ -53,7 +53,7 @@ export const pages = (am: boolean) => {
 		},
 		{
 			url: "/ucp/leintesek",
-			display: `Leintések${am ? " / Bejelentések" : ""}`,
+			display: `Leintések${fact === "TOW" ? " / Bejelentések" : ""}`,
 		},
 		{
 			url: "/ucp/szamlak",

@@ -15,11 +15,11 @@
 	let announcement = $state(false);
 	let nosocket: boolean | string = $state('Socket csatlakozás');
 	let tip = $state('SCKK');
-	if (!data.error && !data.noaccess && !data.noauth) {
-		if (data.layout.taxi) {
+	if (!data.noaccess && !data.noauth) {
+		if (data.faction === 'SCKK') {
 			tip = 'TAXI';
 		}
-		if (data.layout.tow) {
+		if (data.faction === 'TOW') {
 			tip = 'TOW';
 		}
 	}
@@ -54,11 +54,7 @@
 			$socket.on('disconnect', () => {
 				nosocket = 'Socket csatlakozás sikertelen';
 			});
-			if (data.error) {
-				loading.value = false;
-			} else {
-				loading.value = true;
-			}
+			loading.value = true;
 		}
 	});
 </script>
@@ -66,16 +62,16 @@
 <svelte:head>
 	{#if !maintenance || data.maintenance || data.noauth}
 		{#if !navigating.type}
-			{#if page.url.pathname.includes('mv')}
+			{#if page.url.pathname.includes('sm')}
 				<title>Műszakvezetői felület - {tip}</title>
-				<meta content="https://sckk.hu/ucp/sm" property="og:url" />
+				<meta content="https://samt.hu/ucp/sm" property="og:url" />
 				<meta content="Műszakvezetői felület" property="og:description" />
 			{:else if Reeler_keys.some((el) => page.url.pathname.includes(el))}
 				{#if page.url.pathname.endsWith('/upload')}
 					<title
 						>{Reeler_vals[Reeler_keys.indexOf(page.url.pathname.split('/')[2])][2]} feltöltés - {tip}</title
 					>
-					<meta content="https://sckk.hu/ucp/{page.url.pathname.split('/')[2]}" property="og:url" />
+					<meta content="https://samt.hu/ucp/{page.url.pathname.split('/')[2]}" property="og:url" />
 					<meta
 						content="{Reeler_vals[
 							Reeler_keys.indexOf(page.url.pathname.split('/')[2])
@@ -92,11 +88,11 @@
 						][1]} megtekintése"
 						property="og:description"
 					/>
-					<meta content="https://sckk.hu/ucp/{page.url.pathname.split('/')[2]}" property="og:url" />
+					<meta content="https://samt.hu/ucp/{page.url.pathname.split('/')[2]}" property="og:url" />
 				{/if}
 			{:else}
 				<title>Felhasználói felület - {tip}</title>
-				<meta content="https://sckk.hu/ucp" property="og:url" />
+				<meta content="https://samt.hu/ucp" property="og:url" />
 				<meta content="Felhasználói felület" property="og:description" />
 			{/if}
 		{/if}
@@ -105,7 +101,7 @@
 	{/if}
 	<meta content="SCKK Weboldal" property="og:title" />
 
-	<meta content="https://sckk.hu/favicon.png" property="og:image" />
+	<meta content="https://samt.hu/favicon.png" property="og:image" />
 	<meta content="#fece01" data-react-helmet="true" name="theme-color" />
 </svelte:head>
 <Error {data}>
@@ -238,7 +234,7 @@
 			{/if}
 		{/if}
 		{#if initial_socket}
-			<Header {tip} am={data.layout.am} isAdmin={data.layout.admin} />
+			<Header {tip} faction={data.faction!} isAdmin={data.layout.admin} data={data.layout} />
 			<ViewTransition />
 			<main>
 				{@render children?.()}
