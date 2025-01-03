@@ -222,7 +222,9 @@ pub async fn sm_items_post(
                 am: Set(body.am),
                 status: Set(body.status),
                 reason: Set(body.reason),
-                r#type: Set(if vec![1, 2].contains(&body.supp_type.unwrap()) {
+                r#type: Set(if !body.supp_type.is_some() {
+                    None
+                } else if vec![1, 2].contains(&body.supp_type.unwrap()) {
                     body.supp_type
                 } else {
                     None
