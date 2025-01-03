@@ -81,8 +81,8 @@ pub async fn on_connect(socket: SocketRef, data: InitialData) {
                 //   .emit("socketppl-update", io.sockets().unwrap().len())
                 //   .expect("SocketPPL - Update on connect kiküldése sikertelen");
                 socket.join("ucp").expect("UCP Szobacsatlakozás sikertelen");
-                socket.emit("maintenance", mama.maintenance).unwrap();
-                socket.emit("announcement", mama.announcement).unwrap();
+                socket.emit("maintenance", &mama.maintenance).unwrap();
+                socket.emit("announcement", &mama.announcement).unwrap();
                 socket.emit("doneload", "").unwrap();
                 //socket.on(
                 //    "JoinEvent",
