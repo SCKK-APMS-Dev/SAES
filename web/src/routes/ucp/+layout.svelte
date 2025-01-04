@@ -63,45 +63,23 @@
 		{#if !navigating.type}
 			{#if page.url.pathname.includes('sm')}
 				<title>Műszakvezetői felület - {tip}</title>
-				<meta content="https://samt.hu/ucp/sm" property="og:url" />
-				<meta content="Műszakvezetői felület" property="og:description" />
 			{:else if Reeler_keys.some((el) => page.url.pathname.includes(el))}
 				{#if page.url.pathname.endsWith('/upload')}
 					<title
 						>{Reeler_vals[Reeler_keys.indexOf(page.url.pathname.split('/')[2])][2]} feltöltés - {tip}</title
 					>
-					<meta content="https://samt.hu/ucp/{page.url.pathname.split('/')[2]}" property="og:url" />
-					<meta
-						content="{Reeler_vals[
-							Reeler_keys.indexOf(page.url.pathname.split('/')[2])
-						][2]} feltöltés"
-						property="og:description"
-					/>
 				{:else}
 					<title
 						>{Reeler_vals[Reeler_keys.indexOf(page.url.pathname.split('/')[2])][1]} megtekintése - {tip}</title
 					>
-					<meta
-						content="{Reeler_vals[
-							Reeler_keys.indexOf(page.url.pathname.split('/')[2])
-						][1]} megtekintése"
-						property="og:description"
-					/>
-					<meta content="https://samt.hu/ucp/{page.url.pathname.split('/')[2]}" property="og:url" />
 				{/if}
 			{:else}
 				<title>Felhasználói felület - {tip}</title>
-				<meta content="https://samt.hu/ucp" property="og:url" />
-				<meta content="Felhasználói felület" property="og:description" />
 			{/if}
 		{/if}
 	{:else}
 		<title>Karbantartás - {tip}</title>
 	{/if}
-	<meta content="SCKK Weboldal" property="og:title" />
-
-	<meta content="https://samt.hu/favicon.png" property="og:image" />
-	<meta content="#fece01" data-react-helmet="true" name="theme-color" />
 </svelte:head>
 <Error {data}>
 	{#if data.noauth}
