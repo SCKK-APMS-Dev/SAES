@@ -14,6 +14,7 @@ export const load = (async ({ cookies }) => {
 			mode: "no-cors",
 			headers: {
 				cookie: cookies.get("auth_token") as string,
+				faction: cookies.get("selected_faction") as string,
 			},
 		});
 		if (aha.status === 404) {
@@ -25,7 +26,11 @@ export const load = (async ({ cookies }) => {
 		if (aha.status === 403) {
 			throw redirect(302, "/ucp");
 		}
-
+		if (aha.status === 402) {
+			return {
+				error: await aha.text(),
+			};
+		}
 		if (aha.ok) {
 			return {
 				success: true,

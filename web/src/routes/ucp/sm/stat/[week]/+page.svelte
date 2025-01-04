@@ -99,7 +99,7 @@
 										class="ml-1 flex items-center justify-center rounded-full bg-gray-600 p-1 transition-colors duration-200 hover:bg-gray-800"
 										onclick={() =>
 											copyClip(
-												`${$page.url.origin}/list/${key2.replace(' ', '_')}/${getAlterText(key)}`,
+												`${$page.url.origin}/list/${key2.replace(' ', '_')}/${getAlterText(key)}?faction=${data.faction}`,
 												`${key}_${key2}`
 											)}
 										>{#if copied[`${key}_${key2}`]}
@@ -111,7 +111,7 @@
 									<a
 										aria-label="Link megnyitása"
 										class="ml-1 flex items-center justify-center rounded-full bg-gray-600 p-1 transition-colors duration-200 hover:bg-gray-800"
-										href={`${$page.url.origin}/list/${key2.replace(' ', '_')}/${getAlterText(key)}`}
+										href={`${$page.url.origin}/list/${key2.replace(' ', '_')}/${getAlterText(key)}?faction=${data.faction}`}
 										target="”_blank”"
 									>
 										<span class="icon-[ion--open-outline] h-6 w-6 text-blue-500"></span></a

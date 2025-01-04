@@ -55,6 +55,7 @@ pub async fn ucp_items_get(
         if cucc.tipus == types.supplements.id {
             let items = supplements::Entity::find()
                 .filter(supplements::Column::Owner.eq(&ext.name))
+                .filter(supplements::Column::Faction.eq(get_faction_id(ext.faction.unwrap())))
                 .order_by(supplements::Column::Date, Order::Desc)
                 .all(&db)
                 .await
@@ -79,6 +80,7 @@ pub async fn ucp_items_get(
         } else if cucc.tipus == types.hails.id {
             let items = hails::Entity::find()
                 .filter(hails::Column::Owner.eq(&ext.name))
+                .filter(hails::Column::Faction.eq(get_faction_id(ext.faction.unwrap())))
                 .order_by(hails::Column::Date, Order::Desc)
                 .all(&db)
                 .await
@@ -103,6 +105,7 @@ pub async fn ucp_items_get(
         } else if cucc.tipus == types.bills.id {
             let items = bills::Entity::find()
                 .filter(bills::Column::Owner.eq(&ext.name))
+                .filter(bills::Column::Faction.eq(get_faction_id(ext.faction.unwrap())))
                 .order_by(bills::Column::Date, Order::Desc)
                 .all(&db)
                 .await

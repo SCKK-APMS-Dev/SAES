@@ -11,6 +11,7 @@ export const GET: RequestHandler = async ({ request, cookies }) => {
 			{
 				headers: {
 					cookie: dcauth,
+					faction: cookies.get("selected_faction")!,
 				},
 			},
 		);

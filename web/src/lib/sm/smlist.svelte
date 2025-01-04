@@ -72,6 +72,7 @@
 	let multipage = $state(false);
 	let bindEdit: any = $state({});
 	let editid = 0;
+	let bajvan = $state(false);
 	async function render() {
 		loading.value = true;
 		const fatcs = await fetch('/web-api/admin', {
@@ -117,7 +118,8 @@
 			originallength = ret.data.items.length;
 			loading.value = false;
 		} else {
-			console.log('baj');
+			loading.value = false;
+			bajvan = true;
 		}
 	}
 	onMount(() => {
@@ -493,8 +495,13 @@
 					{/each}
 				</TableBody>
 			</Table>
+
 			{#if potleks.data.items.length === 0}
-				<h2>Nincs ilyen elem az adatbázisban!</h2>
+				{#if bajvan}
+					<h2>Lekérés nem jött össze. 😭</h2>
+				{:else}
+					<h2>Nincs ilyen elem az adatbázisban!</h2>
+				{/if}
 			{/if}
 		{:else}
 			<h2>Sikertelen lekérdezés</h2>

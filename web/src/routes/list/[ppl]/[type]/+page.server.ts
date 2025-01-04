@@ -1,9 +1,11 @@
-import { apiUrl } from '$lib/api';
-import type { PageServerLoad } from './$types';
+import { apiUrl, imageUrl } from "$lib/api";
+import type { PageServerLoad } from "./$types";
 
-export const load = (async ({ params }) => {
+export const load = (async ({ params, url }) => {
 	const aha = await fetch(
-		`${apiUrl}/list?driver=${params.ppl.replace('_', ' ')}&tipus=${params.type}`
+		`${apiUrl}/list?driver=${
+			params.ppl.replace("_", " ")
+		}&tipus=${params.type}&faction=${url.searchParams.get("faction")}`,
 	);
 
 	if (aha.ok) {
@@ -11,7 +13,8 @@ export const load = (async ({ params }) => {
 		return {
 			cucc: text,
 			type: params.type,
-			api: apiUrl
+			api: apiUrl,
+			image: imageUrl,
 		};
 	}
 }) satisfies PageServerLoad;

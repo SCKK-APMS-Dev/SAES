@@ -8,9 +8,11 @@ export const load = (async ({ cookies }) => {
 			apiUrl,
 		};
 	}
+	if (!cookies.get("selected_faction")) return {};
 	const fetcs = await fetch(`${apiUrl}/ucp/sm/home`, {
 		headers: {
 			cookie: cookies.get("auth_token")!,
+			faction: cookies.get("selected_faction")!,
 		},
 	});
 	return {

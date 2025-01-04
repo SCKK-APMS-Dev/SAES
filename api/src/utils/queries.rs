@@ -5,8 +5,8 @@ use super::factions::Factions;
 #[derive(Debug, Deserialize)]
 pub struct BaseListQuery {
     pub tipus: String,
-    pub faction: Factions,
     pub driver: String,
+    pub faction: Factions,
 }
 
 #[derive(Debug, Deserialize)]

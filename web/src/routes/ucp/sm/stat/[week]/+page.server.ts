@@ -26,6 +26,7 @@ export const load = (async ({ cookies, params }) => {
 		const mama = await fetch(`${apiUrl}/ucp/sm/stat?week=${params.week}`, {
 			headers: {
 				cookie: dcauth,
+				faction: cookies.get("selected_faction")!,
 			},
 		});
 		if (mama.ok) {
