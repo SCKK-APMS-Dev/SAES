@@ -156,8 +156,8 @@
 	{:else if data.nofact}
 		<main>
 			<div class="flex h-screen items-center justify-center text-center text-white">
-				<div class="grid grid-cols-2 items-center justify-center gap-5">
-					{#if data.layout.taxi || data.layout.admin}
+				<div class="flex items-center justify-center gap-5">
+					{#if data.layout.perms.includes('saes.ucp.taxi') || data.layout.admin}
 						<a
 							href="?select_faction=SCKK"
 							data-sveltekit-reload
@@ -175,7 +175,7 @@
 							</h1>
 						</a>
 					{/if}
-					{#if data.layout.tow || data.layout.admin}
+					{#if data.layout.perms.includes('saes.ucp.tow') || data.layout.admin}
 						<a
 							href="?select_faction=TOW"
 							data-sveltekit-reload
@@ -234,7 +234,7 @@
 			{/if}
 		{/if}
 		{#if initial_socket}
-			<Header {tip} faction={data.faction!} isAdmin={data.layout.admin} data={data.layout} />
+			<Header {tip} faction={data.faction!} isAdmin={data.layout?.admin} data={data.layout!} />
 			<ViewTransition />
 			<main>
 				{@render children?.()}
