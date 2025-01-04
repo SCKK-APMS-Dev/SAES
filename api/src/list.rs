@@ -1,13 +1,13 @@
 use axum::{debug_handler, extract::Query, response::IntoResponse, Json};
 use http::StatusCode;
 use sea_orm::{ColumnTrait, EntityTrait, Order, QueryFilter, QueryOrder};
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 
 use crate::{
     db::{bills, hails, supplements},
     utils::{
+        factions::get_faction_id,
         functions::get_fridays,
-        permissions::{get_perm, Factions, Permissions},
         queries::BaseListQuery,
         sql::get_db_conn,
         types_statuses::{get_statuses, get_types},
@@ -38,6 +38,7 @@ pub async fn base_list_get(
             .filter(supplements::Column::Owner.eq(quer.driver.clone()))
             .filter(supplements::Column::Date.gt(friday.before_last_friday))
             .filter(supplements::Column::Status.eq(statuses.accepted.id))
+            .filter(supplements::Column::Faction.eq(get_faction_id(quer.faction)))
             .filter(supplements::Column::Date.lt(friday.last_friday))
             .filter(supplements::Column::Type.eq(if quer.tipus == "potlek_de" {
                 1
@@ -72,6 +73,7 @@ pub async fn base_list_get(
         let hails_ret = hails::Entity::find()
             .filter(hails::Column::Owner.eq(quer.driver.clone()))
             .filter(hails::Column::Date.gt(friday.before_last_friday))
+            .filter(hails::Column::Faction.eq(get_faction_id(quer.faction)))
             .filter(hails::Column::Date.lt(friday.last_friday))
             .filter(hails::Column::Status.eq(statuses.accepted.id))
             .order_by(hails::Column::Date, Order::Desc)
@@ -97,6 +99,7 @@ pub async fn base_list_get(
         let bills_ret = bills::Entity::find()
             .filter(bills::Column::Owner.eq(quer.driver.clone()))
             .filter(bills::Column::Date.gt(friday.before_last_friday))
+            .filter(bills::Column::Faction.eq(get_faction_id(quer.faction)))
             .filter(bills::Column::Date.lt(friday.last_friday))
             .filter(bills::Column::Status.eq(statuses.accepted.id))
             .order_by(bills::Column::Date, Order::Desc)

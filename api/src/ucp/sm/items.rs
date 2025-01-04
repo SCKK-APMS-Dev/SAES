@@ -14,6 +14,7 @@ use crate::{
     db::{bills, hails, supplements},
     logging::db_log,
     utils::{
+        factions::get_faction_id,
         middle::Driver,
         queries::SMItemsQuery,
         sql::get_db_conn,
@@ -29,7 +30,6 @@ pub struct SMPostItemsBody {
     pub supp_type: Option<i8>,
     pub reason: Option<String>,
     pub tipus: i8,
-    pub am: i8,
 }
 
 #[derive(Debug, Serialize)]
@@ -42,7 +42,7 @@ pub struct SMGetItemsFull {
     pub reason: Option<String>,
     pub r#type: Option<i8>,
     pub price: Option<i32>,
-    pub am: i8,
+    pub faction: i8,
     pub handled_by: Option<String>,
     pub date: chrono::DateTime<Utc>,
 }
@@ -63,7 +63,7 @@ pub async fn sm_items_get(
         let statreturn = supplements::Entity::find()
             .filter(supplements::Column::Status.eq(quer.status.clone()))
             .order_by(supplements::Column::Date, Order::Desc)
-            .filter(supplements::Column::Am.eq(if ext.am == true { 1 } else { 0 }))
+            .filter(supplements::Column::Faction.eq(get_faction_id(ext.faction.unwrap())))
             .all(&db)
             .await
             .expect("[ERROR] Statisztika lekérés sikertelen");
@@ -74,7 +74,7 @@ pub async fn sm_items_get(
                     id: item.id,
                     img_1: item.image,
                     img_2: None,
-                    am: item.am,
+                    faction: item.faction,
                     status: item.status,
                     date: item.date,
                     price: None,
@@ -90,7 +90,7 @@ pub async fn sm_items_get(
         let statreturn = hails::Entity::find()
             .filter(hails::Column::Status.eq(quer.status.clone()))
             .order_by(hails::Column::Date, Order::Desc)
-            .filter(hails::Column::Am.eq(if ext.am == true { 1 } else { 0 }))
+            .filter(hails::Column::Faction.eq(get_faction_id(ext.faction.unwrap())))
             .all(&db)
             .await
             .expect("[ERROR] Statisztika lekérés sikertelen");
@@ -101,7 +101,7 @@ pub async fn sm_items_get(
                     id: item.id,
                     img_1: item.image_1,
                     img_2: Some(item.image_2),
-                    am: item.am,
+                    faction: item.faction,
                     status: item.status,
                     date: item.date,
                     price: None,
@@ -117,7 +117,7 @@ pub async fn sm_items_get(
         let statreturn = bills::Entity::find()
             .filter(bills::Column::Status.eq(quer.status.clone()))
             .order_by(bills::Column::Date, Order::Desc)
-            .filter(bills::Column::Am.eq(if ext.am == true { 1 } else { 0 }))
+            .filter(bills::Column::Faction.eq(get_faction_id(ext.faction.unwrap())))
             .all(&db)
             .await
             .expect("[ERROR] Statisztika lekérés sikertelen");
@@ -128,7 +128,7 @@ pub async fn sm_items_get(
                     id: item.id,
                     img_1: item.image,
                     img_2: None,
-                    am: item.am,
+                    faction: item.faction,
                     price: item.price,
                     r#type: None,
                     status: item.status,
@@ -219,7 +219,7 @@ pub async fn sm_items_post(
             .await;
             let activemodel = supplements::ActiveModel {
                 id: Set(body.id),
-                am: Set(body.am),
+                faction: Set(get_faction_id(ext.faction.unwrap())),
                 status: Set(body.status),
                 reason: Set(body.reason),
                 r#type: Set(if !body.supp_type.is_some() {
@@ -237,7 +237,7 @@ pub async fn sm_items_post(
                 .await
                 .expect("[ERROR] Módosítás sikertelen");
             Ok(Json(SMGetItemsFull {
-                am: statreturn.am,
+                faction: statreturn.faction,
                 status: statreturn.status,
                 date: statreturn.date,
                 handled_by: statreturn.handled_by,
@@ -294,7 +294,7 @@ pub async fn sm_items_post(
             .await;
             let activemodel = hails::ActiveModel {
                 id: Set(body.id),
-                am: Set(body.am),
+                faction: Set(get_faction_id(ext.faction.unwrap())),
                 status: Set(body.status),
                 reason: Set(body.reason),
                 handled_by: Set(Some(ext.name.clone())),
@@ -305,7 +305,7 @@ pub async fn sm_items_post(
                 .await
                 .expect("[ERROR] Módosítás sikertelen");
             Ok(Json(SMGetItemsFull {
-                am: statreturn.am,
+                faction: statreturn.faction,
                 status: statreturn.status,
                 date: statreturn.date,
                 handled_by: statreturn.handled_by,
@@ -379,7 +379,7 @@ pub async fn sm_items_post(
             .await;
             let activemodel = bills::ActiveModel {
                 id: Set(body.id),
-                am: Set(body.am),
+                faction: Set(get_faction_id(ext.faction.unwrap())),
                 status: Set(body.status),
                 reason: Set(body.reason),
                 price: Set(body.price),
@@ -391,7 +391,7 @@ pub async fn sm_items_post(
                 .await
                 .expect("[ERROR] Módosítás sikertelen");
             Ok(Json(SMGetItemsFull {
-                am: statreturn.am,
+                faction: statreturn.faction,
                 status: statreturn.status,
                 date: statreturn.date,
                 handled_by: statreturn.handled_by,

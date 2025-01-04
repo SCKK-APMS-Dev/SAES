@@ -15,6 +15,7 @@ export const load = (async ({ cookies }) => {
 			mode: "no-cors",
 			headers: {
 				cookie: cookies.get("auth_token") as string,
+				faction: cookies.get("selected_faction") as string,
 			},
 		});
 		if (aha.status === 400) {
@@ -23,7 +24,14 @@ export const load = (async ({ cookies }) => {
 			};
 		}
 		if (aha.ok) {
-			const text = await aha.json();
+			const text: {
+				app?: number;
+				leintes: number;
+				potlek: {
+					de: number;
+					du: number;
+				};
+			} = await aha.json();
 			return {
 				calls: text,
 			};

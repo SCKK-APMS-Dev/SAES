@@ -6,7 +6,9 @@ use serde::Serialize;
 
 use crate::{
     db::{bills, hails, supplements},
-    utils::{middle::Driver, sql::get_db_conn, types_statuses::get_statuses},
+    utils::{
+        factions::get_faction_id, middle::Driver, sql::get_db_conn, types_statuses::get_statuses,
+    },
 };
 
 #[derive(Debug, Serialize)]
@@ -17,9 +19,9 @@ pub struct SMStat {
 }
 #[derive(Debug, Serialize)]
 pub struct SMStatReturn {
-    potlek: MVStat,
-    leintes: MVStat,
-    szamla: MVStat,
+    potlek: SMStat,
+    leintes: SMStat,
+    szamla: SMStat,
 }
 
 pub async fn sm_home_stat(
@@ -27,17 +29,17 @@ pub async fn sm_home_stat(
 ) -> Result<impl IntoResponse, (StatusCode, String)> {
     let db = get_db_conn().await;
     let statreturn_supp = supplements::Entity::find()
-        .filter(supplements::Column::Am.eq(if ext.am == true { 1 } else { 0 }))
+        .filter(supplements::Column::Faction.eq(get_faction_id(ext.faction.unwrap())))
         .all(&db)
         .await
         .expect("[ERROR] Statisztika lekérés sikertelen");
     let statreturn_hails = hails::Entity::find()
-        .filter(hails::Column::Am.eq(if ext.am == true { 1 } else { 0 }))
+        .filter(hails::Column::Faction.eq(get_faction_id(ext.faction.unwrap())))
         .all(&db)
         .await
         .expect("[ERROR] Statisztika lekérés sikertelen");
     let statreturn_bills = bills::Entity::find()
-        .filter(bills::Column::Am.eq(if ext.am == true { 1 } else { 0 }))
+        .filter(bills::Column::Faction.eq(get_faction_id(ext.faction.unwrap())))
         .all(&db)
         .await
         .expect("[ERROR] Statisztika lekérés sikertelen");

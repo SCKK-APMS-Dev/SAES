@@ -25,8 +25,8 @@
 
 <header class="z-20">
 	<div class="relative z-20 border-b bg-white dark:bg-gray-700 dark:text-white">
-		<div class="mx-0 px-0 xl:container lg:mx-auto lg:py-4 xl:px-12">
-			<div class="group flex items-center justify-between gap-2">
+		<div class="mx-0 px-0 xl:container lg:mx-auto lg:py-4">
+			<div class={`${!multifact ? 'group' : ''} flex items-center justify-between gap-2`}>
 				<div class="flex items-center justify-center gap-3">
 					<a
 						class="group relative z-20 flex items-center"

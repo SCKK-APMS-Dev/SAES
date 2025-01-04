@@ -27,11 +27,13 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 	const body = await request.json();
 	if (!body) return new Response(null, { status: 404 });
 	const dcauth = cookies.get("auth_token") as string;
+	const fact = cookies.get("selected_faction") as string;
 	if (dcauth) {
 		const mama = await fetch(`${apiUrl}/ucp/sm/post`, {
 			method: "post",
 			headers: {
 				cookie: dcauth,
+				faction: fact,
 				"Content-Type": "application/json",
 			},
 			mode: "no-cors",

@@ -71,23 +71,31 @@
 					>
 				</form>
 			{/if} -->
-			{#if data.layout.taxi || data.layout.tow}
+			{#if data.faction == 'SCKK' && data.layout?.taxi}
 				<h2 class="text-xl drop-shadow-lg md:text-2xl">
-					Pozíciód: {`${data.layout.taxi.positionname ? data.layout.taxi.positionname : data.layout.tow.positionname ? data.layout.tow.positionname : 'nincs'}`}
+					Pozíciód: {data.layout.taxi.positionname}
 				</h2>
 				<h2 class="text-xl drop-shadow-lg md:text-2xl">
-					Műszakod: {`${data.layout.taxi.shiftname ? data.layout.taxi.shiftname : data.layout.tow.shiftname ? data.layout.tow.shiftname : 'nincs'}`}
+					Műszakod: {data.layout.taxi.shiftname}
 				</h2>
 			{/if}
-			{#if !data.layout.am}
-				{#if data.calls.app === null}
+			{#if data.faction == 'TOW' && data.layout?.tow}
+				<h2 class="text-xl drop-shadow-lg md:text-2xl">
+					Pozíciód: {data.layout.tow.positionname}
+				</h2>
+				<h2 class="text-xl drop-shadow-lg md:text-2xl">
+					Műszakod: {data.layout.tow.shiftname}
+				</h2>
+			{/if}
+			{#if data.faction === 'SCKK'}
+				{#if data.calls?.app === null}
 					<h2 class="text-xl drop-shadow-lg md:text-2xl">
 						Hívásaid (app nem megy, csak leintés): {data.calls?.leintes}
 					</h2>
 				{:else}
 					<h2 class="text-xl drop-shadow-lg md:text-2xl">
 						Hívásaid (app+leintés): {data.calls?.app}+{data.calls?.leintes}={Number(
-							data.calls.app
+							data.calls?.app
 						) + Number(data.calls?.leintes)}
 					</h2>
 				{/if}

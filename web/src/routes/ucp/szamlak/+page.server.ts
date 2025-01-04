@@ -10,6 +10,7 @@ export const load = (async ({ cookies, url }) => {
 			{
 				headers: {
 					cookie: cookies.get("auth_token") as string,
+					faction: cookies.get("selected_faction") as string,
 				},
 			},
 		);

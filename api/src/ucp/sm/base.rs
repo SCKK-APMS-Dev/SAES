@@ -12,8 +12,8 @@ use serde::Serialize;
 use crate::{
     db::{bills, hails, supplements},
     utils::{
-        functions::get_fridays, middle::Driver, queries::SMStatQuery, sql::get_db_conn,
-        types_statuses::get_statuses,
+        factions::get_faction_id, functions::get_fridays, middle::Driver, queries::SMStatQuery,
+        sql::get_db_conn, types_statuses::get_statuses,
     },
 };
 
@@ -55,7 +55,7 @@ pub async fn sm_stat(
             .filter(supplements::Column::Status.eq(statuses.accepted.id))
             .filter(supplements::Column::Date.gt(friday.last_friday))
             .filter(supplements::Column::Date.lt(friday.next_friday))
-            .filter(supplements::Column::Am.eq(if ext.am == true { 1 } else { 0 }))
+            .filter(supplements::Column::Faction.eq(get_faction_id(ext.faction.unwrap())))
             .all(&db)
             .await
             .expect("[ERROR] Statisztika lekérés sikertelen");
@@ -63,7 +63,7 @@ pub async fn sm_stat(
             .filter(hails::Column::Status.eq(statuses.accepted.id))
             .filter(hails::Column::Date.gt(friday.last_friday))
             .filter(hails::Column::Date.lt(friday.next_friday))
-            .filter(hails::Column::Am.eq(if ext.am == true { 1 } else { 0 }))
+            .filter(hails::Column::Faction.eq(get_faction_id(ext.faction.unwrap())))
             .all(&db)
             .await
             .expect("[ERROR] Statisztika lekérés sikertelen");
@@ -71,7 +71,7 @@ pub async fn sm_stat(
             .filter(bills::Column::Status.eq(statuses.accepted.id))
             .filter(bills::Column::Date.gt(friday.last_friday))
             .filter(bills::Column::Date.lt(friday.next_friday))
-            .filter(bills::Column::Am.eq(if ext.am == true { 1 } else { 0 }))
+            .filter(bills::Column::Faction.eq(get_faction_id(ext.faction.unwrap())))
             .all(&db)
             .await
             .expect("[ERROR] Statisztika lekérés sikertelen");
@@ -105,7 +105,7 @@ pub async fn sm_stat(
             .filter(supplements::Column::Status.eq(statuses.accepted.id))
             .filter(supplements::Column::Date.gt(friday.before_last_friday))
             .filter(supplements::Column::Date.lt(friday.last_friday))
-            .filter(supplements::Column::Am.eq(if ext.am == true { 1 } else { 0 }))
+            .filter(supplements::Column::Faction.eq(get_faction_id(ext.faction.unwrap())))
             .all(&db)
             .await
             .expect("[ERROR] Statisztika lekérés sikertelen");
@@ -113,7 +113,7 @@ pub async fn sm_stat(
             .filter(hails::Column::Status.eq(statuses.accepted.id))
             .filter(hails::Column::Date.gt(friday.before_last_friday))
             .filter(hails::Column::Date.lt(friday.last_friday))
-            .filter(hails::Column::Am.eq(if ext.am == true { 1 } else { 0 }))
+            .filter(hails::Column::Faction.eq(get_faction_id(ext.faction.unwrap())))
             .all(&db)
             .await
             .expect("[ERROR] Statisztika lekérés sikertelen");
@@ -121,7 +121,7 @@ pub async fn sm_stat(
             .filter(bills::Column::Status.eq(statuses.accepted.id))
             .filter(bills::Column::Date.gt(friday.before_last_friday))
             .filter(bills::Column::Date.lt(friday.last_friday))
-            .filter(bills::Column::Am.eq(if ext.am == true { 1 } else { 0 }))
+            .filter(bills::Column::Faction.eq(get_faction_id(ext.faction.unwrap())))
             .all(&db)
             .await
             .expect("[ERROR] Statisztika lekérés sikertelen");

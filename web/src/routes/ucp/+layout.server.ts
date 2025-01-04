@@ -25,6 +25,11 @@ export const load = (async ({ cookies, request, url }) => {
 			noaccess: await aha.text(),
 		};
 	}
+	if (aha.status === 402) {
+		return {
+			error: await aha.text(),
+		};
+	}
 	if (aha.ok) {
 		const jeson: {
 			discordid: string;

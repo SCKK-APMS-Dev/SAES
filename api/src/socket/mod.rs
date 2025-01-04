@@ -61,6 +61,7 @@ pub async fn on_connect(socket: SocketRef, data: InitialData) {
                     driverid: real_tag.userid,
                     admin: real_tag.issysadmin,
                     perms: real_tag.permissions,
+                    faction: None,
                     taxi: real_tag
                         .factionrecords
                         .iter()
