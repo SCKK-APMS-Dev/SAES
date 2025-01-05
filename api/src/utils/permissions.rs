@@ -8,6 +8,7 @@ pub enum Permissions {
     SaesMaintenance,
     SaesUcp(Factions),
     SaesSm(Factions),
+    SaesFm(Factions),
 }
 
 pub fn get_perm(perm: Permissions) -> String {
@@ -23,6 +24,13 @@ pub fn get_perm(perm: Permissions) -> String {
         ),
         Permissions::SaesUcp(fact) => format!(
             "saes.ucp.{}",
+            match fact {
+                Factions::SCKK => "taxi",
+                Factions::TOW => "tow",
+            }
+        ),
+        Permissions::SaesFm(fact) => format!(
+            "saes.fm.{}",
             match fact {
                 Factions::SCKK => "taxi",
                 Factions::TOW => "tow",

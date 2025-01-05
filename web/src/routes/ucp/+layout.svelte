@@ -9,6 +9,7 @@
 	import { socket } from '$lib/socket.js';
 	import ViewTransition from '$lib/navigation.svelte';
 	import Header from '$lib/ucp/header.svelte';
+	import { Tooltip } from 'flowbite-svelte';
 	let { data, children } = $props();
 	let maintenance = $state(false);
 	let initial_socket = $state(false);
@@ -23,8 +24,9 @@
 			tip = 'TOW';
 		}
 	}
+	console.log(data);
 	onMount(() => {
-		if (!data.noaccess && !data.noauth) {
+		if (!data.noaccess && !data.noauth && !data.error && !data.nofact) {
 			$socket = io(data.api as string, {
 				auth: {
 					auth_token: data.auth
@@ -59,7 +61,7 @@
 </script>
 
 <svelte:head>
-	{#if !maintenance || data.maintenance || data.noauth}
+	{#if !maintenance && !data.maintenance && !data.noauth && !data.error && !data.nofact}
 		{#if !navigating.type}
 			{#if page.url.pathname.includes('sm')}
 				<title>Műszakvezetői felület - {tip}</title>
@@ -78,7 +80,7 @@
 			{/if}
 		{/if}
 	{:else}
-		<title>Karbantartás - {tip}</title>
+		<title>{tip}</title>
 	{/if}
 </svelte:head>
 <Error {data}>
@@ -216,6 +218,17 @@
 			<main>
 				{@render children?.()}
 			</main>
+			{#if data.layout?.admin || data.layout?.perms.includes(data.faction === 'SCKK' ? 'saes.fm.taxi' : 'saes.fm.tow')}
+				<div
+					class={`group fixed bottom-5 right-5 animate-pulse items-center justify-center rounded-xl bg-slate-950 opacity-75 transition-all duration-300 hover:animate-none hover:opacity-100 ${data.faction === 'SCKK' ? 'hover:bg-taxi' : 'hover:bg-tow'}`}
+				>
+					<a
+						href="/ucp/fm"
+						class={`icon-[material-symbols--shield-person-rounded] m-auto flex h-16 w-16 transition-colors duration-300 group-hover:text-white lg:h-24 lg:w-24 ${data.faction === 'SCKK' ? 'text-taxi' : 'text-tow'}`}
+						aria-label="FM Login"
+					></a>
+				</div>
+			{/if}
 		{/if}
 	{:else}
 		<main>
