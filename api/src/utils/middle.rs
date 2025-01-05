@@ -12,6 +12,7 @@ use crate::auth::get_discord_envs;
 use super::{
     api::get_api_envs,
     factions::Factions,
+    functions::{get_env_mode, EnvModes},
     permissions::{get_perm, Permissions},
 };
 
@@ -95,6 +96,24 @@ pub async fn ucp_auth(
                     let parsed_tag = serde_json::from_str(&resp.unwrap());
                     if parsed_tag.is_ok() {
                         let real_tag: GetUserRes = parsed_tag.unwrap();
+                        let env_mode = get_env_mode();
+                        if env_mode == EnvModes::Testing
+                            && !real_tag
+                                .permissions
+                                .contains(&get_perm(Permissions::SaesTest))
+                            && !real_tag.issysadmin
+                        {
+                            return Err((
+                                StatusCode::FORBIDDEN,
+                                "Nincs jogod a teszt oldalhoz! (samt.test)".to_string(),
+                            ));
+                        }
+                        if env_mode == EnvModes::Devel && !real_tag.issysadmin {
+                            return Err((
+                                StatusCode::FORBIDDEN,
+                                "Nincs jogod a dev oldalhoz!".to_string(),
+                            ));
+                        }
                         if real_tag
                             .permissions
                             .contains(&get_perm(Permissions::SaesLogin))

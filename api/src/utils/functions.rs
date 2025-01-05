@@ -1,3 +1,5 @@
+use std::env;
+
 use chrono::{Datelike, Duration, Local, NaiveDateTime, NaiveTime};
 
 pub struct Friday {
@@ -30,5 +32,21 @@ pub fn get_fridays() -> Friday {
         last_friday: last_friday_whole,
         before_last_friday: laster_friday_whole,
         next_friday: next_friday_whole,
+    }
+}
+
+#[derive(Debug, PartialEq)]
+pub enum EnvModes {
+    Production,
+    Testing,
+    Devel,
+}
+
+pub fn get_env_mode() -> EnvModes {
+    let mode = env::var("ENV_MODE").unwrap();
+    match mode.as_str() {
+        "production" => EnvModes::Production,
+        "testing" => EnvModes::Testing,
+        &_ => EnvModes::Devel,
     }
 }
