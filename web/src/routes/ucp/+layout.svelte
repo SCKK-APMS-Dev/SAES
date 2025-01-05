@@ -9,7 +9,6 @@
 	import { socket } from '$lib/socket.js';
 	import ViewTransition from '$lib/navigation.svelte';
 	import Header from '$lib/ucp/header.svelte';
-	import { Tooltip } from 'flowbite-svelte';
 	let { data, children } = $props();
 	let maintenance = $state(false);
 	let initial_socket = $state(false);
@@ -47,7 +46,7 @@
 				}
 			});
 			$socket.on('doneload', () => {
-				console.log('Socket csatlakozva');
+				console.log('[SOCKET] Socket csatlakozva');
 				nosocket = false;
 				initial_socket = true;
 				loading.value = false;
@@ -226,7 +225,7 @@
 			<main>
 				{@render children?.()}
 			</main>
-			{#if data.layout?.admin || data.layout?.perms.includes(data.faction === 'SCKK' ? 'saes.fm.taxi' : 'saes.fm.tow')}
+			{#if (data.layout?.admin || data.layout?.perms.includes(data.faction === 'SCKK' ? 'saes.fm.taxi' : 'saes.fm.tow')) && !page.url.pathname.startsWith('/ucp/fm')}
 				<div
 					class={`group fixed bottom-8 right-8 animate-pulse items-center justify-center rounded-xl bg-slate-950 opacity-75 drop-shadow-2xl transition-all duration-300 hover:animate-none hover:opacity-100 ${data.faction === 'SCKK' ? 'hover:bg-taxi' : 'hover:bg-tow'}`}
 				>

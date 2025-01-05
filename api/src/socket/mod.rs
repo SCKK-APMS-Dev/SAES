@@ -41,7 +41,7 @@ pub async fn on_connect(socket: SocketRef, data: InitialData) {
         if parsed_user.is_ok() {
             let real_user: DiscordUser = parsed_user.unwrap();
             let getuser: String = client
-                .post(format!("{}/saes/authenticate", envs.samt))
+                .get(format!("{}/saes/authenticate", envs.samt))
                 .json(&SAMTAuth {
                     userdiscordid: real_user.id.clone(),
                 })
