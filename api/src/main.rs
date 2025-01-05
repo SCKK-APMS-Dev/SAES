@@ -1,3 +1,5 @@
+use std::env;
+
 use axum::{routing::get, Router};
 use dotenvy::dotenv;
 use socket::InitialData;
@@ -26,6 +28,21 @@ async fn main() {
     dotenv().expect(".env fájl nem található");
     tracing::subscriber::set_global_default(FmtSubscriber::default()).unwrap();
     let (layer, io) = SocketIo::new_layer();
+    let env_mode = env::var("ENV_MODE");
+    if env_mode.is_err() {
+        panic!("ENV_MODE nincs setelve! production / testing / devel")
+    }
+    if ![
+        "production".to_string(),
+        "testing".to_string(),
+        "devel".to_string(),
+    ]
+    .contains(&env_mode.clone().unwrap())
+    {
+        panic!("ENV_MODE rosszul setelve! production / testing / devel")
+    } else {
+        info!("Running in {} mode", env_mode.unwrap().to_uppercase());
+    }
     init::main();
     io.ns(
         "/",
@@ -49,7 +66,7 @@ async fn main() {
         .layer(TraceLayer::new_for_http())
         .layer(CookieManagerLayer::new());
     // run our app with hyper, listening globally on port 3000
-    info!("Szerver indul");
+    info!("Server runs on :3000");
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
     axum::serve(listener, app.into_make_service())
         .await

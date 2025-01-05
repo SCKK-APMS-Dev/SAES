@@ -6,6 +6,7 @@ use super::factions::Factions;
 pub enum Permissions {
     SaesLogin,
     SaesMaintenance,
+    SaesTest,
     SaesUcp(Factions),
     SaesSm(Factions),
     SaesFm(Factions),
@@ -36,5 +37,6 @@ pub fn get_perm(perm: Permissions) -> String {
                 Factions::TOW => "tow",
             }
         ),
+        Permissions::SaesTest => "saes.test".to_string(),
     }
 }
