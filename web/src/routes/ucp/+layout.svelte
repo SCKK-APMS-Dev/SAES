@@ -89,17 +89,19 @@
 			<div class="flex h-screen">
 				<div class="m-auto text-center">
 					<h1 class="animate-pulse text-3xl font-bold text-black dark:text-white">
-						Az oldal használatához kérlek lépj be
+						Az oldal használatához kérlek lépj be!
 					</h1>
 					<button
+						aria-label="Belépés Discord használatával"
 						class="from-taxi hover:bg-pos-100 bg-size-200 bg-pos-0 group relative m-auto mt-3 flex h-12 animate-bounce items-center space-x-2 overflow-hidden rounded-full bg-gradient-to-r via-rose-500 to-red-600 px-6 transition-all duration-500"
 					>
-						<a href={`${data.apiUrl}/auth?path=${page.url.pathname}`}>
-							<span
-								class="relative text-xl font-bold text-white transition-colors duration-300 group-hover:text-black"
-								>Belépés Discordal</span
-							>
-						</a>
+						<a
+							href={`${data.apiUrl}/auth?path=${page.url.pathname}`}
+							aria-label="Belépés Discord használatával"
+							class="flex w-full justify-end gap-2 text-white transition-colors duration-300 hover:text-black"
+							><span class="icon-[ic--baseline-discord] m-auto h-12 w-12"></span>
+							<h2 class="m-auto text-xl font-bold">Discord</h2></a
+						>
 						<div class="flex translate-x-3 items-center -space-x-3">
 							<div
 								class="h-[1.6px] w-2.5 origin-left scale-x-0 rounded bg-white transition duration-300 group-hover:scale-x-100 group-hover:bg-black"
@@ -213,14 +215,20 @@
 			{/if}
 		{/if}
 		{#if initial_socket}
-			<Header {tip} faction={data.faction!} isAdmin={data.layout?.admin} data={data.layout!} />
+			<Header
+				{tip}
+				faction={data.faction!}
+				isAdmin={data.layout?.admin}
+				data={data.layout!}
+				{nosocket}
+			/>
 			<ViewTransition />
 			<main>
 				{@render children?.()}
 			</main>
 			{#if data.layout?.admin || data.layout?.perms.includes(data.faction === 'SCKK' ? 'saes.fm.taxi' : 'saes.fm.tow')}
 				<div
-					class={`group fixed bottom-5 right-5 animate-pulse items-center justify-center rounded-xl bg-slate-950 opacity-75 transition-all duration-300 hover:animate-none hover:opacity-100 ${data.faction === 'SCKK' ? 'hover:bg-taxi' : 'hover:bg-tow'}`}
+					class={`group fixed bottom-8 right-8 animate-pulse items-center justify-center rounded-xl bg-slate-950 opacity-75 drop-shadow-2xl transition-all duration-300 hover:animate-none hover:opacity-100 ${data.faction === 'SCKK' ? 'hover:bg-taxi' : 'hover:bg-tow'}`}
 				>
 					<a
 						href="/ucp/fm"

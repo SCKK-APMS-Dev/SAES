@@ -68,7 +68,7 @@ export const load = (async ({ cookies, request, url }) => {
 						) {
 							cookies.set("selected_faction", "SCKK", {
 								path: "/",
-								maxAge: 60 * 60 * 24 * 7,
+								maxAge: 360 * 24 * 30,
 								secure: true,
 								sameSite: true,
 								httpOnly: true,
@@ -82,7 +82,7 @@ export const load = (async ({ cookies, request, url }) => {
 						) {
 							cookies.set("selected_faction", "TOW", {
 								path: "/",
-								maxAge: 60 * 60 * 24 * 7,
+								maxAge: 360 * 24 * 30,
 								secure: true,
 								sameSite: true,
 								httpOnly: true,
