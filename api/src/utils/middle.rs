@@ -86,7 +86,6 @@ pub async fn ucp_auth(
                     .json(&SAMTAuth {
                         userdiscordid: real_user.id.clone(),
                     })
-                    .basic_auth("dev", envs.testpass)
                     .send()
                     .await
                     .expect("Lekérés sikertelen");

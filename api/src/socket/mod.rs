@@ -45,7 +45,6 @@ pub async fn on_connect(socket: SocketRef, data: InitialData) {
                 .json(&SAMTAuth {
                     userdiscordid: real_user.id.clone(),
                 })
-                .basic_auth("dev", envs.testpass)
                 .send()
                 .await
                 .expect("Lekérés sikertelen")
