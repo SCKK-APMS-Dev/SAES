@@ -53,7 +53,7 @@
 					{/if}
 					<a
 						href="/ucp"
-						class={`z-20 mr-3 text-3xl font-bold drop-shadow-xl transition-colors duration-200 ${
+						class={`z-20 text-3xl font-bold drop-shadow-xl transition-colors duration-200 ${
 							faction === 'TOW'
 								? multifact
 									? 'hover:text-tow'
@@ -88,7 +88,7 @@
 					>
 						<div class="flex h-full flex-col justify-between lg:flex-row lg:items-center">
 							<ul
-								class="items-center space-y-8 px-6 pt-32 text-center text-gray-700 md:px-12 lg:flex lg:space-x-3 lg:space-y-0 lg:pt-0 xl:space-x-12"
+								class="items-center pt-32 text-center text-gray-700 md:space-y-8 lg:flex lg:space-x-3 lg:space-y-0 lg:px-2 lg:pt-0 xl:space-x-12 xl:px-12"
 							>
 								{#each pagesz as page}
 									<li>
