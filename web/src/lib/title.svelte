@@ -1,5 +1,9 @@
-<script>
-	export let title = 'SCKK';
+<script lang="ts">
+	interface Props {
+		title?: string;
+	}
+
+	let { title = 'SCKK' }: Props = $props();
 </script>
 
 <svelte:head>

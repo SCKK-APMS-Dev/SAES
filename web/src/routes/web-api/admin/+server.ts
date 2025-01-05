@@ -1,19 +1,24 @@
-import { apiUrl } from '$lib/api';
-import type { RequestHandler } from './$types';
+import { apiUrl } from "$lib/api";
+import type { RequestHandler } from "./$types";
 
 export const GET: RequestHandler = async ({ request, cookies }) => {
-	const dcauth = cookies.get('auth_token') as string;
+	const dcauth = cookies.get("auth_token") as string;
 	if (dcauth) {
 		const mama = await fetch(
-			`${apiUrl}/ucp/mv/get?tipus=${request.headers.get('type')}&status=${request.headers.get('status')}`,
+			`${apiUrl}/ucp/sm/get?tipus=${request.headers.get("type")}&status=${
+				request.headers.get("status")
+			}`,
 			{
 				headers: {
-					cookie: dcauth
-				}
-			}
+					cookie: dcauth,
+					faction: cookies.get("selected_faction")!,
+				},
+			},
 		);
 		if (mama.ok) {
-			return new Response(JSON.stringify({ data: await mama.json(), api: apiUrl }));
+			return new Response(
+				JSON.stringify({ data: await mama.json(), api: apiUrl }),
+			);
 		}
 	}
 	return new Response(null, { status: 400 });
@@ -22,16 +27,18 @@ export const GET: RequestHandler = async ({ request, cookies }) => {
 export const POST: RequestHandler = async ({ request, cookies }) => {
 	const body = await request.json();
 	if (!body) return new Response(null, { status: 404 });
-	const dcauth = cookies.get('auth_token') as string;
+	const dcauth = cookies.get("auth_token") as string;
+	const fact = cookies.get("selected_faction") as string;
 	if (dcauth) {
-		const mama = await fetch(`${apiUrl}/ucp/mv/post`, {
-			method: 'post',
+		const mama = await fetch(`${apiUrl}/ucp/sm/post`, {
+			method: "post",
 			headers: {
 				cookie: dcauth,
-				'Content-Type': 'application/json'
+				faction: fact,
+				"Content-Type": "application/json",
 			},
-			mode: 'no-cors',
-			body: JSON.stringify(body)
+			mode: "no-cors",
+			body: JSON.stringify(body),
 		});
 		if (mama.ok) {
 			return new Response(JSON.stringify(await mama.json()));

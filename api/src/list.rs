@@ -1,11 +1,29 @@
 use axum::{debug_handler, extract::Query, response::IntoResponse, Json};
 use http::StatusCode;
 use sea_orm::{ColumnTrait, EntityTrait, Order, QueryFilter, QueryOrder};
+use serde::Serialize;
 
 use crate::{
-    db::data,
-    utils::{functions::get_fridays, queries::BaseListQuery, sql::get_db_conn},
+    db::{bills, hails, supplements},
+    utils::{
+        factions::get_faction_id,
+        functions::get_fridays,
+        queries::BaseListQuery,
+        sql::get_db_conn,
+        types_statuses::{get_statuses, get_types},
+    },
 };
+
+#[derive(Debug, Serialize)]
+pub struct ListReturn {
+    pub id: i32,
+    pub r#type: i8,
+    pub img_1: i32,
+    pub img_2: Option<i32>,
+    pub desc: Option<String>,
+    pub handled_by: Option<String>,
+    pub price: Option<i32>,
+}
 
 #[debug_handler]
 pub async fn base_list_get(
@@ -13,45 +31,101 @@ pub async fn base_list_get(
 ) -> Result<impl IntoResponse, (StatusCode, String)> {
     let friday = get_fridays();
     let db = get_db_conn().await;
+    let statuses = get_statuses();
+    let types = get_types();
     if quer.tipus.starts_with("potlek") {
-        let cuccok = data::Entity::find()
-            .filter(data::Column::Owner.eq(quer.driver.clone()))
-            .filter(data::Column::Date.gt(friday.laster))
-            .filter(data::Column::Status.eq("elfogadva"))
-            .filter(data::Column::Date.lt(friday.last))
-            .filter(data::Column::Extra.eq(if quer.tipus == "potlek_de" {
-                "délelőtti"
+        let supp_ret = supplements::Entity::find()
+            .filter(supplements::Column::Owner.eq(quer.driver.clone()))
+            .filter(supplements::Column::Date.gt(friday.before_last_friday))
+            .filter(supplements::Column::Status.eq(statuses.accepted.id))
+            .filter(supplements::Column::Faction.eq(get_faction_id(quer.faction)))
+            .filter(supplements::Column::Date.lt(friday.last_friday))
+            .filter(supplements::Column::Type.eq(if quer.tipus == "potlek_de" {
+                1
             } else if quer.tipus == "potlek_ej" {
-                "éjszakai"
+                2
             } else {
                 return Err((
                     StatusCode::BAD_REQUEST,
                     "Ilyen pótlékot nem ismerek!".to_string(),
                 ));
             }))
-            .filter(data::Column::Type.eq("pótlék"))
-            .order_by(data::Column::Date, Order::Desc)
+            .order_by(supplements::Column::Date, Order::Desc)
             .all(&db)
             .await
             .expect("[ERROR] List lekérés sikertelen");
-        Ok(Json(cuccok))
+        let ret: Vec<ListReturn> = supp_ret
+            .iter()
+            .map(|item| -> ListReturn {
+                ListReturn {
+                    id: item.id,
+                    img_1: item.image,
+                    img_2: None,
+                    price: None,
+                    desc: item.reason.clone(),
+                    handled_by: item.handled_by.clone(),
+                    r#type: types.supplements.id,
+                }
+            })
+            .collect();
+        return Ok(Json(ret));
+    } else if quer.tipus == "leintes".to_string() {
+        let hails_ret = hails::Entity::find()
+            .filter(hails::Column::Owner.eq(quer.driver.clone()))
+            .filter(hails::Column::Date.gt(friday.before_last_friday))
+            .filter(hails::Column::Faction.eq(get_faction_id(quer.faction)))
+            .filter(hails::Column::Date.lt(friday.last_friday))
+            .filter(hails::Column::Status.eq(statuses.accepted.id))
+            .order_by(hails::Column::Date, Order::Desc)
+            .all(&db)
+            .await
+            .expect("[ERROR] List lekérés sikertelen");
+        let ret = hails_ret
+            .iter()
+            .map(|item| -> ListReturn {
+                ListReturn {
+                    id: item.id,
+                    img_1: item.image_1,
+                    img_2: Some(item.image_2),
+                    price: None,
+                    desc: item.reason.clone(),
+                    handled_by: item.handled_by.clone(),
+                    r#type: types.hails.id,
+                }
+            })
+            .collect();
+        return Ok(Json(ret));
+    } else if quer.tipus == "szamla".to_string() {
+        let bills_ret = bills::Entity::find()
+            .filter(bills::Column::Owner.eq(quer.driver.clone()))
+            .filter(bills::Column::Date.gt(friday.before_last_friday))
+            .filter(bills::Column::Faction.eq(get_faction_id(quer.faction)))
+            .filter(bills::Column::Date.lt(friday.last_friday))
+            .filter(bills::Column::Status.eq(statuses.accepted.id))
+            .order_by(bills::Column::Date, Order::Desc)
+            .all(&db)
+            .await
+            .expect("[ERROR] List lekérés sikertelen");
+
+        let ret = bills_ret
+            .iter()
+            .map(|item| -> ListReturn {
+                ListReturn {
+                    id: item.id,
+                    img_1: item.image,
+                    r#type: types.bills.id,
+                    desc: item.reason.clone(),
+                    handled_by: item.handled_by.clone(),
+                    img_2: None,
+                    price: item.price,
+                }
+            })
+            .collect();
+        return Ok(Json(ret));
     } else {
-        let cuccok = data::Entity::find()
-            .filter(data::Column::Owner.eq(quer.driver.clone()))
-            .filter(data::Column::Date.gt(friday.laster))
-            .filter(data::Column::Date.lt(friday.last))
-            .filter(data::Column::Status.eq("elfogadva"))
-            .filter(data::Column::Type.eq(if quer.tipus == "leintes" {
-                "leintés"
-            } else if quer.tipus == "szamla" {
-                "számla"
-            } else {
-                return Err((StatusCode::BAD_REQUEST, "Nincs ilyen elem!".to_string()));
-            }))
-            .order_by(data::Column::Date, Order::Desc)
-            .all(&db)
-            .await
-            .expect("[ERROR] List lekérés sikertelen");
-        Ok(Json(cuccok))
+        return Err((
+            StatusCode::NOT_FOUND,
+            "Ilyen típus nem található!".to_string(),
+        ));
     }
 }

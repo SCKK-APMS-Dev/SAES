@@ -1,11 +1,11 @@
 export interface FullDBType {
 	am: 0 | 1;
 	date: Date;
-	extra: null | string;
+	price: null | number;
 	id: number;
-	kep: string;
+	image: string;
 	owner: string;
 	reason: null | string;
-	status: 'feltöltve' | 'elfogadva' | 'elutasítva';
-	type: 'pótlék' | 'leintés' | 'számla';
+	status: number;
+	type: number;
 }

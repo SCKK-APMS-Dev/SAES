@@ -1,10 +1,25 @@
-FROM rust
+FROM rust:alpine AS build
+WORKDIR /usr/src/api/dev
 
-WORKDIR /usr/src/api
+#* Előkészítés
 
+RUN apk add build-base 
+RUN apk add pkgconfig 
+RUN apk add openssl-dev 
+RUN apk add openssl-libs-static
+
+#* Build
 COPY . .
 
-RUN cargo install --path .
+RUN cargo build --release
+
+#* Release
+
+FROM alpine
+WORKDIR /usr/src/api/prod
+
+COPY --from=build /usr/src/api/dev/target/release/saes-api /usr/src/api/prod/
+
 RUN touch .env
 EXPOSE 3000
-CMD ["saes-api"]
+CMD ["./saes-api"]

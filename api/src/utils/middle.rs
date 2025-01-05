@@ -1,5 +1,3 @@
-#![allow(non_snake_case)]
-
 use axum::{
     extract::Request,
     http::HeaderMap,
@@ -11,26 +9,52 @@ use serde::{Deserialize, Serialize};
 
 use crate::auth::get_discord_envs;
 
-use super::api::get_api_envs;
+use super::{
+    api::get_api_envs,
+    factions::Factions,
+    functions::{get_env_mode, EnvModes},
+    permissions::{get_perm, Permissions},
+};
 
 #[derive(Debug, Deserialize, Clone)]
 pub struct DiscordUser {
     pub id: String,
 }
 
+#[derive(Debug, Deserialize, Clone, Serialize)]
+pub struct FactionRecord {
+    pub factionid: i8,
+    pub factionname: String,
+    pub positionid: i8,
+    pub positionname: String,
+    pub shiftid: i8,
+    pub shiftname: String,
+}
+
 #[derive(Debug, Deserialize, Clone)]
 pub struct GetUserRes {
-    pub PermissionGroup: Option<u32>,
-    pub PlayerName: String,
-    pub PositionId: i8,
+    pub factionrecords: Vec<FactionRecord>,
+    pub issysadmin: bool,
+    pub permissions: Vec<String>,
+    pub userid: i8,
+    pub username: String,
+}
+
+#[derive(Debug, Serialize)]
+pub struct SAMTAuth {
+    pub userdiscordid: String,
 }
 
 #[derive(Debug, Deserialize, Clone, Serialize)]
-pub struct Tag {
-    pub id: String,
+pub struct Driver {
+    pub discordid: String,
+    pub driverid: i8,
     pub name: String,
     pub admin: bool,
-    pub am: bool,
+    pub perms: Vec<String>,
+    pub taxi: Option<FactionRecord>,
+    pub tow: Option<FactionRecord>,
+    pub faction: Option<Factions>,
 }
 
 pub async fn ucp_auth(
@@ -38,55 +62,11 @@ pub async fn ucp_auth(
     mut request: Request,
     next: Next,
 ) -> Result<impl IntoResponse, (StatusCode, String)> {
-    // do something with `request`...
-    let special_key = headers.get("secret-key");
-    let special_id = headers.get("secret-id");
     let auth = headers.get("cookie");
+    let faction = headers.get("faction");
     let ds = get_discord_envs();
     let envs = get_api_envs();
-    if special_key.is_some()
-        && special_id.is_some()
-        && special_key.unwrap().to_str().unwrap() == ds.secret_key
-    {
-        let client = reqwest::Client::new();
-        let getuser: String = client
-            .get(format!(
-                "{}/appauth/login/{}",
-                envs.patrik,
-                special_id.unwrap().to_str().unwrap()
-            ))
-            .send()
-            .await
-            .expect("Lekérés sikertelen")
-            .text()
-            .await
-            .expect("Átalakítás sikertelen");
-        let parsed_tag = serde_json::from_str(&getuser);
-        if parsed_tag.is_ok() {
-            let real_tag: GetUserRes = parsed_tag.unwrap();
-            let am_admins: [i8; 10] = [35, 36, 37, 43, 44, 45, 46, 47, 48, 49];
-            let tag = Tag {
-                id: special_id.unwrap().to_str().unwrap().to_string(),
-                name: real_tag.PlayerName,
-                admin: if real_tag.PermissionGroup.is_some_and(|x| x == 1)
-                    || am_admins.contains(&real_tag.PositionId)
-                {
-                    true
-                } else {
-                    false
-                },
-                am: if real_tag.PositionId.gt(&34) && real_tag.PositionId.lt(&50) {
-                    true
-                } else {
-                    false
-                },
-            };
-            request.extensions_mut().insert(tag);
-            return Ok(next.run(request).await);
-        } else {
-            return Err((StatusCode::FORBIDDEN, "Nincs jogod!".to_string()));
-        }
-    } else if auth.is_some() {
+    if auth.is_some() {
         let client = reqwest::Client::new();
         let dcuserget = client
             .get(format!("{}/users/@me", ds.api_endpoint))
@@ -102,38 +82,121 @@ pub async fn ucp_auth(
             let parsed_user = serde_json::from_str(&handled_user);
             if parsed_user.is_ok() {
                 let real_user: DiscordUser = parsed_user.unwrap();
-                let getuser: String = client
-                    .get(format!("{}/appauth/login/{}", envs.patrik, real_user.id))
+                let getuser = client
+                    .get(format!("{}/saes/authenticate", envs.samt))
+                    .json(&SAMTAuth {
+                        userdiscordid: real_user.id.clone(),
+                    })
                     .send()
                     .await
-                    .expect("Lekérés sikertelen")
-                    .text()
-                    .await
-                    .expect("Átalakítás sikertelen");
-                let parsed_tag = serde_json::from_str(&getuser);
-                if parsed_tag.is_ok() {
-                    let real_tag: GetUserRes = parsed_tag.unwrap();
-                    let am_admins: [i8; 10] = [35, 36, 37, 43, 44, 45, 46, 47, 48, 49];
-                    let tag = Tag {
-                        id: real_user.id,
-                        name: real_tag.PlayerName,
-                        admin: if real_tag.PermissionGroup.is_some_and(|x| x == 1)
-                            || am_admins.contains(&real_tag.PositionId)
+                    .expect("Lekérés sikertelen");
+                let status = getuser.status();
+                let resp = getuser.text().await;
+                if status == StatusCode::OK {
+                    let parsed_tag = serde_json::from_str(&resp.unwrap());
+                    if parsed_tag.is_ok() {
+                        let real_tag: GetUserRes = parsed_tag.unwrap();
+                        let env_mode = get_env_mode();
+                        if env_mode == EnvModes::Testing
+                            && !real_tag
+                                .permissions
+                                .contains(&get_perm(Permissions::SaesTest))
+                            && !real_tag.issysadmin
                         {
-                            true
+                            return Err((
+                                StatusCode::FORBIDDEN,
+                                "Nincs jogod a teszt oldalhoz! (samt.test)".to_string(),
+                            ));
+                        }
+                        if env_mode == EnvModes::Devel && !real_tag.issysadmin {
+                            return Err((
+                                StatusCode::FORBIDDEN,
+                                "Nincs jogod a dev oldalhoz!".to_string(),
+                            ));
+                        }
+                        if real_tag
+                            .permissions
+                            .contains(&get_perm(Permissions::SaesLogin))
+                            || real_tag.issysadmin
+                        {
+                            let taxi = real_tag
+                                .factionrecords
+                                .iter()
+                                .find(|fact| fact.factionid == 1)
+                                .cloned();
+                            let tow = real_tag
+                                .factionrecords
+                                .iter()
+                                .find(|fact| fact.factionid == 3)
+                                .cloned();
+                            let fact = match faction {
+                                None => None,
+                                Some(val) => {
+                                    if val.to_str().is_ok() {
+                                        if val.to_str().unwrap() == "SCKK" {
+                                            if real_tag.permissions.contains(&get_perm(
+                                                Permissions::SaesUcp(Factions::SCKK),
+                                            )) || real_tag.issysadmin
+                                            {
+                                                Some(Factions::SCKK)
+                                            } else {
+                                                None
+                                            }
+                                        } else if val.to_str().unwrap() == "TOW" {
+                                            if real_tag.permissions.contains(&get_perm(
+                                                Permissions::SaesUcp(Factions::TOW),
+                                            )) || real_tag.issysadmin
+                                            {
+                                                Some(Factions::TOW)
+                                            } else {
+                                                None
+                                            }
+                                        } else {
+                                            None
+                                        }
+                                    } else {
+                                        None
+                                    }
+                                }
+                            };
+                            let tag = Driver {
+                                discordid: real_user.id,
+                                name: real_tag.username,
+                                driverid: real_tag.userid,
+                                admin: real_tag.issysadmin,
+                                perms: real_tag.permissions,
+                                faction: fact,
+                                taxi,
+                                tow,
+                            };
+                            request.extensions_mut().insert(tag);
+                            return Ok(next.run(request).await);
                         } else {
-                            false
-                        },
-                        am: if real_tag.PositionId.gt(&34) && real_tag.PositionId.lt(&50) {
-                            true
-                        } else {
-                            false
-                        },
-                    };
-                    request.extensions_mut().insert(tag);
-                    return Ok(next.run(request).await);
+                            return Err((
+                                StatusCode::FORBIDDEN,
+                                "Nincs jogod a belépéshez! (samt.login)".to_string(),
+                            ));
+                        }
+                    } else {
+                        return Err((
+                            StatusCode::FORBIDDEN,
+                            "Hát ez egy béna lekérés volt!".to_string(),
+                        ));
+                    }
                 } else {
-                    return Err((StatusCode::FORBIDDEN, "Nincs jogod!".to_string()));
+                    if status == StatusCode::NOT_FOUND {
+                        return Err((StatusCode::FORBIDDEN, "Nincs jogod ehhez!".to_string()));
+                    } else if status == StatusCode::INTERNAL_SERVER_ERROR {
+                        return Err((
+                            StatusCode::PAYMENT_REQUIRED,
+                            "SAMT API lekérés sikertelen!".to_string(),
+                        ));
+                    } else {
+                        return Err((
+                            StatusCode::PAYMENT_REQUIRED,
+                            "SAMT API-t nem értük el. 🥺".to_string(),
+                        ));
+                    }
                 }
             } else {
                 return Err((StatusCode::BAD_REQUEST, "Érvénytelen lekérés!".to_string()));
@@ -146,15 +209,44 @@ pub async fn ucp_auth(
     };
 }
 
-pub async fn mv_auth(
+pub async fn sm_auth(
     mut req: Request,
     next: Next,
 ) -> Result<impl IntoResponse, (StatusCode, String)> {
-    let exts: Option<&Tag> = req.extensions_mut().get();
+    let exts: Option<&Driver> = req.extensions_mut().get();
     let uwrp = exts.expect("Tag lekérése sikertelen, ucp_auth megtörtént?");
-    if uwrp.admin == true {
-        return Ok(next.run(req).await);
+    if uwrp.faction.is_some() {
+        let fact = match uwrp.faction.unwrap() {
+            Factions::SCKK => {
+                if uwrp
+                    .perms
+                    .contains(&get_perm(Permissions::SaesSm(Factions::SCKK)))
+                {
+                    true
+                } else {
+                    false
+                }
+            }
+            Factions::TOW => {
+                if uwrp
+                    .perms
+                    .contains(&get_perm(Permissions::SaesSm(Factions::TOW)))
+                {
+                    true
+                } else {
+                    false
+                }
+            }
+        };
+        if uwrp.admin == true || fact {
+            return Ok(next.run(req).await);
+        } else {
+            return Err((StatusCode::FORBIDDEN, "Nem vagy műszakvezető".to_string()));
+        }
     } else {
-        return Err((StatusCode::FORBIDDEN, "Nem vagy műszakvezető".to_string()));
+        return Err((
+            StatusCode::BAD_REQUEST,
+            "Frakciójelölés hiányzik!".to_string(),
+        ));
     }
 }

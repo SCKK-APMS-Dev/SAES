@@ -5,9 +5,10 @@ use tracing::{info, warn};
 
 use crate::{
     auth::get_discord_envs,
+    logging::db_log,
     utils::{
         api::get_api_envs,
-        middle::{DiscordUser, GetUserRes, Tag},
+        middle::{DiscordUser, Driver, GetUserRes, SAMTAuth},
     },
 };
 
@@ -40,7 +41,10 @@ pub async fn on_connect(socket: SocketRef, data: InitialData) {
         if parsed_user.is_ok() {
             let real_user: DiscordUser = parsed_user.unwrap();
             let getuser: String = client
-                .get(format!("{}/appauth/login/{}", envs.patrik, real_user.id))
+                .get(format!("{}/saes/authenticate", envs.samt))
+                .json(&SAMTAuth {
+                    userdiscordid: real_user.id.clone(),
+                })
                 .send()
                 .await
                 .expect("Lekérés sikertelen")
@@ -50,27 +54,29 @@ pub async fn on_connect(socket: SocketRef, data: InitialData) {
             let parsed_tag = serde_json::from_str(&getuser);
             if parsed_tag.is_ok() {
                 let real_tag: GetUserRes = parsed_tag.unwrap();
-                let am_admins: [i8; 10] = [35, 36, 37, 43, 44, 45, 46, 47, 48, 49];
-                let tag = Tag {
-                    id: real_user.id,
-                    name: real_tag.PlayerName,
-                    admin: if real_tag.PermissionGroup.is_some_and(|x| x == 1)
-                        || am_admins.contains(&real_tag.PositionId)
-                    {
-                        true
-                    } else {
-                        false
-                    },
-                    am: if real_tag.PositionId.gt(&34) && real_tag.PositionId.lt(&50) {
-                        true
-                    } else {
-                        false
-                    },
+                let tag = Driver {
+                    discordid: real_user.id,
+                    name: real_tag.username,
+                    driverid: real_tag.userid,
+                    admin: real_tag.issysadmin,
+                    perms: real_tag.permissions,
+                    faction: None,
+                    taxi: real_tag
+                        .factionrecords
+                        .iter()
+                        .find(|fact| fact.factionid == 1)
+                        .cloned(),
+                    tow: real_tag
+                        .factionrecords
+                        .iter()
+                        .find(|fact| fact.factionid == 3)
+                        .cloned(),
                 };
                 info!(
-                    "Socket {} authenticated: {} / {}",
-                    socket.id, tag.name, tag.id,
+                    "Socket {} authenticated: {} / {} / {}",
+                    socket.id, tag.name, tag.driverid, tag.discordid,
                 );
+                db_log(tag.name.clone(), None, None, "LOGIN", None).await;
                 let mama = get_stores();
                 if tag.admin {
                     socket.join("mv").expect("MV Szobacsatlakozás sikertelen")
@@ -79,8 +85,8 @@ pub async fn on_connect(socket: SocketRef, data: InitialData) {
                 //   .emit("socketppl-update", io.sockets().unwrap().len())
                 //   .expect("SocketPPL - Update on connect kiküldése sikertelen");
                 socket.join("ucp").expect("UCP Szobacsatlakozás sikertelen");
-                socket.emit("maintenance", mama.maintenance).unwrap();
-                socket.emit("announcement", mama.announcement).unwrap();
+                socket.emit("maintenance", &mama.maintenance).unwrap();
+                socket.emit("announcement", &mama.announcement).unwrap();
                 socket.emit("doneload", "").unwrap();
                 //socket.on(
                 //    "JoinEvent",
@@ -100,7 +106,10 @@ pub async fn on_connect(socket: SocketRef, data: InitialData) {
                 //    },
                 // );
                 socket.on_disconnect(move |s: SocketRef| {
-                    info!("Socket {} disconnected {} / {}", s.id, tag.name, tag.id);
+                    info!(
+                        "Socket {} disconnected {} / {} / {}",
+                        s.id, tag.name, tag.driverid, tag.discordid
+                    );
                     //io.to("socketppl")
                     //   .emit("socketppl-update", iod - 1)
                     //   .expect("SocketPPL - Update on disconnect kiküldése sikertelen");

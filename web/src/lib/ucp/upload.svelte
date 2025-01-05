@@ -1,16 +1,21 @@
 <script lang="ts">
 	import { beforeNavigate } from '$app/navigation';
 	import Error from '$lib/error.svelte';
-	import { loading } from '$lib/loading';
-	export let data;
-	let formerror = '';
-	export let display = '';
-	export let tipus = '';
-	export let warning = '';
-	export let agent = '';
+	import { loading } from '$lib/loading.svelte';
+	import { get_type_number } from './types';
+	let formerror = $state('');
+	interface Props {
+		data: any;
+		display?: string;
+		tipus: number;
+		warning?: string;
+		agent?: string;
+	}
+
+	let { data, display = '', tipus, warning = '', agent = '' }: Props = $props();
 	let seli: string[][] = [];
-	let fileas: string[] = [];
-	let tope = 'col';
+	let fileas: string[] = $state([]);
+	let tope = $state('col');
 	let uploading = false;
 	beforeNavigate((ev) => {
 		if (uploading) {
@@ -18,7 +23,7 @@
 		}
 	});
 	async function upload() {
-		$loading = true;
+		loading.value = true;
 		uploading = true;
 		let files = document.getElementById('file') as HTMLInputElement;
 		if (files.files) {
@@ -34,12 +39,12 @@
 			const mama = await fetch('/web-api/upload', {
 				method: 'POST',
 				headers: {
-					tip: tipus,
+					tip: tipus.toString(),
 					dates: JSON.stringify(dates)
 				},
 				body: formData
 			});
-			$loading = false;
+			loading.value = false;
 			uploading = false;
 			const ret = await mama.json();
 			if (ret.error === 'toobig') {
@@ -49,23 +54,10 @@
 				formerror = 'Leintéshez kérlek 2-vel osztható mennyiségű képet tölts fel!';
 			} else {
 				fileas = ret;
+				console.log(fileas);
 			}
-			// for (let i = 0; i < files.files.length / 2; i++) {
-			// 	seli.push([]);
-			// 	seli[i].push(URL.createObjectURL(files.files[i]));
-			// 	seli[i].push(URL.createObjectURL(files.files[i + 1]));
-			// 	seli = seli;
-			// }
-			// $loading = false;
 		}
 	}
-	const switchTope = () => {
-		if (tope === 'col') {
-			tope = 'row';
-		} else {
-			tope = 'col';
-		}
-	};
 </script>
 
 <Error {data}>
@@ -76,11 +68,11 @@
 			{#if agent.includes('Firefox')}
 				<h1 class="mb-2 text-xl font-bold">
 					Firefoxon (és az azon alapuló böngészőkön) jelenlegi állás szerint nem lehet elemeket
-					feltölteni. Ez idő alatt kérlek használj egy Chromium alapú böngészőt! (Pl. Chrome, Edge,
-					Brave, Arc, stb.)
+					feltölteni. Ez idő alatt kérlek használj egy Chromium alapú böngészőt! (Pl. Chrome, Opera,
+					Edge, Brave, Arc, stb.)
 				</h1>
 			{:else}
-				<form on:submit|preventDefault={() => upload()} enctype="multipart/form-data">
+				<form onsubmit={() => upload()} enctype="multipart/form-data">
 					<input
 						class="file:text-black"
 						type="file"
@@ -106,48 +98,18 @@
 			{#if !agent.includes('Firefox')}
 				<h2 class="font-bold">Ha sikeresen feltöltötted őket akkor itt fognak megjelenni:</h2>
 			{/if}
-			<button
-				class="mb-2 hidden rounded-lg bg-red-600 px-2 transition-all duration-200 hover:bg-red-800"
-				on:click={switchTope}
-				>{#if tope === 'row'}
-					Sorban
-				{:else}
-					Oszlopban
-				{/if}</button
-			>
-			{#each seli as asd}
-				<div
-					class="flex items-center justify-center bg-slate-500 py-4 align-middle"
-					class:flex-col={tope === 'col'}
-					class:flex-row={tope === 'row'}
-				>
-					<div>
-						<button class="bg-slate-900 p-2">
-							<img src={asd[0]} alt="asd" class="max-h-5xl m-auto max-w-5xl" />
-						</button>
-						<h2>Kép a 10-12-ről</h2>
-					</div>
-					<h1 class="text-5xl font-bold">+</h1>
-					<div>
-						<button class="bg-slate-900 p-2">
-							<img src={asd[1]} alt="asd" class="max-h-5xl m-auto max-w-5xl" />
-						</button>
-						<h2>Kép a "xy kifizette az utazást"-ról</h2>
-					</div>
-				</div>
-			{/each}
 			{#each fileas as nyam}
-				{#if tipus === 'leintés'}
+				{#if tipus === get_type_number('leintés')}
 					<div class="flex flex-col">
 						<img
 							loading="lazy"
-							src={`${data.api}/limg?id=${nyam}&ver=0`}
+							src={`${data.image}/get?id=${nyam[0]}`}
 							alt=""
 							class="max-h-5xl m-auto max-w-5xl py-3"
 						/>
 						<img
 							loading="lazy"
-							src={`${data.api}/limg?id=${nyam}&ver=1`}
+							src={`${data.image}/get?id=${nyam[1]}`}
 							alt=""
 							class="max-h-5xl m-auto max-w-5xl py-3"
 						/>
@@ -155,7 +117,7 @@
 				{:else}
 					<img
 						loading="lazy"
-						src={`${data.api}/img?id=${nyam}`}
+						src={`${data.image}/get?id=${nyam[0]}`}
 						alt=""
 						class="max-h-5xl m-auto max-w-5xl py-3"
 					/>
