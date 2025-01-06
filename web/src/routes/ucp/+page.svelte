@@ -1,12 +1,12 @@
 <script lang="ts">
-	import { snow } from '$lib/api.js';
+	import { christmas } from '$lib/api.js';
 
 	let { data } = $props();
 	let date = new Date();
 	let hour = date.getHours();
 	let greet = $state('');
 	let end = $state('!');
-	if (snow) {
+	if (christmas) {
 		greet = 'Kellemes ünnepeket';
 		if (
 			(date.getMonth() === 11 && (date.getDate() === 24 || date.getDate() === 25)) ||

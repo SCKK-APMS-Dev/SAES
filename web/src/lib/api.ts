@@ -9,6 +9,11 @@ let date = new Date();
 
 // * Hó engedélyezése Mikulás-naptól vízkeresztig
 export const snow = (date.getMonth() === 11 && date.getDate() >= 6) ||
+		(date.getMonth() < 2)
+	? true
+	: false;
+
+export const christmas = (date.getMonth() === 11 && date.getDate() >= 6) ||
 		(date.getMonth() == 0 && date.getDate() <= 7)
 	? true
 	: false;
