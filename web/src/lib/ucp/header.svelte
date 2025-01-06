@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { snow } from '$lib/api';
+	import { christmas } from '$lib/api';
 	import { pages } from './public';
 	import { page as statepage } from '$app/state';
 	import { Tooltip } from 'flowbite-svelte';
@@ -42,7 +42,7 @@
 							height="40"
 							alt="SCKK Logó"
 						/>
-						{#if snow}
+						{#if christmas}
 							<img
 								src="/santa.svg"
 								class="absolute bottom-2 left-3.5 w-14 -rotate-[24deg]"
@@ -116,7 +116,7 @@
 											class={`${faction === 'TOW' ? 'from-tow via-blue-600 to-emerald-400' : 'from-taxi via-amber-600 to-red-500'} hover:bg-pos-100 bg-size-200 bg-pos-0 block rounded-full bg-gradient-to-r px-6 py-3 text-center font-bold drop-shadow-lg transition-all duration-500`}
 										>
 											Műszakvezetés
-											{#if snow}
+											{#if christmas}
 												<span class="icon-[fluent-emoji--sled] absolute bottom-11 right-8 h-6 w-6"
 												></span>
 											{/if}
