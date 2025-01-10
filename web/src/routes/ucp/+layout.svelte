@@ -23,7 +23,6 @@
 			tip = 'TOW';
 		}
 	}
-	console.log(data);
 	onMount(() => {
 		if (!data.noaccess && !data.noauth && !data.error && !data.nofact) {
 			$socket = io(data.api as string, {

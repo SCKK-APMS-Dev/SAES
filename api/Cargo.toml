@@ -12,9 +12,9 @@ sea-orm = { version = "1.1.3", features = [
     "runtime-tokio-native-tls",
     "macros",
 ] }
-serde_json = "1.0.134"
+serde_json = "1.0.135"
 axum = { version = "0.8.1", features = ["http2", "macros", "multipart"] }
-tokio = { version = "1.42.0", features = ["full"] }
+tokio = { version = "1.43.0", features = ["full"] }
 tower-cookies = "0.11.0"
 dotenvy = "0.15.7"
 reqwest = { version = "0.12.12", features = ["json"] }

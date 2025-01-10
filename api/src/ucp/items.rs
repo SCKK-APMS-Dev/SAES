@@ -173,6 +173,7 @@ pub async fn ucp_items_post(
                                 let img = images::ActiveModel {
                                     owner: Set(ext.name.clone()),
                                     tmp: Set(1),
+                                    faction: Set(get_faction_id(ext.faction.unwrap())),
                                     filename: Set(format!("{}-{}", ext.name, file_name)),
                                     date: Set(DateTime::from_timestamp_millis(
                                         ditas[i].parse().unwrap(),
@@ -215,6 +216,7 @@ pub async fn ucp_items_post(
                                 let img = images::ActiveModel {
                                     owner: Set(ext.name.clone()),
                                     filename: Set(format!("{}-{}", ext.name, file_name)),
+                                    faction: Set(get_faction_id(ext.faction.unwrap())),
                                     tmp: Set(1),
                                     date: Set(DateTime::from_timestamp_millis(
                                         ditas[i].parse().unwrap(),
@@ -273,6 +275,7 @@ pub async fn ucp_items_post(
                         } else if cucc.tipus == types.bills.id {
                             let img = images::ActiveModel {
                                 owner: Set(ext.name.clone()),
+                                faction: Set(get_faction_id(ext.faction.unwrap())),
                                 tmp: Set(1),
                                 filename: Set(format!("{}-{}", ext.name, file_name)),
                                 date: Set(DateTime::from_timestamp_millis(
