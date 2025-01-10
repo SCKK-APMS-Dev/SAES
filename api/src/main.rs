@@ -14,7 +14,6 @@ use tracing::info;
 use tracing_subscriber::FmtSubscriber;
 
 mod auth;
-mod db;
 mod init;
 mod list;
 mod logging;

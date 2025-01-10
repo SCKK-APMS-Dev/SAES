@@ -2,14 +2,15 @@ use std::{env, fs, path::Path, process::Command, thread, time::Duration};
 
 use chrono::{Timelike, Utc};
 use dotenvy::dotenv;
+use ffmpeg::get_ffmpeg;
+use saes_shared::{
+    db::images::{self, ActiveModel, Model},
+    sql::get_db_conn,
+};
 use sea_orm::{ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter, Set};
-use utils::{ffmpeg::get_ffmpeg, sql::get_db_conn};
 
-use db::images::{self as Images, ActiveModel, Model};
-
-mod db;
+mod ffmpeg;
 mod init;
-mod utils;
 
 #[tokio::main]
 async fn main() {
@@ -18,8 +19,8 @@ async fn main() {
     let dir = env::var("CONVERT_DIR").expect("CONVERT_DIR lekérdezése sikertelen");
     let db = get_db_conn().await;
     loop {
-        let data = Images::Entity::find()
-            .filter(Images::Column::Converted.eq(0))
+        let data = images::Entity::find()
+            .filter(images::Column::Converted.eq(0))
             .all(&db)
             .await
             .expect("Adatbázis lekérés sikertelen");
@@ -91,7 +92,7 @@ async fn convert(modl: Vec<Model>, ffmpeg: String, dir: &String, db: &DatabaseCo
                         converted: Set(1),
                         ..Default::default()
                     };
-                    let dbupdate = Images::Entity::update(activem).exec(db).await;
+                    let dbupdate = images::Entity::update(activem).exec(db).await;
                     if dbupdate.is_ok() {
                         fs::remove_file(format!(
                             "{}/{}",
@@ -126,7 +127,7 @@ async fn convert(modl: Vec<Model>, ffmpeg: String, dir: &String, db: &DatabaseCo
                     converted: Set(1),
                     ..Default::default()
                 };
-                Images::Entity::update(activem)
+                images::Entity::update(activem)
                     .exec(db)
                     .await
                     .expect("Meglévő átírása db-be sikertelen");

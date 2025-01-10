@@ -1,6 +1,5 @@
+use saes_shared::{db::logs, sql::get_db_conn};
 use sea_orm::{EntityTrait, Set};
-
-use crate::{db::logs, utils::sql::get_db_conn};
 
 pub async fn db_log(
     owner: String,

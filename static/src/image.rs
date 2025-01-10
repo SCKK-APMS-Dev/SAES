@@ -1,11 +1,10 @@
 use std::env;
 
 use axum::{body::Body, debug_handler, extract::Query, http::StatusCode, response::Response};
+use saes_shared::{db::images, sql::get_db_conn};
 use sea_orm::{ColumnTrait, EntityTrait, QueryFilter};
 use serde::Deserialize;
 use tokio::{fs::File, io::AsyncReadExt};
-
-use crate::{db::images as Images, sql::get_db_conn};
 
 #[derive(Debug, Deserialize)]
 pub struct ImgQuery {
@@ -16,8 +15,8 @@ pub struct ImgQuery {
 pub async fn image_get(q: Query<ImgQuery>) -> Response {
     let db = get_db_conn().await;
     let parent_dir = env::var("PARENT_IMAGE_DIR").expect("PARENT_IMAGE_DIR env nem létezik");
-    let image = Images::Entity::find()
-        .filter(Images::Column::Id.eq(q.id.clone()))
+    let image = images::Entity::find()
+        .filter(images::Column::Id.eq(q.id.clone()))
         .one(&db)
         .await
         .unwrap();

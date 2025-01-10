@@ -1,8 +1,10 @@
 use axum::{debug_handler, response::IntoResponse, Json};
 use http::{HeaderMap, StatusCode};
+use saes_shared::{db::shorts, sql::get_db_conn};
+
 use sea_orm::EntityTrait;
 
-use crate::{auth::get_discord_envs, db::shorts, utils::sql::get_db_conn};
+use crate::auth::get_discord_envs;
 
 #[debug_handler]
 pub async fn base_get_shorts(

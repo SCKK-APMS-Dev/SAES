@@ -6,9 +6,7 @@ use tower_http::{cors::CorsLayer, trace::TraceLayer};
 use tracing::info;
 use tracing_subscriber::FmtSubscriber;
 
-mod db;
 mod image;
-mod sql;
 
 #[tokio::main]
 async fn main() {

@@ -10,6 +10,7 @@ RUN apk add openssl-libs-static
 
 #* Build
 COPY . .
+COPY ../shared /usr/src/static/dev/shared
 
 RUN cargo build --release
 

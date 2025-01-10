@@ -1,14 +1,15 @@
 use axum::{debug_handler, extract::Request, Json};
 use http::StatusCode;
+use saes_shared::db::{hails, supplements};
+use saes_shared::sql::get_db_conn;
 use sea_orm::{ColumnTrait, EntityTrait, QueryFilter};
 use serde::{Deserialize, Serialize};
 use serde_json::from_str;
 
-use crate::db::{hails, supplements};
 use crate::utils::factions::get_faction_id;
 use crate::utils::functions::get_fridays;
 use crate::utils::types_statuses::get_statuses;
-use crate::utils::{api::get_api_envs, middle::Driver, sql::get_db_conn};
+use crate::utils::{api::get_api_envs, middle::Driver};
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct DriverRecord {

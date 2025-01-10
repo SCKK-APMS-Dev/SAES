@@ -11,6 +11,8 @@ RUN apk add openssl-libs-static
 #* Build
 
 COPY . .
+COPY ../shared /usr/src/converter/dev/shared
+
 RUN cargo build --release
 
 #* Release
