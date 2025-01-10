@@ -1,0 +1,6 @@
+web
+node_modules
+.github
+.vscode
+target
+scripts
