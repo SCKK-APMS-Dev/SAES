@@ -1,4 +1,4 @@
-use std::env;
+use std::{env, error::Error};
 
 use axum::{routing::get, Router};
 use dotenvy::dotenv;
@@ -24,9 +24,9 @@ mod ucp;
 mod utils;
 
 #[tokio::main]
-async fn main() {
+async fn main() -> Result<(), Box<dyn Error>> {
     dotenv().expect(".env fájl nem található");
-    tracing::subscriber::set_global_default(FmtSubscriber::default()).unwrap();
+    tracing::subscriber::set_global_default(FmtSubscriber::default())?;
     let (layer, io) = SocketIo::new_layer();
     let env_mode = env::var("ENV_MODE");
     if env_mode.is_err() {
@@ -37,11 +37,11 @@ async fn main() {
         "testing".to_string(),
         "devel".to_string(),
     ]
-    .contains(&env_mode.clone().unwrap())
+    .contains(&env_mode.clone()?)
     {
         panic!("ENV_MODE rosszul setelve! production / testing / devel")
     } else {
-        info!("Running in {} mode", env_mode.unwrap().to_uppercase());
+        info!("Running in {} mode", env_mode?.to_uppercase());
     }
     init::main();
     io.ns(
@@ -67,8 +67,7 @@ async fn main() {
         .layer(CookieManagerLayer::new());
     // run our app with hyper, listening globally on port 3000
     info!("Server runs on :3000");
-    let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
-    axum::serve(listener, app.into_make_service())
-        .await
-        .unwrap();
+    let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await?;
+    axum::serve(listener, app.into_make_service()).await?;
+    Ok(())
 }
