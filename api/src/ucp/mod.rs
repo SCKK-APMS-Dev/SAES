@@ -4,6 +4,7 @@ use crate::utils::middle::ucp_auth;
 
 mod base;
 mod calls;
+mod fm;
 mod items;
 mod sm;
 
@@ -13,5 +14,6 @@ pub fn routes() -> Router {
         .route("/calls", get(calls::ucp_calls))
         .nest("/items", items::routes())
         .nest("/sm", sm::routes())
+        .nest("/fm", fm::routes())
         .layer(middleware::from_fn(ucp_auth))
 }

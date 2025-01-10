@@ -238,10 +238,10 @@ pub async fn sm_auth(
                 }
             }
         };
-        if uwrp.admin == true || fact {
+        if uwrp.admin || fact {
             return Ok(next.run(req).await);
         } else {
-            return Err((StatusCode::FORBIDDEN, "Nem vagy műszakvezető".to_string()));
+            return Err((StatusCode::FORBIDDEN, "Nincs jogod! (saes.sm)".to_string()));
         }
     } else {
         return Err((
@@ -249,4 +249,44 @@ pub async fn sm_auth(
             "Frakciójelölés hiányzik!".to_string(),
         ));
     }
+}
+
+pub async fn fm_auth(
+    mut req: Request,
+    next: Next,
+) -> Result<impl IntoResponse, (StatusCode, String)> {
+    let exts: Option<&Driver> = req.extensions_mut().get();
+    let uwrp = exts.expect("Tag lekérése sikertelen, ucp_auth megtörtént?");
+    if uwrp.faction.is_none() {
+        return Err((
+            StatusCode::BAD_REQUEST,
+            "Frakciójelölés hiányzik!".to_string(),
+        ));
+    }
+    let fact = match uwrp.faction.unwrap() {
+        Factions::SCKK => {
+            if uwrp
+                .perms
+                .contains(&get_perm(Permissions::SaesFm(Factions::SCKK)))
+            {
+                true
+            } else {
+                false
+            }
+        }
+        Factions::TOW => {
+            if uwrp
+                .perms
+                .contains(&get_perm(Permissions::SaesFm(Factions::TOW)))
+            {
+                true
+            } else {
+                false
+            }
+        }
+    };
+    if !uwrp.admin && !fact {
+        return Err((StatusCode::FORBIDDEN, "Nincs jogod! (saes.fm)".to_string()));
+    }
+    return Ok(next.run(req).await);
 }
