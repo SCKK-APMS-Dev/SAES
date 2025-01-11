@@ -90,10 +90,9 @@ pub async fn ucp_auth(
                     .send()
                     .await
                     .expect("Lekérés sikertelen");
-                let status = getuser.status();
-                let resp = getuser.text().await;
-                if status == StatusCode::OK {
-                    let parsed_tag = serde_json::from_str(&resp.unwrap());
+                let err = getuser.error_for_status();
+                if err.is_ok() {
+                    let parsed_tag: Result<GetUserRes, reqwest::Error> = err.unwrap().json().await;
                     if parsed_tag.is_ok() {
                         let real_tag: GetUserRes = parsed_tag.unwrap();
                         let env_mode = get_env_mode();
@@ -184,6 +183,7 @@ pub async fn ucp_auth(
                         ));
                     }
                 } else {
+                    let status = err.unwrap_err().status().unwrap();
                     if status == StatusCode::NOT_FOUND {
                         return Err((StatusCode::FORBIDDEN, "Nincs jogod ehhez!".to_string()));
                     } else if status == StatusCode::INTERNAL_SERVER_ERROR {
