@@ -4,11 +4,11 @@ WORKDIR /usr/src/web/dev
 # install dependencies into temp directory
 # this will cache them and speed up future builds
 
-COPY ./package.json ./
+COPY ./web/package.json .
 
 RUN npm install
 
-COPY ./ ./
+COPY ./web .
 
 RUN npm run build
 RUN npm prune --omit=dev
