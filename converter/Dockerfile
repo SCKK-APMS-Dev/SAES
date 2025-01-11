@@ -1,17 +1,10 @@
-FROM rust:alpine AS build
+FROM rust AS build
 WORKDIR /usr/src/converter/dev
-
-#* Előkészítés
-
-RUN apk add build-base 
-RUN apk add pkgconfig 
-RUN apk add openssl-dev 
-RUN apk add openssl-libs-static
 
 #* Build
 
-COPY . .
-COPY ../shared /usr/src/converter/dev/shared
+COPY ./converter .
+COPY ./shared ../shared
 
 RUN cargo build --release
 
@@ -23,4 +16,4 @@ WORKDIR /usr/src/converter/prod
 COPY --from=build /usr/src/converter/dev/target/release/saes-converter /usr/src/converter/prod/
 
 RUN touch .env
-CMD ["./saes-converter"]
+ENTRYPOINT ["./saes-converter"]

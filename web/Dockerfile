@@ -23,4 +23,4 @@ ENV BODY_SIZE_LIMIT="Infinity"
 # run the app
 USER root
 EXPOSE 3000
-CMD [ "node", "build" ]
+ENTRYPOINT [ "node", "build" ]

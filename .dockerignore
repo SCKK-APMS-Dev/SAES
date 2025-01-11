@@ -4,3 +4,7 @@ node_modules
 .vscode
 target
 scripts
+.env
+.env.example
+.git
+google-service-account.json
