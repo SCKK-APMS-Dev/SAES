@@ -1,4 +1,4 @@
-# SCKK, APMS Extra Services (SAES) pnpm monorepo
+# SCKK, APMS Extra Services (SAES) monorepo
 
 Mit tartalmaz ez a monorepo?
 
