@@ -10,6 +10,7 @@ use crate::utils::factions::get_faction_id;
 use crate::utils::functions::get_fridays;
 use crate::utils::types_statuses::get_statuses;
 use crate::utils::{api::get_api_envs, middle::Driver};
+use crate::WEB_CLIENT;
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct DriverRecord {
@@ -34,11 +35,10 @@ pub struct Potlek {
 pub async fn ucp_calls(mut request: Request) -> Result<Json<Callz>, (StatusCode, String)> {
     let exts: Option<&Driver> = request.extensions_mut().get();
     if exts.unwrap().faction.is_some() {
-        let client = reqwest::Client::new();
         let db = get_db_conn().await;
         let statuses = get_statuses();
         let envs = get_api_envs();
-        let calls = client
+        let calls = WEB_CLIENT
             .get(format!("{}/api/log/status/current", envs.sckkapp))
             .send()
             .await;

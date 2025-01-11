@@ -131,7 +131,7 @@
 		</div>
 	</div>
 	<h2 class="z-20 bg-gradient-to-r from-rose-600 to-amber-600 py-1 text-center text-xl text-white">
-		Nem vagy biztos valamiben? Nézd meg a <a href="/ucp/segedlet" class="text-taxi z-20 font-bold"
+		Nem vagy biztos valamiben? Nézd meg a <a href="/ucp/help" class="text-taxi z-20 font-bold"
 			>segédletet</a
 		>!
 	</h2>

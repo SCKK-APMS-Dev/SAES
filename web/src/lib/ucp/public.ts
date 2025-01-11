@@ -40,7 +40,7 @@ export const pages = (fact: string) => {
 			display: "Kezdőlap",
 		},
 		{
-			url: "/ucp/segedlet",
+			url: "/ucp/help",
 			display: "Segédlet",
 		},
 		{

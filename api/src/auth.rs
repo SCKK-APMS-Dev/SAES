@@ -10,6 +10,8 @@ use url_builder::URLBuilder;
 
 use serde::{Deserialize, Serialize};
 
+use crate::WEB_CLIENT;
+
 pub struct DiscordAuth {
     pub api_endpoint: String,
     pub discord_base: String,
@@ -62,7 +64,6 @@ struct TokenResponse {
 
 #[debug_handler]
 pub async fn base_callback(Query(query): Query<Code>, cookies: Cookies) -> Redirect {
-    let client = reqwest::Client::new();
     let ds = get_discord_envs();
     let data = [
         ("grant_type", "authorization_code"),
@@ -70,7 +71,7 @@ pub async fn base_callback(Query(query): Query<Code>, cookies: Cookies) -> Redir
         ("redirect_uri", &ds.redirect_url),
     ];
     let url = format!("{}/oauth2/token", ds.api_endpoint);
-    let response = client
+    let response = WEB_CLIENT
         .post(&url)
         .basic_auth(ds.discord_id, Some(ds.discord_secret.to_string()))
         .form(&data)

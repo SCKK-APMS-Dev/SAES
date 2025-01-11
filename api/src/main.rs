@@ -2,6 +2,8 @@ use std::{env, error::Error};
 
 use axum::{routing::get, Router};
 use dotenvy::dotenv;
+use lazy_static::lazy_static;
+use reqwest::Client;
 use socket::InitialData;
 use socketioxide::{
     extract::{Data, SocketRef},
@@ -21,6 +23,10 @@ mod shorts;
 mod socket;
 mod ucp;
 mod utils;
+
+lazy_static! {
+    pub static ref WEB_CLIENT: Client = Client::new();
+}
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
@@ -66,6 +72,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
         .layer(CookieManagerLayer::new());
     // run our app with hyper, listening globally on port 3000
     info!("Server runs on :3000");
+    // dos().await;
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await?;
     axum::serve(listener, app.into_make_service()).await?;
     Ok(())

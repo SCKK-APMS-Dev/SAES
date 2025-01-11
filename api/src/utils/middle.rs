@@ -7,7 +7,7 @@ use axum::{
 use reqwest::StatusCode;
 use serde::{Deserialize, Serialize};
 
-use crate::auth::get_discord_envs;
+use crate::{auth::get_discord_envs, WEB_CLIENT};
 
 use super::{
     api::get_api_envs,
@@ -67,8 +67,7 @@ pub async fn ucp_auth(
     let ds = get_discord_envs();
     let envs = get_api_envs();
     if auth.is_some() {
-        let client = reqwest::Client::new();
-        let dcuserget = client
+        let dcuserget = WEB_CLIENT
             .get(format!("{}/users/@me", ds.api_endpoint))
             .header(
                 "Authorization",
@@ -82,7 +81,7 @@ pub async fn ucp_auth(
             let parsed_user = serde_json::from_str(&handled_user);
             if parsed_user.is_ok() {
                 let real_user: DiscordUser = parsed_user.unwrap();
-                let getuser = client
+                let getuser = WEB_CLIENT
                     .post(format!("{}/saes/authenticate", envs.samt))
                     .json(&SAMTAuth {
                         userdiscordid: real_user.id.clone(),
@@ -90,9 +89,10 @@ pub async fn ucp_auth(
                     .send()
                     .await
                     .expect("Lekérés sikertelen");
-                let err = getuser.error_for_status();
-                if err.is_ok() {
-                    let parsed_tag: Result<GetUserRes, reqwest::Error> = err.unwrap().json().await;
+                let status = getuser.status();
+                let resp = getuser.text().await;
+                if status == StatusCode::OK {
+                    let parsed_tag = serde_json::from_str(&resp.unwrap());
                     if parsed_tag.is_ok() {
                         let real_tag: GetUserRes = parsed_tag.unwrap();
                         let env_mode = get_env_mode();
@@ -183,13 +183,12 @@ pub async fn ucp_auth(
                         ));
                     }
                 } else {
-                    let status = err.unwrap_err().status().unwrap();
                     if status == StatusCode::NOT_FOUND {
                         return Err((StatusCode::FORBIDDEN, "Nincs jogod ehhez!".to_string()));
                     } else if status == StatusCode::INTERNAL_SERVER_ERROR {
                         return Err((
                             StatusCode::PAYMENT_REQUIRED,
-                            "SAMT API lekérés sikertelen!".to_string(),
+                            format!("SAMT API lekérés sikertelen! {:?}", resp.unwrap()),
                         ));
                     } else {
                         return Err((

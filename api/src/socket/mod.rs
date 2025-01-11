@@ -10,6 +10,7 @@ use crate::{
         api::get_api_envs,
         middle::{DiscordUser, Driver, GetUserRes, SAMTAuth},
     },
+    WEB_CLIENT,
 };
 
 mod stores;
@@ -26,10 +27,9 @@ pub async fn on_connect(socket: SocketRef, data: InitialData) {
         socket.ns(),
         data,
     );
-    let client = reqwest::Client::new();
     let ds = get_discord_envs();
     let envs = get_api_envs();
-    let dcuserget = client
+    let dcuserget = WEB_CLIENT
         .get(format!("{}/users/@me", ds.api_endpoint))
         .header("Authorization", format!("Bearer {}", data.auth_token))
         .send()
@@ -40,7 +40,7 @@ pub async fn on_connect(socket: SocketRef, data: InitialData) {
         let parsed_user = serde_json::from_str(&handled_user);
         if parsed_user.is_ok() {
             let real_user: DiscordUser = parsed_user.unwrap();
-            let getuser: String = client
+            let getuser: String = WEB_CLIENT
                 .post(format!("{}/saes/authenticate", envs.samt))
                 .json(&SAMTAuth {
                     userdiscordid: real_user.id.clone(),
