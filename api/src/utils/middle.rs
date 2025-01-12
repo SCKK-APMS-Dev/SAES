@@ -1,9 +1,4 @@
-use axum::{
-    extract::Request,
-    http::HeaderMap,
-    middleware::Next,
-    response::{IntoResponse, Redirect},
-};
+use axum::{extract::Request, http::HeaderMap, middleware::Next, response::IntoResponse};
 use reqwest::StatusCode;
 use serde::{Deserialize, Serialize};
 
@@ -201,7 +196,7 @@ pub async fn ucp_auth(
                 return Err((StatusCode::BAD_REQUEST, "Érvénytelen lekérés!".to_string()));
             }
         } else {
-            return Ok(Redirect::to("/auth").into_response());
+            return Err((StatusCode::UNAUTHORIZED, "Discord Auth failed".to_string()));
         }
     } else {
         return Err((StatusCode::NOT_FOUND, "Nincs kuki".to_string()));

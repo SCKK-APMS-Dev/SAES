@@ -213,13 +213,15 @@
 			{/if}
 		{/if}
 		{#if initial_socket}
-			<Header
-				{tip}
-				faction={data.faction!}
-				isAdmin={data.layout?.admin}
-				data={data.layout!}
-				{nosocket}
-			/>
+			{#if !page.url.pathname.startsWith('/ucp/fm')}
+				<Header
+					{tip}
+					faction={data.faction!}
+					isAdmin={data.layout?.admin}
+					data={data.layout!}
+					{nosocket}
+				/>
+			{/if}
 			<ViewTransition />
 			<main>
 				{@render children?.()}
