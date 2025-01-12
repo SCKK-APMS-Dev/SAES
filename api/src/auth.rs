@@ -121,6 +121,7 @@ pub async fn auth_home(Query(q): Query<AuthHomeCode>) -> Redirect {
         .add_param("state", &general_purpose::STANDARD.encode(state_str))
         .add_param("client_id", &ds.discord_id)
         .add_param("scope", "identify")
+        .add_param("prompt", "none")
         .add_param("redirect_uri", &ds.redirect_url);
     let built_url = ub.build();
     Redirect::to(&built_url)
