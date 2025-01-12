@@ -17,8 +17,7 @@ async fn main() {
         .route("/get", get(image_get))
         .layer(ServiceBuilder::new().layer(CorsLayer::permissive()))
         .layer(TraceLayer::new_for_http());
-    // run our app with hyper, listening globally on port 3000
-    info!("Szerver indul");
+    info!("Server runs on :3100");
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3100").await.unwrap();
     axum::serve(listener, app.into_make_service())
         .await

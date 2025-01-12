@@ -99,7 +99,7 @@ pub async fn ucp_auth(
                         {
                             return Err((
                                 StatusCode::FORBIDDEN,
-                                "Nincs jogod a teszt oldalhoz! (samt.test)".to_string(),
+                                "Nincs jogod a teszt oldalhoz! (saes.test)".to_string(),
                             ));
                         }
                         if env_mode == EnvModes::Devel && !real_tag.issysadmin {
@@ -168,7 +168,7 @@ pub async fn ucp_auth(
                         } else {
                             return Err((
                                 StatusCode::FORBIDDEN,
-                                "Nincs jogod a belépéshez! (samt.login)".to_string(),
+                                "Nincs jogod a belépéshez! (saes.login)".to_string(),
                             ));
                         }
                     } else {

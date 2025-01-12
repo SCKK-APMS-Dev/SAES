@@ -1,44 +1,47 @@
-import { redirect } from "@sveltejs/kit";
-import type { LayoutServerLoad } from "./$types";
-import { apiUrl } from "$lib/api";
+import { isRedirect, redirect } from '@sveltejs/kit';
+import type { LayoutServerLoad } from './$types';
+import { apiUrl } from '$lib/api';
 
 export const load = (async ({ cookies }) => {
-	if (!cookies.get("auth_token")) {
+	if (!cookies.get('auth_token')) {
 		return {
 			noauth: true,
-			apiUrl,
+			apiUrl
 		};
 	}
 	try {
 		const aha = await fetch(`${apiUrl}/ucp/sm`, {
-			mode: "no-cors",
+			mode: 'no-cors',
 			headers: {
-				cookie: cookies.get("auth_token") as string,
-				faction: cookies.get("selected_faction") as string,
-			},
+				cookie: cookies.get('auth_token') as string,
+				faction: cookies.get('selected_faction') as string
+			}
 		});
 		if (aha.status === 404) {
 			return {
 				noauth: true,
-				apiUrl,
+				apiUrl
 			};
 		}
 		if (aha.status === 403) {
-			throw redirect(302, "/ucp");
+			throw redirect(302, '/ucp');
 		}
 		if (aha.status === 402) {
 			return {
-				error: await aha.text(),
+				error: await aha.text()
 			};
 		}
 		if (aha.ok) {
 			return {
-				success: true,
+				success: true
 			};
 		}
 	} catch (err) {
+		if (isRedirect(err)) {
+			throw redirect(err.status, err.location);
+		}
 		return {
-			error: true,
+			error: true
 		};
 	}
 }) satisfies LayoutServerLoad;

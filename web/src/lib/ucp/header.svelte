@@ -91,7 +91,7 @@
 					>
 						<div class="flex h-full flex-col justify-between lg:flex-row lg:items-center">
 							<ul
-								class="items-center pt-32 text-center text-gray-700 md:space-y-8 lg:flex lg:space-x-3 lg:space-y-0 lg:px-2 lg:pt-0 xl:space-x-12 xl:px-12"
+								class="flex flex-col items-center gap-5 pt-32 text-center text-gray-700 md:space-y-8 lg:flex-row lg:space-x-3 lg:space-y-0 lg:px-2 lg:pt-0 xl:space-x-12 xl:px-12"
 							>
 								{#each pagesz as page}
 									<li>

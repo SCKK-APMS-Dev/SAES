@@ -5,8 +5,8 @@
 		children?: import('svelte').Snippet;
 	}
 
-	let { data, children }: Props = $props();
-	let nav: HTMLDivElement = $state();
+	let { children }: Props = $props();
+	let nav: HTMLDivElement = $state()!;
 	const tognav = () => {
 		if (nav.classList.contains('hidden')) {
 			nav.classList.remove('hidden');
@@ -31,7 +31,7 @@
 	</div>
 	<button
 		aria-label="mv-menu"
-		class="mr-[10vw] cursor-pointer self-center justify-self-end text-3xl font-semibold transition-all duration-200 hover:text-emerald-500 lg:hidden"
+		class="mr-[10vw] flex cursor-pointer self-center justify-self-end text-3xl font-semibold transition-all duration-200 hover:text-emerald-500 lg:hidden"
 		onclick={tognav}
 	>
 		<span class="icon-[material-symbols--menu]"></span>

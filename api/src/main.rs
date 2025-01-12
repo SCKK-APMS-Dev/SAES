@@ -70,9 +70,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
         )
         .layer(TraceLayer::new_for_http())
         .layer(CookieManagerLayer::new());
-    // run our app with hyper, listening globally on port 3000
     info!("Server runs on :3000");
-    // dos().await;
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await?;
     axum::serve(listener, app.into_make_service()).await?;
     Ok(())
