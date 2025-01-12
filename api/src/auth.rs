@@ -1,9 +1,12 @@
 use std::env;
+use std::sync::RwLock;
 
 use axum::extract::Query;
 use axum::{debug_handler, response::Redirect};
 use base64::engine::general_purpose;
 use base64::Engine;
+use lazy_static::lazy_static;
+use random_string::{charsets, generate};
 use tower_cookies::cookie::time::Duration;
 use tower_cookies::{Cookie, Cookies};
 use url_builder::URLBuilder;
@@ -12,6 +15,9 @@ use serde::{Deserialize, Serialize};
 
 use crate::WEB_CLIENT;
 
+lazy_static! {
+    static ref GLOBAL_ARRAY: RwLock<Vec<String>> = RwLock::new(Vec::new());
+}
 pub struct DiscordAuth {
     pub api_endpoint: String,
     pub discord_base: String,
@@ -77,7 +83,6 @@ pub async fn base_callback(Query(query): Query<Code>, cookies: Cookies) -> Redir
         .form(&data)
         .send()
         .await;
-
     let token_response: String = response
         .expect("Lekérés sikertelen")
         .text()
@@ -85,18 +90,28 @@ pub async fn base_callback(Query(query): Query<Code>, cookies: Cookies) -> Redir
         .expect("Átalakítás sikertelen");
     let object: TokenResponse =
         serde_json::from_str(&token_response).expect("Átalakítás sikertelen");
-    cookies.add(
-        Cookie::build(("auth_token", object.access_token))
-            .max_age(Duration::seconds(object.expires_in))
-            .http_only(true)
-            .secure(true)
-            .domain(ds.domain.clone())
-            .path("/")
-            .build(),
-    );
     let path = String::from_utf8(general_purpose::STANDARD.decode(query.state).unwrap()).unwrap();
-    let path_full: AuthHomeCode = serde_json::from_str(&path).expect("Nem megy");
-    Redirect::to(&format!("{}{}", &ds.fdomain, path_full.path))
+    let path_full: AuthState = serde_json::from_str(&path).expect("Nem megy");
+    if GLOBAL_ARRAY.read().unwrap().contains(&path_full.truestate) {
+        cookies.add(
+            Cookie::build(("auth_token", object.access_token))
+                .max_age(Duration::seconds(object.expires_in))
+                .http_only(true)
+                .secure(true)
+                .domain(ds.domain.clone())
+                .path("/")
+                .build(),
+        );
+        let id = GLOBAL_ARRAY
+            .read()
+            .unwrap()
+            .iter()
+            .position(|x| x == &path_full.truestate)
+            .unwrap();
+        GLOBAL_ARRAY.write().unwrap().remove(id);
+        return Redirect::to(&format!("{}{}", &ds.fdomain, path_full.path));
+    }
+    Redirect::to("google.com")
 }
 
 fn base_path() -> String {
@@ -109,10 +124,21 @@ pub struct AuthHomeCode {
     path: String,
 }
 
+#[derive(Debug, Deserialize, Serialize)]
+pub struct AuthState {
+    path: String,
+    truestate: String,
+}
+
 #[debug_handler]
 pub async fn auth_home(Query(q): Query<AuthHomeCode>) -> Redirect {
     let mut ub = URLBuilder::new();
-    let state = AuthHomeCode { path: q.path };
+    let rstate = generate(256, charsets::ALPHANUMERIC);
+    let state = AuthState {
+        path: q.path,
+        truestate: rstate.clone(),
+    };
+    GLOBAL_ARRAY.write().unwrap().push(rstate);
     let state_str = serde_json::to_string(&state).expect("Sikertelen átalakítás");
     let ds = get_discord_envs();
     ub.set_protocol("https")
