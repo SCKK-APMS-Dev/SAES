@@ -10,6 +10,7 @@ on:
     branches: ['main', 'test']
     paths:
       - 'api/**/*'
+      - 'shared/**/*'
       - '.github/workflows/build-api.yml'
 
 env:

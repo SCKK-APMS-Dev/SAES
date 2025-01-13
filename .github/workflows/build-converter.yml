@@ -10,6 +10,7 @@ on:
     branches: ['main', 'test']
     paths:
       - 'converter/**/*'
+      - 'shared/**/*'
       - '.github/workflows/build-converter.yml'
 
 env:
