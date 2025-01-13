@@ -1,5 +1,4 @@
 use std::env;
-use std::sync::RwLock;
 
 use axum::extract::Query;
 use axum::{debug_handler, response::Redirect};
@@ -7,6 +6,7 @@ use base64::engine::general_purpose;
 use base64::Engine;
 use lazy_static::lazy_static;
 use random_string::{charsets, generate};
+use tokio::sync::RwLock;
 use tower_cookies::cookie::time::Duration;
 use tower_cookies::{Cookie, Cookies};
 use url_builder::URLBuilder;
@@ -92,7 +92,7 @@ pub async fn base_callback(Query(query): Query<Code>, cookies: Cookies) -> Redir
         serde_json::from_str(&token_response).expect("Átalakítás sikertelen");
     let path = String::from_utf8(general_purpose::STANDARD.decode(query.state).unwrap()).unwrap();
     let path_full: AuthState = serde_json::from_str(&path).expect("Nem megy");
-    if GLOBAL_ARRAY.read().unwrap().contains(&path_full.truestate) {
+    if GLOBAL_ARRAY.read().await.contains(&path_full.truestate) {
         cookies.add(
             Cookie::build(("auth_token", object.access_token))
                 .max_age(Duration::seconds(object.expires_in))
@@ -104,11 +104,11 @@ pub async fn base_callback(Query(query): Query<Code>, cookies: Cookies) -> Redir
         );
         let id = GLOBAL_ARRAY
             .read()
-            .unwrap()
+            .await
             .iter()
             .position(|x| x == &path_full.truestate)
             .unwrap();
-        GLOBAL_ARRAY.write().unwrap().remove(id);
+        GLOBAL_ARRAY.write().await.remove(id);
         return Redirect::to(&format!("{}{}", &ds.fdomain, path_full.path));
     }
     Redirect::to("google.com")
@@ -138,7 +138,7 @@ pub async fn auth_home(Query(q): Query<AuthHomeCode>) -> Redirect {
         path: q.path,
         truestate: rstate.clone(),
     };
-    GLOBAL_ARRAY.write().unwrap().push(rstate);
+    GLOBAL_ARRAY.write().await.push(rstate);
     let state_str = serde_json::to_string(&state).expect("Sikertelen átalakítás");
     let ds = get_discord_envs();
     ub.set_protocol("https")

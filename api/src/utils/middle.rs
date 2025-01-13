@@ -60,7 +60,7 @@ pub async fn ucp_auth(
     let auth = headers.get("cookie");
     let faction = headers.get("faction");
     let ds = get_discord_envs();
-    let envs = get_api_envs();
+    let envs = get_api_envs().await;
     if auth.is_some() {
         let dcuserget = WEB_CLIENT
             .get(format!("{}/users/@me", ds.api_endpoint))
@@ -90,7 +90,7 @@ pub async fn ucp_auth(
                     let parsed_tag = serde_json::from_str(&resp.unwrap());
                     if parsed_tag.is_ok() {
                         let real_tag: GetUserRes = parsed_tag.unwrap();
-                        let env_mode = get_env_mode();
+                        let env_mode = get_env_mode().await;
                         if env_mode == EnvModes::Testing
                             && !real_tag
                                 .permissions

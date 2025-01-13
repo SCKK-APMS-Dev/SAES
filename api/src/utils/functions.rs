@@ -1,6 +1,6 @@
-use std::env;
-
 use chrono::{Datelike, Duration, Local, NaiveDateTime, NaiveTime};
+
+use crate::BASE_HASHMAP;
 
 pub struct Friday {
     pub last_friday: NaiveDateTime,
@@ -42,8 +42,9 @@ pub enum EnvModes {
     Devel,
 }
 
-pub fn get_env_mode() -> EnvModes {
-    let mode = env::var("ENV_MODE").unwrap();
+pub async fn get_env_mode() -> EnvModes {
+    let hash = BASE_HASHMAP.read().await;
+    let mode = hash.get("env_mode").unwrap();
     match mode.as_str() {
         "production" => EnvModes::Production,
         "testing" => EnvModes::Testing,

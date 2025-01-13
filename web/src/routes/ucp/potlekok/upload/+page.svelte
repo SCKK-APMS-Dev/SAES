@@ -10,7 +10,7 @@
 	display="Pótlék"
 	tipus={get_type_number('pótlék')}
 	agent={data.agent}
-	warning={data.layout.am
+	info={data.faction === 'TOW'
 		? '8:00-16:00: Délelőtti pótlék, 20:00-4:00: Éjszakai pótlék'
 		: '8:00-15:00: Délelőtti pótlék, 22:00-4:00: Éjszakai pótlék'}
 />

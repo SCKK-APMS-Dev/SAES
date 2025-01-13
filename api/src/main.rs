@@ -1,4 +1,4 @@
-use std::{env, error::Error};
+use std::{collections::HashMap, env, error::Error};
 
 use axum::{routing::get, Router};
 use dotenvy::dotenv;
@@ -9,6 +9,7 @@ use socketioxide::{
     extract::{Data, SocketRef},
     SocketIo,
 };
+use tokio::sync::RwLock;
 use tower::ServiceBuilder;
 use tower_cookies::CookieManagerLayer;
 use tower_http::{cors::CorsLayer, trace::TraceLayer};
@@ -26,6 +27,7 @@ mod utils;
 
 lazy_static! {
     pub static ref WEB_CLIENT: Client = Client::new();
+    pub static ref BASE_HASHMAP: RwLock<HashMap<String, String>> = RwLock::new(HashMap::new());
 }
 
 #[tokio::main]
@@ -46,9 +48,13 @@ async fn main() -> Result<(), Box<dyn Error>> {
     {
         panic!("ENV_MODE rosszul setelve! production / testing / devel")
     } else {
-        info!("Running in {} mode", env_mode?.to_uppercase());
+        info!("Running in {} mode", env_mode.clone()?.to_uppercase());
+        BASE_HASHMAP
+            .write()
+            .await
+            .insert("env_mode".to_string(), env_mode?.to_uppercase().to_string());
     }
-    init::main();
+    init::main().await;
     io.ns(
         "/",
         move |socket: SocketRef, Data(data): Data<InitialData>| socket::on_connect(socket, data),

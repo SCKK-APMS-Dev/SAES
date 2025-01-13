@@ -8,15 +8,13 @@
 		data: any;
 		display?: string;
 		tipus: number;
-		warning?: string;
+		info?: string;
 		agent?: string;
 	}
 
-	let { data, display = '', tipus, warning = '', agent = '' }: Props = $props();
-	let seli: string[][] = [];
+	let { data, display = '', tipus, info = '', agent = '' }: Props = $props();
 	let fileas: string[] = $state([]);
-	let tope = $state('col');
-	let uploading = false;
+	let uploading = $state(false);
 	beforeNavigate((ev) => {
 		if (uploading) {
 			ev.cancel();
@@ -58,13 +56,27 @@
 			}
 		}
 	}
+	let selectedFiles: string[] = $state([]);
+
+	function handleFileChange(event: Event) {
+		const input = event.target as HTMLInputElement;
+		if (input.files) {
+			selectedFiles = Array.from(input.files).map((file) => file.name);
+		}
+	}
 </script>
 
 <Error {data}>
 	<div class="text-center text-white">
-		<div class="ml-16 mr-16 mt-16 rounded-lg bg-gradient-to-tr from-green-500 to-emerald-400 p-2">
+		<div
+			class="bg-size-200 bg-pos-0 via-taxi ml-64 mr-64 mt-16 rounded-lg bg-gradient-to-r from-rose-600 to-emerald-500 p-2 transition-all duration-300"
+			class:bg-pos-100={uploading}
+		>
 			<h2 class="font-bold text-red-800 drop-shadow-xl">{formerror ? formerror : ''}</h2>
-			<h1 class="mb-2 text-3xl font-bold uppercase">{display} feltöltése</h1>
+			<h1 class="text-3xl font-bold uppercase drop-shadow-lg">{display} feltöltése</h1>
+			<h2 class="mb-2 font-bold text-yellow-100 drop-shadow-xl">
+				{info}
+			</h2>
 			{#if agent.includes('Firefox')}
 				<h1 class="mb-2 text-xl font-bold">
 					Firefoxon (és az azon alapuló böngészőkön) jelenlegi állás szerint nem lehet elemeket
@@ -72,26 +84,46 @@
 					Edge, Brave, Arc, stb.)
 				</h1>
 			{:else}
-				<form onsubmit={() => upload()} enctype="multipart/form-data">
+				<form
+					onsubmit={() => upload()}
+					enctype="multipart/form-data"
+					class="flex justify-center gap-4"
+				>
 					<input
-						class="file:text-black"
+						class="hidden"
 						type="file"
 						name="file"
 						id="file"
 						accept="image/*"
 						required
 						multiple
+						onchange={handleFileChange}
 					/>
+					<label
+						for={uploading ? '' : 'file'}
+						class:bg-pos-100={uploading}
+						class:!cursor-not-allowed={uploading}
+						class="bg-size-200 bg-pos-0 hover:bg-pos-100 mb-2 cursor-pointer rounded-xl bg-gradient-to-r from-gray-600 via-rose-600 to-amber-400 px-3 py-1 text-xl font-bold uppercase drop-shadow-lg transition-all duration-300"
+						>Fájlok kiválasztása</label
+					>
 					<button
 						type="submit"
-						class="from-taxi hover:bg-pos-100 bg-size-200 bg-pos-0 rounded-full bg-gradient-to-r via-amber-600 to-green-500 px-3 py-1 text-xl uppercase drop-shadow-lg transition-all duration-500"
-						>Feltöltés</button
+						aria-label="Feltöltés"
+						class="bg-size-200 bg-pos-0 via-taxi hover:bg-pos-100 mb-2 w-16 rounded-xl bg-gradient-to-r from-gray-600 to-emerald-400 px-3 py-1 text-xl font-bold uppercase drop-shadow-lg transition-all duration-300 disabled:cursor-not-allowed"
+						class:bg-pos-100={uploading}
+						disabled={uploading}
 					>
-					<h2>
-						{warning}
-					</h2>
+						<span class="icon-[material-symbols--upload] h-full w-full"></span>
+					</button>
 				</form>
-				<h2 class="rounded-xl bg-red-600 px-2 text-xl font-bold">{''}</h2>
+				{#if selectedFiles.length > 0}
+					<h2 class="font-bold">Kiválaszottt fájlok:</h2>
+					<div class="flex flex-wrap items-center justify-center gap-2">
+						{#each selectedFiles as file}
+							<h2 class="rounded-lg bg-black bg-opacity-30 px-2 font-light">{file}</h2>
+						{/each}
+					</div>
+				{/if}
 			{/if}
 		</div>
 		<div class="flex-row items-center justify-center align-middle">

@@ -28,7 +28,7 @@ pub async fn on_connect(socket: SocketRef, data: InitialData) {
         data,
     );
     let ds = get_discord_envs();
-    let envs = get_api_envs();
+    let envs = get_api_envs().await;
     let dcuserget = WEB_CLIENT
         .get(format!("{}/users/@me", ds.api_endpoint))
         .header("Authorization", format!("Bearer {}", data.auth_token))
@@ -77,7 +77,7 @@ pub async fn on_connect(socket: SocketRef, data: InitialData) {
                     socket.id, tag.name, tag.driverid, tag.discordid,
                 );
                 db_log(tag.name.clone(), None, None, "LOGIN", None).await;
-                let mama = get_stores();
+                let mama = get_stores().await;
                 if tag.admin {
                     socket.join("mv").expect("MV Szobacsatlakozás sikertelen")
                 }

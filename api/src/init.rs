@@ -1,9 +1,13 @@
+use core::panic;
 use std::{
+    env,
     fs::{self, File},
     path::Path,
 };
 
-fn stores_init() {
+use crate::BASE_HASHMAP;
+
+async fn stores_init() {
     let stores_dir = Path::new("stores");
     if !stores_dir.exists() {
         fs::create_dir(stores_dir).expect("Store dir létrehozása sikertelen");
@@ -21,19 +25,40 @@ fn stores_init() {
 fn image_init() {
     let image_dir = Path::new("public");
     if !image_dir.exists() {
-        fs::create_dir(image_dir).expect("Image dir létrehozása sikertelen");
+        let mkdir = fs::create_dir(image_dir);
+        if mkdir.is_err() {
+            panic!("public dir létrehozása sikertelen");
+        }
     }
 }
 
 fn image_tmp_init() {
     let image_tmp_dir = Path::new("public/tmp");
     if !image_tmp_dir.exists() {
-        fs::create_dir(image_tmp_dir).expect("image_tmp_dir létrehozása sikertelen")
+        let mkdir = fs::create_dir(image_tmp_dir);
+        if mkdir.is_err() {
+            panic!("public/tmp dir létrehozása sikertelen");
+        }
     }
 }
 
-pub fn main() {
-    stores_init();
+async fn ext_apis_init() {
+    let mut hash = BASE_HASHMAP.write().await;
+    let samt = env::var("SAMT_API");
+    if samt.is_err() {
+        panic!("SAMT_API nincs setelve!");
+    }
+    let sckkapp = env::var("SCKKAPP_API");
+    if sckkapp.is_err() {
+        panic!("SCKKAPP_API nincs setelve!");
+    }
+    hash.insert("api_samt".to_string(), samt.unwrap());
+    hash.insert("api_sckkapp".to_string(), sckkapp.unwrap());
+}
+
+pub async fn main() {
+    stores_init().await;
     image_init();
     image_tmp_init();
+    ext_apis_init().await;
 }

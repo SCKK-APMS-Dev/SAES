@@ -37,7 +37,7 @@ pub async fn ucp_calls(mut request: Request) -> Result<Json<Callz>, (StatusCode,
     if exts.unwrap().faction.is_some() {
         let db = get_db_conn().await;
         let statuses = get_statuses();
-        let envs = get_api_envs();
+        let envs = get_api_envs().await;
         let calls = WEB_CLIENT
             .get(format!("{}/api/log/status/current", envs.sckkapp))
             .send()

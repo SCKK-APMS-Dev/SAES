@@ -10,5 +10,5 @@
 	display="Leintés"
 	tipus={get_type_number('leintés')}
 	agent={data.agent}
-	warning="Egy leintés 2 képből áll! (Egyszerre több leintést is fel lehet tölteni)"
+	info="Egy leintés 2 képből áll! (Egyszerre több leintést is fel lehet tölteni)"
 />
