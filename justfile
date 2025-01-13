@@ -20,6 +20,14 @@ w_dev:
     cd web && pnpm dev
 
 [windows]
+w_i:
+    cd web; pnpm install
+
+[linux]
+w_i:
+    cd web && pnpm install
+
+[windows]
 d_build soft tag:
     cd {{ soft }}; docker build --platform linux/amd64 . -t ghcr.io/sckk-apms-dev/saes-{{ soft }}:{{ tag }}
 
