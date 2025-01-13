@@ -50,3 +50,9 @@ r_build soft:
 [linux]
 r_build soft:
     cd {{ soft }} && cargo build --release
+
+dev_to_test:
+    git switch test
+    git rebase devel
+    git push
+    git switch devel

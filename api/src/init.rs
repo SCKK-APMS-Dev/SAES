@@ -2,12 +2,13 @@ use core::panic;
 use std::{
     env,
     fs::{self, File},
+    io::Read,
     path::Path,
 };
 
 use crate::BASE_HASHMAP;
 
-async fn stores_init() {
+async fn stores_dir_init() {
     let stores_dir = Path::new("stores");
     if !stores_dir.exists() {
         fs::create_dir(stores_dir).expect("Store dir létrehozása sikertelen");
@@ -20,6 +21,25 @@ async fn stores_init() {
     if announcement_path.exists() == false {
         File::create(announcement_path).expect("announcement.store létrehozása sikertelen");
     }
+}
+
+pub async fn stores_data_init() {
+    let mut maintenance = File::open("stores/maintenance.store").unwrap();
+    let mut announcement = File::open("stores/announcement.store").unwrap();
+    let mut maintenance_string = String::new();
+    let mut announcement_string = String::new();
+    maintenance
+        .read_to_string(&mut maintenance_string)
+        .expect("String alakítás sikertelen");
+    announcement
+        .read_to_string(&mut announcement_string)
+        .expect("String alakítás sikertelen");
+    let mut hash = BASE_HASHMAP.write().await;
+    hash.insert("store_maintenance".to_string(), maintenance_string.clone());
+    hash.insert(
+        "store_announcement".to_string(),
+        announcement_string.clone(),
+    );
 }
 
 fn image_init() {
@@ -57,7 +77,8 @@ async fn ext_apis_init() {
 }
 
 pub async fn main() {
-    stores_init().await;
+    stores_dir_init().await;
+    stores_data_init().await;
     image_init();
     image_tmp_init();
     ext_apis_init().await;
