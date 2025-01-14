@@ -103,13 +103,13 @@
 						for={uploading ? '' : 'file'}
 						class:bg-pos-100={uploading}
 						class:!cursor-not-allowed={uploading}
-						class="bg-size-200 bg-pos-0 hover:bg-pos-100 mb-2 cursor-pointer rounded-xl bg-gradient-to-r from-gray-600 via-rose-600 to-amber-400 px-3 py-1 text-xl font-bold uppercase drop-shadow-lg transition-all duration-300"
+						class="bg-size-200 bg-pos-0 hover:bg-pos-100 mb-2 cursor-pointer rounded-xl bg-gradient-to-r from-gray-600 via-amber-400 to-rose-600 px-3 py-1 text-xl font-bold uppercase drop-shadow-lg transition-all duration-300"
 						>Fájlok kiválasztása</label
 					>
 					<button
 						type="submit"
 						aria-label="Feltöltés"
-						class="bg-size-200 bg-pos-0 via-taxi hover:bg-pos-100 mb-2 w-16 rounded-xl bg-gradient-to-r from-gray-600 to-emerald-400 px-3 py-1 text-xl font-bold uppercase drop-shadow-lg transition-all duration-300 disabled:cursor-not-allowed"
+						class="bg-size-200 bg-pos-0 hover:bg-pos-100 mb-2 w-16 rounded-xl bg-gradient-to-r from-gray-600 via-amber-400 to-emerald-400 px-3 py-1 text-xl font-bold uppercase drop-shadow-lg transition-all duration-300 disabled:cursor-not-allowed"
 						class:bg-pos-100={uploading}
 						disabled={uploading}
 					>
