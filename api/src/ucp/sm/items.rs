@@ -213,9 +213,10 @@ pub async fn sm_items_post(
             }
             db_log(
                 ext.name.clone(),
+                Some(get_faction_id(ext.faction.unwrap())),
                 Some(body.id.clone()),
                 Some(types.supplements.id),
-                "UPDATE",
+                "UPDATE ITEM",
                 Some(act),
             )
             .await;
@@ -288,9 +289,10 @@ pub async fn sm_items_post(
             }
             db_log(
                 ext.name.clone(),
+                Some(get_faction_id(ext.faction.unwrap())),
                 Some(body.id.clone()),
                 Some(types.hails.id),
-                "UPDATE",
+                "UPDATE ITEM",
                 Some(act),
             )
             .await;
@@ -373,9 +375,10 @@ pub async fn sm_items_post(
             }
             db_log(
                 ext.name.clone(),
+                Some(get_faction_id(ext.faction.unwrap())),
                 Some(body.id.clone()),
                 Some(types.bills.id),
-                "UPDATE",
+                "UPDATE ITEM",
                 Some(act),
             )
             .await;

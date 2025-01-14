@@ -1,4 +1,7 @@
-use std::{fs::File, io::Write};
+use std::{
+    fs::File,
+    io::{self, Write},
+};
 
 use axum::{
     debug_handler,
@@ -10,11 +13,13 @@ use axum::{
 use chrono::{DateTime, Utc};
 use reqwest::StatusCode;
 use saes_shared::{
-    db::{bills, hails, images, supplements},
+    db::{bills, hails, images, images_bind, supplements},
     sql::get_db_conn,
 };
 use sea_orm::{ColumnTrait, EntityTrait, Order, QueryFilter, QueryOrder, Set};
 use serde::{Deserialize, Serialize};
+use sha2::Digest;
+use tokio::fs::remove_file;
 
 use crate::{
     logging::db_log,
@@ -170,6 +175,25 @@ pub async fn ucp_items_post(
                             File::create(format!("./public/tmp/{}-{}", ext.name, file_name))
                                 .unwrap();
                         file.write(&data.unwrap()).unwrap();
+                        let mut s256 = sha2::Sha256::new();
+                        io::copy(
+                            &mut File::open(format!("./public/tmp/{}-{}", ext.name, file_name))
+                                .unwrap(),
+                            &mut s256,
+                        )
+                        .unwrap();
+                        let hash = s256.finalize();
+                        let hash_text = format!("{:x}", hash);
+                        let same_file = images::Entity::find()
+                            .filter(images::Column::Checksum.eq(hash_text.clone()))
+                            .one(&db)
+                            .await
+                            .expect("Fájl ellenőrzése sikertelen");
+                        if same_file.is_some() {
+                            remove_file(format!("./public/tmp/{}-{}", ext.name, file_name))
+                                .await
+                                .unwrap();
+                        }
                         if cucc.tipus == types.hails.id {
                             if files_for_leintes.len().eq(&1) {
                                 let img = images::ActiveModel {
@@ -177,17 +201,23 @@ pub async fn ucp_items_post(
                                     tmp: Set(1),
                                     faction: Set(get_faction_id(ext.faction.unwrap())),
                                     filename: Set(format!("{}-{}", ext.name, file_name)),
+                                    checksum: Set(Some(hash_text)),
                                     date: Set(DateTime::from_timestamp_millis(
                                         ditas[i].parse().unwrap(),
                                     )
                                     .unwrap()),
-                                    usage: Set(types.hails.id),
                                     ..Default::default()
                                 };
-                                let new_img = images::Entity::insert(img)
-                                    .exec(&db)
-                                    .await
-                                    .expect("Fájl mentése sikertelen");
+                                let new_img = if same_file.is_none() {
+                                    images::Entity::insert(img)
+                                        .exec(&db)
+                                        .await
+                                        .expect("Fájl mentése sikertelen")
+                                        .last_insert_id
+                                } else {
+                                    same_file.unwrap().id
+                                };
+
                                 let iten = hails::ActiveModel {
                                     faction: Set(get_faction_id(ext.faction.unwrap())),
                                     date: Set(DateTime::from_timestamp_millis(
@@ -197,59 +227,90 @@ pub async fn ucp_items_post(
                                     owner: Set(ext.name.clone()),
                                     status: Set(statuses.uploaded.id),
                                     image_1: Set(files_for_leintes[0]),
-                                    image_2: Set(new_img.last_insert_id),
+                                    image_2: Set(new_img),
                                     ..Default::default()
                                 };
                                 let newitem = hails::Entity::insert(iten)
                                     .exec(&db)
                                     .await
                                     .expect("Adatbázisba mentés sikertelen");
+                                let newitem_bind = images_bind::ActiveModel {
+                                    image_id: Set(new_img),
+                                    r#type: Set(types.hails.id),
+                                    type_id: Set(newitem.last_insert_id),
+                                    ..Default::default()
+                                };
+                                images_bind::Entity::insert(newitem_bind)
+                                    .exec(&db)
+                                    .await
+                                    .expect("BIND Create failed");
+                                let newitem2_bind = images_bind::ActiveModel {
+                                    image_id: Set(files_for_leintes[0]),
+                                    r#type: Set(types.hails.id),
+                                    type_id: Set(newitem.last_insert_id),
+                                    ..Default::default()
+                                };
+                                images_bind::Entity::insert(newitem2_bind)
+                                    .exec(&db)
+                                    .await
+                                    .expect("BIND Create failed");
                                 db_log(
                                     ext.name.clone(),
+                                    Some(get_faction_id(ext.faction.unwrap())),
                                     Some(newitem.last_insert_id),
                                     Some(types.hails.id),
-                                    "CREATE",
+                                    "UPLOAD",
                                     None,
                                 )
                                 .await;
-                                file_ids.push([new_img.last_insert_id, files_for_leintes[0]]);
+                                file_ids.push([new_img, files_for_leintes[0]]);
                                 files_for_leintes.clear();
                             } else {
                                 let img = images::ActiveModel {
                                     owner: Set(ext.name.clone()),
                                     filename: Set(format!("{}-{}", ext.name, file_name)),
+                                    checksum: Set(Some(hash_text)),
                                     faction: Set(get_faction_id(ext.faction.unwrap())),
                                     tmp: Set(1),
                                     date: Set(DateTime::from_timestamp_millis(
                                         ditas[i].parse().unwrap(),
                                     )
                                     .unwrap()),
-                                    usage: Set(types.hails.id),
                                     ..Default::default()
                                 };
-                                let new_img = images::Entity::insert(img)
-                                    .exec(&db)
-                                    .await
-                                    .expect("Fájl mentése sikertelen");
-                                files_for_leintes.push(new_img.last_insert_id)
+                                let new_img = if same_file.is_none() {
+                                    images::Entity::insert(img)
+                                        .exec(&db)
+                                        .await
+                                        .expect("Fájl mentése sikertelen")
+                                        .last_insert_id
+                                } else {
+                                    same_file.unwrap().id
+                                };
+                                files_for_leintes.push(new_img)
                             }
                         } else if cucc.tipus == types.supplements.id {
                             let img = images::ActiveModel {
                                 owner: Set(ext.name.clone()),
                                 tmp: Set(1),
                                 filename: Set(format!("{}-{}", ext.name, file_name)),
+                                checksum: Set(Some(hash_text)),
                                 faction: Set(get_faction_id(ext.faction.unwrap())),
                                 date: Set(DateTime::from_timestamp_millis(
                                     ditas[i].parse().unwrap(),
                                 )
                                 .unwrap()),
-                                usage: Set(types.supplements.id),
                                 ..Default::default()
                             };
-                            let new_img = images::Entity::insert(img)
-                                .exec(&db)
-                                .await
-                                .expect("Fájl mentése sikertelen");
+                            let new_img = if same_file.is_none() {
+                                images::Entity::insert(img)
+                                    .exec(&db)
+                                    .await
+                                    .expect("Fájl mentése sikertelen")
+                                    .last_insert_id
+                            } else {
+                                same_file.unwrap().id
+                            };
                             let iten = supplements::ActiveModel {
                                 faction: Set(get_faction_id(ext.faction.unwrap())),
                                 date: Set(DateTime::from_timestamp_millis(
@@ -258,39 +319,55 @@ pub async fn ucp_items_post(
                                 .unwrap()),
                                 owner: Set(ext.name.clone()),
                                 status: Set(statuses.uploaded.id),
-                                image: Set(new_img.last_insert_id),
+                                image: Set(new_img),
                                 ..Default::default()
                             };
                             let newitem = supplements::Entity::insert(iten)
                                 .exec(&db)
                                 .await
                                 .expect("Adatbázisba mentés sikertelen");
+                            let newitem_bind = images_bind::ActiveModel {
+                                image_id: Set(new_img),
+                                r#type: Set(types.supplements.id),
+                                type_id: Set(newitem.last_insert_id),
+                                ..Default::default()
+                            };
+                            images_bind::Entity::insert(newitem_bind)
+                                .exec(&db)
+                                .await
+                                .expect("BIND Create failed");
                             db_log(
                                 ext.name.clone(),
+                                Some(get_faction_id(ext.faction.unwrap())),
                                 Some(newitem.last_insert_id),
                                 Some(types.supplements.id),
-                                "CREATE",
+                                "UPLOAD",
                                 None,
                             )
                             .await;
-                            file_ids.push([new_img.last_insert_id, 0])
+                            file_ids.push([new_img, 0])
                         } else if cucc.tipus == types.bills.id {
                             let img = images::ActiveModel {
                                 owner: Set(ext.name.clone()),
                                 faction: Set(get_faction_id(ext.faction.unwrap())),
+                                checksum: Set(Some(hash_text)),
                                 tmp: Set(1),
                                 filename: Set(format!("{}-{}", ext.name, file_name)),
                                 date: Set(DateTime::from_timestamp_millis(
                                     ditas[i].parse().unwrap(),
                                 )
                                 .unwrap()),
-                                usage: Set(types.bills.id),
                                 ..Default::default()
                             };
-                            let new_img = images::Entity::insert(img)
-                                .exec(&db)
-                                .await
-                                .expect("Fájl mentése sikertelen");
+                            let new_img = if same_file.is_none() {
+                                images::Entity::insert(img)
+                                    .exec(&db)
+                                    .await
+                                    .expect("Fájl mentése sikertelen")
+                                    .last_insert_id
+                            } else {
+                                same_file.unwrap().id
+                            };
                             let iten = bills::ActiveModel {
                                 faction: Set(get_faction_id(ext.faction.unwrap())),
                                 date: Set(DateTime::from_timestamp_millis(
@@ -299,22 +376,33 @@ pub async fn ucp_items_post(
                                 .unwrap()),
                                 owner: Set(ext.name.clone()),
                                 status: Set(statuses.uploaded.id),
-                                image: Set(new_img.last_insert_id),
+                                image: Set(new_img),
                                 ..Default::default()
                             };
                             let newitem = bills::Entity::insert(iten)
                                 .exec(&db)
                                 .await
                                 .expect("Adatbázisba mentés sikertelen");
+                            let newitem_bind = images_bind::ActiveModel {
+                                image_id: Set(new_img),
+                                r#type: Set(types.bills.id),
+                                type_id: Set(newitem.last_insert_id),
+                                ..Default::default()
+                            };
+                            images_bind::Entity::insert(newitem_bind)
+                                .exec(&db)
+                                .await
+                                .expect("BIND Create failed");
                             db_log(
                                 ext.name.clone(),
+                                Some(get_faction_id(ext.faction.unwrap())),
                                 Some(newitem.last_insert_id),
                                 Some(types.bills.id),
-                                "CREATE",
+                                "UPLOAD",
                                 None,
                             )
                             .await;
-                            file_ids.push([new_img.last_insert_id, 0])
+                            file_ids.push([new_img, 0])
                         }
                         i += 1
                     } else {

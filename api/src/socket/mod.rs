@@ -76,7 +76,7 @@ pub async fn on_connect(socket: SocketRef, data: InitialData) {
                     "Socket {} authenticated: {} / {} / {}",
                     socket.id, tag.name, tag.driverid, tag.discordid,
                 );
-                db_log(tag.name.clone(), None, None, "LOGIN", None).await;
+                db_log(tag.name.clone(), None, None, None, "LOGIN", None).await;
                 let mama = get_stores().await;
                 if tag.admin {
                     socket.join("mv").expect("MV Szobacsatlakozás sikertelen")
