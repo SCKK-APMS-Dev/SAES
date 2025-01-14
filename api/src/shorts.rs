@@ -10,7 +10,7 @@ use crate::auth::get_discord_envs;
 pub async fn base_get_shorts(
     headers: HeaderMap,
 ) -> Result<impl IntoResponse, (StatusCode, String)> {
-    let key = get_discord_envs();
+    let key = get_discord_envs().await;
     let headerkey = headers.get("secret-key");
     if headerkey.is_some() {
         if headerkey.unwrap().to_str().unwrap() == key.secret_key {

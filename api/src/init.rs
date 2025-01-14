@@ -1,6 +1,5 @@
 use core::panic;
 use std::{
-    env,
     fs::{self, File},
     io::Read,
     path::Path,
@@ -62,24 +61,9 @@ fn image_tmp_init() {
     }
 }
 
-async fn ext_apis_init() {
-    let mut hash = BASE_HASHMAP.write().await;
-    let samt = env::var("SAMT_API");
-    if samt.is_err() {
-        panic!("SAMT_API nincs setelve!");
-    }
-    let sckkapp = env::var("SCKKAPP_API");
-    if sckkapp.is_err() {
-        panic!("SCKKAPP_API nincs setelve!");
-    }
-    hash.insert("api_samt".to_string(), samt.unwrap());
-    hash.insert("api_sckkapp".to_string(), sckkapp.unwrap());
-}
-
 pub async fn main() {
     stores_dir_init().await;
     stores_data_init().await;
     image_init();
     image_tmp_init();
-    ext_apis_init().await;
 }

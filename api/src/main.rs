@@ -17,6 +17,7 @@ use tracing::info;
 use tracing_subscriber::FmtSubscriber;
 
 mod auth;
+mod envs;
 mod init;
 mod list;
 mod logging;
@@ -35,6 +36,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     dotenv().expect(".env fájl nem található");
     tracing::subscriber::set_global_default(FmtSubscriber::default())?;
     let (layer, io) = SocketIo::new_layer();
+    envs::load_envs().await;
     let env_mode = env::var("ENV_MODE");
     if env_mode.is_err() {
         panic!("ENV_MODE nincs setelve! production / testing / devel")
@@ -47,13 +49,13 @@ async fn main() -> Result<(), Box<dyn Error>> {
     .contains(&env_mode.clone()?)
     {
         panic!("ENV_MODE rosszul setelve! production / testing / devel")
-    } else {
-        info!("Running in {} mode", env_mode.clone()?.to_uppercase());
-        BASE_HASHMAP
-            .write()
-            .await
-            .insert("env_mode".to_string(), env_mode?.to_uppercase().to_string());
     }
+    info!("Running in {} mode", env_mode.clone()?.to_uppercase());
+    BASE_HASHMAP
+        .write()
+        .await
+        .insert("env_mode".to_string(), env_mode?.to_uppercase().to_string());
+
     init::main().await;
     io.ns(
         "/",

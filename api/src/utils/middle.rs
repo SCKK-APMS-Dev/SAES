@@ -59,7 +59,7 @@ pub async fn ucp_auth(
 ) -> Result<impl IntoResponse, (StatusCode, String)> {
     let auth = headers.get("cookie");
     let faction = headers.get("faction");
-    let ds = get_discord_envs();
+    let ds = get_discord_envs().await;
     let envs = get_api_envs().await;
     if auth.is_some() {
         let dcuserget = WEB_CLIENT

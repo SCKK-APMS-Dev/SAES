@@ -27,7 +27,7 @@ pub async fn on_connect(socket: SocketRef, data: InitialData) {
         socket.ns(),
         data,
     );
-    let ds = get_discord_envs();
+    let ds = get_discord_envs().await;
     let envs = get_api_envs().await;
     let dcuserget = WEB_CLIENT
         .get(format!("{}/users/@me", ds.api_endpoint))

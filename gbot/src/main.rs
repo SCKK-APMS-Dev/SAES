@@ -8,6 +8,7 @@ use serde_json::Value;
 use tokio::time::interval;
 
 mod auth;
+mod envs;
 
 #[derive(Debug, Deserialize, PartialEq)]
 struct DriverData {
@@ -38,6 +39,7 @@ async fn get_previous_week() -> Vec<DriverData> {
 #[tokio::main]
 async fn main() {
     dotenv().expect(".env fájl olvasása sikertelen");
+    envs::load_envs().await;
     let interval_var = env::var("INTERVAL_SECS").expect("INTERVAL_SECS váltózó nem található!");
     let invt: u64 = interval_var.parse().expect("INTERVAL_SECS nem u64");
     let mut interval = interval(Duration::from_secs(invt));

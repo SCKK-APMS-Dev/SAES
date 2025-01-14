@@ -1,5 +1,3 @@
-use std::env;
-
 use axum::extract::Query;
 use axum::{debug_handler, response::Redirect};
 use base64::engine::general_purpose;
@@ -13,7 +11,7 @@ use url_builder::URLBuilder;
 
 use serde::{Deserialize, Serialize};
 
-use crate::WEB_CLIENT;
+use crate::{BASE_HASHMAP, WEB_CLIENT};
 
 lazy_static! {
     static ref GLOBAL_ARRAY: RwLock<Vec<String>> = RwLock::new(Vec::new());
@@ -29,28 +27,23 @@ pub struct DiscordAuth {
     pub secret_key: String,
 }
 
-pub fn get_discord_envs() -> DiscordAuth {
-    let id = env::var("DISCORD_ID")
-        .expect("DISCORD_ID .env fájlból betöltése sikertelen. Létre van hozva?");
-    let secret = env::var("DISCORD_SECRET")
-        .expect("DISCORD_SECRET .env fájlból betöltése sikertelen. Létre van hozva?");
-    let cb = env::var("REDIRECT_URL")
-        .expect("REDIRECT_URL .env fájlból betöltése sikertelen. Létre van hozva?");
-    let domain =
-        env::var("DOMAIN").expect("DOMAIN .env fájlból betöltése sikertelen. Létre van hozva?");
-    let fdomain = env::var("FULL_DOMAIN")
-        .expect("FULL_DOMAIN .env fájlból betöltése sikertelen. Létre van hozva?");
-    let secret_key = env::var("SECRET_KEY")
-        .expect("SECRET_KEY .env fájlból betöltése sikertelen. Létre van hozva?");
+pub async fn get_discord_envs() -> DiscordAuth {
+    let hash = BASE_HASHMAP.read().await;
+    let id = hash.get("env_discord_id").unwrap();
+    let secret = hash.get("env_discord_secret").unwrap();
+    let cb = hash.get("env_redirect_url").unwrap();
+    let domain = hash.get("env_domain").unwrap();
+    let fdomain = hash.get("env_full_domain").unwrap();
+    let secret_key = hash.get("env_secret_key").unwrap();
     DiscordAuth {
         api_endpoint: String::from("https://discord.com/api/v10"),
-        discord_id: id,
-        discord_secret: secret,
-        domain,
-        fdomain,
-        redirect_url: cb,
+        discord_id: id.to_owned(),
+        discord_secret: secret.to_owned(),
+        domain: domain.to_owned(),
+        fdomain: fdomain.to_owned(),
+        redirect_url: cb.to_owned(),
         discord_base: String::from("discord.com/oauth2/authorize"),
-        secret_key,
+        secret_key: secret_key.to_owned(),
     }
 }
 
@@ -70,7 +63,7 @@ struct TokenResponse {
 
 #[debug_handler]
 pub async fn base_callback(Query(query): Query<Code>, cookies: Cookies) -> Redirect {
-    let ds = get_discord_envs();
+    let ds = get_discord_envs().await;
     let data = [
         ("grant_type", "authorization_code"),
         ("code", &query.code),
@@ -111,7 +104,7 @@ pub async fn base_callback(Query(query): Query<Code>, cookies: Cookies) -> Redir
         GLOBAL_ARRAY.write().await.remove(id);
         return Redirect::to(&format!("{}{}", &ds.fdomain, path_full.path));
     }
-    Redirect::to("google.com")
+    Redirect::to("https://google.com")
 }
 
 fn base_path() -> String {
@@ -140,7 +133,7 @@ pub async fn auth_home(Query(q): Query<AuthHomeCode>) -> Redirect {
     };
     GLOBAL_ARRAY.write().await.push(rstate);
     let state_str = serde_json::to_string(&state).expect("Sikertelen átalakítás");
-    let ds = get_discord_envs();
+    let ds = get_discord_envs().await;
     ub.set_protocol("https")
         .set_host(&ds.discord_base.as_str())
         .add_param("response_type", "code")

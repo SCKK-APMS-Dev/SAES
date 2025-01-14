@@ -9,6 +9,7 @@ use saes_shared::{
 };
 use sea_orm::{ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter, Set};
 
+mod envs;
 mod ffmpeg;
 mod init;
 
@@ -16,6 +17,7 @@ mod init;
 async fn main() {
     dotenv().expect(".env fájl nem található");
     init::main();
+    envs::load_envs().await;
     let dir = env::var("CONVERT_DIR").expect("CONVERT_DIR lekérdezése sikertelen");
     let db = get_db_conn().await;
     loop {
