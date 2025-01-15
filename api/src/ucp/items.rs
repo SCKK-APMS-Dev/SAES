@@ -1,6 +1,7 @@
 use std::{
     fs::File,
     io::{self, Write},
+    path::Path,
 };
 
 use axum::{
@@ -171,9 +172,10 @@ pub async fn ucp_items_post(
                     let data = field.bytes().await;
                     if data.is_ok() {
                         let db = get_db_conn().await;
-                        let epoch = chrono::Utc::now().timestamp_millis();
-                        let real_file_name =
-                            format!("./public/tmp/{}-{}-{}", ext.name, epoch, file_name);
+                        let mut real_file_name = format!("./public/tmp/{}-{}", ext.name, file_name);
+                        if Path::new(&real_file_name).exists() {
+                            real_file_name = format!("./public/tmp/{}-2-{}", ext.name, file_name);
+                        }
                         let mut file = File::create(real_file_name.clone()).unwrap();
                         file.write(&data.unwrap()).unwrap();
                         let mut s256 = sha2::Sha256::new();
@@ -195,7 +197,7 @@ pub async fn ucp_items_post(
                                     owner: Set(ext.name.clone()),
                                     tmp: Set(1),
                                     faction: Set(get_faction_id(ext.faction.unwrap())),
-                                    filename: Set(real_file_name.clone()),
+                                    filename: Set(real_file_name),
                                     checksum: Set(Some(hash_text)),
                                     date: Set(DateTime::from_timestamp_millis(
                                         ditas[i].parse().unwrap(),
@@ -263,7 +265,7 @@ pub async fn ucp_items_post(
                             } else {
                                 let img = images::ActiveModel {
                                     owner: Set(ext.name.clone()),
-                                    filename: Set(real_file_name.clone()),
+                                    filename: Set(real_file_name),
                                     checksum: Set(Some(hash_text)),
                                     faction: Set(get_faction_id(ext.faction.unwrap())),
                                     tmp: Set(1),
@@ -288,7 +290,7 @@ pub async fn ucp_items_post(
                             let img = images::ActiveModel {
                                 owner: Set(ext.name.clone()),
                                 tmp: Set(1),
-                                filename: Set(real_file_name.clone()),
+                                filename: Set(real_file_name),
                                 checksum: Set(Some(hash_text)),
                                 faction: Set(get_faction_id(ext.faction.unwrap())),
                                 date: Set(DateTime::from_timestamp_millis(
@@ -347,7 +349,7 @@ pub async fn ucp_items_post(
                                 faction: Set(get_faction_id(ext.faction.unwrap())),
                                 checksum: Set(Some(hash_text)),
                                 tmp: Set(1),
-                                filename: Set(real_file_name.clone()),
+                                filename: Set(real_file_name),
                                 date: Set(DateTime::from_timestamp_millis(
                                     ditas[i].parse().unwrap(),
                                 )
