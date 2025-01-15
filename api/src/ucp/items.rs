@@ -172,15 +172,29 @@ pub async fn ucp_items_post(
                     let data = field.bytes().await;
                     if data.is_ok() {
                         let db = get_db_conn().await;
-                        let mut real_file_name = format!("./public/tmp/{}-{}", ext.name, file_name);
-                        if Path::new(&real_file_name).exists() {
-                            real_file_name = format!("./public/tmp/{}-2-{}", ext.name, file_name);
+                        let mut real_file_name = [
+                            format!("./public/tmp/{}-{}", ext.name, file_name),
+                            format!("{}-{}", ext.name, file_name),
+                        ];
+                        let mut j = 1;
+                        loop {
+                            if Path::new(&real_file_name[0]).exists() {
+                                real_file_name[0] =
+                                    format!("./public/tmp/{}-{}-{}", ext.name, j, file_name);
+                                real_file_name[1] = format!("{}-{}-{}", ext.name, j, file_name);
+                                j += 1;
+                            } else {
+                                break;
+                            }
                         }
-                        let mut file = File::create(real_file_name.clone()).unwrap();
+                        let mut file = File::create(real_file_name[0].clone()).unwrap();
                         file.write(&data.unwrap()).unwrap();
                         let mut s256 = sha2::Sha256::new();
-                        io::copy(&mut File::open(real_file_name.clone()).unwrap(), &mut s256)
-                            .unwrap();
+                        io::copy(
+                            &mut File::open(real_file_name[0].clone()).unwrap(),
+                            &mut s256,
+                        )
+                        .unwrap();
                         let hash = s256.finalize();
                         let hash_text = format!("{:x}", hash);
                         let same_file = images::Entity::find()
@@ -189,7 +203,7 @@ pub async fn ucp_items_post(
                             .await
                             .expect("Fájl ellenőrzése sikertelen");
                         if same_file.is_some() {
-                            remove_file(real_file_name.clone()).await.unwrap();
+                            remove_file(real_file_name[0].clone()).await.unwrap();
                         }
                         if cucc.tipus == types.hails.id {
                             if files_for_leintes.len().eq(&1) {
@@ -197,7 +211,7 @@ pub async fn ucp_items_post(
                                     owner: Set(ext.name.clone()),
                                     tmp: Set(1),
                                     faction: Set(get_faction_id(ext.faction.unwrap())),
-                                    filename: Set(real_file_name),
+                                    filename: Set(real_file_name[1].clone()),
                                     checksum: Set(Some(hash_text)),
                                     date: Set(DateTime::from_timestamp_millis(
                                         ditas[i].parse().unwrap(),
@@ -265,7 +279,7 @@ pub async fn ucp_items_post(
                             } else {
                                 let img = images::ActiveModel {
                                     owner: Set(ext.name.clone()),
-                                    filename: Set(real_file_name),
+                                    filename: Set(real_file_name[1].clone()),
                                     checksum: Set(Some(hash_text)),
                                     faction: Set(get_faction_id(ext.faction.unwrap())),
                                     tmp: Set(1),
@@ -290,7 +304,7 @@ pub async fn ucp_items_post(
                             let img = images::ActiveModel {
                                 owner: Set(ext.name.clone()),
                                 tmp: Set(1),
-                                filename: Set(real_file_name),
+                                filename: Set(real_file_name[1].clone()),
                                 checksum: Set(Some(hash_text)),
                                 faction: Set(get_faction_id(ext.faction.unwrap())),
                                 date: Set(DateTime::from_timestamp_millis(
@@ -349,7 +363,7 @@ pub async fn ucp_items_post(
                                 faction: Set(get_faction_id(ext.faction.unwrap())),
                                 checksum: Set(Some(hash_text)),
                                 tmp: Set(1),
-                                filename: Set(real_file_name),
+                                filename: Set(real_file_name[1].clone()),
                                 date: Set(DateTime::from_timestamp_millis(
                                     ditas[i].parse().unwrap(),
                                 )
