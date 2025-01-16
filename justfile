@@ -3,6 +3,8 @@ default:
 
 set windows-powershell
 
+#* DEV scripts
+
 [windows]
 r_dev soft:
     cd {{ soft }}; cargo watch -x run
@@ -19,6 +21,8 @@ w_dev:
 w_dev:
     cd web && pnpm dev
 
+#* pNPM install scripts
+
 [windows]
 w_i:
     cd web; pnpm install
@@ -26,6 +30,8 @@ w_i:
 [linux]
 w_i:
     cd web && pnpm install
+
+#* Docker image build scripts
 
 [windows]
 d_build soft tag:
@@ -51,8 +57,20 @@ r_build soft:
 r_build soft:
     cd {{ soft }} && cargo build --release
 
+#* Merge changes from devel to test with rebase
+
 dev_to_test:
     git switch test
     git rebase devel
     git push
     git switch devel
+
+#* Tauri dev for app
+
+[windows]
+t_dev:
+    cd app; cargo tauri dev
+
+[linux]
+t_dev:
+    cd app && cargo tauri dev
