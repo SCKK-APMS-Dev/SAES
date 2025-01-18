@@ -1,4 +1,4 @@
-name: 'publish'
+name: SAMT App Build
 
 on:
   push:
