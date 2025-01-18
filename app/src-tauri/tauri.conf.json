@@ -17,13 +17,39 @@
         "height": 50,
         "resizable": false,
         "skipTaskbar": true,
+        "visible": false,
         "decorations": false,
         "x": 20,
         "y": 20,
         "closable": false,
-        "label": "main",
+        "alwaysOnTop": true,
+        "label": "overlay",
+        "url": "/overlay",
         "transparent": true,
         "maximizable": false
+      },
+      {
+        "title": "SAMT App",
+        "width": 300,
+        "height": 400,
+        "resizable": false,
+        "visible": false,
+        "decorations": false,
+        "url": "/loader",
+        "center": true,
+        "closable": false,
+        "label": "loader",
+        "transparent": true,
+        "maximizable": false
+      },
+      {
+        "title": "SAMT App",
+        "width": 200,
+        "height": 50,
+        "visible": false,
+        "label": "main",
+        "url": "/main",
+        "center": true
       }
     ],
     "security": {
