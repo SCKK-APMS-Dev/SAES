@@ -9,13 +9,11 @@ pub fn run() {
             let overlay = app.get_webview_window("overlay").unwrap();
             let loader = app.get_webview_window("loader").unwrap();
             let main = app.get_webview_window("main").unwrap();
-            thread::spawn(move || {
-                loader.show().unwrap();
-                loader.set_focus().unwrap();
-                thread::sleep(Duration::from_secs(5));
-                loader.hide().unwrap();
-                overlay.show().unwrap();
-            });
+            loader.show().unwrap();
+            loader.set_focus().unwrap();
+            thread::sleep(Duration::from_secs(5));
+            loader.hide().unwrap();
+            overlay.show().unwrap();
             Ok(())
         })
         .run(tauri::generate_context!())
