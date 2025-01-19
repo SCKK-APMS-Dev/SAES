@@ -3,6 +3,7 @@ use tauri::{
     tray::TrayIconBuilder,
     AppHandle, Emitter, Manager,
 };
+use tauri_plugin_opener::OpenerExt;
 
 mod util;
 
@@ -16,7 +17,7 @@ async fn update_done(app: AppHandle) {
         let main = app.get_webview_window("main").unwrap();
         app.emit("setloadertext", "Konfiguráció nem létezik")
             .unwrap();
-        loader.hide().unwrap();
+        loader.close().unwrap();
         main.show().unwrap();
         main.set_focus().unwrap();
         app.emit("setmainpage", "noconfig").unwrap();
