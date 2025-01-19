@@ -1,9 +1,54 @@
+<script lang="ts">
+	import { check } from '@tauri-apps/plugin-updater';
+	import { invoke } from '@tauri-apps/api/core';
+	import { relaunch } from '@tauri-apps/plugin-process';
+	import { onMount } from 'svelte';
+	let text = $state('Frissítések keresése');
+	onMount(async () => {
+		setTimeout(async () => {
+			const update = await check();
+			if (update) {
+				text = 'Frissítés találva';
+				console.log(`found update ${update.version} from ${update.date} with notes ${update.body}`);
+				let downloaded = 0;
+				let contentLength = 0;
+				// alternatively we could also call update.download() and update.install() separately
+				await update.downloadAndInstall((event) => {
+					switch (event.event) {
+						case 'Started':
+							contentLength = event.data.contentLength!;
+							console.log(`started downloading ${event.data.contentLength} bytes`);
+							break;
+						case 'Progress':
+							downloaded += event.data.chunkLength;
+							text = 'Letötés: ' + Math.round((downloaded / contentLength) * 100) + '%';
+							console.log(`downloaded ${downloaded} from ${contentLength}`);
+							break;
+						case 'Finished':
+							console.log('download finished');
+							text = 'Telepítés';
+							break;
+					}
+				});
+
+				console.log('update installed');
+				text = 'Frissítés kész, újraindítás';
+				await relaunch();
+			}
+			text = 'App indítása';
+			setTimeout(() => {
+				invoke('update_done');
+			}, 1000);
+		}, 1000);
+	});
+</script>
+
 <div
 	class="pointer-events-none selection:bg-none justify-center items-center text-center bg-gray-900 w-screen h-screen"
 >
 	<div class="flex flex-col absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
 		<img src="/favicon.png" class="w-[200px] m-auto" alt="" />
 		<h1 class="font-bold text-3xl text-white w-screen">SAMT App</h1>
-		<h2 class="text-gray-300 font-light">App indítása</h2>
+		<h2 class="text-gray-300 font-light">{text}</h2>
 	</div>
 </div>
