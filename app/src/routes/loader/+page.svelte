@@ -1,10 +1,13 @@
 <script lang="ts">
 	import { check } from '@tauri-apps/plugin-updater';
 	import { invoke } from '@tauri-apps/api/core';
+	import { getVersion } from '@tauri-apps/api/app';
 	import { relaunch } from '@tauri-apps/plugin-process';
 	import { onMount } from 'svelte';
 	let text = $state('Frissítések keresése');
+	let ver = $state('');
 	onMount(async () => {
+		ver = await getVersion();
 		setTimeout(async () => {
 			const update = await check();
 			if (update) {
@@ -36,9 +39,9 @@
 				await relaunch();
 			}
 			text = 'App indítása';
-			setTimeout(() => {
-				invoke('update_done');
-			}, 1000);
+			// setTimeout(() => {
+			// 	invoke('update_done');
+			// }, 1000);
 		}, 1000);
 	});
 </script>
@@ -51,4 +54,5 @@
 		<h1 class="font-bold text-3xl text-white w-screen">SAMT App</h1>
 		<h2 class="text-gray-300 font-light">{text}</h2>
 	</div>
+	<h2 class="text-gray-400 absolute bottom-0 left-1">v{ver}</h2>
 </div>

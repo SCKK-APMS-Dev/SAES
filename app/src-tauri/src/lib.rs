@@ -20,7 +20,7 @@ pub fn run() {
             let quit_i = MenuItem::with_id(app, "quit", "Kilépés", true, None::<&str>)?;
             let menu = Menu::with_items(app, &[&quit_i])?;
 
-            let tray = TrayIconBuilder::new()
+            TrayIconBuilder::new()
                 .menu(&menu)
                 .title("SAMT App")
                 .tooltip("SAMT App")
