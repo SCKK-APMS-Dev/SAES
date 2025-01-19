@@ -15,6 +15,9 @@ async fn update_done(app_handle: tauri::AppHandle) {
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_single_instance::init(|_app, _argv, _cwd| {
+            println!("Single instance callback");
+        }))
         .plugin(tauri_plugin_updater::Builder::new().build())
         .setup(|app| {
             let quit_i = MenuItem::with_id(app, "quit", "Kilépés", true, None::<&str>)?;

@@ -39,10 +39,10 @@
 				await relaunch();
 			}
 			text = 'App indítása';
-			// setTimeout(() => {
-			// 	invoke('update_done');
-			// }, 1000);
-		}, 1000);
+			setTimeout(() => {
+				invoke('update_done');
+			}, 500);
+		}, 300);
 	});
 </script>
 
