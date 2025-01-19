@@ -69,7 +69,7 @@
   },
   "plugins": {
     "updater": {
-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEVGQTE3QUNERUI4MDUxNzMKUldSelVZRHJ6WHFoNzhmb2R4eVdCY0NSeHZYMDlIWWduSk84U0lQOXFVMjJ0TmpzL29KV0VxUjQK",
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDUzQjc2QjY1MDJGQTg1MUQKUldRZGhmb0NaV3UzVSt5cjZhd1M5OGZaRlVzOGJYd2djTjZkK2pVRG1xYU9DaFBESDFNUmxVdnoK",
       "endpoints": [
         "https://github.com/SCKK-APMS-DEV/SAES/releases/latest/download/latest.json"
       ]
