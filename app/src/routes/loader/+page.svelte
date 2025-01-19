@@ -4,8 +4,14 @@
 	import { getVersion } from '@tauri-apps/api/app';
 	import { relaunch } from '@tauri-apps/plugin-process';
 	import { onMount } from 'svelte';
+	import { listen } from '@tauri-apps/api/event';
 	let text = $state('Frissítések keresése');
 	let ver = $state('');
+
+	listen<string>('setloadertext', (ev) => {
+		text = ev.payload;
+	});
+
 	onMount(async () => {
 		ver = await getVersion();
 		setTimeout(async () => {
@@ -24,7 +30,7 @@
 							break;
 						case 'Progress':
 							downloaded += event.data.chunkLength;
-							text = 'Letötés: ' + Math.round((downloaded / contentLength) * 100) + '%';
+							text = 'Letöltés: ' + Math.round((downloaded / contentLength) * 100) + '%';
 							console.log(`downloaded ${downloaded} from ${contentLength}`);
 							break;
 						case 'Finished':
@@ -47,7 +53,7 @@
 </script>
 
 <div
-	class="pointer-events-none selection:bg-none justify-center items-center text-center bg-gray-900 w-screen h-screen"
+	class="pointer-events-none select-none justify-center items-center text-center bg-gray-900 w-screen h-screen"
 >
 	<div class="flex flex-col absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
 		<img src="/favicon.png" class="w-[200px] m-auto" alt="" />

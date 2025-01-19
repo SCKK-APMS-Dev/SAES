@@ -1,11 +1,30 @@
 use tauri::{
     menu::{Menu, MenuItem},
     tray::TrayIconBuilder,
-    Manager,
+    AppHandle, Emitter, Manager,
 };
 
+mod util;
+
 #[tauri::command]
-async fn update_done(app_handle: tauri::AppHandle) {
+async fn update_done(app: AppHandle) {
+    app.emit("setloadertext", "Konfiguráció betöltése").unwrap();
+    util::config::setup_folders();
+    let config = util::config::load_config();
+    if config.is_none() {
+        let loader = app.get_webview_window("loader").unwrap();
+        let main = app.get_webview_window("main").unwrap();
+        app.emit("setloadertext", "Konfiguráció nem létezik")
+            .unwrap();
+        loader.hide().unwrap();
+        main.show().unwrap();
+        main.set_focus().unwrap();
+        app.emit("setmainpage", "noconfig").unwrap();
+    }
+}
+
+#[tauri::command]
+async fn start_app(app_handle: AppHandle) {
     let overlay = app_handle.get_webview_window("overlay").unwrap();
     let loader = app_handle.get_webview_window("loader").unwrap();
     loader.hide().unwrap();
@@ -22,7 +41,6 @@ pub fn run() {
         .setup(|app| {
             let quit_i = MenuItem::with_id(app, "quit", "Kilépés", true, None::<&str>)?;
             let menu = Menu::with_items(app, &[&quit_i])?;
-
             TrayIconBuilder::new()
                 .menu(&menu)
                 .title("SAMT App")
