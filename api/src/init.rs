@@ -5,6 +5,8 @@ use std::{
     path::Path,
 };
 
+use saes_shared::sql::test_db_conn;
+
 use crate::BASE_HASHMAP;
 
 async fn stores_dir_init() {
@@ -62,6 +64,7 @@ fn image_tmp_init() {
 }
 
 pub async fn main() {
+    test_db_conn().await;
     stores_dir_init().await;
     stores_data_init().await;
     image_init();

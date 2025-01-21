@@ -11,5 +11,13 @@ pub async fn get_db_conn() -> DatabaseConnection {
         .idle_timeout(Duration::from_secs(10))
         .max_lifetime(Duration::from_secs(15))
         .sqlx_logging(true);
-    return Database::connect(opt).await.unwrap();
+    let db_connection = Database::connect(opt).await;
+    if db_connection.is_ok() {
+        return db_connection.unwrap();
+    }
+    panic!("Failed to connect to database");
+}
+
+pub async fn test_db_conn() {
+    get_db_conn().await;
 }
