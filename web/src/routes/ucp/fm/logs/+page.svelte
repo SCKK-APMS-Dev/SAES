@@ -92,7 +92,7 @@
 			<h1 class="mb-3 text-3xl font-bold">Feltöltött elem információi:</h1>
 			{#if modalItem?.item_type === 2}
 				<div class="flex gap-1">
-					<a href={`${data.cdn}/get?id=${modalItem?.img_1}`}
+					<a target="_blank" href={`${data.cdn}/get?id=${modalItem?.img_1}`}
 						><img
 							class="m-auto"
 							src={`${data.cdn}/get?id=${modalItem?.img_1}`}
@@ -100,7 +100,7 @@
 							alt=""
 						/></a
 					>
-					<a href={`${data.cdn}/get?id=${modalItem?.img_2}`}
+					<a target="_blank" href={`${data.cdn}/get?id=${modalItem?.img_2}`}
 						><img
 							class="m-auto"
 							src={`${data.cdn}/get?id=${modalItem?.img_2}`}
@@ -110,7 +110,7 @@
 					>
 				</div>
 			{:else}
-				<a href={`${data.cdn}/get?id=${modalItem?.img_1}`}
+				<a target="_blank" href={`${data.cdn}/get?id=${modalItem?.img_1}`}
 					><img
 						class="m-auto"
 						src={`${data.cdn}/get?id=${modalItem?.img_1}`}
