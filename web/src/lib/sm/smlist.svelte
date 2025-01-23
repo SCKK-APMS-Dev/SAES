@@ -32,7 +32,6 @@
 		extraText?: string;
 		des?: string;
 		tools?: string[];
-		am?: boolean;
 	}
 
 	let {
@@ -42,8 +41,7 @@
 		editdes = '',
 		extraText = '',
 		des = '',
-		tools = [],
-		am = false
+		tools = []
 	}: Props = $props();
 	let modal: HTMLDialogElement | undefined = $state();
 	let bindbtn: HTMLButtonElement | undefined = $state();
@@ -78,7 +76,6 @@
 		const fatcs = await fetch('/web-api/admin', {
 			headers: {
 				status: jona as string,
-				am: String(am),
 				type: type.toString()
 			}
 		});

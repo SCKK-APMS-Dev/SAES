@@ -6,7 +6,7 @@ export const load = (async ({ cookies, request, url }) => {
 	if (!cookies.get('auth_token')) {
 		return {
 			noauth: true,
-			apiUrl
+			api: apiUrlPublic
 		};
 	}
 	try {

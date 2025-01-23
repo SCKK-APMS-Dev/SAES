@@ -1,11 +1,12 @@
 import { isRedirect, redirect } from '@sveltejs/kit';
 import type { LayoutServerLoad } from './$types';
-import { apiUrl } from '$lib/api';
+import { apiUrl, apiUrlPublic } from '$lib/api';
 
 export const load = (async ({ cookies }) => {
 	if (!cookies.get('auth_token')) {
 		return {
-			noauth: true
+			noauth: true,
+			api: apiUrlPublic
 		};
 	}
 	try {
@@ -18,7 +19,8 @@ export const load = (async ({ cookies }) => {
 		});
 		if (aha.status === 404) {
 			return {
-				noauth: true
+				noauth: true,
+				api: apiUrlPublic
 			};
 		}
 		if (aha.status === 403) {

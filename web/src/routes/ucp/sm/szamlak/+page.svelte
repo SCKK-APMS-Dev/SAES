@@ -10,6 +10,5 @@
 	{data}
 	editdes="számlájának"
 	extraText="Összeg"
-	am={data.layout.am}
 	tools={['edit']}
 />
