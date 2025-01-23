@@ -243,7 +243,7 @@
 
 <dialog
 	bind:this={modal}
-	class="h-screen w-screen rounded-3xl bg-black bg-opacity-20 text-center text-white open:flex lg:h-[800px] lg:w-[600px]"
+	class="h-screen w-screen rounded-3xl bg-black bg-opacity-75 text-center text-white open:flex lg:h-[800px] lg:w-[600px]"
 >
 	{#if bindEdit.custombg}
 		<img

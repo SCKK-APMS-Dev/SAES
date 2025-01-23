@@ -17,7 +17,6 @@ export const load = (async ({ cookies }) => {
 				faction: cookies.get('selected_faction') as string
 			}
 		});
-		console.log(aha.status);
 		if (aha.status === 404) {
 			return {
 				noauth: true,

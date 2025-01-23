@@ -5,13 +5,15 @@
 		TableBodyCell,
 		TableBodyRow,
 		TableHead,
-		TableHeadCell
+		TableHeadCell,
+		Tooltip
 	} from 'flowbite-svelte';
 	import type { PageData } from './$types';
 	import { formatRelative } from 'date-fns';
 	import { locale } from '$lib/time';
 	import { get_status_string, get_type_string } from '$lib/ucp/types';
 
+	let modal: HTMLDialogElement | undefined = $state();
 	let { data }: { data: PageData } = $props();
 
 	function handle_msg(msg: string) {
@@ -32,22 +34,58 @@
 		}
 		return done_text;
 	}
+
+	function details(details: string, type: string) {
+		if (type === 'UPDATE ITEM') {
+			let msg = handle_msg(details);
+			modal!.showModal();
+		}
+	}
+	function closeModal() {
+		modal!.close();
+	}
 </script>
+
+<dialog
+	bind:this={modal}
+	class="h-screen w-screen rounded-3xl bg-black bg-opacity-75 text-center text-white open:flex lg:h-[800px] lg:w-[600px]"
+>
+	<h1>Cső</h1>
+	<button
+		aria-label="Bezárás"
+		class="absolute right-4 top-2 flex items-center justify-center rounded-xl bg-black bg-opacity-40 p-2 text-3xl font-bold text-red-600 duration-150 hover:bg-opacity-90"
+		onclick={() => closeModal()}><span class="icon-[carbon--close-filled] m-auto"></span></button
+	>
+</dialog>
 
 <div class="flex">
 	<div class="m-auto text-center text-black dark:text-white">
-		<h1 class="font-itim text-3xl font-bold">Események</h1>
+		<h1 class="font-itim mt-2 text-3xl font-bold">Események</h1>
 		<Table class="mt-5 table-auto p-10 text-center text-white">
 			<TableHead class="rounded-xl">
+				<TableHeadCell></TableHeadCell>
 				<TableHeadCell>Dátum</TableHeadCell>
 				<TableHeadCell>Esemény létrehozója</TableHeadCell>
 				<TableHeadCell>Esemény</TableHeadCell>
 				<TableHeadCell>Elem (típus/id)</TableHeadCell>
-				<TableHeadCell>Elem változtatása</TableHeadCell>
+				<TableHeadCell>Részletek</TableHeadCell>
 			</TableHead>
 			<TableBody>
 				{#each data.logs as log}
 					<TableBodyRow>
+						<TableBodyCell
+							><span
+								class={`${
+									log.action === 'UPLOAD ITEM'
+										? 'icon-[material-symbols--upload-file] text-green-500'
+										: ''
+								} ${
+									log.action === 'UPDATE ITEM'
+										? 'icon-[material-symbols--edit-document] text-blue-600'
+										: ''
+								} h-10 w-10`}
+							></span></TableBodyCell
+						>
 						<TableBodyCell
 							>{formatRelative(new Date(new Date(log.date).valueOf() - data.offset!), new Date(), {
 								locale
@@ -55,16 +93,24 @@
 						>
 						<TableBodyCell>{log.owner}</TableBodyCell>
 						<TableBodyCell
-							>{log.action === 'UPLOAD'
-								? 'Feltöltés'
-								: log.action === 'UPDATE ITEM'
-									? 'Elem módosítás'
-									: ''}</TableBodyCell
+							>{#if log.action === 'UPLOAD ITEM'}
+								Elem feltöltés
+							{/if}
+							{#if log.action === 'UPDATE ITEM'}
+								Elem szerkesztés
+							{/if}</TableBodyCell
 						>
 						<TableBodyCell
 							>{log.item_type ? get_type_string(log.item_type) : ''} / {log.item_id}</TableBodyCell
 						>
-						<TableBodyCell>{log.message ? handle_msg(log.message) : ''}</TableBodyCell>
+						<TableBodyCell
+							>{#if log.action === 'UPDATE ITEM' || log.action === 'UPLOAD ITEM'}<button
+									onclick={() => details(log.message!, log.action)}
+									aria-label="More"
+									class="icon-[material-symbols--ad] h-10 w-10 transition-colors duration-150 hover:text-emerald-400"
+								></button><Tooltip>Részletek megnézése</Tooltip>
+							{/if}
+						</TableBodyCell>
 					</TableBodyRow>
 				{/each}
 			</TableBody>

@@ -270,7 +270,7 @@ pub async fn ucp_items_post(
                                     Some(get_faction_id(ext.faction.unwrap())),
                                     Some(newitem.last_insert_id),
                                     Some(types.hails.id),
-                                    "UPLOAD",
+                                    "UPLOAD ITEM",
                                     None,
                                 )
                                 .await;
@@ -352,7 +352,7 @@ pub async fn ucp_items_post(
                                 Some(get_faction_id(ext.faction.unwrap())),
                                 Some(newitem.last_insert_id),
                                 Some(types.supplements.id),
-                                "UPLOAD",
+                                "UPLOAD ITEM",
                                 None,
                             )
                             .await;
@@ -409,7 +409,7 @@ pub async fn ucp_items_post(
                                 Some(get_faction_id(ext.faction.unwrap())),
                                 Some(newitem.last_insert_id),
                                 Some(types.bills.id),
-                                "UPLOAD",
+                                "UPLOAD ITEM",
                                 None,
                             )
                             .await;
