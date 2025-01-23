@@ -91,7 +91,7 @@ pub async fn ucp_auth(
                     if parsed_tag.is_ok() {
                         let real_tag: GetUserRes = parsed_tag.unwrap();
                         let env_mode = get_env_mode().await;
-                        if env_mode == EnvModes::Testing
+                        if (env_mode == EnvModes::Testing)
                             && !real_tag
                                 .permissions
                                 .contains(&get_perm(Permissions::SaesTest))
@@ -102,7 +102,7 @@ pub async fn ucp_auth(
                                 "Nincs jogod a teszt oldalhoz! (saes.test)".to_string(),
                             ));
                         }
-                        if env_mode == EnvModes::Devel && !real_tag.issysadmin {
+                        if (env_mode == EnvModes::Devel) && !real_tag.issysadmin {
                             return Err((
                                 StatusCode::FORBIDDEN,
                                 "Nincs jogod a dev oldalhoz!".to_string(),

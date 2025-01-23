@@ -45,7 +45,7 @@ pub enum EnvModes {
 pub async fn get_env_mode() -> EnvModes {
     let hash = BASE_HASHMAP.read().await;
     let mode = hash.get("env_mode").unwrap();
-    match mode.as_str() {
+    match mode.to_lowercase().as_str() {
         "production" => EnvModes::Production,
         "testing" => EnvModes::Testing,
         &_ => EnvModes::Devel,
