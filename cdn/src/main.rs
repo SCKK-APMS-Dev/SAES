@@ -15,7 +15,7 @@ async fn main() {
     tracing::subscriber::set_global_default(FmtSubscriber::default()).unwrap();
     envs::load_envs().await;
     let app = Router::new()
-        .route("/", get(|| async { "SAES Static server" }))
+        .route("/", get(|| async { "SAES CDN server" }))
         .route("/get", get(image_get))
         .layer(ServiceBuilder::new().layer(CorsLayer::permissive()))
         .layer(TraceLayer::new_for_http());
