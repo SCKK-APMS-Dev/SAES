@@ -17,8 +17,7 @@ export const load = (async ({ cookies, request, url }) => {
 		});
 		if (aha.status === 404 || aha.status === 406) {
 			return {
-				noauth: true,
-				apiUrl
+				noauth: true
 			};
 		}
 		if (aha.status === 403) {
@@ -88,7 +87,6 @@ export const load = (async ({ cookies, request, url }) => {
 				if (!cookies.get('selected_faction')) {
 					return {
 						layout: jeson,
-						api: apiUrl,
 						auth: cookies.get('auth_token')!,
 						maintenance: cookies.get('maintenance')
 							? jeson.admin
@@ -112,8 +110,6 @@ export const load = (async ({ cookies, request, url }) => {
 				}
 				return {
 					layout: jeson,
-					api: apiUrl,
-					image: cdnUrl,
 					faction: cookies.get('selected_faction'),
 					country:
 						process.env.NODE_ENV === 'development'

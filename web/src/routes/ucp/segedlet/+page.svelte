@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { cdnUrl } from '$lib/api';
+
 	interface Props {
 		data: {
 			api?: string | undefined;
@@ -33,7 +35,7 @@
 						A fotónak tartalmaznia kell a kiadott számlát és a teljes játékot. <a
 							class="text-taxi hidden text-xl font-bold uppercase"
 							target="_blank"
-							href="{data.api}/img?id=8740">példa</a
+							href="{cdnUrl}/img?id=8740">példa</a
 						>
 					{:else}
 						A fuvar igazolásáról kell egy teljes képernyős képet készíteni. (4-es pont).
@@ -67,7 +69,7 @@
 						Az első képen a kiadott számlának kell látszódnia. <a
 							class="text-taxi hidden text-xl font-bold uppercase"
 							target="_blank"
-							href="{data.api}/limg?id=1015&ver=1">példa</a
+							href="{cdnUrl}/limg?id=1015&ver=1">példa</a
 						>
 					{:else}
 						Az első képen a 10-12 rádiózásának, vagy hívás átvételnél a rádió rp-nek kell
@@ -78,12 +80,12 @@
 					<a
 						class="text-taxi hidden text-xl font-bold uppercase"
 						target="_blank"
-						href="{data.api}/limg?id=5965&ver=0">példa a 10-12-ről</a
+						href="{cdnUrl}/limg?id=5965&ver=0">példa a 10-12-ről</a
 					>
 					<a
 						class="text-taxi hidden text-xl font-bold uppercase"
 						target="_blank"
-						href="{data.api}/limg?id=5509&ver=0">példa a rádió rpről</a
+						href="{cdnUrl}/limg?id=5509&ver=0">példa a rádió rpről</a
 					>
 				{/if}
 			</li>
@@ -95,7 +97,7 @@
 						<a
 							class="text-taxi hidden text-xl font-bold uppercase"
 							target="_blank"
-							href="{data.api}/limg?id=1015&ver=0">példa</a
+							href="{cdnUrl}/limg?id=1015&ver=0">példa</a
 						>
 					{:else}
 						A második képen a hívást kell igazolni (4-es pont).
@@ -142,7 +144,7 @@
 					<a
 						class="text-taxi hidden text-xl font-bold uppercase"
 						target="_blank"
-						href="{data.api}/img?id=5544">példa</a
+						href="{cdnUrl}/img?id=5544">példa</a
 					>
 				</li>
 				<li class="flex gap-2">
@@ -154,7 +156,7 @@
 					<a
 						class="text-taxi hidden text-xl font-bold uppercase"
 						target="_blank"
-						href="{data.api}/img?id=5883">példa</a
+						href="{cdnUrl}/img?id=5883">példa</a
 					>
 				</li>
 			</ul>

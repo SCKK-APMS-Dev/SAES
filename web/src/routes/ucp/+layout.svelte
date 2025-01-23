@@ -9,6 +9,7 @@
 	import { socket } from '$lib/socket.js';
 	import ViewTransition from '$lib/navigation.svelte';
 	import Header from '$lib/ucp/header.svelte';
+	import { apiUrlPublic } from '$lib/api.js';
 	let { data, children } = $props();
 	let maintenance = $state(false);
 	let initial_socket = $state(false);
@@ -25,7 +26,7 @@
 	}
 	onMount(() => {
 		if (!data.noaccess && !data.noauth && !data.error && !data.nofact) {
-			$socket = io(data.api as string, {
+			$socket = io(apiUrlPublic, {
 				auth: {
 					auth_token: data.auth
 				}
@@ -94,7 +95,7 @@
 						class="from-taxi hover:bg-pos-100 bg-size-200 bg-pos-0 group relative m-auto mt-3 flex h-12 animate-bounce items-center space-x-2 overflow-hidden rounded-full bg-gradient-to-r via-rose-500 to-red-600 px-6 transition-all duration-500"
 					>
 						<a
-							href={`${data.apiUrl}/auth?path=${page.url.pathname}`}
+							href={`${apiUrlPublic}/auth?path=${page.url.pathname}`}
 							aria-label="Belépés Discord használatával"
 							class="flex w-full justify-end gap-2 text-white transition-colors duration-300 hover:text-black"
 							><span class="icon-[ic--baseline-discord] m-auto h-12 w-12"></span>

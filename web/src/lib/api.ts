@@ -2,10 +2,14 @@ export const apiUrl =
 	process.env.NODE_ENV === 'development'
 		? 'http://localhost:3000'
 		: (process.env.api_url as string);
+export const apiUrlPublic =
+	process.env.NODE_ENV === 'development'
+		? 'http://localhost:3000'
+		: (process.env.api_url_pub as string);
 export const cdnUrl =
 	process.env.NODE_ENV === 'development'
 		? 'http://localhost:3100'
-		: (process.env.cdn_url as string);
+		: (process.env.cdn_url_pub as string);
 
 let date = new Date();
 
