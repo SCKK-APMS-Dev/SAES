@@ -33,21 +33,16 @@ w_i:
 
 #* Docker image build scripts
 
-[windows]
 d_build soft tag:
-    cd {{ soft }}; docker build --platform linux/amd64 . -t ghcr.io/sckk-apms-dev/saes-{{ soft }}:{{ tag }}
-
-[linux]
-d_build soft tag:
-    cd {{ soft }} && docker build --platform linux/amd64 . -t ghcr.io/sckk-apms-dev/saes-{{ soft }}:{{ tag }}
+    podman build --platform linux/amd64 -f {{soft}}/Dockerfile . -t ghcr.io/sckk-apms-dev/saes-{{ soft }}:{{ tag }}
 
 [windows]
 w_build:
-    cd web; pnpm build
+    cd web; pnpm run build
 
 [linux]
 w_build:
-    cd web && pnpm build
+    cd web && pnpm run build
 
 [windows]
 r_build soft:
