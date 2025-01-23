@@ -171,7 +171,7 @@ pub async fn sm_items_post(
             if old_model.status != body.status {
                 act += format!(
                     "{}status FROM {} TO {}",
-                    if act.len() > 0 { ", " } else { "" },
+                    if act.len() > 0 { "; " } else { "" },
                     old_model.status,
                     body.status
                 )
@@ -180,14 +180,17 @@ pub async fn sm_items_post(
             if old_model.reason != body.reason {
                 act += format!(
                     "{}reason FROM {} TO {}",
-                    if act.len() > 0 { ", " } else { "" },
+                    if act.len() > 0 { "; " } else { "" },
                     if old_model.reason.is_some() {
-                        old_model.reason.unwrap()
+                        old_model.reason.unwrap().replace(";", "{saes_semicolon}")
                     } else {
                         String::from("null")
                     },
                     if body.reason.is_some() {
-                        body.reason.clone().unwrap()
+                        body.reason
+                            .clone()
+                            .unwrap()
+                            .replace(";", "{saes_semicolon}")
                     } else {
                         String::from("null")
                     }
@@ -197,7 +200,7 @@ pub async fn sm_items_post(
             if old_model.r#type != body.supp_type {
                 act += format!(
                     "{}supp_type FROM {} TO {}",
-                    if act.len() > 0 { ", " } else { "" },
+                    if act.len() > 0 { "; " } else { "" },
                     if old_model.r#type.is_some() {
                         old_model.r#type.unwrap()
                     } else {
@@ -264,7 +267,7 @@ pub async fn sm_items_post(
             if old_model.status != body.status {
                 act += format!(
                     "{}status FROM {} TO {}",
-                    if act.len() > 0 { ", " } else { "" },
+                    if act.len() > 0 { "; " } else { "" },
                     old_model.status,
                     body.status
                 )
@@ -273,14 +276,17 @@ pub async fn sm_items_post(
             if old_model.reason != body.reason {
                 act += format!(
                     "{}reason FROM {} TO {}",
-                    if act.len() > 0 { ", " } else { "" },
+                    if act.len() > 0 { "; " } else { "" },
                     if old_model.reason.is_some() {
-                        old_model.reason.unwrap()
+                        old_model.reason.unwrap().replace(";", "{saes_semicolon}")
                     } else {
                         String::from("null")
                     },
                     if body.reason.is_some() {
-                        body.reason.clone().unwrap()
+                        body.reason
+                            .clone()
+                            .unwrap()
+                            .replace(";", "{saes_semicolon}")
                     } else {
                         String::from("null")
                     }
@@ -333,7 +339,7 @@ pub async fn sm_items_post(
             if old_model.status != body.status {
                 act += format!(
                     "{}status FROM {} TO {}",
-                    if act.len() > 0 { ", " } else { "" },
+                    if act.len() > 0 { "; " } else { "" },
                     old_model.status,
                     body.status
                 )
@@ -342,14 +348,17 @@ pub async fn sm_items_post(
             if old_model.reason != body.reason {
                 act += format!(
                     "{}reason FROM {} TO {}",
-                    if act.len() > 0 { ", " } else { "" },
+                    if act.len() > 0 { "; " } else { "" },
                     if old_model.reason.is_some() {
-                        old_model.reason.unwrap()
+                        old_model.reason.unwrap().replace(";", "{saes_semicolon}")
                     } else {
                         String::from("null")
                     },
                     if body.reason.is_some() {
-                        body.reason.clone().unwrap()
+                        body.reason
+                            .clone()
+                            .unwrap()
+                            .replace(";", "{saes_semicolon}")
                     } else {
                         String::from("null")
                     }
@@ -359,7 +368,7 @@ pub async fn sm_items_post(
             if old_model.price != body.price {
                 act += format!(
                     "{}price FROM {} TO {}",
-                    if act.len() > 0 { ", " } else { "" },
+                    if act.len() > 0 { "; " } else { "" },
                     if old_model.price.is_some() {
                         old_model.price.unwrap()
                     } else {

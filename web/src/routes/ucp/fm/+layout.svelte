@@ -44,6 +44,7 @@
 		class="child:px-2 child:rounded-lg child:drop-shadow-xl col-span-2 hidden flex-col items-center justify-center text-center text-xl md:flex-row lg:z-auto lg:col-span-1 lg:!flex xl:mr-[10vw]"
 	>
 		<a href="/ucp/fm" class="transition-all duration-200 hover:bg-blue-600">Főoldal</a>
+		<a href="/ucp/fm/logs" class="transition-all duration-200 hover:bg-blue-600">Eseménynapló</a>
 	</div>
 </nav>
 
