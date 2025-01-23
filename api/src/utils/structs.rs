@@ -14,4 +14,5 @@ pub struct SMGetItemsFull {
     pub faction: i8,
     pub handled_by: Option<String>,
     pub date: chrono::DateTime<Utc>,
+    pub item_type: i8,
 }

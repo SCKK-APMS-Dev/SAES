@@ -69,6 +69,7 @@ pub async fn sm_items_get(
                     handled_by: item.handled_by.clone(),
                     reason: item.reason.clone(),
                     owner: item.owner.clone(),
+                    item_type: types.supplements.id,
                 }
             })
             .collect();
@@ -96,6 +97,7 @@ pub async fn sm_items_get(
                     handled_by: item.handled_by.clone(),
                     reason: item.reason.clone(),
                     owner: item.owner.clone(),
+                    item_type: types.hails.id,
                 }
             })
             .collect();
@@ -123,6 +125,7 @@ pub async fn sm_items_get(
                     handled_by: item.handled_by.clone(),
                     reason: item.reason.clone(),
                     owner: item.owner.clone(),
+                    item_type: types.bills.id,
                 }
             })
             .collect();
@@ -239,6 +242,7 @@ pub async fn sm_items_post(
                 owner: statreturn.owner,
                 price: None,
                 r#type: statreturn.r#type,
+                item_type: types.supplements.id,
             })
             .into_response())
         } else if body.tipus == types.hails.id {
@@ -311,6 +315,7 @@ pub async fn sm_items_post(
                 owner: statreturn.owner,
                 r#type: None,
                 price: None,
+                item_type: types.hails.id,
             })
             .into_response())
         } else if body.tipus == types.bills.id {
@@ -401,6 +406,7 @@ pub async fn sm_items_post(
                 owner: statreturn.owner,
                 price: statreturn.price,
                 r#type: None,
+                item_type: types.bills.id,
             })
             .into_response())
         } else {

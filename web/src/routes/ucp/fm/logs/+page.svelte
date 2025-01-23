@@ -91,7 +91,7 @@
 		{/if}
 		{#if modaltype === 'UPLOAD ITEM' && modalItem}
 			<h1 class="mb-3 text-3xl font-bold">Feltöltött elem információi:</h1>
-			{#if modalItem?.type == 2}
+			{#if modalItem?.item_type === 2}
 				<div class="flex gap-1">
 					<a href={`${imageUrl}/get?id=${modalItem?.img_1}`}
 						><img
@@ -104,7 +104,7 @@
 					<a href={`${imageUrl}/get?id=${modalItem?.img_2}`}
 						><img
 							class="m-auto"
-							src={`${imageUrl}/get?id=${modalItem?.img_1}`}
+							src={`${imageUrl}/get?id=${modalItem?.img_2}`}
 							width="300vw"
 							alt=""
 						/></a

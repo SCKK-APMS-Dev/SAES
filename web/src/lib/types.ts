@@ -22,4 +22,5 @@ export interface SMGetItemsFull {
 	faction: number;
 	handled_by: string | undefined;
 	date: Date;
+	item_type: number;
 }

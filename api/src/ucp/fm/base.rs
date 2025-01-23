@@ -50,6 +50,7 @@ pub async fn get_images_by_id(query: Query<GetImageQuery>) -> impl IntoResponse 
                 reason: ret.reason,
                 owner: ret.owner,
                 status: ret.status,
+                item_type: types.supplements.id,
             };
             return Ok(Json(final_ret));
         }
@@ -75,6 +76,7 @@ pub async fn get_images_by_id(query: Query<GetImageQuery>) -> impl IntoResponse 
                 reason: ret.reason,
                 owner: ret.owner,
                 status: ret.status,
+                item_type: types.hails.id,
             };
             return Ok(Json(final_ret));
         }
@@ -100,6 +102,7 @@ pub async fn get_images_by_id(query: Query<GetImageQuery>) -> impl IntoResponse 
                 reason: ret.reason,
                 owner: ret.owner,
                 status: ret.status,
+                item_type: types.bills.id,
             };
             return Ok(Json(final_ret));
         }
