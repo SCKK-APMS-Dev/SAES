@@ -1,5 +1,5 @@
 export interface FullDBType {
-	am: 0 | 1;
+	faction: string;
 	date: Date;
 	price: null | number;
 	id: number;
@@ -8,4 +8,18 @@ export interface FullDBType {
 	reason: null | string;
 	status: number;
 	type: number;
+}
+
+export interface SMGetItemsFull {
+	id: number;
+	owner: string;
+	img_1: number;
+	img_2: number | undefined;
+	status: number;
+	reason: string | undefined;
+	type: number | undefined;
+	price: number | undefined;
+	faction: number;
+	handled_by: string | undefined;
+	date: Date;
 }

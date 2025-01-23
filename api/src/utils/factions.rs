@@ -12,3 +12,11 @@ pub fn get_faction_id(faction: Factions) -> i8 {
         Factions::TOW => 3,
     }
 }
+
+// pub fn get_faction_by_id(id: i8) -> Factions {
+//     match id {
+//         1 => Factions::SCKK,
+//         3 => Factions::TOW,
+//         _ => Factions::SCKK,
+//     }
+// }

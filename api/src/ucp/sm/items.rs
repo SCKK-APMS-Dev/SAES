@@ -4,7 +4,6 @@ use axum::{
     response::IntoResponse,
     Extension, Json,
 };
-use chrono::Utc;
 use http::StatusCode;
 use saes_shared::{
     db::{bills, hails, supplements},
@@ -20,6 +19,7 @@ use crate::{
         factions::get_faction_id,
         middle::Driver,
         queries::SMItemsQuery,
+        structs::SMGetItemsFull,
         types_statuses::{get_statuses_as_list, get_types, get_types_as_list},
     },
 };
@@ -32,21 +32,6 @@ pub struct SMPostItemsBody {
     pub supp_type: Option<i8>,
     pub reason: Option<String>,
     pub tipus: i8,
-}
-
-#[derive(Debug, Serialize)]
-pub struct SMGetItemsFull {
-    pub id: i32,
-    pub owner: String,
-    pub img_1: i32,
-    pub img_2: Option<i32>,
-    pub status: i8,
-    pub reason: Option<String>,
-    pub r#type: Option<i8>,
-    pub price: Option<i32>,
-    pub faction: i8,
-    pub handled_by: Option<String>,
-    pub date: chrono::DateTime<Utc>,
 }
 
 #[derive(Debug, Serialize)]
