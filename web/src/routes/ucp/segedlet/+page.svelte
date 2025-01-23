@@ -1,15 +1,5 @@
 <script lang="ts">
-	import { cdnUrl } from '$lib/api';
-
-	interface Props {
-		data: {
-			api?: string | undefined;
-			layout: { am: boolean };
-			error?: string | undefined;
-		};
-	}
-
-	let { data }: Props = $props();
+	let { data } = $props();
 </script>
 
 <div class="text-center text-black dark:text-white">
@@ -31,11 +21,11 @@
 			<li class="flex items-center gap-2">
 				<h2 class="text-left text-xl font-bold">1.</h2>
 				<h2 class="text-xl">
-					{#if data.layout.am}
+					{#if data.faction === 'TOW'}
 						A fotónak tartalmaznia kell a kiadott számlát és a teljes játékot. <a
 							class="text-taxi hidden text-xl font-bold uppercase"
 							target="_blank"
-							href="{cdnUrl}/img?id=8740">példa</a
+							href="{data.cdn}/img?id=8740">példa</a
 						>
 					{:else}
 						A fuvar igazolásáról kell egy teljes képernyős képet készíteni. (4-es pont).
@@ -45,7 +35,7 @@
 			<li class="flex items-center gap-2">
 				<h2 class="text-left text-xl font-bold">2.</h2>
 				<h2 class="text-xl">
-					Pótlékok a következő időben érvényesek: {#if data.layout.am}
+					Pótlékok a következő időben érvényesek: {#if data.faction === 'TOW'}
 						8-16 óra (délelőtti), 20-4 (éjszakai).
 					{:else}
 						8-15 óra (délelőtti), 22-4 (éjszakai).
@@ -54,7 +44,7 @@
 			</li>
 		</ul>
 		<h1 class="ml-[20%] mt-5 text-left text-3xl font-bold">
-			2. Leintések {#if data.layout.am}/ Bejelentések
+			2. Leintések {#if data.faction === 'TOW'}/ Bejelentések
 			{/if}
 		</h1>
 		<ul class="child:mx-[20%] child:text-left ml-2">
@@ -65,39 +55,39 @@
 			<li class="flex gap-2">
 				<h2 class="text-xl font-bold">2.</h2>
 				<h2 class="text-xl">
-					{#if data.layout.am}
+					{#if data.faction === 'TOW'}
 						Az első képen a kiadott számlának kell látszódnia. <a
 							class="text-taxi hidden text-xl font-bold uppercase"
 							target="_blank"
-							href="{cdnUrl}/limg?id=1015&ver=1">példa</a
+							href="{data.cdn}/limg?id=1015&ver=1">példa</a
 						>
 					{:else}
 						Az első képen a 10-12 rádiózásának, vagy hívás átvételnél a rádió rp-nek kell
 						látszódnia.
 					{/if}
 				</h2>
-				{#if !data.layout.am}
+				{#if data.faction !== 'TOW'}
 					<a
 						class="text-taxi hidden text-xl font-bold uppercase"
 						target="_blank"
-						href="{cdnUrl}/limg?id=5965&ver=0">példa a 10-12-ről</a
+						href="{data.cdn}/limg?id=5965&ver=0">példa a 10-12-ről</a
 					>
 					<a
 						class="text-taxi hidden text-xl font-bold uppercase"
 						target="_blank"
-						href="{cdnUrl}/limg?id=5509&ver=0">példa a rádió rpről</a
+						href="{data.cdn}/limg?id=5509&ver=0">példa a rádió rpről</a
 					>
 				{/if}
 			</li>
 			<li class="flex gap-2">
 				<h2 class="text-xl font-bold">3.</h2>
 				<h2 class="text-xl">
-					{#if data.layout.am}
+					{#if data.faction === 'TOW'}
 						A második képen a fizetésről kell képet készíteni. (chat)
 						<a
 							class="text-taxi hidden text-xl font-bold uppercase"
 							target="_blank"
-							href="{cdnUrl}/limg?id=1015&ver=0">példa</a
+							href="{data.cdn}/limg?id=1015&ver=0">példa</a
 						>
 					{:else}
 						A második képen a hívást kell igazolni (4-es pont).
@@ -127,7 +117,7 @@
 			</li>
 		</ul>
 
-		{#if !data.layout.am}
+		{#if data.faction !== 'TOW'}
 			<h1 class="ml-[20%] mt-5 text-left text-3xl font-bold">4. Hívások igazolása</h1>
 			<ul class="child:mx-[20%] child:text- ml-2">
 				<li class="flex gap-2">
@@ -144,7 +134,7 @@
 					<a
 						class="text-taxi hidden text-xl font-bold uppercase"
 						target="_blank"
-						href="{cdnUrl}/img?id=5544">példa</a
+						href="{data.cdn}/img?id=5544">példa</a
 					>
 				</li>
 				<li class="flex gap-2">
@@ -156,7 +146,7 @@
 					<a
 						class="text-taxi hidden text-xl font-bold uppercase"
 						target="_blank"
-						href="{cdnUrl}/img?id=5883">példa</a
+						href="{data.cdn}/img?id=5883">példa</a
 					>
 				</li>
 			</ul>

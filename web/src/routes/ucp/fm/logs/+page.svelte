@@ -14,7 +14,6 @@
 	import { locale } from '$lib/time';
 	import { get_status_string, get_type_string } from '$lib/ucp/types';
 	import type { SMGetItemsFull } from '$lib/types';
-	import { cdnUrl } from '$lib/api';
 	import { loading } from '$lib/loading.svelte';
 
 	let modal: HTMLDialogElement | undefined = $state();
@@ -93,28 +92,28 @@
 			<h1 class="mb-3 text-3xl font-bold">Feltöltött elem információi:</h1>
 			{#if modalItem?.item_type === 2}
 				<div class="flex gap-1">
-					<a href={`${cdnUrl}/get?id=${modalItem?.img_1}`}
+					<a href={`${data.cdn}/get?id=${modalItem?.img_1}`}
 						><img
 							class="m-auto"
-							src={`${cdnUrl}/get?id=${modalItem?.img_1}`}
+							src={`${data.cdn}/get?id=${modalItem?.img_1}`}
 							width="300vw"
 							alt=""
 						/></a
 					>
-					<a href={`${cdnUrl}/get?id=${modalItem?.img_2}`}
+					<a href={`${data.cdn}/get?id=${modalItem?.img_2}`}
 						><img
 							class="m-auto"
-							src={`${cdnUrl}/get?id=${modalItem?.img_2}`}
+							src={`${data.cdn}/get?id=${modalItem?.img_2}`}
 							width="300vw"
 							alt=""
 						/></a
 					>
 				</div>
 			{:else}
-				<a href={`${cdnUrl}/get?id=${modalItem?.img_1}`}
+				<a href={`${data.cdn}/get?id=${modalItem?.img_1}`}
 					><img
 						class="m-auto"
-						src={`${cdnUrl}/get?id=${modalItem?.img_1}`}
+						src={`${data.cdn}/get?id=${modalItem?.img_1}`}
 						width="300vw"
 						alt=""
 					/></a

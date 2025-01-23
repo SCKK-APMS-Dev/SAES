@@ -23,7 +23,6 @@
 		get_type_number,
 		get_type_string
 	} from '$lib/ucp/types';
-	import { cdnUrl } from '$lib/api';
 	let haveadmin = $state(false);
 	interface Props {
 		title?: string;
@@ -248,7 +247,7 @@
 >
 	{#if bindEdit.custombg}
 		<img
-			src={`${cdnUrl}/get?id=${bindEdit.img_1}`}
+			src={`${data.cdn}/get?id=${bindEdit.img_1}`}
 			class="absolute left-1/2 top-1/2 h-full -translate-x-1/2 -translate-y-1/2 opacity-90"
 			alt=""
 		/>
@@ -394,28 +393,28 @@
 							<TableBodyCell>
 								{#if type == get_type_number('leintés')}
 									<div class="flex flex-col xl:flex-row">
-										<a href={`${cdnUrl}/get?id=${potle.img_1}`} target="”_blank”"
+										<a href={`${data.cdn}/get?id=${potle.img_1}`} target="”_blank”"
 											><img
 												loading="lazy"
-												src={`${cdnUrl}/get?id=${potle.img_1}`}
+												src={`${data.cdn}/get?id=${potle.img_1}`}
 												alt=""
 												class="lg:w-52"
 											/></a
 										>
-										<a href={`${cdnUrl}/get?id=${potle.img_2}`} target="”_blank”"
+										<a href={`${data.cdn}/get?id=${potle.img_2}`} target="”_blank”"
 											><img
 												loading="lazy"
-												src={`${cdnUrl}/get?id=${potle.img_2}`}
+												src={`${data.cdn}/get?id=${potle.img_2}`}
 												alt=""
 												class="lg:w-52"
 											/></a
 										>
 									</div>
 								{:else}
-									<a href={`${cdnUrl}/get?id=${potle.img_1}`} target="”_blank”"
+									<a href={`${data.cdn}/get?id=${potle.img_1}`} target="”_blank”"
 										><img
 											loading="lazy"
-											src={`${cdnUrl}/get?id=${potle.img_1}`}
+											src={`${data.cdn}/get?id=${potle.img_1}`}
 											alt=""
 											class="lg:w-52"
 										/></a

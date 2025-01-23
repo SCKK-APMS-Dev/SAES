@@ -8,7 +8,6 @@
 	import { locale } from '$lib/time';
 	import { get_status_string, get_type_number, get_type_string } from './types';
 	import { Tooltip } from 'flowbite-svelte';
-	import { cdnUrl } from '$lib/api';
 	let multipage = $state(false);
 	interface Props {
 		data: PageData;
@@ -98,14 +97,14 @@
 						{#if tipus === get_type_number('leintés')}
 							<div class="flex flex-col xl:flex-row">
 								<a
-									href={`${cdnUrl}/get?id=${potle.img_1}`}
+									href={`${data.cdn}/get?id=${potle.img_1}`}
 									target="_blank"
 									onmouseenter={() => (potle.focus1 = true)}
 									onmouseleave={() => (potle.focus1 = false)}
 								>
 									<img
 										loading="lazy"
-										src={`${cdnUrl}/get?id=${potle.img_1}`}
+										src={`${data.cdn}/get?id=${potle.img_1}`}
 										alt=""
 										class="max-h-xl m-auto max-w-xl py-2 drop-shadow-xl"
 										class:blur={potle.focus1}
@@ -117,14 +116,14 @@
 									{/if}
 								</a>
 								<a
-									href={`${cdnUrl}/get?id=${potle.img_2}`}
+									href={`${data.cdn}/get?id=${potle.img_2}`}
 									target="_blank"
 									onmouseenter={() => (potle.focus2 = true)}
 									onmouseleave={() => (potle.focus2 = false)}
 								>
 									<img
 										loading="lazy"
-										src={`${cdnUrl}/get?id=${potle.img_2}`}
+										src={`${data.cdn}/get?id=${potle.img_2}`}
 										alt=""
 										class="max-h-xl m-auto max-w-xl py-2 drop-shadow-xl"
 										class:blur={potle.focus2}
@@ -138,14 +137,14 @@
 							</div>
 						{:else}
 							<a
-								href={`${cdnUrl}/get?id=${potle.img_1}`}
+								href={`${data.cdn}/get?id=${potle.img_1}`}
 								target="_blank"
 								onmouseenter={() => (potle.focus = true)}
 								onmouseleave={() => (potle.focus = false)}
 							>
 								<img
 									loading="lazy"
-									src={`${cdnUrl}/get?id=${potle.img_1}`}
+									src={`${data.cdn}/get?id=${potle.img_1}`}
 									alt=""
 									class="max-h-xl m-auto max-w-xl py-2 drop-shadow-xl"
 									class:blur={potle.focus}

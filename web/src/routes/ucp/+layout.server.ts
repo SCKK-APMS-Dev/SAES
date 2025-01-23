@@ -1,5 +1,5 @@
 import type { LayoutServerLoad } from './$types';
-import { apiUrl, cdnUrl } from '$lib/api';
+import { apiUrl, apiUrlPublic, cdnUrl } from '$lib/api';
 import { isRedirect, redirect } from '@sveltejs/kit';
 
 export const load = (async ({ cookies, request, url }) => {
@@ -17,7 +17,8 @@ export const load = (async ({ cookies, request, url }) => {
 		});
 		if (aha.status === 404 || aha.status === 406) {
 			return {
-				noauth: true
+				noauth: true,
+				api: apiUrlPublic
 			};
 		}
 		if (aha.status === 403) {
@@ -88,6 +89,7 @@ export const load = (async ({ cookies, request, url }) => {
 					return {
 						layout: jeson,
 						auth: cookies.get('auth_token')!,
+						api: apiUrlPublic,
 						maintenance: cookies.get('maintenance')
 							? jeson.admin
 								? cookies.get('maintenance')
@@ -110,6 +112,8 @@ export const load = (async ({ cookies, request, url }) => {
 				}
 				return {
 					layout: jeson,
+					api: apiUrlPublic,
+					cdn: cdnUrl,
 					faction: cookies.get('selected_faction'),
 					country:
 						process.env.NODE_ENV === 'development'

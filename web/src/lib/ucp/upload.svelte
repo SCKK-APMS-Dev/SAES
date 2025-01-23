@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { beforeNavigate } from '$app/navigation';
-	import { cdnUrl } from '$lib/api';
 	import Error from '$lib/error.svelte';
 	import { loading } from '$lib/loading.svelte';
 	import { get_type_number } from './types';
@@ -136,13 +135,13 @@
 					<div class="flex flex-col">
 						<img
 							loading="lazy"
-							src={`${cdnUrl}/get?id=${nyam[0]}`}
+							src={`${data.cdn}/get?id=${nyam[0]}`}
 							alt=""
 							class="max-h-5xl m-auto max-w-5xl py-3"
 						/>
 						<img
 							loading="lazy"
-							src={`${cdnUrl}/get?id=${nyam[1]}`}
+							src={`${data.cdn}/get?id=${nyam[1]}`}
 							alt=""
 							class="max-h-5xl m-auto max-w-5xl py-3"
 						/>
@@ -150,7 +149,7 @@
 				{:else}
 					<img
 						loading="lazy"
-						src={`${cdnUrl}/get?id=${nyam[0]}`}
+						src={`${data.cdn}/get?id=${nyam[0]}`}
 						alt=""
 						class="max-h-5xl m-auto max-w-5xl py-3"
 					/>
