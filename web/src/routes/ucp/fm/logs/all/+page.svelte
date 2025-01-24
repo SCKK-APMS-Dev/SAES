@@ -148,14 +148,12 @@
 
 <div class="flex">
 	<div class="m-auto text-center text-black dark:text-white">
-		<h1 class="font-itim mt-2 text-3xl font-bold">Események</h1>
-		{#if data.layout?.admin}
-			<a href="/ucp/fm/logs/all" class="rounded-lg bg-emerald-700 px-1">Összes esemény</a>
-		{/if}
-		<div class="mt-3 flex items-center justify-center gap-5">
+		<h1 class="font-itim mb-3 mt-2 text-3xl font-bold">Összes esemény</h1>
+		<div class="flex items-center justify-center gap-5">
 			<h1>Filter:</h1>
 			<Select bind:value={filter} placeholder="Válassz esemény típust">
 				<option value="all">Minden</option>
+				<option value="LOGIN">Bejelentkezés</option>
 				<option value="UPLOAD ITEM">Elem feltöltés</option>
 				<option value="UPDATE ITEM">Elem szerkesztés</option>
 			</Select>
@@ -166,6 +164,7 @@
 				<TableHeadCell>Dátum</TableHeadCell>
 				<TableHeadCell>Esemény létrehozója</TableHeadCell>
 				<TableHeadCell>Esemény</TableHeadCell>
+				<TableHeadCell>Frakció</TableHeadCell>
 				<TableHeadCell>Elem (típus/id)</TableHeadCell>
 				<TableHeadCell>Részletek</TableHeadCell>
 			</TableHead>
@@ -183,7 +182,7 @@
 										log.action === 'UPDATE ITEM'
 											? 'icon-[material-symbols--edit-document] text-blue-600'
 											: ''
-									} h-10 w-10`}
+									} ${log.action === 'LOGIN' ? 'icon-[material-symbols--how-to-reg] text-yellow-300' : ''} h-10 w-10`}
 								></span></TableBodyCell
 							>
 							<TableBodyCell
@@ -202,11 +201,17 @@
 								{/if}
 								{#if log.action === 'UPDATE ITEM'}
 									Elem szerkesztés
-								{/if}</TableBodyCell
-							>
-							<TableBodyCell
-								>{log.item_type ? get_type_string(log.item_type) : ''} / {log.item_id}</TableBodyCell
-							>
+								{/if}
+								{#if log.action === 'LOGIN'}
+									Bejelentkezés
+								{/if}
+							</TableBodyCell>
+							<TableBodyCell>{log.faction}</TableBodyCell>
+							<TableBodyCell>
+								{#if log.action !== 'LOGIN'}
+									{log.item_type ? get_type_string(log.item_type) : ''} / {log.item_id}
+								{/if}
+							</TableBodyCell>
 							<TableBodyCell
 								>{#if log.action === 'UPDATE ITEM'}<button
 										onclick={() => get_details(log.message!, log.action)}
