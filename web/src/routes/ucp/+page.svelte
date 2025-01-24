@@ -53,24 +53,8 @@
 	{#if !data.error}
 		<div class="ml-16 mr-16 mt-16 rounded-lg bg-amber-600">
 			<h1 class="text-2xl drop-shadow-lg md:text-5xl md:font-bold">
-				{greet}, {data.layout?.name}{end}
+				{greet}, {data.layout?.admin ? 'szöszadmin ' : ''}{data.layout?.name}{end}
 			</h1>
-			<!-- {#if end === '?'}
-				<form class="flex items-center justify-center gap-2 md:mb-4" on:submit={sendResponse}>
-					<input
-						bind:value={reason}
-						type="text"
-						class="w-[30vw] rounded-3xl border-2 border-white bg-amber-600 text-center font-bold placeholder:text-center placeholder:text-xl placeholder:font-bold placeholder:text-white"
-						name="response"
-						placeholder="Válasz"
-					/>
-					<button
-						type="submit"
-						class="text-xl font-bold transition-colors duration-200 hover:text-blue-600"
-						>Küld</button
-					>
-				</form>
-			{/if} -->
 			{#if data.faction == 'SCKK' && data.layout?.taxi}
 				<h2 class="text-xl drop-shadow-lg md:text-2xl">
 					Pozíciód: {data.layout.taxi.positionname}

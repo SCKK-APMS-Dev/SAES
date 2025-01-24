@@ -64,6 +64,8 @@
 		{#if !navigating.type}
 			{#if page.url.pathname.includes('sm')}
 				<title>Műszakvezetői felület - {tip}</title>
+			{:else if page.url.pathname.includes('fm')}
+				<title>Frakcióvezetői felület - {tip}</title>
 			{:else if Reeler_keys.some((el) => page.url.pathname.includes(el))}
 				{#if page.url.pathname.endsWith('/upload')}
 					<title
@@ -230,7 +232,7 @@
 			</main>
 			{#if (data.layout?.admin || data.layout?.perms.includes(data.faction === 'SCKK' ? 'saes.fm.taxi' : 'saes.fm.tow')) && !page.url.pathname.startsWith('/ucp/fm')}
 				<div
-					class={`group fixed bottom-8 right-8 animate-pulse items-center justify-center rounded-xl bg-slate-950 opacity-75 drop-shadow-2xl transition-all duration-300 hover:animate-none hover:opacity-100 ${data.faction === 'SCKK' ? 'hover:bg-taxi' : 'hover:bg-tow'}`}
+					class={`group fixed bottom-8 left-8 animate-pulse items-center justify-center rounded-xl bg-slate-950 opacity-75 drop-shadow-2xl transition-all duration-300 hover:animate-none hover:opacity-100 ${data.faction === 'SCKK' ? 'hover:bg-taxi' : 'hover:bg-tow'}`}
 				>
 					<a
 						href="/ucp/fm"
