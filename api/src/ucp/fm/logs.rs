@@ -17,6 +17,17 @@ pub struct Logs {
     date: DateTime<Utc>,
 }
 
+#[derive(Debug, Serialize)]
+pub struct AllLogs {
+    owner: String,
+    item_id: Option<i32>,
+    item_type: Option<i8>,
+    action: String,
+    faction: Option<i8>,
+    message: Option<String>,
+    date: DateTime<Utc>,
+}
+
 pub fn get_routes() -> Router {
     Router::new()
         .route("/get", get(fm_get_logs))
@@ -57,14 +68,15 @@ pub async fn fm_get_all_logs(ext: Extension<Driver>) -> impl IntoResponse {
             .all(&db)
             .await
             .unwrap();
-        let logs: Vec<Logs> = logs
+        let logs: Vec<AllLogs> = logs
             .iter()
-            .map(|log| -> Logs {
-                Logs {
+            .map(|log| -> AllLogs {
+                AllLogs {
                     owner: log.owner.clone(),
                     item_id: log.item_id,
                     item_type: log.item_type,
                     action: log.action.clone(),
+                    faction: log.faction,
                     message: log.message.clone(),
                     date: log.date.clone(),
                 }
