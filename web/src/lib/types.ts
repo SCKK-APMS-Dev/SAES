@@ -24,3 +24,13 @@ export interface SMGetItemsFull {
 	date: Date;
 	item_type: number;
 }
+
+export interface Logs {
+	owner: string;
+	item_id: number | undefined;
+	item_type: number | undefined;
+	action: string;
+	faction: string;
+	message: string | undefined;
+	date: Date;
+}

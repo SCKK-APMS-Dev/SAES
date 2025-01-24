@@ -1,16 +1,7 @@
 import { apiUrl } from '$lib/api';
 import { redirect } from '@sveltejs/kit';
-import type { PageServerLoad } from './$types';
-
-interface Logs {
-	owner: string;
-	item_id: number | undefined;
-	item_type: number | undefined;
-	action: string;
-	faction: string | undefined;
-	message: string | undefined;
-	date: Date;
-}
+import type { PageServerLoad } from '../$types';
+import type { Logs } from '$lib/types';
 
 export const load = (async ({ cookies }) => {
 	let req = await fetch(`${apiUrl}/ucp/fm/logs/get_all`, {

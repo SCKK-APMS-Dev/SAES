@@ -13,16 +13,6 @@ pub struct Logs {
     item_id: Option<i32>,
     item_type: Option<i8>,
     action: String,
-    message: Option<String>,
-    date: DateTime<Utc>,
-}
-
-#[derive(Debug, Serialize)]
-pub struct AllLogs {
-    owner: String,
-    item_id: Option<i32>,
-    item_type: Option<i8>,
-    action: String,
     faction: Option<i8>,
     message: Option<String>,
     date: DateTime<Utc>,
@@ -51,6 +41,7 @@ pub async fn fm_get_logs(ext: Extension<Driver>) -> impl IntoResponse {
                 item_id: log.item_id,
                 item_type: log.item_type,
                 action: log.action.clone(),
+                faction: log.faction.clone(),
                 message: log.message.clone(),
                 date: log.date.clone(),
             }
@@ -68,10 +59,10 @@ pub async fn fm_get_all_logs(ext: Extension<Driver>) -> impl IntoResponse {
             .all(&db)
             .await
             .unwrap();
-        let logs: Vec<AllLogs> = logs
+        let logs: Vec<Logs> = logs
             .iter()
-            .map(|log| -> AllLogs {
-                AllLogs {
+            .map(|log| -> Logs {
+                Logs {
                     owner: log.owner.clone(),
                     item_id: log.item_id,
                     item_type: log.item_type,

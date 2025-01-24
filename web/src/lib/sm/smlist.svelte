@@ -73,7 +73,7 @@
 	let bajvan = $state(false);
 	async function render() {
 		loading.value = true;
-		const fatcs = await fetch('/web-api/admin', {
+		const fatcs = await fetch('/web-api/sm', {
 			headers: {
 				status: jona as string,
 				type: type.toString()
@@ -138,7 +138,7 @@
 		console.log(bindEdit);
 	}
 	async function quickTools(timpo: string, id: number) {
-		const fatcs = await fetch('/web-api/admin', {
+		const fatcs = await fetch('/web-api/sm', {
 			headers: {
 				'Content-Type': 'application/json'
 			},
@@ -202,7 +202,7 @@
 		bindbtn?.classList.add('cursor-not-allowed');
 		bindbtn?.classList.add('bg-emerald-700');
 		bindbtn!.disabled = true;
-		const fatcs = await fetch('/web-api/admin', {
+		const fatcs = await fetch('/web-api/sm', {
 			headers: {
 				'Content-Type': 'application/json'
 			},

@@ -1,14 +1,6 @@
 import { apiUrl } from '$lib/api';
+import type { Logs } from '$lib/types';
 import type { PageServerLoad } from './$types';
-
-interface Logs {
-	owner: string;
-	item_id: number | undefined;
-	item_type: number | undefined;
-	action: string;
-	message: string | undefined;
-	date: Date;
-}
 
 export const load = (async ({ cookies }) => {
 	let req = await fetch(`${apiUrl}/ucp/fm/logs/get`, {
