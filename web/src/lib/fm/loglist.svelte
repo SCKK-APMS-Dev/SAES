@@ -202,30 +202,29 @@
 		{/if}
 		<div class="mt-3 flex items-center justify-center gap-5">
 			{#if filters.includes('login')}
-				<div class="flex gap-2 rounded-lg bg-gray-400 bg-opacity-30 px-2 py-1">
-					<label for="login">Bejelentkezés</label>
-					<Checkbox bind:checked={selected_filters.login} on:change={filter_check} name="login" />
-				</div>
+				<Checkbox
+					bind:checked={selected_filters.login}
+					on:change={filter_check}
+					name="login"
+					class="gap-1 rounded-lg bg-gray-400 bg-opacity-30 px-2 py-1 font-sans text-white"
+					>Bejelentkezés</Checkbox
+				>
 			{/if}
 			{#if filters.includes('upload_item')}
-				<div class="flex gap-2 rounded-lg bg-gray-400 bg-opacity-30 px-2 py-1">
-					<label for="upload item">Elem feltöltés</label>
-					<Checkbox
-						bind:checked={selected_filters.upload_item}
-						on:change={filter_check}
-						name="upload item"
-					/>
-				</div>
+				<Checkbox
+					bind:checked={selected_filters.upload_item}
+					on:change={filter_check}
+					class="gap-1 rounded-lg bg-gray-400 bg-opacity-30 px-2 py-1 font-sans text-white"
+					name="upload item">Elem feltöltés</Checkbox
+				>
 			{/if}
 			{#if filters.includes('update_item')}
-				<div class="flex gap-2 rounded-lg bg-gray-400 bg-opacity-30 px-2 py-1">
-					<label for="update item">Elem szerkesztés</label>
-					<Checkbox
-						bind:checked={selected_filters.update_item}
-						on:change={filter_check}
-						name="update item"
-					/>
-				</div>
+				<Checkbox
+					bind:checked={selected_filters.update_item}
+					on:change={filter_check}
+					class="gap-1 rounded-lg bg-gray-400 bg-opacity-30 px-2 py-1 font-sans text-white"
+					name="update item">Elem szerkesztés</Checkbox
+				>
 			{/if}
 		</div>
 		<Table class="mt-5 table-auto p-10 text-center text-white">
