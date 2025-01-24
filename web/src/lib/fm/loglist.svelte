@@ -257,13 +257,9 @@
 								></span></TableBodyCell
 							>
 							<TableBodyCell
-								>{formatRelative(
-									new Date(new Date(log.date).valueOf() - data.offset!),
-									new Date(),
-									{
-										locale
-									}
-								)}</TableBodyCell
+								>{formatRelative(new Date(log.date), new Date(), {
+									locale
+								})}</TableBodyCell
 							>
 							<TableBodyCell>{log.owner}</TableBodyCell>
 							<TableBodyCell
