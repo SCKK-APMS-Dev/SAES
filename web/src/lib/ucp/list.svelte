@@ -63,7 +63,7 @@
 			<a
 				href={`${$page.url.pathname}/upload`}
 				aria-label="Feltöltés"
-				class="from-taxi hover:bg-pos-100 bg-size-200 bg-pos-0 h-8 w-16 rounded-full bg-gradient-to-r via-teal-400 to-green-600 text-center text-xl font-bold text-white shadow-2xl drop-shadow-lg transition-all duration-500"
+				class="from-taxi hover:bg-pos-100 bg-size-200 bg-pos-0 h-8 w-16 rounded-full bg-linear-to-r via-teal-400 to-green-600 text-center text-xl font-bold text-white shadow-2xl drop-shadow-lg transition-all duration-500"
 				><span class="icon-[material-symbols--upload] h-full w-full"></span></a
 			>
 			<Tooltip class="bg-slate-500">
@@ -74,7 +74,7 @@
 			{#if handled_potleks}
 				{#each handled_potleks as potle}
 					<div
-						class="rounded-lg bg-gradient-to-bl p-2 drop-shadow-xl"
+						class="rounded-lg bg-linear-to-bl p-2 drop-shadow-xl"
 						class:from-teal-500={get_status_string(potle.status) === 'elfogadva'}
 						class:to-green-600={get_status_string(potle.status) === 'elfogadva'}
 						class:from-amber-500={get_status_string(potle.status) === 'elutasítva'}
@@ -173,7 +173,7 @@
 				<button
 					aria-label="Előző oldal"
 					onclick={() => switchPage('prev')}
-					class="hover:bg-pos-100 bg-size-200 bg-pos-0 rounded-full bg-gradient-to-r from-emerald-500 via-teal-600 to-red-500 text-white duration-300"
+					class="hover:bg-pos-100 bg-size-200 bg-pos-0 rounded-full bg-linear-to-r from-emerald-500 via-teal-600 to-red-500 text-white duration-300"
 					style="width: calc(5vw*2.5); height: 5vh;"
 					><span class="icon-[solar--map-arrow-left-bold] h-full w-full"></span></button
 				>
@@ -182,7 +182,7 @@
 				<button
 					aria-label="Következő oldal"
 					onclick={() => switchPage('next')}
-					class="hover:bg-pos-100 bg-size-200 bg-pos-0 rounded-full bg-gradient-to-r from-emerald-500 via-teal-600 to-red-500 text-white duration-300"
+					class="hover:bg-pos-100 bg-size-200 bg-pos-0 rounded-full bg-linear-to-r from-emerald-500 via-teal-600 to-red-500 text-white duration-300"
 					style="width: calc(5vw*2.5); height: 5vh;"
 					><span class="icon-[solar--map-arrow-right-bold] h-full w-full"></span></button
 				>

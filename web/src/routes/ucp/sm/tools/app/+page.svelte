@@ -131,7 +131,7 @@
 		<Textarea bind:value={code}></Textarea>
 		<button
 			onclick={handle}
-			class="hover:bg-pos-100 bg-size-200 bg-pos-0 w-full rounded-lg bg-gradient-to-r from-emerald-500 via-amber-400 to-rose-600 py-2 text-xl font-bold drop-shadow-lg transition-all duration-500"
+			class="hover:bg-pos-100 bg-size-200 bg-pos-0 w-full rounded-lg bg-linear-to-r from-emerald-500 via-amber-400 to-rose-600 py-2 text-xl font-bold drop-shadow-lg transition-all duration-500"
 			>Feldolgozás</button
 		>
 		{#if Object.keys(a).length > 0}

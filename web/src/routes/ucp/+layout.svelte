@@ -94,7 +94,7 @@
 					</h1>
 					<button
 						aria-label="Belépés Discord használatával"
-						class="from-taxi hover:bg-pos-100 bg-size-200 bg-pos-0 group relative m-auto mt-3 flex h-12 animate-bounce items-center space-x-2 overflow-hidden rounded-full bg-gradient-to-r via-rose-500 to-red-600 px-6 transition-all duration-500"
+						class="from-taxi hover:bg-pos-100 bg-size-200 bg-pos-0 group relative m-auto mt-3 flex h-12 animate-bounce items-center space-x-2 overflow-hidden rounded-full bg-linear-to-r via-rose-500 to-red-600 px-6 transition-all duration-500"
 					>
 						<a
 							href={`${data.api}/auth?path=${page.url.pathname}`}
@@ -105,7 +105,7 @@
 						>
 						<div class="flex translate-x-3 items-center -space-x-3">
 							<div
-								class="h-[1.6px] w-2.5 origin-left scale-x-0 rounded bg-white transition duration-300 group-hover:scale-x-100 group-hover:bg-black"
+								class="h-[1.6px] w-2.5 origin-left scale-x-0 rounded-sm bg-white transition duration-300 group-hover:scale-x-100 group-hover:bg-black"
 							></div>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
@@ -130,7 +130,7 @@
 					<a
 						href="/logout"
 						data-sveltekit-reload
-						class="hover:bg-pos-100 bg-size-200 bg-pos-0 mb-5 ml-5 mr-5 mt-5 block rounded-full bg-gradient-to-r from-red-500 via-amber-400 to-rose-600 px-2 py-1 text-center text-lg font-bold text-white drop-shadow-lg transition-all duration-500"
+						class="hover:bg-pos-100 bg-size-200 bg-pos-0 mb-5 ml-5 mr-5 mt-5 block rounded-full bg-linear-to-r from-red-500 via-amber-400 to-rose-600 px-2 py-1 text-center text-lg font-bold text-white drop-shadow-lg transition-all duration-500"
 						>Kijelentkezés</a
 					>
 				</div>
@@ -256,7 +256,7 @@
 					{#if data.layout?.admin}
 						<a
 							href="/ucp/keine"
-							class="hover:bg-pos-100 bg-size-200 bg-pos-0 mb-5 ml-5 mr-5 mt-5 block rounded-full bg-gradient-to-r from-red-500 via-amber-400 to-rose-600 px-2 py-1 text-center text-lg font-bold text-white drop-shadow-lg transition-all duration-500"
+							class="hover:bg-pos-100 bg-size-200 bg-pos-0 mb-5 ml-5 mr-5 mt-5 block rounded-full bg-linear-to-r from-red-500 via-amber-400 to-rose-600 px-2 py-1 text-center text-lg font-bold text-white drop-shadow-lg transition-all duration-500"
 							>Továbblépés (nyomj rá majd töltsd újra az oldalt)</a
 						>
 					{/if}

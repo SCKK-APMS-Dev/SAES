@@ -19,7 +19,7 @@
 </script>
 
 <nav class="grid grid-cols-2 items-center justify-between bg-emerald-700 text-white lg:flex">
-	<div class="ml-2 flex flex-shrink items-center gap-2 xl:ml-[10vw]">
+	<div class="ml-2 flex shrink items-center gap-2 xl:ml-[10vw]">
 		<h1 class="hidden text-3xl font-bold drop-shadow-xl md:block">Műszakvezetés</h1>
 		<h1 class="text-3xl font-bold drop-shadow-xl md:hidden">Műszakv.</h1>
 		<a
@@ -38,7 +38,7 @@
 	</button>
 	<div
 		bind:this={nav}
-		class="child:px-2 child:rounded-lg child:drop-shadow-xl col-span-2 hidden flex-col items-center justify-center text-center text-xl md:flex-row lg:z-auto lg:col-span-1 lg:!flex xl:mr-[10vw]"
+		class="child:px-2 child:rounded-lg child:drop-shadow-xl col-span-2 hidden flex-col items-center justify-center text-center text-xl md:flex-row lg:z-auto lg:col-span-1 lg:flex! xl:mr-[10vw]"
 	>
 		<a href="/ucp/sm" class="transition-all duration-200 hover:bg-emerald-600">Főoldal</a>
 		<a href="/ucp/sm/stat/current" class="transition-all duration-200 hover:bg-emerald-600"

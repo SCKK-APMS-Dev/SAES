@@ -78,11 +78,11 @@
 					>
 						<div
 							aria-hidden="true"
-							class="m-auto h-0.5 w-6 rounded bg-white transition duration-300"
+							class="m-auto h-0.5 w-6 rounded-sm bg-white transition duration-300"
 						></div>
 						<div
 							aria-hidden="true"
-							class="m-auto mt-2 h-0.5 w-6 rounded bg-white transition duration-300"
+							class="m-auto mt-2 h-0.5 w-6 rounded-sm bg-white transition duration-300"
 						></div>
 					</label>
 
@@ -113,7 +113,7 @@
 										<a
 											href="/ucp/sm"
 											class:text-red-500={nosocket}
-											class={`${faction === 'TOW' ? 'from-tow via-blue-600 to-emerald-400' : 'from-taxi via-amber-600 to-red-500'} hover:bg-pos-100 bg-size-200 bg-pos-0 block rounded-full bg-gradient-to-r px-6 py-3 text-center font-bold drop-shadow-lg transition-all duration-500`}
+											class={`${faction === 'TOW' ? 'from-tow via-blue-600 to-emerald-400' : 'from-taxi via-amber-600 to-red-500'} hover:bg-pos-100 bg-size-200 bg-pos-0 block rounded-full bg-linear-to-r px-6 py-3 text-center font-bold drop-shadow-lg transition-all duration-500`}
 										>
 											Műszakvezetés
 											{#if christmas}
@@ -130,7 +130,7 @@
 			</div>
 		</div>
 	</div>
-	<h2 class="z-20 bg-gradient-to-r from-rose-600 to-amber-600 py-1 text-center text-xl text-white">
+	<h2 class="z-20 bg-linear-to-r from-rose-600 to-amber-600 py-1 text-center text-xl text-white">
 		Nem vagy biztos valamiben? Nézd meg a <a href="/ucp/segedlet" class="text-taxi z-20 font-bold"
 			>segédletet</a
 		>!
