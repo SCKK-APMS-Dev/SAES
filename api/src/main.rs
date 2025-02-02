@@ -4,12 +4,14 @@ use axum::{routing::get, Router};
 use dotenvy::dotenv;
 use lazy_static::lazy_static;
 use reqwest::Client;
+use saes_shared::sql::get_db_conn;
+use sea_orm::DatabaseConnection;
 use socket::InitialData;
 use socketioxide::{
     extract::{Data, SocketRef},
     SocketIo,
 };
-use tokio::sync::RwLock;
+use tokio::sync::{OnceCell, RwLock};
 use tower::ServiceBuilder;
 use tower_cookies::CookieManagerLayer;
 use tower_http::{cors::CorsLayer, trace::TraceLayer};
@@ -30,6 +32,7 @@ lazy_static! {
     pub static ref WEB_CLIENT: Client = Client::new();
     pub static ref BASE_HASHMAP: RwLock<HashMap<String, String>> = RwLock::new(HashMap::new());
 }
+pub static DB_CLIENT: OnceCell<DatabaseConnection> = OnceCell::const_new();
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
@@ -57,6 +60,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
         .insert("env_mode".to_string(), env_mode?.to_uppercase().to_string());
 
     init::main().await;
+    DB_CLIENT.set(get_db_conn().await).unwrap();
     io.ns(
         "/",
         move |socket: SocketRef, Data(data): Data<InitialData>| socket::on_connect(socket, data),

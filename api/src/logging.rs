@@ -1,5 +1,7 @@
-use saes_shared::{db::logs, sql::get_db_conn};
+use saes_shared::db::logs;
 use sea_orm::{EntityTrait, Set};
+
+use crate::DB_CLIENT;
 
 pub async fn db_log(
     owner: String,
@@ -9,7 +11,7 @@ pub async fn db_log(
     action: &str,
     message: Option<String>,
 ) {
-    let db = get_db_conn().await;
+    let db = DB_CLIENT.get().unwrap();
     let amodel = logs::ActiveModel {
         owner: Set(owner),
         item_id: Set(item_id),
@@ -20,7 +22,7 @@ pub async fn db_log(
         ..Default::default()
     };
     logs::Entity::insert(amodel)
-        .exec(&db)
+        .exec(db)
         .await
         .expect("[ERROR] Log létrehozása sikertelen");
 }

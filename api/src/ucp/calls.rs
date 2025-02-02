@@ -1,7 +1,6 @@
 use axum::{debug_handler, extract::Request, Json};
 use http::StatusCode;
 use saes_shared::db::{hails, supplements};
-use saes_shared::sql::get_db_conn;
 use sea_orm::{ColumnTrait, EntityTrait, QueryFilter};
 use serde::{Deserialize, Serialize};
 use serde_json::from_str;
@@ -10,7 +9,7 @@ use crate::utils::factions::get_faction_id;
 use crate::utils::functions::get_fridays;
 use crate::utils::types_statuses::get_statuses;
 use crate::utils::{api::get_api_envs, middle::Driver};
-use crate::WEB_CLIENT;
+use crate::{DB_CLIENT, WEB_CLIENT};
 
 #[derive(Debug, Deserialize, Serialize, Clone)]
 pub struct DriverRecord {
@@ -35,7 +34,7 @@ pub struct Potlek {
 pub async fn ucp_calls(mut request: Request) -> Result<Json<Callz>, (StatusCode, String)> {
     let exts: Option<&Driver> = request.extensions_mut().get();
     if exts.unwrap().faction.is_some() {
-        let db = get_db_conn().await;
+        let db = DB_CLIENT.get().unwrap();
         let statuses = get_statuses();
         let envs = get_api_envs().await;
         let calls = WEB_CLIENT
@@ -49,7 +48,7 @@ pub async fn ucp_calls(mut request: Request) -> Result<Json<Callz>, (StatusCode,
             .filter(supplements::Column::Date.gt(fridays.last_friday))
             .filter(supplements::Column::Faction.eq(get_faction_id(exts.unwrap().faction.unwrap())))
             .filter(supplements::Column::Date.lt(fridays.next_friday))
-            .all(&db)
+            .all(db)
             .await
             .expect("Leintések lekérése sikertelen az adatbázisból");
         let dbreturn_hails = hails::Entity::find()
@@ -58,7 +57,7 @@ pub async fn ucp_calls(mut request: Request) -> Result<Json<Callz>, (StatusCode,
             .filter(hails::Column::Date.gt(fridays.last_friday))
             .filter(hails::Column::Faction.eq(get_faction_id(exts.unwrap().faction.unwrap())))
             .filter(hails::Column::Date.lt(fridays.next_friday))
-            .all(&db)
+            .all(db)
             .await
             .expect("Leintések lekérése sikertelen az adatbázisból");
         let mut leintes = 0;

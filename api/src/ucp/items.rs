@@ -13,10 +13,7 @@ use axum::{
 };
 use chrono::{DateTime, Utc};
 use reqwest::StatusCode;
-use saes_shared::{
-    db::{bills, hails, images, images_bind, supplements},
-    sql::get_db_conn,
-};
+use saes_shared::db::{bills, hails, images, images_bind, supplements};
 use sea_orm::{ColumnTrait, EntityTrait, Order, QueryFilter, QueryOrder, Set};
 use serde::{Deserialize, Serialize};
 use sha2::Digest;
@@ -30,6 +27,7 @@ use crate::{
         queries::{UCPTypeExtraQuery, UCPTypeQuery},
         types_statuses::{get_statuses, get_types, get_types_as_list},
     },
+    DB_CLIENT,
 };
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -57,7 +55,7 @@ pub async fn ucp_items_get(
     ext: Extension<Driver>,
     cucc: Query<UCPTypeQuery>,
 ) -> Result<impl IntoResponse, (StatusCode, String)> {
-    let db = get_db_conn().await;
+    let db = DB_CLIENT.get().unwrap();
     let types = get_types();
     if ext.faction.is_some() {
         if cucc.tipus == types.supplements.id {
@@ -65,7 +63,7 @@ pub async fn ucp_items_get(
                 .filter(supplements::Column::Owner.eq(&ext.name))
                 .filter(supplements::Column::Faction.eq(get_faction_id(ext.faction.unwrap())))
                 .order_by(supplements::Column::Date, Order::Desc)
-                .all(&db)
+                .all(db)
                 .await
                 .expect("Pótlékok lekérése sikertelen az adatbázisból");
             let another: Vec<ItemsStruct> = items
@@ -90,7 +88,7 @@ pub async fn ucp_items_get(
                 .filter(hails::Column::Owner.eq(&ext.name))
                 .filter(hails::Column::Faction.eq(get_faction_id(ext.faction.unwrap())))
                 .order_by(hails::Column::Date, Order::Desc)
-                .all(&db)
+                .all(db)
                 .await
                 .expect("Pótlékok lekérése sikertelen az adatbázisból");
             let another: Vec<ItemsStruct> = items
@@ -115,7 +113,7 @@ pub async fn ucp_items_get(
                 .filter(bills::Column::Owner.eq(&ext.name))
                 .filter(bills::Column::Faction.eq(get_faction_id(ext.faction.unwrap())))
                 .order_by(bills::Column::Date, Order::Desc)
-                .all(&db)
+                .all(db)
                 .await
                 .expect("Pótlékok lekérése sikertelen az adatbázisból");
             let another: Vec<ItemsStruct> = items
@@ -171,7 +169,7 @@ pub async fn ucp_items_post(
                     let file_name = field.file_name().unwrap().to_string();
                     let data = field.bytes().await;
                     if data.is_ok() {
-                        let db = get_db_conn().await;
+                        let db = DB_CLIENT.get().unwrap();
                         let mut real_file_name = [
                             format!("./public/tmp/{}-{}", ext.name, file_name),
                             format!("{}-{}", ext.name, file_name),
@@ -199,7 +197,7 @@ pub async fn ucp_items_post(
                         let hash_text = format!("{:x}", hash);
                         let same_file = images::Entity::find()
                             .filter(images::Column::Checksum.eq(hash_text.clone()))
-                            .one(&db)
+                            .one(db)
                             .await
                             .expect("Fájl ellenőrzése sikertelen");
                         if same_file.is_some() {
@@ -221,7 +219,7 @@ pub async fn ucp_items_post(
                                 };
                                 let new_img = if same_file.is_none() {
                                     images::Entity::insert(img)
-                                        .exec(&db)
+                                        .exec(db)
                                         .await
                                         .expect("Fájl mentése sikertelen")
                                         .last_insert_id
@@ -242,7 +240,7 @@ pub async fn ucp_items_post(
                                     ..Default::default()
                                 };
                                 let newitem = hails::Entity::insert(iten)
-                                    .exec(&db)
+                                    .exec(db)
                                     .await
                                     .expect("Adatbázisba mentés sikertelen");
                                 let newitem_bind = images_bind::ActiveModel {
@@ -252,7 +250,7 @@ pub async fn ucp_items_post(
                                     ..Default::default()
                                 };
                                 images_bind::Entity::insert(newitem_bind)
-                                    .exec(&db)
+                                    .exec(db)
                                     .await
                                     .expect("BIND Create failed");
                                 let newitem2_bind = images_bind::ActiveModel {
@@ -262,7 +260,7 @@ pub async fn ucp_items_post(
                                     ..Default::default()
                                 };
                                 images_bind::Entity::insert(newitem2_bind)
-                                    .exec(&db)
+                                    .exec(db)
                                     .await
                                     .expect("BIND Create failed");
                                 db_log(
@@ -291,7 +289,7 @@ pub async fn ucp_items_post(
                                 };
                                 let new_img = if same_file.is_none() {
                                     images::Entity::insert(img)
-                                        .exec(&db)
+                                        .exec(db)
                                         .await
                                         .expect("Fájl mentése sikertelen")
                                         .last_insert_id
@@ -315,7 +313,7 @@ pub async fn ucp_items_post(
                             };
                             let new_img = if same_file.is_none() {
                                 images::Entity::insert(img)
-                                    .exec(&db)
+                                    .exec(db)
                                     .await
                                     .expect("Fájl mentése sikertelen")
                                     .last_insert_id
@@ -334,7 +332,7 @@ pub async fn ucp_items_post(
                                 ..Default::default()
                             };
                             let newitem = supplements::Entity::insert(iten)
-                                .exec(&db)
+                                .exec(db)
                                 .await
                                 .expect("Adatbázisba mentés sikertelen");
                             let newitem_bind = images_bind::ActiveModel {
@@ -344,7 +342,7 @@ pub async fn ucp_items_post(
                                 ..Default::default()
                             };
                             images_bind::Entity::insert(newitem_bind)
-                                .exec(&db)
+                                .exec(db)
                                 .await
                                 .expect("BIND Create failed");
                             db_log(
@@ -372,7 +370,7 @@ pub async fn ucp_items_post(
                             };
                             let new_img = if same_file.is_none() {
                                 images::Entity::insert(img)
-                                    .exec(&db)
+                                    .exec(db)
                                     .await
                                     .expect("Fájl mentése sikertelen")
                                     .last_insert_id
@@ -391,7 +389,7 @@ pub async fn ucp_items_post(
                                 ..Default::default()
                             };
                             let newitem = bills::Entity::insert(iten)
-                                .exec(&db)
+                                .exec(db)
                                 .await
                                 .expect("Adatbázisba mentés sikertelen");
                             let newitem_bind = images_bind::ActiveModel {
@@ -401,7 +399,7 @@ pub async fn ucp_items_post(
                                 ..Default::default()
                             };
                             images_bind::Entity::insert(newitem_bind)
-                                .exec(&db)
+                                .exec(db)
                                 .await
                                 .expect("BIND Create failed");
                             db_log(

@@ -5,10 +5,7 @@ use axum::{
     Extension, Json,
 };
 use http::StatusCode;
-use saes_shared::{
-    db::{bills, hails, supplements},
-    sql::get_db_conn,
-};
+use saes_shared::db::{bills, hails, supplements};
 use serde::{Deserialize, Serialize};
 
 use sea_orm::{ColumnTrait, EntityTrait, Order, QueryFilter, QueryOrder, Set};
@@ -22,6 +19,7 @@ use crate::{
         structs::SMGetItemsFull,
         types_statuses::{get_statuses_as_list, get_types, get_types_as_list},
     },
+    DB_CLIENT,
 };
 
 #[derive(Debug, Deserialize)]
@@ -44,14 +42,14 @@ pub async fn sm_items_get(
     ext: Extension<Driver>,
     quer: Query<SMItemsQuery>,
 ) -> Result<impl IntoResponse, (StatusCode, String)> {
-    let db = get_db_conn().await;
+    let db = DB_CLIENT.get().unwrap();
     let types = get_types();
     if quer.tipus == types.supplements.id {
         let statreturn = supplements::Entity::find()
             .filter(supplements::Column::Status.eq(quer.status.clone()))
             .order_by(supplements::Column::Date, Order::Desc)
             .filter(supplements::Column::Faction.eq(get_faction_id(ext.faction.unwrap())))
-            .all(&db)
+            .all(db)
             .await
             .expect("[ERROR] Statisztika lekérés sikertelen");
         let ret: Vec<SMGetItemsFull> = statreturn
@@ -79,7 +77,7 @@ pub async fn sm_items_get(
             .filter(hails::Column::Status.eq(quer.status.clone()))
             .order_by(hails::Column::Date, Order::Desc)
             .filter(hails::Column::Faction.eq(get_faction_id(ext.faction.unwrap())))
-            .all(&db)
+            .all(db)
             .await
             .expect("[ERROR] Statisztika lekérés sikertelen");
         let ret: Vec<SMGetItemsFull> = statreturn
@@ -107,7 +105,7 @@ pub async fn sm_items_get(
             .filter(bills::Column::Status.eq(quer.status.clone()))
             .order_by(bills::Column::Date, Order::Desc)
             .filter(bills::Column::Faction.eq(get_faction_id(ext.faction.unwrap())))
-            .all(&db)
+            .all(db)
             .await
             .expect("[ERROR] Statisztika lekérés sikertelen");
         let ret: Vec<SMGetItemsFull> = statreturn
@@ -147,11 +145,11 @@ pub async fn sm_items_post(
     let types_list = get_types_as_list();
     if status_list.contains(&body.status) && types_list.contains(&body.tipus) {
         let types = get_types();
-        let db = get_db_conn().await;
+        let db = DB_CLIENT.get().unwrap();
         if body.tipus == types.supplements.id {
             let old_model = supplements::Entity::find()
                 .filter(supplements::Column::Id.eq(body.id))
-                .one(&db)
+                .one(db)
                 .await
                 .expect("[ERROR] Régi lekérése sikertelen")
                 .unwrap();
@@ -227,7 +225,7 @@ pub async fn sm_items_post(
                 ..Default::default()
             };
             let statreturn = supplements::Entity::update(activemodel)
-                .exec(&db)
+                .exec(db)
                 .await
                 .expect("[ERROR] Módosítás sikertelen");
             Ok(Json(SMGetItemsFull {
@@ -248,7 +246,7 @@ pub async fn sm_items_post(
         } else if body.tipus == types.hails.id {
             let old_model = hails::Entity::find()
                 .filter(hails::Column::Id.eq(body.id))
-                .one(&db)
+                .one(db)
                 .await
                 .expect("[ERROR] Régi lekérése sikertelen")
                 .unwrap();
@@ -300,7 +298,7 @@ pub async fn sm_items_post(
                 ..Default::default()
             };
             let statreturn = hails::Entity::update(activemodel)
-                .exec(&db)
+                .exec(db)
                 .await
                 .expect("[ERROR] Módosítás sikertelen");
             Ok(Json(SMGetItemsFull {
@@ -321,7 +319,7 @@ pub async fn sm_items_post(
         } else if body.tipus == types.bills.id {
             let old_model = bills::Entity::find()
                 .filter(bills::Column::Id.eq(body.id))
-                .one(&db)
+                .one(db)
                 .await
                 .expect("[ERROR] Régi lekérése sikertelen")
                 .unwrap();
@@ -391,7 +389,7 @@ pub async fn sm_items_post(
                 ..Default::default()
             };
             let statreturn = bills::Entity::update(activemodel)
-                .exec(&db)
+                .exec(db)
                 .await
                 .expect("[ERROR] Módosítás sikertelen");
             Ok(Json(SMGetItemsFull {

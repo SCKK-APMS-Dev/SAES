@@ -6,16 +6,16 @@ use axum::{
 };
 use chrono::NaiveDateTime;
 use http::StatusCode;
-use saes_shared::{
-    db::{bills, hails, supplements},
-    sql::get_db_conn,
-};
+use saes_shared::db::{bills, hails, supplements};
 use sea_orm::{ColumnTrait, EntityTrait, QueryFilter};
 use serde::Serialize;
 
-use crate::utils::{
-    factions::get_faction_id, functions::get_fridays, middle::Driver, queries::SMStatQuery,
-    types_statuses::get_statuses,
+use crate::{
+    utils::{
+        factions::get_faction_id, functions::get_fridays, middle::Driver, queries::SMStatQuery,
+        types_statuses::get_statuses,
+    },
+    DB_CLIENT,
 };
 
 #[debug_handler]
@@ -51,13 +51,13 @@ pub async fn sm_stat(
     let statuses = get_statuses();
     if quer.week == "current".to_string() {
         let friday = get_fridays();
-        let db = get_db_conn().await;
+        let db = DB_CLIENT.get().unwrap();
         let statreturn_supp = supplements::Entity::find()
             .filter(supplements::Column::Status.eq(statuses.accepted.id))
             .filter(supplements::Column::Date.gt(friday.last_friday))
             .filter(supplements::Column::Date.lt(friday.next_friday))
             .filter(supplements::Column::Faction.eq(get_faction_id(ext.faction.unwrap())))
-            .all(&db)
+            .all(db)
             .await
             .expect("[ERROR] Statisztika lekérés sikertelen");
         let statreturn_hails = hails::Entity::find()
@@ -65,7 +65,7 @@ pub async fn sm_stat(
             .filter(hails::Column::Date.gt(friday.last_friday))
             .filter(hails::Column::Date.lt(friday.next_friday))
             .filter(hails::Column::Faction.eq(get_faction_id(ext.faction.unwrap())))
-            .all(&db)
+            .all(db)
             .await
             .expect("[ERROR] Statisztika lekérés sikertelen");
         let statreturn_bills = bills::Entity::find()
@@ -73,7 +73,7 @@ pub async fn sm_stat(
             .filter(bills::Column::Date.gt(friday.last_friday))
             .filter(bills::Column::Date.lt(friday.next_friday))
             .filter(bills::Column::Faction.eq(get_faction_id(ext.faction.unwrap())))
-            .all(&db)
+            .all(db)
             .await
             .expect("[ERROR] Statisztika lekérés sikertelen");
         let mut potlekok = vec![];
@@ -101,13 +101,13 @@ pub async fn sm_stat(
         }))
     } else if quer.week == "previous" {
         let friday = get_fridays();
-        let db = get_db_conn().await;
+        let db = DB_CLIENT.get().unwrap();
         let statreturn_supp = supplements::Entity::find()
             .filter(supplements::Column::Status.eq(statuses.accepted.id))
             .filter(supplements::Column::Date.gt(friday.before_last_friday))
             .filter(supplements::Column::Date.lt(friday.last_friday))
             .filter(supplements::Column::Faction.eq(get_faction_id(ext.faction.unwrap())))
-            .all(&db)
+            .all(db)
             .await
             .expect("[ERROR] Statisztika lekérés sikertelen");
         let statreturn_hails = hails::Entity::find()
@@ -115,7 +115,7 @@ pub async fn sm_stat(
             .filter(hails::Column::Date.gt(friday.before_last_friday))
             .filter(hails::Column::Date.lt(friday.last_friday))
             .filter(hails::Column::Faction.eq(get_faction_id(ext.faction.unwrap())))
-            .all(&db)
+            .all(db)
             .await
             .expect("[ERROR] Statisztika lekérés sikertelen");
         let statreturn_bills = bills::Entity::find()
@@ -123,7 +123,7 @@ pub async fn sm_stat(
             .filter(bills::Column::Date.gt(friday.before_last_friday))
             .filter(bills::Column::Date.lt(friday.last_friday))
             .filter(bills::Column::Faction.eq(get_faction_id(ext.faction.unwrap())))
-            .all(&db)
+            .all(db)
             .await
             .expect("[ERROR] Statisztika lekérés sikertelen");
         let mut potlekok = vec![];

@@ -1,10 +1,10 @@
 use axum::{debug_handler, response::IntoResponse, Json};
 use http::{HeaderMap, StatusCode};
-use saes_shared::{db::shorts, sql::get_db_conn};
+use saes_shared::db::shorts;
 
 use sea_orm::EntityTrait;
 
-use crate::auth::get_discord_envs;
+use crate::{auth::get_discord_envs, DB_CLIENT};
 
 #[debug_handler]
 pub async fn base_get_shorts(
@@ -14,9 +14,9 @@ pub async fn base_get_shorts(
     let headerkey = headers.get("secret-key");
     if headerkey.is_some() {
         if headerkey.unwrap().to_str().unwrap() == key.secret_key {
-            let db = get_db_conn().await;
+            let db = DB_CLIENT.get().unwrap();
             let shorts = shorts::Entity::find()
-                .all(&db)
+                .all(db)
                 .await
                 .expect("[SHORTS:ERROR] Lekérés sikertelen");
             Ok(Json(shorts))

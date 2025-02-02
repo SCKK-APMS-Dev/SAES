@@ -1,7 +1,7 @@
+
 use std::{env, time::Duration};
 
 use sea_orm::{ConnectOptions, Database, DatabaseConnection};
-
 pub async fn get_db_conn() -> DatabaseConnection {
     let url = env::var("DATABASE_URL").unwrap();
     let mut opt = ConnectOptions::new(url).to_owned();

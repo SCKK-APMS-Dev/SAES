@@ -1,11 +1,14 @@
 use axum::{debug_handler, response::IntoResponse, routing::get, Extension, Json, Router};
 use chrono::{DateTime, Utc};
 use http::StatusCode;
-use saes_shared::{db::logs, sql::get_db_conn};
+use saes_shared::db::logs;
 use sea_orm::{ColumnTrait, EntityTrait, Order, QueryFilter, QueryOrder};
 use serde::Serialize;
 
-use crate::utils::{factions::get_faction_id, middle::Driver};
+use crate::{
+    utils::{factions::get_faction_id, middle::Driver},
+    DB_CLIENT,
+};
 
 #[derive(Debug, Serialize)]
 pub struct Logs {
@@ -26,11 +29,11 @@ pub fn get_routes() -> Router {
 
 #[debug_handler]
 pub async fn fm_get_logs(ext: Extension<Driver>) -> impl IntoResponse {
-    let db = get_db_conn().await;
+    let db = DB_CLIENT.get().unwrap();
     let logs = logs::Entity::find()
         .filter(logs::Column::Faction.eq(get_faction_id(ext.faction.unwrap())))
         .order_by(logs::Column::Date, Order::Desc)
-        .all(&db)
+        .all(db)
         .await
         .unwrap();
     let logs: Vec<Logs> = logs
@@ -53,10 +56,10 @@ pub async fn fm_get_logs(ext: Extension<Driver>) -> impl IntoResponse {
 #[debug_handler]
 pub async fn fm_get_all_logs(ext: Extension<Driver>) -> impl IntoResponse {
     if ext.admin {
-        let db = get_db_conn().await;
+        let db = DB_CLIENT.get().unwrap();
         let logs = logs::Entity::find()
             .order_by(logs::Column::Date, Order::Desc)
-            .all(&db)
+            .all(db)
             .await
             .unwrap();
         let logs: Vec<Logs> = logs

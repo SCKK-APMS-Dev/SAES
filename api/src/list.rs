@@ -1,17 +1,17 @@
 use axum::{debug_handler, extract::Query, response::IntoResponse, Json};
 use http::StatusCode;
-use saes_shared::{
-    db::{bills, hails, supplements},
-    sql::get_db_conn,
-};
+use saes_shared::db::{bills, hails, supplements};
 use sea_orm::{ColumnTrait, EntityTrait, Order, QueryFilter, QueryOrder};
 use serde::Serialize;
 
-use crate::utils::{
-    factions::get_faction_id,
-    functions::get_fridays,
-    queries::BaseListQuery,
-    types_statuses::{get_statuses, get_types},
+use crate::{
+    utils::{
+        factions::get_faction_id,
+        functions::get_fridays,
+        queries::BaseListQuery,
+        types_statuses::{get_statuses, get_types},
+    },
+    DB_CLIENT,
 };
 
 #[derive(Debug, Serialize)]
@@ -30,7 +30,7 @@ pub async fn base_list_get(
     quer: Query<BaseListQuery>,
 ) -> Result<impl IntoResponse, (StatusCode, String)> {
     let friday = get_fridays();
-    let db = get_db_conn().await;
+    let db = DB_CLIENT.get().unwrap();
     let statuses = get_statuses();
     let types = get_types();
     if quer.tipus.starts_with("potlek") {
@@ -51,7 +51,7 @@ pub async fn base_list_get(
                 ));
             }))
             .order_by(supplements::Column::Date, Order::Desc)
-            .all(&db)
+            .all(db)
             .await
             .expect("[ERROR] List lekérés sikertelen");
         let ret: Vec<ListReturn> = supp_ret
@@ -77,7 +77,7 @@ pub async fn base_list_get(
             .filter(hails::Column::Date.lt(friday.last_friday))
             .filter(hails::Column::Status.eq(statuses.accepted.id))
             .order_by(hails::Column::Date, Order::Desc)
-            .all(&db)
+            .all(db)
             .await
             .expect("[ERROR] List lekérés sikertelen");
         let ret = hails_ret
@@ -103,7 +103,7 @@ pub async fn base_list_get(
             .filter(bills::Column::Date.lt(friday.last_friday))
             .filter(bills::Column::Status.eq(statuses.accepted.id))
             .order_by(bills::Column::Date, Order::Desc)
-            .all(&db)
+            .all(db)
             .await
             .expect("[ERROR] List lekérés sikertelen");
 

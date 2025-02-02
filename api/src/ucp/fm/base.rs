@@ -5,14 +5,14 @@ use axum::{
     Json,
 };
 use http::StatusCode;
-use saes_shared::{
-    db::{bills, hails, supplements},
-    sql::get_db_conn,
-};
+use saes_shared::db::{bills, hails, supplements};
 use sea_orm::{ColumnTrait, EntityTrait, QueryFilter};
 use serde::Deserialize;
 
-use crate::utils::{middle::Driver, structs::SMGetItemsFull, types_statuses::get_types};
+use crate::{
+    utils::{middle::Driver, structs::SMGetItemsFull, types_statuses::get_types},
+    DB_CLIENT,
+};
 
 #[debug_handler]
 pub async fn fm_home(mut request: Request) -> Json<Driver> {
@@ -29,11 +29,11 @@ pub struct GetImageQuery {
 #[debug_handler]
 pub async fn get_images_by_id(query: Query<GetImageQuery>) -> impl IntoResponse {
     let types = get_types();
-    let db = get_db_conn().await;
+    let db = DB_CLIENT.get().unwrap();
     if query.r#type == types.supplements.id {
         let ret = supplements::Entity::find()
             .filter(supplements::Column::Id.eq(query.id))
-            .one(&db)
+            .one(db)
             .await
             .unwrap();
         if ret.is_some() {
@@ -59,7 +59,7 @@ pub async fn get_images_by_id(query: Query<GetImageQuery>) -> impl IntoResponse 
     if query.r#type == types.hails.id {
         let ret = hails::Entity::find()
             .filter(hails::Column::Id.eq(query.id))
-            .one(&db)
+            .one(db)
             .await
             .unwrap();
         if ret.is_some() {
@@ -85,7 +85,7 @@ pub async fn get_images_by_id(query: Query<GetImageQuery>) -> impl IntoResponse 
     if query.r#type == types.bills.id {
         let ret = bills::Entity::find()
             .filter(bills::Column::Id.eq(query.id))
-            .one(&db)
+            .one(db)
             .await
             .unwrap();
         if ret.is_some() {
