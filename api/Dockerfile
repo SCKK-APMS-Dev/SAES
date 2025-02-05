@@ -22,6 +22,9 @@ WORKDIR /usr/src/api/prod
 ARG ENV_MODE
 ENV ENV_MODE=${ENV_MODE}
 
+ARG COMMIT_HASH
+ENV COMMIT_HASH=${COMMIT_HASH}
+
 COPY --from=build /usr/src/api/dev/target/release/saes-api /usr/src/api/prod/
 
 RUN apk add --no-cache curl

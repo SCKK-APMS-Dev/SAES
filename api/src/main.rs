@@ -53,11 +53,12 @@ async fn main() -> Result<(), Box<dyn Error>> {
     {
         panic!("ENV_MODE rosszul setelve! production / testing / devel")
     }
-    info!("Running in {} mode", env_mode.clone()?.to_uppercase());
-    BASE_HASHMAP
-        .write()
-        .await
-        .insert("env_mode".to_string(), env_mode?.to_uppercase().to_string());
+    info!("Running in {} mode", &env_mode.clone()?.to_uppercase());
+    let env_mode = env_mode.unwrap();
+    BASE_HASHMAP.write().await.insert(
+        "env_mode".to_string(),
+        env_mode.clone().to_uppercase().to_string(),
+    );
 
     init::main().await;
     DB_CLIENT.set(get_db_conn().await).unwrap();
@@ -69,14 +70,15 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let app = Router::new()
         .route(
             "/",
-            get(|| async {
+            get(|| async move {
                 format!(
-                    "SAES API V2 ({}) Axum & Sea-ORM használatával",
+                    "SAES API V2 ({} / {}) Axum & Sea-ORM használatával",
                     if hash.is_ok() {
                         hash.unwrap()
                     } else {
                         String::from("")
-                    }
+                    },
+                    env_mode
                 )
             }),
         )
