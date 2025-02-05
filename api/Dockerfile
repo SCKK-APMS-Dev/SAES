@@ -3,10 +3,10 @@ WORKDIR /usr/src/api/dev
 
 #* Dependencies
 
-RUN apk add build-base 
-RUN apk add pkgconfig 
-RUN apk add openssl-dev 
-RUN apk add openssl-libs-static
+RUN apk add --no-cache build-base 
+RUN apk add --no-cache pkgconfig 
+RUN apk add --no-cache openssl-dev 
+RUN apk add --no-cache openssl-libs-static
 
 #* Build
 COPY ./api/ .
@@ -24,7 +24,9 @@ ENV ENV_MODE=${ENV_MODE}
 
 COPY --from=build /usr/src/api/dev/target/release/saes-api /usr/src/api/prod/
 
+RUN apk add --no-cache curl
 HEALTHCHECK CMD curl --fail http://localhost:3000 || exit 1
+
 RUN touch .env
 EXPOSE 3000
 ENTRYPOINT ["./saes-api"]

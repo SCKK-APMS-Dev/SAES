@@ -20,8 +20,12 @@ COPY --from=build /usr/src/web/dev/build /usr/src/web/prod/build
 COPY --from=build /usr/src/web/dev/node_modules /usr/src/web/prod/node_modules
 
 ENV BODY_SIZE_LIMIT="Infinity"
-# run the app
+
+# * Healthcheck
+RUN apk add --no-cache curl
 HEALTHCHECK CMD curl --fail http://localhost:3000 || exit 1
+
+# run the app
 USER root
 EXPOSE 3000
 ENTRYPOINT [ "node", "build" ]
