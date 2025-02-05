@@ -65,10 +65,20 @@ async fn main() -> Result<(), Box<dyn Error>> {
         "/",
         move |socket: SocketRef, Data(data): Data<InitialData>| socket::on_connect(socket, data),
     );
+    let hash = env::var("COMMIT_HASH");
     let app = Router::new()
         .route(
             "/",
-            get(|| async { "SAES API V2 Axum & Sea-ORM használatával" }),
+            get(|| async {
+                format!(
+                    "SAES API V2 ({}) Axum & Sea-ORM használatával",
+                    if hash.is_ok() {
+                        hash.unwrap()
+                    } else {
+                        String::from("")
+                    }
+                )
+            }),
         )
         .route("/auth", get(auth::auth_home))
         .route("/auth/cb", get(auth::base_callback))
