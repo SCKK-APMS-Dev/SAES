@@ -19,8 +19,12 @@ RUN cargo build --release
 FROM alpine
 WORKDIR /usr/src/api/prod
 
+ARG ENV_MODE
+ENV ENV_MODE=${ENV_MODE}
+
 COPY --from=build /usr/src/api/dev/target/release/saes-api /usr/src/api/prod/
 
+HEALTHCHECK CMD curl --fail http://localhost:3000 || exit 1
 RUN touch .env
 EXPOSE 3000
 ENTRYPOINT ["./saes-api"]

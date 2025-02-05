@@ -21,6 +21,7 @@ WORKDIR /usr/src/cdn/prod
 
 COPY --from=build /usr/src/cdn/dev/target/release/saes-cdn /usr/src/cdn/prod/
 
+HEALTHCHECK CMD curl --fail http://localhost:3100 || exit 1
 RUN touch .env
 EXPOSE 3100
 ENTRYPOINT ["./saes-cdn"]

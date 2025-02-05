@@ -21,6 +21,7 @@ COPY --from=build /usr/src/web/dev/node_modules /usr/src/web/prod/node_modules
 
 ENV BODY_SIZE_LIMIT="Infinity"
 # run the app
+HEALTHCHECK CMD curl --fail http://localhost:3000 || exit 1
 USER root
 EXPOSE 3000
 ENTRYPOINT [ "node", "build" ]
