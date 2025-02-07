@@ -111,11 +111,11 @@
 								{#if isAdmin}
 									<div class="flex items-center gap-3">
 										<a
-											href="/ucp/sm"
+											href="/ucp/admin"
 											class:text-red-500={nosocket}
-											class={`${faction === 'TOW' ? 'from-tow via-blue-600 to-emerald-400' : 'from-taxi via-amber-600 to-red-500'} hover:bg-pos-100 bg-size-200 bg-pos-0 block rounded-full bg-linear-to-r px-6 py-3 text-center font-bold drop-shadow-lg transition-all duration-500`}
+											class={`${faction === 'TOW' ? 'from-tow via-blue-600 to-emerald-400' : 'from-taxi via-amber-600 to-red-500'} hover:bg-pos-100 bg-size-200 bg-pos-0 bg-linear-to-r block rounded-full px-6 py-3 text-center font-bold drop-shadow-lg transition-all duration-500`}
 										>
-											Műszakvezetés
+											Adminisztráció
 											{#if christmas}
 												<span class="icon-[fluent-emoji--sled] absolute bottom-11 right-8 h-6 w-6"
 												></span>
@@ -130,7 +130,7 @@
 			</div>
 		</div>
 	</div>
-	<h2 class="z-20 bg-linear-to-r from-rose-600 to-amber-600 py-1 text-center text-xl text-white">
+	<h2 class="bg-linear-to-r z-20 from-rose-600 to-amber-600 py-1 text-center text-xl text-white">
 		Nem vagy biztos valamiben? Nézd meg a <a href="/ucp/segedlet" class="text-taxi z-20 font-bold"
 			>segédletet</a
 		>!

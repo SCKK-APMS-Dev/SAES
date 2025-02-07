@@ -9,7 +9,6 @@
 	import { socket } from '$lib/socket.js';
 	import ViewTransition from '$lib/navigation.svelte';
 	import Header from '$lib/ucp/header.svelte';
-	import { apiUrlPublic } from '$lib/api.js';
 	let { data, children } = $props();
 	let maintenance = $state(false);
 	let initial_socket = $state(false);
@@ -94,7 +93,7 @@
 					</h1>
 					<button
 						aria-label="Belépés Discord használatával"
-						class="from-taxi hover:bg-pos-100 bg-size-200 bg-pos-0 group relative m-auto mt-3 flex h-12 animate-bounce items-center space-x-2 overflow-hidden rounded-full bg-linear-to-r via-rose-500 to-red-600 px-6 transition-all duration-500"
+						class="from-taxi hover:bg-pos-100 bg-size-200 bg-pos-0 bg-linear-to-r group relative m-auto mt-3 flex h-12 animate-bounce items-center space-x-2 overflow-hidden rounded-full via-rose-500 to-red-600 px-6 transition-all duration-500"
 					>
 						<a
 							href={`${data.api}/auth?path=${page.url.pathname}`}
@@ -130,7 +129,7 @@
 					<a
 						href="/logout"
 						data-sveltekit-reload
-						class="hover:bg-pos-100 bg-size-200 bg-pos-0 mb-5 ml-5 mr-5 mt-5 block rounded-full bg-linear-to-r from-red-500 via-amber-400 to-rose-600 px-2 py-1 text-center text-lg font-bold text-white drop-shadow-lg transition-all duration-500"
+						class="hover:bg-pos-100 bg-size-200 bg-pos-0 bg-linear-to-r mb-5 ml-5 mr-5 mt-5 block rounded-full from-red-500 via-amber-400 to-rose-600 px-2 py-1 text-center text-lg font-bold text-white drop-shadow-lg transition-all duration-500"
 						>Kijelentkezés</a
 					>
 				</div>
@@ -230,17 +229,6 @@
 			<main>
 				{@render children?.()}
 			</main>
-			{#if (data.layout?.admin || data.layout?.perms.includes(data.faction === 'SCKK' ? 'saes.fm.taxi' : 'saes.fm.tow')) && !page.url.pathname.startsWith('/ucp/fm')}
-				<div
-					class={`group fixed bottom-8 left-8 animate-pulse items-center justify-center rounded-xl bg-slate-950 opacity-75 drop-shadow-2xl transition-all duration-300 hover:animate-none hover:opacity-100 ${data.faction === 'SCKK' ? 'hover:bg-taxi' : 'hover:bg-tow'}`}
-				>
-					<a
-						href="/ucp/fm"
-						class={`icon-[material-symbols--shield-person-rounded] m-auto flex h-16 w-16 transition-colors duration-300 group-hover:text-white lg:h-24 lg:w-24 ${data.faction === 'SCKK' ? 'text-taxi' : 'text-tow'}`}
-						aria-label="FM Login"
-					></a>
-				</div>
-			{/if}
 		{/if}
 	{:else}
 		<main>
@@ -256,7 +244,7 @@
 					{#if data.layout?.admin}
 						<a
 							href="/ucp/keine"
-							class="hover:bg-pos-100 bg-size-200 bg-pos-0 mb-5 ml-5 mr-5 mt-5 block rounded-full bg-linear-to-r from-red-500 via-amber-400 to-rose-600 px-2 py-1 text-center text-lg font-bold text-white drop-shadow-lg transition-all duration-500"
+							class="hover:bg-pos-100 bg-size-200 bg-pos-0 bg-linear-to-r mb-5 ml-5 mr-5 mt-5 block rounded-full from-red-500 via-amber-400 to-rose-600 px-2 py-1 text-center text-lg font-bold text-white drop-shadow-lg transition-all duration-500"
 							>Továbblépés (nyomj rá majd töltsd újra az oldalt)</a
 						>
 					{/if}
