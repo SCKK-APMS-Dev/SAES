@@ -40,18 +40,22 @@
 		bind:this={nav}
 		class="child:px-2 child:rounded-lg child:drop-shadow-xl lg:flex! col-span-2 hidden flex-col items-center justify-center text-center text-xl md:flex-row lg:z-auto lg:col-span-1 xl:mr-[10vw]"
 	>
-		<a href="/ucp/sm" class="transition-all duration-200 hover:bg-emerald-600">Főoldal</a>
-		<a href="/ucp/sm/stat/current" class="transition-all duration-200 hover:bg-emerald-600"
+		<a href="/ucp/admin/sm" class="transition-all duration-200 hover:bg-emerald-600"
+			>Műszakvezetés</a
+		>
+		<a href="/ucp/admin/sm/stat/current" class="transition-all duration-200 hover:bg-emerald-600"
 			>Jelenlegi hét</a
 		>
-		<a href="/ucp/sm/stat/previous" class="transition-all duration-200 hover:bg-emerald-600"
+		<a href="/ucp/admin/sm/stat/previous" class="transition-all duration-200 hover:bg-emerald-600"
 			>Előző hét</a
 		>
-		<a href="/ucp/sm/potlekok" class="transition-all duration-200 hover:bg-emerald-600">Pótlékok</a>
-		<a href="/ucp/sm/leintesek" class="transition-all duration-200 hover:bg-emerald-600"
+		<a href="/ucp/items/potlekok" class="transition-all duration-200 hover:bg-emerald-600"
+			>Pótlékok</a
+		>
+		<a href="/ucp/items/leintesek" class="transition-all duration-200 hover:bg-emerald-600"
 			>Leintések</a
 		>
-		<a href="/ucp/sm/szamlak" class="transition-all duration-200 hover:bg-emerald-600"
+		<a href="/ucp/items/szamlak" class="transition-all duration-200 hover:bg-emerald-600"
 			>Szereltetési számlák</a
 		>
 	</div>
