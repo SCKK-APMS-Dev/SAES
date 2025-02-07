@@ -113,7 +113,7 @@
 										<a
 											href="/ucp/admin"
 											class:text-red-500={nosocket}
-											class={`${faction === 'TOW' ? 'from-tow via-blue-600 to-emerald-400' : 'from-taxi via-amber-600 to-red-500'} hover:bg-pos-100 bg-size-200 bg-pos-0 bg-linear-to-r block rounded-full px-6 py-3 text-center font-bold drop-shadow-lg transition-all duration-500`}
+											class={`${faction === 'TOW' ? 'from-tow via-blue-600 to-emerald-400' : 'from-taxi via-amber-600 to-red-500'} bg-linear-to-r block rounded-full bg-[size:200%] bg-[position:0] px-6 py-3 text-center font-bold drop-shadow-lg transition-all duration-500 hover:bg-[position:100%]`}
 										>
 											Adminisztráció
 											{#if christmas}

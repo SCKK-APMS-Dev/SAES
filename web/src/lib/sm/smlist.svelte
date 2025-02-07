@@ -511,7 +511,7 @@
 			<button
 				aria-label="Előző oldal"
 				onclick={() => switchPage('prev')}
-				class="hover:bg-pos-100 bg-size-200 bg-pos-0 rounded-full bg-linear-to-r from-emerald-500 via-teal-600 to-red-500 text-white duration-300"
+				class="bg-linear-to-r rounded-full from-emerald-500 via-teal-600 to-red-500 bg-[size:200%] bg-[position:0] text-white duration-300 hover:bg-[position:100%]"
 				style="width: calc(5vw*2.5); height: 5vh;"
 				><span class="icon-[solar--map-arrow-left-bold] h-full w-full"></span></button
 			>
@@ -520,7 +520,7 @@
 			<button
 				aria-label="Következő oldal"
 				onclick={() => switchPage('next')}
-				class="hover:bg-pos-100 bg-size-200 bg-pos-0 rounded-full bg-linear-to-r from-emerald-500 via-teal-600 to-red-500 text-white duration-300"
+				class="bg-linear-to-r rounded-full from-emerald-500 via-teal-600 to-red-500 bg-[size:200%] bg-[position:0] text-white duration-300 hover:bg-[position:100%]"
 				style="width: calc(5vw*2.5); height: 5vh;"
 				><span class="icon-[solar--map-arrow-right-bold] h-full w-full"></span></button
 			>

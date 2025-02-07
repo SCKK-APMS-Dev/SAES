@@ -22,12 +22,6 @@
 	<div class="ml-2 flex shrink items-center gap-2 xl:ml-[10vw]">
 		<h1 class="hidden text-3xl font-bold drop-shadow-xl md:block">Adminisztráció</h1>
 		<h1 class="text-3xl font-bold drop-shadow-xl md:hidden">Admin</h1>
-		<a
-			href="/ucp/sm/tools"
-			aria-label="tools"
-			class="icon-[tabler--tool] hover:text-taxi min-h-6 min-w-6 transition-colors duration-500"
-		></a>
-		<Tooltip placement="bottom">Eszközök megnyitása</Tooltip>
 	</div>
 	<button
 		aria-label="mv-menu"
@@ -40,23 +34,18 @@
 		bind:this={nav}
 		class="child:px-2 child:rounded-lg child:drop-shadow-xl lg:flex! col-span-2 hidden flex-col items-center justify-center text-center text-xl md:flex-row lg:z-auto lg:col-span-1 xl:mr-[10vw]"
 	>
+		<a href="/ucp/admin/tools" class="transition-all duration-200 hover:bg-emerald-600">Eszközök</a>
+		<a href="/ucp/admin/items" class="transition-all duration-200 hover:bg-emerald-600"
+			>Feltöltött elemek</a
+		>
 		<a href="/ucp/admin/sm" class="transition-all duration-200 hover:bg-emerald-600"
 			>Műszakvezetés</a
 		>
-		<a href="/ucp/admin/sm/stat/current" class="transition-all duration-200 hover:bg-emerald-600"
-			>Jelenlegi hét</a
+		<a href="/ucp/admin/sm" class="transition-all duration-200 hover:bg-emerald-600"
+			>Flottakezelés</a
 		>
-		<a href="/ucp/admin/sm/stat/previous" class="transition-all duration-200 hover:bg-emerald-600"
-			>Előző hét</a
-		>
-		<a href="/ucp/items/potlekok" class="transition-all duration-200 hover:bg-emerald-600"
-			>Pótlékok</a
-		>
-		<a href="/ucp/items/leintesek" class="transition-all duration-200 hover:bg-emerald-600"
-			>Leintések</a
-		>
-		<a href="/ucp/items/szamlak" class="transition-all duration-200 hover:bg-emerald-600"
-			>Szereltetési számlák</a
+		<a href="/ucp/admin/fm" class="transition-all duration-200 hover:bg-emerald-600"
+			>Frakciókezelés</a
 		>
 	</div>
 </nav>

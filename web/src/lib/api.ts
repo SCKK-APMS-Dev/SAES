@@ -15,7 +15,7 @@ let date = new Date();
 
 // * Hó engedélyezése Mikulás-naptól vízkeresztig
 export const snow =
-	(date.getMonth() === 11 && date.getDate() >= 6) || (date.getMonth() < 2 && date.getDate() < 20)
+	(date.getMonth() === 11 && date.getDate() >= 6) || (date.getMonth() < 1 && date.getDate() < 20)
 		? true
 		: false;
 

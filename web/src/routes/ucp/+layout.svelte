@@ -93,7 +93,7 @@
 					</h1>
 					<button
 						aria-label="Belépés Discord használatával"
-						class="from-taxi hover:bg-pos-100 bg-size-200 bg-pos-0 bg-linear-to-r group relative m-auto mt-3 flex h-12 animate-bounce items-center space-x-2 overflow-hidden rounded-full via-rose-500 to-red-600 px-6 transition-all duration-500"
+						class="from-taxi bg-linear-to-r group relative m-auto mt-3 flex h-12 animate-bounce items-center space-x-2 overflow-hidden rounded-full via-rose-500 to-red-600 bg-[size:200%] bg-[position:0] px-6 transition-all duration-500 hover:bg-[position:100%]"
 					>
 						<a
 							href={`${data.api}/auth?path=${page.url.pathname}`}
@@ -129,7 +129,7 @@
 					<a
 						href="/logout"
 						data-sveltekit-reload
-						class="hover:bg-pos-100 bg-size-200 bg-pos-0 bg-linear-to-r mb-5 ml-5 mr-5 mt-5 block rounded-full from-red-500 via-amber-400 to-rose-600 px-2 py-1 text-center text-lg font-bold text-white drop-shadow-lg transition-all duration-500"
+						class="bg-linear-to-r mb-5 ml-5 mr-5 mt-5 block rounded-full from-red-500 via-amber-400 to-rose-600 bg-[size:200%] bg-[position:0] px-2 py-1 text-center text-lg font-bold text-white drop-shadow-lg transition-all duration-500 hover:bg-[position:100%]"
 						>Kijelentkezés</a
 					>
 				</div>
@@ -244,7 +244,7 @@
 					{#if data.layout?.admin}
 						<a
 							href="/ucp/keine"
-							class="hover:bg-pos-100 bg-size-200 bg-pos-0 bg-linear-to-r mb-5 ml-5 mr-5 mt-5 block rounded-full from-red-500 via-amber-400 to-rose-600 px-2 py-1 text-center text-lg font-bold text-white drop-shadow-lg transition-all duration-500"
+							class="bg-linear-to-r mb-5 ml-5 mr-5 mt-5 block rounded-full from-red-500 via-amber-400 to-rose-600 bg-[size:200%] bg-[position:0] px-2 py-1 text-center text-lg font-bold text-white drop-shadow-lg transition-all duration-500 hover:bg-[position:100%]"
 							>Továbblépés (nyomj rá majd töltsd újra az oldalt)</a
 						>
 					{/if}

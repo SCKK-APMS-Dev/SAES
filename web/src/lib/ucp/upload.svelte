@@ -69,7 +69,7 @@
 <Error {data}>
 	<div class="text-center text-white">
 		<div
-			class="bg-size-200 bg-pos-0 via-taxi ml-64 mr-64 mt-16 rounded-lg bg-linear-to-r from-rose-600 to-emerald-500 p-2 transition-all duration-300"
+			class="via-taxi bg-linear-to-r ml-64 mr-64 mt-16 rounded-lg from-rose-600 to-emerald-500 bg-[size:200%] bg-[position:0] p-2 transition-all duration-300"
 			class:bg-pos-100={uploading}
 		>
 			<h2 class="font-bold text-red-800 drop-shadow-xl">{formerror ? formerror : ''}</h2>
@@ -103,13 +103,13 @@
 						for={uploading ? '' : 'file'}
 						class:bg-pos-100={uploading}
 						class:!cursor-not-allowed={uploading}
-						class="bg-size-200 bg-pos-0 hover:bg-pos-100 mb-2 cursor-pointer rounded-xl bg-linear-to-r from-gray-600 via-amber-400 to-rose-600 px-3 py-1 text-xl font-bold uppercase drop-shadow-lg transition-all duration-300"
+						class="bg-linear-to-r mb-2 cursor-pointer rounded-xl from-gray-600 via-amber-400 to-rose-600 bg-[size:200%] bg-[position:0] px-3 py-1 text-xl font-bold uppercase drop-shadow-lg transition-all duration-300 hover:bg-[position:100%]"
 						>Fájlok kiválasztása</label
 					>
 					<button
 						type="submit"
 						aria-label="Feltöltés"
-						class="bg-size-200 bg-pos-0 hover:bg-pos-100 mb-2 w-16 rounded-xl bg-linear-to-r from-gray-600 via-amber-400 to-emerald-400 px-3 py-1 text-xl font-bold uppercase drop-shadow-lg transition-all duration-300 disabled:cursor-not-allowed"
+						class="bg-linear-to-r mb-2 w-16 rounded-xl from-gray-600 via-amber-400 to-emerald-400 bg-[size:200%] bg-[position:0] px-3 py-1 text-xl font-bold uppercase drop-shadow-lg transition-all duration-300 hover:bg-[position:100%] disabled:cursor-not-allowed"
 						class:bg-pos-100={uploading}
 						disabled={uploading}
 					>

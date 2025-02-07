@@ -14,7 +14,7 @@
 		<h1 class="text-3xl text-red-600">{$page.error.message}</h1>
 		<a
 			href="/"
-			class="hover:bg-pos-100 bg-size-200 bg-pos-0 mb-5 ml-5 mr-5 mt-5 block rounded-full bg-linear-to-r from-indigo-600 via-teal-400 to-blue-400 px-2 py-1 text-center text-lg font-bold text-white drop-shadow-lg transition-all duration-500"
+			class="bg-linear-to-r mb-5 ml-5 mr-5 mt-5 block rounded-full from-indigo-600 via-teal-400 to-blue-400 bg-[size:200%] bg-[position:0] px-2 py-1 text-center text-lg font-bold text-white drop-shadow-lg transition-all duration-500 hover:bg-[position:100%]"
 			>Vissza a kezdőlapra</a
 		>
 	</div>
