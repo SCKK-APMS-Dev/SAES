@@ -226,7 +226,13 @@
 				/>
 			{/if}
 			<ViewTransition />
-			<main>
+			<main
+				class={data.faction === 'SCKK'
+					? 'selection:bg-taxi'
+					: data.faction === 'TOW'
+						? 'selection:bg-tow'
+						: ''}
+			>
 				{@render children?.()}
 			</main>
 		{/if}
