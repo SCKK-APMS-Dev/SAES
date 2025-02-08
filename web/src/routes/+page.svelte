@@ -6,12 +6,12 @@
 		<img
 			src="/favicon.png"
 			class="group-hover:border-taxi m-auto rounded-full border-4 border-solid border-white transition-colors duration-300"
-			alt="SCKK Logo"
+			alt="SAMT Logo"
 		/>
 		<h1
 			class="group-hover:text-taxi text-3xl font-bold tracking-wider transition-colors duration-300"
 		>
-			SCKK Felhasználói felület
+			SAMT UCP
 		</h1>
 	</a>
 </div>

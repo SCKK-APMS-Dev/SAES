@@ -1,11 +1,8 @@
 <script lang="ts">
-	import { page } from '$app/state';
-	import { Tooltip } from 'flowbite-svelte';
-	interface Props {
-		children?: import('svelte').Snippet;
-	}
+	import { allowPerms } from '$lib/api';
+	import { Permissions } from '$lib/permissions';
 
-	let { children }: Props = $props();
+	let { children, data } = $props();
 	let nav: HTMLDivElement = $state()!;
 	const tognav = () => {
 		if (nav.classList.contains('hidden')) {
@@ -34,19 +31,26 @@
 		bind:this={nav}
 		class="child:px-2 child:rounded-lg child:drop-shadow-xl lg:flex! col-span-2 hidden flex-col items-center justify-center text-center text-xl md:flex-row lg:z-auto lg:col-span-1 xl:mr-[10vw]"
 	>
+		<a href="/ucp/admin" class="transition-all duration-200 hover:bg-emerald-600">Főoldal</a>
 		<a href="/ucp/admin/tools" class="transition-all duration-200 hover:bg-emerald-600">Eszközök</a>
 		<a href="/ucp/admin/items" class="transition-all duration-200 hover:bg-emerald-600"
 			>Feltöltött elemek</a
 		>
-		<a href="/ucp/admin/sm" class="transition-all duration-200 hover:bg-emerald-600"
-			>Műszakvezetés</a
-		>
-		<a href="/ucp/admin/sm" class="transition-all duration-200 hover:bg-emerald-600"
-			>Flottakezelés</a
-		>
-		<a href="/ucp/admin/fm" class="transition-all duration-200 hover:bg-emerald-600"
-			>Frakciókezelés</a
-		>
+		{#if allowPerms( data, [Permissions.SaesTaxiAdminShift, Permissions.SaesTowAdminShift, Permissions.SaesTaxiAdminFaction, Permissions.SaesTowAdminFaction] )}
+			<a href="/ucp/admin/shift" class="transition-all duration-200 hover:bg-emerald-600"
+				>Műszakvezetés</a
+			>
+		{/if}
+		{#if allowPerms( data, [Permissions.SaesTaxiAdminFleet, Permissions.SaesTowAdminFleet, Permissions.SaesTaxiAdminFaction, Permissions.SaesTowAdminFaction] )}
+			<a href="/ucp/admin/fleet" class="transition-all duration-200 hover:bg-emerald-600"
+				>Flottakezelés</a
+			>
+		{/if}
+		{#if allowPerms(data, [Permissions.SaesTaxiAdminFaction, Permissions.SaesTowAdminFaction])}
+			<a href="/ucp/admin/faction" class="transition-all duration-200 hover:bg-emerald-600"
+				>Frakciókezelés</a
+			>
+		{/if}
 	</div>
 </nav>
 {@render children?.()}

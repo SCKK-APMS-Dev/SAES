@@ -10,7 +10,7 @@ export const load = (async ({ cookies }) => {
 		};
 	}
 	try {
-		const aha = await fetch(`${apiUrl}/ucp/sm`, {
+		const aha = await fetch(`${apiUrl}/ucp/admin`, {
 			mode: 'no-cors',
 			headers: {
 				cookie: cookies.get('auth_token') as string,

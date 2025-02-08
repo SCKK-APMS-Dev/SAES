@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { Factions } from '$lib/permissions.js';
+
 	let { data } = $props();
 </script>
 
@@ -21,7 +23,7 @@
 			<li class="flex items-center gap-2">
 				<h2 class="text-left text-xl font-bold">1.</h2>
 				<h2 class="text-xl">
-					{#if data.faction === 'TOW'}
+					{#if data.faction === Factions.Tow}
 						A fotónak tartalmaznia kell a kiadott számlát és a teljes játékot. <a
 							class="text-taxi hidden text-xl font-bold uppercase"
 							target="_blank"
@@ -35,7 +37,7 @@
 			<li class="flex items-center gap-2">
 				<h2 class="text-left text-xl font-bold">2.</h2>
 				<h2 class="text-xl">
-					Pótlékok a következő időben érvényesek: {#if data.faction === 'TOW'}
+					Pótlékok a következő időben érvényesek: {#if data.faction === Factions.Tow}
 						8-16 óra (délelőtti), 20-4 (éjszakai).
 					{:else}
 						8-15 óra (délelőtti), 22-4 (éjszakai).
@@ -44,7 +46,7 @@
 			</li>
 		</ul>
 		<h1 class="ml-[20%] mt-5 text-left text-3xl font-bold">
-			2. Leintések {#if data.faction === 'TOW'}/ Bejelentések
+			2. Leintések {#if data.faction === Factions.Tow}/ Bejelentések
 			{/if}
 		</h1>
 		<ul class="child:mx-[20%] child:text-left ml-2">
@@ -55,7 +57,7 @@
 			<li class="flex gap-2">
 				<h2 class="text-xl font-bold">2.</h2>
 				<h2 class="text-xl">
-					{#if data.faction === 'TOW'}
+					{#if data.faction === Factions.Tow}
 						Az első képen a kiadott számlának kell látszódnia. <a
 							class="text-taxi hidden text-xl font-bold uppercase"
 							target="_blank"
@@ -66,7 +68,7 @@
 						látszódnia.
 					{/if}
 				</h2>
-				{#if data.faction !== 'TOW'}
+				{#if data.faction !== Factions.Tow}
 					<a
 						class="text-taxi hidden text-xl font-bold uppercase"
 						target="_blank"
@@ -82,7 +84,7 @@
 			<li class="flex gap-2">
 				<h2 class="text-xl font-bold">3.</h2>
 				<h2 class="text-xl">
-					{#if data.faction === 'TOW'}
+					{#if data.faction === Factions.Tow}
 						A második képen a fizetésről kell képet készíteni. (chat)
 						<a
 							class="text-taxi hidden text-xl font-bold uppercase"
@@ -117,7 +119,7 @@
 			</li>
 		</ul>
 
-		{#if data.faction !== 'TOW'}
+		{#if data.faction === Factions.Taxi}
 			<h1 class="ml-[20%] mt-5 text-left text-3xl font-bold">4. Hívások igazolása</h1>
 			<ul class="child:mx-[20%] child:text- ml-2">
 				<li class="flex gap-2">

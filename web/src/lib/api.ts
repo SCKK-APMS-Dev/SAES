@@ -23,3 +23,19 @@ export const christmas =
 	(date.getMonth() === 11 && date.getDate() >= 6) || (date.getMonth() == 0 && date.getDate() <= 7)
 		? true
 		: false;
+
+export function allowPerms(
+	data: {
+		layout?: {
+			admin: boolean;
+			perms: string[];
+		};
+	},
+	perms: string[]
+) {
+	if (data.layout?.admin) return true;
+	for (const perm of perms) {
+		if (data.layout?.perms.includes(perm)) return true;
+	}
+	return false;
+}

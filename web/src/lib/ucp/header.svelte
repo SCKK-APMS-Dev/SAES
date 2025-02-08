@@ -1,26 +1,28 @@
 <script lang="ts">
-	import { christmas } from '$lib/api';
+	import { allowPerms, christmas } from '$lib/api';
 	import { pages } from './public';
 	import { page as statepage } from '$app/state';
 	import { Tooltip } from 'flowbite-svelte';
+	import { Permissions } from '$lib/permissions';
 
 	interface Props {
 		tip: any;
 		isAdmin?: boolean;
 		faction: string;
 		data: {
-			taxi?: any;
-			tow?: any;
-			admin?: boolean;
-			perms?: string[];
+			layout?: {
+				taxi?: any;
+				tow?: any;
+				admin: boolean;
+				perms: string[];
+			};
 		};
 		nosocket: string | boolean;
 	}
 
 	let { tip, isAdmin = false, faction = 'SCKK', data, nosocket }: Props = $props();
 
-	let multifact =
-		(data.perms?.includes('saes.ucp.taxi') && data.perms.includes('saes.ucp.tow')) || data.admin;
+	let multifact = allowPerms(data, [Permissions.SaesTaxiUcp, Permissions.SaesTowUcp]);
 	let pagesz = pages(faction);
 </script>
 
@@ -35,12 +37,12 @@
 						href={multifact ? '?clear_faction=true' : '/ucp'}
 					>
 						<img
-							src="/favicon.png"
+							src={faction === 'SCKK' || faction === 'TOW' ? '/sckk_icon.png' : '/favicon.png'}
 							class:border-red-500={nosocket}
 							class={`pointer-events-none ml-5 rounded-full border-2 border-solid drop-shadow-xl transition-colors duration-200 ${faction === 'TOW' ? 'group-hover:border-tow' : 'group-hover:border-taxi'}`}
 							width="40"
 							height="40"
-							alt="SCKK Logó"
+							alt="SAMT Faction logo"
 						/>
 						{#if christmas}
 							<img

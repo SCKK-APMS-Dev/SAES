@@ -14,10 +14,10 @@
 
 <svelte:head>
 	<title>SAMT</title>
-	<meta name="description" content="A See City Közlekedési Központ weboldala" />
+	<meta name="description" content="A SAMT rendszerének weboldala." />
 	<meta content="SAMT Weboldal" property="og:title" />
 	<meta content="https://samt.hu" property="og:url" />
-	<meta content="Az SCKK weboldala." property="og:description" />
+	<meta content="A SAMT rendszerének weboldala." property="og:description" />
 	<meta content="https://samt.hu/favicon.png" property="og:image" />
 	<meta content="#fece01" data-react-helmet="true" name="theme-color" />
 </svelte:head>

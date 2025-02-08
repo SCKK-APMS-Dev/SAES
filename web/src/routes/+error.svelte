@@ -3,7 +3,7 @@
 </script>
 
 <svelte:head>
-	<title>{$page.status} - SCKK</title>
+	<title>{$page.status} - SAMT</title>
 </svelte:head>
 
 {#if $page.error}

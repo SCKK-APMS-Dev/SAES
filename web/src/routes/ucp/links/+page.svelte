@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { Factions } from '$lib/permissions.js';
+
 	let { data } = $props();
 </script>
 
@@ -6,7 +8,7 @@
 	<div class="m-auto">
 		<h1 class="font-itim mb-5 mt-5 text-4xl font-bold">Hasznos linkek</h1>
 		<div class="flex w-screen items-center justify-center gap-5">
-			{#if data.faction === 'SCKK'}
+			{#if data.faction === Factions.Taxi}
 				<a
 					href="/s/app"
 					target="_blank"
@@ -29,7 +31,7 @@
 					következő montage videóban is benne lehetsz!
 				</h2>
 			</a>
-			{#if data.faction === 'SCKK' || data.faction === 'TOW'}
+			{#if data.faction === Factions.Taxi || data.faction === Factions.Tow}
 				<a
 					href="/s/steam"
 					target="_blank"

@@ -96,7 +96,7 @@
 		if (type === 'UPLOAD ITEM') {
 			loading.value = true;
 			let jsoff: { type: number; id: number } = JSON.parse(details);
-			fetch('/web-api/fm/get_by_id', {
+			fetch('/web-api/faction/get_by_id', {
 				headers: {
 					item_id: jsoff.id.toString(),
 					item_type: jsoff.type.toString()
@@ -198,7 +198,8 @@
 	<div class="m-auto text-center text-black dark:text-white">
 		<h1 class="font-itim mt-2 text-3xl font-bold">Események</h1>
 		{#if data.layout?.admin}
-			<a href="/ucp/fm/logs/all" class="rounded-lg bg-emerald-700 px-1">Összes esemény</a>
+			<a href="/ucp/admin/faction/logs/all" class="rounded-lg bg-emerald-700 px-1">Összes esemény</a
+			>
 		{/if}
 		<div class="mt-3 flex items-center justify-center gap-5">
 			{#if filters.includes('login')}

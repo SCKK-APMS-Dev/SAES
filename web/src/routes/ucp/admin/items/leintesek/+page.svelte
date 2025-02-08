@@ -1,5 +1,5 @@
 <script lang="ts">
-	import SMList from '$lib/sm/smlist.svelte';
+	import SMList from '$lib/admin/itemlist.svelte';
 	import { get_type_number } from '$lib/ucp/types.js';
 	let { data } = $props();
 </script>

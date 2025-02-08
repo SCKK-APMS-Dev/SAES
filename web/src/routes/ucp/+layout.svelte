@@ -9,17 +9,19 @@
 	import { socket } from '$lib/socket.js';
 	import ViewTransition from '$lib/navigation.svelte';
 	import Header from '$lib/ucp/header.svelte';
+	import { allowPerms } from '$lib/api.js';
+	import { Factions, Permissions } from '$lib/permissions.js';
 	let { data, children } = $props();
 	let maintenance = $state(false);
 	let initial_socket = $state(false);
 	let announcement = $state(false);
 	let nosocket: boolean | string = $state('Socket csatlakozás');
-	let tip = $state('SCKK');
+	let tip = $state('SAMT');
 	if (!data.noaccess && !data.noauth) {
-		if (data.faction === 'SCKK') {
+		if (data.faction === Factions.Taxi) {
 			tip = 'TAXI';
 		}
-		if (data.faction === 'TOW') {
+		if (data.faction === Factions.Tow) {
 			tip = 'TOW';
 		}
 	}
@@ -61,10 +63,14 @@
 <svelte:head>
 	{#if !maintenance && !data.maintenance && !data.noauth && !data.error && !data.nofact}
 		{#if !navigating.type}
-			{#if page.url.pathname.includes('sm')}
+			{#if page.url.pathname.includes('shift')}
 				<title>Műszakvezetői felület - {tip}</title>
-			{:else if page.url.pathname.includes('fm')}
+			{:else if page.url.pathname.includes('faction')}
 				<title>Frakcióvezetői felület - {tip}</title>
+			{:else if page.url.pathname.includes('fleet')}
+				<title>Flottakezelői felület - {tip}</title>
+			{:else if page.url.pathname.includes('admin')}
+				<title>Adminisztrátori felület - {tip}</title>
 			{:else if Reeler_keys.some((el) => page.url.pathname.includes(el))}
 				{#if page.url.pathname.endsWith('/upload')}
 					<title
@@ -81,6 +87,9 @@
 		{/if}
 	{:else}
 		<title>{tip}</title>
+	{/if}
+	{#if data.faction === Factions.Taxi || data.faction === Factions.Tow}
+		<link rel="icon" href="/sckk_icon.png" />
 	{/if}
 </svelte:head>
 <Error {data}>
@@ -139,15 +148,15 @@
 		<main>
 			<div class="flex h-screen items-center justify-center text-center text-white">
 				<div class="flex items-center justify-center gap-5">
-					{#if data.layout.perms.includes('saes.ucp.taxi') || data.layout.admin}
+					{#if allowPerms(data, [Permissions.SaesTaxiUcp, Permissions.SaesTowUcp])}
 						<a
 							href="?select_faction=SCKK"
 							data-sveltekit-reload
 							class="group m-auto items-center justify-center rounded-xl bg-black bg-opacity-60 p-5"
 						>
 							<img
-								src="/favicon.png"
-								class="group-hover:border-taxi m-auto rounded-full border-4 border-solid border-white transition-colors duration-300"
+								src="/sckk_icon.png"
+								class="group-hover:border-taxi m-auto w-48 rounded-full border-4 border-solid border-white transition-colors duration-300"
 								alt="SCKK Logo"
 							/>
 							<h1
@@ -157,15 +166,15 @@
 							</h1>
 						</a>
 					{/if}
-					{#if data.layout.perms.includes('saes.ucp.tow') || data.layout.admin}
+					{#if allowPerms(data, [Permissions.SaesTaxiUcp, Permissions.SaesTowUcp])}
 						<a
 							href="?select_faction=TOW"
 							data-sveltekit-reload
 							class="group m-auto items-center justify-center rounded-xl bg-black bg-opacity-60 p-5"
 						>
 							<img
-								src="/favicon.png"
-								class="group-hover:border-tow m-auto rounded-full border-4 border-solid border-white transition-colors duration-300"
+								src="/sckk_icon.png"
+								class="group-hover:border-tow m-auto w-48 rounded-full border-4 border-solid border-white transition-colors duration-300"
 								alt="SCKK Logo"
 							/>
 							<h1
@@ -216,20 +225,24 @@
 			{/if}
 		{/if}
 		{#if initial_socket}
-			{#if !page.url.pathname.startsWith('/ucp/fm')}
+			{#if !page.url.pathname.startsWith('/ucp/admin/fm')}
 				<Header
 					{tip}
 					faction={data.faction!}
-					isAdmin={data.layout?.admin}
-					data={data.layout!}
+					isAdmin={data.faction === Factions.Taxi
+						? allowPerms(data, [Permissions.SaesTaxiAdmin])
+						: data.faction === Factions.Tow
+							? allowPerms(data, [Permissions.SaesTowAdmin])
+							: false}
+					{data}
 					{nosocket}
 				/>
 			{/if}
 			<ViewTransition />
 			<main
-				class={data.faction === 'SCKK'
+				class={data.faction === Factions.Taxi
 					? 'selection:bg-taxi'
-					: data.faction === 'TOW'
+					: data.faction === Factions.Tow
 						? 'selection:bg-tow'
 						: ''}
 			>
@@ -247,7 +260,7 @@
 					{#if typeof maintenance === 'string'}
 						<h1 class="text-2xl text-gray-300">Indoklás: {@html marked(maintenance)}</h1>
 					{/if}
-					{#if data.layout?.admin}
+					{#if allowPerms(data, [Permissions.SaesMaintenance])}
 						<a
 							href="/ucp/keine"
 							class="bg-linear-to-r mb-5 ml-5 mr-5 mt-5 block rounded-full from-red-500 via-amber-400 to-rose-600 bg-[size:200%] bg-[position:0] px-2 py-1 text-center text-lg font-bold text-white drop-shadow-lg transition-all duration-500 hover:bg-[position:100%]"

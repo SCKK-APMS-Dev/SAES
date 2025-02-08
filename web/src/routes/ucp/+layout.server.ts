@@ -1,6 +1,7 @@
 import type { LayoutServerLoad } from './$types';
-import { apiUrl, apiUrlPublic, cdnUrl } from '$lib/api';
+import { allowPerms, apiUrl, apiUrlPublic, cdnUrl } from '$lib/api';
 import { isRedirect, redirect } from '@sveltejs/kit';
+import { Factions, Permissions } from '$lib/permissions';
 
 export const load = (async ({ cookies, request, url }) => {
 	if (!cookies.get('auth_token')) {
@@ -59,7 +60,10 @@ export const load = (async ({ cookies, request, url }) => {
 				if (url.searchParams.get('select_faction')) {
 					let sfact = url.searchParams.get('select_faction') as string;
 					if (['SCKK', 'TOW'].includes(sfact)) {
-						if (sfact === 'SCKK' && (jeson.perms.includes('saes.ucp.taxi') || jeson.admin)) {
+						if (
+							sfact === Factions.Taxi &&
+							allowPerms({ layout: jeson }, [Permissions.SaesTaxiUcp])
+						) {
 							cookies.set('selected_faction', 'SCKK', {
 								path: '/',
 								maxAge: 360 * 24 * 30,
@@ -69,7 +73,7 @@ export const load = (async ({ cookies, request, url }) => {
 							});
 							throw redirect(303, url.pathname);
 						}
-						if (sfact === 'TOW' && (jeson.perms.includes('saes.ucp.tow') || jeson.admin)) {
+						if (sfact === Factions.Tow && allowPerms({ layout: jeson }, [Permissions.SaesTowUcp])) {
 							cookies.set('selected_faction', 'TOW', {
 								path: '/',
 								maxAge: 360 * 24 * 30,
@@ -100,12 +104,12 @@ export const load = (async ({ cookies, request, url }) => {
 				}
 				switch (cookies.get('selected_faction')) {
 					case 'SCKK':
-						if (!jeson.perms.includes('saes.ucp.taxi') && !jeson.admin) {
+						if (!allowPerms({ layout: jeson }, [Permissions.SaesTaxiUcp])) {
 							throw redirect(303, '?clear_faction=true');
 						}
 						break;
 					case 'TOW':
-						if (!jeson.perms.includes('saes.ucp.tow') && !jeson.admin) {
+						if (!allowPerms({ layout: jeson }, [Permissions.SaesTowUcp])) {
 							throw redirect(303, '?clear_faction=true');
 						}
 						break;
