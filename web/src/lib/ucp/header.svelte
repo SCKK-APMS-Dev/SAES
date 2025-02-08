@@ -36,14 +36,18 @@
 						data-sveltekit-reload
 						href={multifact ? '?clear_faction=true' : '/ucp'}
 					>
-						<img
-							src={faction === 'SCKK' || faction === 'TOW' ? '/sckk_icon.png' : '/favicon.png'}
-							class:border-red-500={nosocket}
-							class={`pointer-events-none ml-5 rounded-full border-2 border-solid drop-shadow-xl transition-colors duration-200 ${faction === 'TOW' ? 'group-hover:border-tow' : 'group-hover:border-taxi'}`}
-							width="40"
-							height="40"
-							alt="SAMT Faction logo"
-						/>
+						<div
+							class={`ml-5 border-2 border-solid duration-200 ${faction === 'TOW' ? 'group-hover:border-tow' : 'group-hover:border-taxi'} rounded-full drop-shadow-xl`}
+						>
+							<img
+								src={faction === 'SCKK' || faction === 'TOW' ? '/sckk_icon.png' : '/favicon.png'}
+								class:border-red-500={nosocket}
+								class={`border-1 pointer-events-none rounded-full border-solid border-black transition-colors `}
+								width="40"
+								height="40"
+								alt="SAMT Faction logo"
+							/>
+						</div>
 						{#if christmas}
 							<img
 								src="/santa.svg"

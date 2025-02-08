@@ -148,17 +148,21 @@
 		<main>
 			<div class="flex h-screen items-center justify-center text-center text-white">
 				<div class="flex items-center justify-center gap-5">
-					{#if allowPerms(data, [Permissions.SaesTaxiUcp, Permissions.SaesTowUcp])}
+					{#if allowPerms(data, [Permissions.SaesTaxiUcp])}
 						<a
 							href="?select_faction=SCKK"
 							data-sveltekit-reload
 							class="group m-auto items-center justify-center rounded-xl bg-black bg-opacity-60 p-5"
 						>
-							<img
-								src="/sckk_icon.png"
-								class="group-hover:border-taxi m-auto w-48 rounded-full border-4 border-solid border-white transition-colors duration-300"
-								alt="SCKK Logo"
-							/>
+							<div
+								class="group-hover:border-taxi rounded-full border-4 border-solid border-white duration-300"
+							>
+								<img
+									src="/sckk_icon.png"
+									class="m-auto w-40 rounded-full border-2 border-solid border-black transition-colors"
+									alt="SCKK Logo"
+								/>
+							</div>
 							<h1
 								class="group-hover:text-taxi text-3xl font-bold tracking-wider transition-colors duration-300"
 							>
@@ -166,17 +170,21 @@
 							</h1>
 						</a>
 					{/if}
-					{#if allowPerms(data, [Permissions.SaesTaxiUcp, Permissions.SaesTowUcp])}
+					{#if allowPerms(data, [Permissions.SaesTowUcp])}
 						<a
 							href="?select_faction=TOW"
 							data-sveltekit-reload
 							class="group m-auto items-center justify-center rounded-xl bg-black bg-opacity-60 p-5"
 						>
-							<img
-								src="/sckk_icon.png"
-								class="group-hover:border-tow m-auto w-48 rounded-full border-4 border-solid border-white transition-colors duration-300"
-								alt="SCKK Logo"
-							/>
+							<div
+								class="group-hover:border-tow rounded-full border-4 border-solid border-white duration-300"
+							>
+								<img
+									src="/sckk_icon.png"
+									class=" m-auto w-40 rounded-full border-2 border-solid border-black transition-colors"
+									alt="SCKK Logo"
+								/>
+							</div>
 							<h1
 								class="group-hover:text-tow text-3xl font-bold tracking-wider transition-colors duration-300"
 							>
