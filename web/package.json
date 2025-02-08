@@ -26,7 +26,6 @@
 		"eslint": "^9.19.0",
 		"eslint-config-prettier": "^10.0.1",
 		"eslint-plugin-svelte": "^2.46.1",
-		"flowbite": "^3.1.1",
 		"flowbite-svelte": "^0.47.4",
 		"marked": "^15.0.6",
 		"prettier": "^3.4.2",
@@ -43,6 +42,7 @@
 	"type": "module",
 	"packageManager": "pnpm@9.11.0+sha512.0a203ffaed5a3f63242cd064c8fb5892366c103e328079318f78062f24ea8c9d50bc6a47aa3567cabefd824d170e78fa2745ed1f16b132e16436146b7688f19b",
 	"dependencies": {
-		"@tailwindcss/vite": "^4.0.3"
+		"@tailwindcss/vite": "^4.0.3",
+		"flowbite": "^3.1.2"
 	}
 }
