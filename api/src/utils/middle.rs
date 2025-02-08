@@ -203,7 +203,7 @@ pub async fn ucp_auth(
     };
 }
 
-pub async fn sm_auth(
+pub async fn shift_auth(
     mut req: Request,
     next: Next,
 ) -> Result<impl IntoResponse, (StatusCode, String)> {
@@ -214,7 +214,7 @@ pub async fn sm_auth(
             Factions::SCKK => {
                 if uwrp
                     .perms
-                    .contains(&get_perm(Permissions::SaesSm(Factions::SCKK)))
+                    .contains(&get_perm(Permissions::SaesAdminShift(Factions::SCKK)))
                 {
                     true
                 } else {
@@ -224,7 +224,7 @@ pub async fn sm_auth(
             Factions::TOW => {
                 if uwrp
                     .perms
-                    .contains(&get_perm(Permissions::SaesSm(Factions::TOW)))
+                    .contains(&get_perm(Permissions::SaesAdminShift(Factions::TOW)))
                 {
                     true
                 } else {
@@ -245,7 +245,52 @@ pub async fn sm_auth(
     }
 }
 
-pub async fn fm_auth(
+pub async fn admin_auth(
+    mut req: Request,
+    next: Next,
+) -> Result<impl IntoResponse, (StatusCode, String)> {
+    let exts: Option<&Driver> = req.extensions_mut().get();
+    let uwrp = exts.expect("Tag lekérése sikertelen, ucp_auth megtörtént?");
+    if uwrp.faction.is_some() {
+        let fact = match uwrp.faction.unwrap() {
+            Factions::SCKK => {
+                if uwrp
+                    .perms
+                    .contains(&get_perm(Permissions::SaesAdmin(Factions::SCKK)))
+                {
+                    true
+                } else {
+                    false
+                }
+            }
+            Factions::TOW => {
+                if uwrp
+                    .perms
+                    .contains(&get_perm(Permissions::SaesAdmin(Factions::TOW)))
+                {
+                    true
+                } else {
+                    false
+                }
+            }
+        };
+        if uwrp.admin || fact {
+            return Ok(next.run(req).await);
+        } else {
+            return Err((
+                StatusCode::FORBIDDEN,
+                "Nincs jogod! (saes.admin)".to_string(),
+            ));
+        }
+    } else {
+        return Err((
+            StatusCode::BAD_REQUEST,
+            "Frakciójelölés hiányzik!".to_string(),
+        ));
+    }
+}
+
+pub async fn faction_auth(
     mut req: Request,
     next: Next,
 ) -> Result<impl IntoResponse, (StatusCode, String)> {
@@ -261,7 +306,7 @@ pub async fn fm_auth(
         Factions::SCKK => {
             if uwrp
                 .perms
-                .contains(&get_perm(Permissions::SaesFm(Factions::SCKK)))
+                .contains(&get_perm(Permissions::SaesAdminFaction(Factions::SCKK)))
             {
                 true
             } else {
@@ -271,7 +316,7 @@ pub async fn fm_auth(
         Factions::TOW => {
             if uwrp
                 .perms
-                .contains(&get_perm(Permissions::SaesFm(Factions::TOW)))
+                .contains(&get_perm(Permissions::SaesAdminFaction(Factions::TOW)))
             {
                 true
             } else {

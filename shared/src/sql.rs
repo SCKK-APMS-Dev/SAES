@@ -5,10 +5,10 @@ pub async fn get_db_conn() -> DatabaseConnection {
     let url = env::var("DATABASE_URL").unwrap();
     let mut opt = ConnectOptions::new(url).to_owned();
     opt.max_connections(20)
-        .min_connections(2)
+        .min_connections(4)
         .connect_timeout(Duration::from_secs(5))
-        .idle_timeout(Duration::from_secs(10))
-        .max_lifetime(Duration::from_secs(15))
+        .idle_timeout(Duration::from_secs(30))
+        .max_lifetime(Duration::from_secs(60))
         .sqlx_logging(true);
     let db_connection = Database::connect(opt).await;
     if db_connection.is_ok() {

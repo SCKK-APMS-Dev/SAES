@@ -4,7 +4,7 @@
 			"strings": true
 		},
 		"editor.suggest.insertMode": "replace",
-		"editor.defaultFormatter": "tamasfe.even-better-toml"
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
 	},
 	"[rust]": {
 		"editor.defaultFormatter": "rust-lang.rust-analyzer"

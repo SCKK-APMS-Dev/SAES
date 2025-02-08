@@ -23,7 +23,7 @@ pub struct SMStatReturn {
     szamla: SMStat,
 }
 
-pub async fn sm_home_stat(
+pub async fn admin_home_stat(
     ext: Extension<Driver>,
 ) -> Result<impl IntoResponse, (StatusCode, String)> {
     let db = DB_CLIENT.get().unwrap();

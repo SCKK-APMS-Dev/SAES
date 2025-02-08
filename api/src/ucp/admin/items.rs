@@ -38,7 +38,7 @@ pub struct StatDBAll {
 }
 
 #[debug_handler]
-pub async fn sm_items_get(
+pub async fn admin_items_get(
     ext: Extension<Driver>,
     quer: Query<SMItemsQuery>,
 ) -> Result<impl IntoResponse, (StatusCode, String)> {
@@ -137,7 +137,7 @@ pub async fn sm_items_get(
 }
 
 #[debug_handler]
-pub async fn sm_items_post(
+pub async fn admin_items_post(
     ext: Extension<Driver>,
     extract::Json(body): extract::Json<SMPostItemsBody>,
 ) -> Result<impl IntoResponse, (StatusCode, String)> {

@@ -8,30 +8,46 @@ pub enum Permissions {
     SaesMaintenance,
     SaesTest,
     SaesUcp(Factions),
-    SaesSm(Factions),
-    SaesFm(Factions),
+    SaesAdmin(Factions),
+    SaesAdminShift(Factions),
+    SaesAdminFleet(Factions),
+    SaesAdminFaction(Factions),
 }
 
 pub fn get_perm(perm: Permissions) -> String {
     match perm {
         Permissions::SaesLogin => "saes.login".to_string(),
         Permissions::SaesMaintenance => "saes.maintenance".to_string(),
-        Permissions::SaesSm(fact) => format!(
-            "saes.sm.{}",
+        Permissions::SaesAdmin(fact) => format!(
+            "saes.{}.admin",
             match fact {
                 Factions::SCKK => "taxi",
                 Factions::TOW => "tow",
             }
         ),
         Permissions::SaesUcp(fact) => format!(
-            "saes.ucp.{}",
+            "saes.{}.ucp",
             match fact {
                 Factions::SCKK => "taxi",
                 Factions::TOW => "tow",
             }
         ),
-        Permissions::SaesFm(fact) => format!(
-            "saes.fm.{}",
+        Permissions::SaesAdminShift(fact) => format!(
+            "saes.{}.admin.shift",
+            match fact {
+                Factions::SCKK => "taxi",
+                Factions::TOW => "tow",
+            }
+        ),
+        Permissions::SaesAdminFaction(fact) => format!(
+            "saes.{}.admin.faction",
+            match fact {
+                Factions::SCKK => "taxi",
+                Factions::TOW => "tow",
+            }
+        ),
+        Permissions::SaesAdminFleet(fact) => format!(
+            "saes.{}.admin.fleet",
             match fact {
                 Factions::SCKK => "taxi",
                 Factions::TOW => "tow",
