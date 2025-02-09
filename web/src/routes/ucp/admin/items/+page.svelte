@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Grid from '$lib/admin/grid.svelte';
+	import { Permissions } from '$lib/permissions.js';
 
 	let { data } = $props();
 	const supportCountries = ['HU', 'SK', 'RO'];
@@ -15,7 +16,12 @@
 			href: '/ucp/admin/items/potlekok',
 			border: 'border-yellow-400',
 			background: 'hover:bg-yellow-400',
-			faction: ['SCKK', 'TOW']
+			permission: [
+				Permissions.SaesTaxiAdminShift,
+				Permissions.SaesTaxiAdminFaction,
+				Permissions.SaesTowAdminShift,
+				Permissions.SaesTowAdminFaction
+			]
 		},
 		{
 			title: 'Leintések',
@@ -23,7 +29,12 @@
 			href: '/ucp/admin/items/leintesek',
 			border: 'border-green-400',
 			background: 'hover:bg-green-400',
-			faction: ['SCKK', 'TOW']
+			permission: [
+				Permissions.SaesTaxiAdminShift,
+				Permissions.SaesTaxiAdminFaction,
+				Permissions.SaesTowAdminShift,
+				Permissions.SaesTowAdminFaction
+			]
 		},
 		{
 			title: 'Szereltetési számlák',
@@ -31,7 +42,12 @@
 			href: '/ucp/admin/items/szamlak',
 			border: 'border-tow',
 			background: 'hover:bg-tow',
-			faction: ['SCKK', 'TOW']
+			permission: [
+				Permissions.SaesTaxiAdminShift,
+				Permissions.SaesTaxiAdminFaction,
+				Permissions.SaesTowAdminShift,
+				Permissions.SaesTowAdminFaction
+			]
 		}
 	]}
 />

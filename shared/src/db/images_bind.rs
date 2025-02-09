@@ -10,6 +10,7 @@ pub struct Model {
     pub image_id: i32,
     pub r#type: i8,
     pub type_id: i32,
+    pub archived: i8,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

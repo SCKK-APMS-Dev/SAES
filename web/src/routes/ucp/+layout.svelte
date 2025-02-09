@@ -233,7 +233,7 @@
 			{/if}
 		{/if}
 		{#if initial_socket}
-			{#if !page.url.pathname.startsWith('/ucp/admin/fm')}
+			{#if !page.url.pathname.startsWith('/ucp/admin/')}
 				<Header
 					{tip}
 					faction={data.faction!}
