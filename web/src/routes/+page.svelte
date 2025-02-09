@@ -5,7 +5,7 @@
 	>
 		<img
 			src="/favicon.png"
-			class="group-hover:border-taxi m-auto rounded-full border-4 border-solid border-white transition-colors duration-300"
+			class="group-hover:border-taxi m-auto w-52 rounded-full border-4 border-solid border-white transition-colors duration-300"
 			alt="SAMT Logo"
 		/>
 		<h1
