@@ -64,7 +64,7 @@ export const load = (async ({ cookies, request, url }) => {
 							sfact === Factions.Taxi &&
 							allowPerms({ layout: jeson }, [Permissions.SaesTaxiUcp])
 						) {
-							cookies.set('selected_faction', 'SCKK', {
+							cookies.set('selected_faction', Factions.Taxi, {
 								path: '/',
 								maxAge: 360 * 24 * 30,
 								secure: true,
@@ -74,7 +74,7 @@ export const load = (async ({ cookies, request, url }) => {
 							throw redirect(303, url.pathname);
 						}
 						if (sfact === Factions.Tow && allowPerms({ layout: jeson }, [Permissions.SaesTowUcp])) {
-							cookies.set('selected_faction', 'TOW', {
+							cookies.set('selected_faction', Factions.Tow, {
 								path: '/',
 								maxAge: 360 * 24 * 30,
 								secure: true,
@@ -90,25 +90,36 @@ export const load = (async ({ cookies, request, url }) => {
 					throw redirect(303, url.pathname);
 				}
 				if (!cookies.get('selected_faction')) {
-					return {
-						layout: jeson,
-						auth: cookies.get('auth_token')!,
-						api: apiUrlPublic,
-						maintenance: cookies.get('maintenance')
-							? jeson.admin
-								? cookies.get('maintenance')
-								: false
-							: false,
-						nofact: true
-					};
+					if (
+						allowPerms({ layout: jeson }, [Permissions.SaesTaxiUcp]) &&
+						allowPerms({ layout: jeson }, [Permissions.SaesTowUcp])
+					) {
+						return {
+							layout: jeson,
+							auth: cookies.get('auth_token')!,
+							api: apiUrlPublic,
+							maintenance: cookies.get('maintenance')
+								? jeson.admin
+									? cookies.get('maintenance')
+									: false
+								: false,
+							nofact: true
+						};
+					}
+					if (allowPerms({ layout: jeson }, [Permissions.SaesTaxiUcp])) {
+						throw redirect(303, '?select_faction=SCKK');
+					}
+					if (allowPerms({ layout: jeson }, [Permissions.SaesTowUcp])) {
+						throw redirect(303, '?select_faction=TOW');
+					}
 				}
 				switch (cookies.get('selected_faction')) {
-					case 'SCKK':
+					case Factions.Taxi:
 						if (!allowPerms({ layout: jeson }, [Permissions.SaesTaxiUcp])) {
 							throw redirect(303, '?clear_faction=true');
 						}
 						break;
-					case 'TOW':
+					case Factions.Tow:
 						if (!allowPerms({ layout: jeson }, [Permissions.SaesTowUcp])) {
 							throw redirect(303, '?clear_faction=true');
 						}

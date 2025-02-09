@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Grid from '$lib/admin/grid.svelte';
+	import { Permissions } from '$lib/permissions.js';
 
 	let { data } = $props();
 </script>
@@ -15,7 +16,7 @@
 			href: '/ucp/admin/tools/app',
 			border: 'border-taxi',
 			background: 'hover:bg-taxi',
-			faction: ['SCKK']
+			permission: [Permissions.SaesTaxiAdmin]
 		},
 		{
 			title: 'Hívásszámláló',
@@ -24,7 +25,7 @@
 			href: '/ucp/admin/tools/call',
 			border: 'border-blue-600',
 			background: 'hover:bg-blue-600',
-			faction: ['SCKK', 'TOW']
+			permission: [Permissions.SaesTaxiAdmin, Permissions.SaesTowAdmin]
 		}
 	]}
 />

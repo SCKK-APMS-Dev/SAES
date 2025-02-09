@@ -51,6 +51,11 @@
 				>Frakciókezelés</a
 			>
 		{/if}
+		{#if allowPerms(data, [])}
+			<a href="/ucp/admin/sysadmin" class="transition-all duration-200 hover:bg-emerald-600"
+				>Sysadmin</a
+			>
+		{/if}
 	</div>
 </nav>
 {@render children?.()}

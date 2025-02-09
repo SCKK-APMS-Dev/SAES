@@ -22,60 +22,46 @@
 
 	let { tip, isAdmin = false, faction = 'SCKK', data, nosocket }: Props = $props();
 
-	let multifact = allowPerms(data, [Permissions.SaesTaxiUcp, Permissions.SaesTowUcp]);
+	let multifact =
+		allowPerms(data, [Permissions.SaesTaxiUcp]) && allowPerms(data, [Permissions.SaesTowUcp]);
+
 	let pagesz = pages(faction);
 </script>
 
 <header class="z-20">
 	<div class="relative z-20 border-b bg-white dark:bg-gray-700 dark:text-white">
 		<div class="mx-0 px-0 xl:container lg:mx-auto lg:py-4">
-			<div class={`${!multifact ? 'group' : ''} flex items-center justify-between gap-2`}>
-				<div class="flex items-center justify-center gap-3">
-					<a
-						class="group relative z-20 flex items-center"
-						data-sveltekit-reload
-						href={multifact ? '?clear_faction=true' : '/ucp'}
+			<div class="flex items-center justify-between gap-2">
+				<a
+					class="group relative z-20 flex items-center gap-3"
+					data-sveltekit-reload={multifact ? true : false}
+					href={multifact ? '?clear_faction=true' : '/ucp'}
+				>
+					<div
+						class={`${faction === 'TOW' ? 'group-hover:border-tow' : 'group-hover:border-taxi'} pointer-events-none ml-5 rounded-full border-2 border-solid drop-shadow-xl duration-200`}
 					>
-						<div
-							class={`ml-5 border-2 border-solid duration-200 ${faction === 'TOW' ? 'group-hover:border-tow' : 'group-hover:border-taxi'} rounded-full drop-shadow-xl`}
-						>
-							<img
-								src={faction === 'SCKK' || faction === 'TOW' ? '/sckk_icon.png' : '/favicon.png'}
-								class:border-red-500={nosocket}
-								class={`border-1 pointer-events-none rounded-full border-solid border-black transition-colors `}
-								width="40"
-								height="40"
-								alt="SAMT Faction logo"
-							/>
-						</div>
-						{#if christmas}
-							<img
-								src="/santa.svg"
-								class="absolute bottom-2 left-3.5 w-14 -rotate-[24deg]"
-								alt=""
-							/>
-						{/if}
-					</a>
-					{#if multifact}
-						<Tooltip>Részlegváltás</Tooltip>
-					{/if}
-					<a
-						href="/ucp"
-						class:text-red-500={nosocket}
-						class={`z-20 text-3xl font-bold drop-shadow-xl transition-colors duration-200 ${
-							faction === 'TOW'
-								? multifact
-									? 'hover:text-tow'
-									: 'group-hover:text-tow'
-								: multifact
-									? 'hover:text-taxi'
-									: 'group-hover:text-taxi'
+						<img
+							src={faction === 'SCKK' || faction === 'TOW' ? '/sckk_icon.png' : '/favicon.png'}
+							class="border-1 pointer-events-none rounded-full border-solid border-black"
+							width="40"
+							height="40"
+							alt="SCKK Logó"
+						/>
+					</div>
+					<h1
+						class={`text-3xl font-bold drop-shadow-xl transition-colors duration-200 ${
+							faction === 'TOW' ? 'group-hover:text-tow' : 'group-hover:text-taxi'
 						}`}
 					>
 						{tip}
-					</a>
-				</div>
-
+					</h1>
+					{#if christmas}
+						<img src="/santa.svg" class="absolute bottom-2 left-3.5 w-14 -rotate-[24deg]" alt="" />
+					{/if}
+				</a>
+				{#if multifact}
+					<Tooltip>Frakcióváltás</Tooltip>
+				{/if}
 				<div class="flex items-center justify-end border-l lg:border-l-0">
 					<input type="checkbox" name="hamburger" id="hamburger" class="peer opacity-0" hidden />
 					<label
