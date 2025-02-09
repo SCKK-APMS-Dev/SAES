@@ -1,6 +1,7 @@
 use std::{collections::HashMap, env, error::Error};
 
 use axum::{routing::get, Router};
+use config::structs::MainConfig;
 use dotenvy::dotenv;
 use lazy_static::lazy_static;
 use reqwest::Client;
@@ -19,6 +20,7 @@ use tracing::info;
 use tracing_subscriber::FmtSubscriber;
 
 mod auth;
+mod config;
 mod envs;
 mod init;
 mod list;
@@ -33,6 +35,7 @@ lazy_static! {
     pub static ref BASE_HASHMAP: RwLock<HashMap<String, String>> = RwLock::new(HashMap::new());
 }
 pub static DB_CLIENT: OnceCell<DatabaseConnection> = OnceCell::const_new();
+pub static MAIN_CONFIG: OnceCell<MainConfig> = OnceCell::const_new();
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {

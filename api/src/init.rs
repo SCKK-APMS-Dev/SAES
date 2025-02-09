@@ -1,13 +1,12 @@
 use core::panic;
 use std::{
     fs::{self, File},
-    io::Read,
     path::Path,
 };
 
 use saes_shared::sql::test_db_conn;
 
-use crate::BASE_HASHMAP;
+use crate::config::loader::check_config;
 
 async fn stores_dir_init() {
     let stores_dir = Path::new("stores");
@@ -22,25 +21,6 @@ async fn stores_dir_init() {
     if announcement_path.exists() == false {
         File::create(announcement_path).expect("announcement.store létrehozása sikertelen");
     }
-}
-
-pub async fn stores_data_init() {
-    let mut maintenance = File::open("stores/maintenance.store").unwrap();
-    let mut announcement = File::open("stores/announcement.store").unwrap();
-    let mut maintenance_string = String::new();
-    let mut announcement_string = String::new();
-    maintenance
-        .read_to_string(&mut maintenance_string)
-        .expect("String alakítás sikertelen");
-    announcement
-        .read_to_string(&mut announcement_string)
-        .expect("String alakítás sikertelen");
-    let mut hash = BASE_HASHMAP.write().await;
-    hash.insert("store_maintenance".to_string(), maintenance_string.clone());
-    hash.insert(
-        "store_announcement".to_string(),
-        announcement_string.clone(),
-    );
 }
 
 fn image_init() {
@@ -64,9 +44,9 @@ fn image_tmp_init() {
 }
 
 pub async fn main() {
+    check_config();
     test_db_conn().await;
     stores_dir_init().await;
-    stores_data_init().await;
     image_init();
     image_tmp_init();
 }

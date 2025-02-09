@@ -1,6 +1,5 @@
 use serde::Deserialize;
 use socketioxide::extract::SocketRef;
-use stores::get_stores;
 use tracing::{info, warn};
 
 use crate::{
@@ -10,10 +9,8 @@ use crate::{
         api::get_api_envs,
         middle::{DiscordUser, Driver, GetUserRes, SAMTAuth},
     },
-    WEB_CLIENT,
+    MAIN_CONFIG, WEB_CLIENT,
 };
-
-mod stores;
 
 #[derive(Debug, Deserialize)]
 pub struct InitialData {
@@ -77,7 +74,7 @@ pub async fn on_connect(socket: SocketRef, data: InitialData) {
                     socket.id, tag.name, tag.driverid, tag.discordid,
                 );
                 db_log(tag.name.clone(), None, None, None, "LOGIN", None).await;
-                let mama = get_stores().await;
+                let mama = MAIN_CONFIG.get().unwrap();
                 if tag.admin {
                     socket.join("mv").expect("MV Szobacsatlakozás sikertelen")
                 }
@@ -85,8 +82,12 @@ pub async fn on_connect(socket: SocketRef, data: InitialData) {
                 //   .emit("socketppl-update", io.sockets().unwrap().len())
                 //   .expect("SocketPPL - Update on connect kiküldése sikertelen");
                 socket.join("ucp").expect("UCP Szobacsatlakozás sikertelen");
-                socket.emit("maintenance", &mama.maintenance).unwrap();
-                socket.emit("announcement", &mama.announcement).unwrap();
+                socket
+                    .emit("maintenance", &mama.global.maintenance)
+                    .unwrap();
+                socket
+                    .emit("announcement", &mama.global.announcement)
+                    .unwrap();
                 socket.emit("doneload", "").unwrap();
                 //socket.on(
                 //    "JoinEvent",
