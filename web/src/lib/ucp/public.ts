@@ -45,7 +45,7 @@ export const pages = (fact: string) => {
 		{
 			url: '/ucp/segedlet',
 			display: 'Segédlet',
-			faction: [Factions.Taxi, Factions.Apms, Factions.Tow]
+			faction: [Factions.Taxi, Factions.Tow]
 		},
 		{
 			url: '/ucp/links',

@@ -29,7 +29,11 @@
 	let pagesz = pages(faction);
 </script>
 
-<header class="z-20">
+<header class={`${faction === Factions.Taxi
+	? 'selection:bg-taxi'
+	: faction === Factions.Tow
+		? 'selection:bg-tow'
+		: faction === Factions.Apms ? "selection:bg-apms" : ''} z-30`}>
 	<div class="relative z-20 border-b bg-white dark:bg-gray-700 dark:text-white">
 		<div class="mx-0 px-0 xl:container lg:mx-auto lg:py-4">
 			<div class="flex items-center justify-between gap-2">
@@ -133,9 +137,11 @@
 			</div>
 		</div>
 	</div>
-	<h2 class="bg-linear-to-r z-20 from-rose-600 to-amber-600 py-1 text-center text-xl text-white">
-		Nem vagy biztos valamiben? Nézd meg a <a href="/ucp/segedlet" class="text-taxi z-20 font-bold"
-			>segédletet</a
-		>!
-	</h2>
+	{#if faction === Factions.Taxi || faction === Factions.Tow}
+		<h2 class="bg-linear-to-r z-20 from-rose-600 to-amber-600 py-1 text-center text-xl text-white">
+			Nem vagy biztos valamiben? Nézd meg a <a href="/ucp/segedlet" class="text-taxi z-20 font-bold"
+				>segédletet</a
+			>!
+		</h2>
+	{/if}
 </header>

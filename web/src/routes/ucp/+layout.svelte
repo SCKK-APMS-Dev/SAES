@@ -282,7 +282,7 @@
 					? 'selection:bg-taxi'
 					: data.faction === Factions.Tow
 						? 'selection:bg-tow'
-						: ''}
+						: data.faction === Factions.Apms ? "selection:bg-apms" : ''}
 			>
 				{@render children?.()}
 			</main>
