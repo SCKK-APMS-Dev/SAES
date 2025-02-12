@@ -22,6 +22,7 @@ pub fn get_perm(perm: Permissions) -> String {
             "saes.{}.admin",
             match fact {
                 Factions::SCKK => "taxi",
+                Factions::APMS => "apms",
                 Factions::TOW => "tow",
             }
         ),
@@ -29,6 +30,7 @@ pub fn get_perm(perm: Permissions) -> String {
             "saes.{}.ucp",
             match fact {
                 Factions::SCKK => "taxi",
+                Factions::APMS => "apms",
                 Factions::TOW => "tow",
             }
         ),
@@ -36,6 +38,7 @@ pub fn get_perm(perm: Permissions) -> String {
             "saes.{}.admin.shift",
             match fact {
                 Factions::SCKK => "taxi",
+                Factions::APMS => "apms",
                 Factions::TOW => "tow",
             }
         ),
@@ -43,6 +46,7 @@ pub fn get_perm(perm: Permissions) -> String {
             "saes.{}.admin.faction",
             match fact {
                 Factions::SCKK => "taxi",
+                Factions::APMS => "apms",
                 Factions::TOW => "tow",
             }
         ),
@@ -50,6 +54,7 @@ pub fn get_perm(perm: Permissions) -> String {
             "saes.{}.admin.fleet",
             match fact {
                 Factions::SCKK => "taxi",
+                Factions::APMS => "apms",
                 Factions::TOW => "tow",
             }
         ),

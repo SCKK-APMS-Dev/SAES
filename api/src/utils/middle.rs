@@ -145,6 +145,15 @@ pub async fn ucp_auth(
                                             } else {
                                                 None
                                             }
+                                        } else if val.to_str().unwrap() == "APMS" {
+                                            if real_tag.permissions.contains(&get_perm(
+                                                Permissions::SaesUcp(Factions::APMS),
+                                            )) || real_tag.issysadmin
+                                            {
+                                                Some(Factions::APMS)
+                                            } else {
+                                                None
+                                            }
                                         } else {
                                             None
                                         }
@@ -210,28 +219,14 @@ pub async fn shift_auth(
     let exts: Option<&Driver> = req.extensions_mut().get();
     let uwrp = exts.expect("Tag lekérése sikertelen, ucp_auth megtörtént?");
     if uwrp.faction.is_some() {
-        let fact = match uwrp.faction.unwrap() {
-            Factions::SCKK => {
-                if uwrp
-                    .perms
-                    .contains(&get_perm(Permissions::SaesAdminShift(Factions::SCKK)))
-                {
-                    true
-                } else {
-                    false
-                }
-            }
-            Factions::TOW => {
-                if uwrp
-                    .perms
-                    .contains(&get_perm(Permissions::SaesAdminShift(Factions::TOW)))
-                {
-                    true
-                } else {
-                    false
-                }
-            }
+        let fact = if uwrp.perms.contains(&get_perm(Permissions::SaesAdminShift(
+            uwrp.faction.unwrap(),
+        ))) {
+            true
+        } else {
+            false
         };
+
         if uwrp.admin || fact {
             return Ok(next.run(req).await);
         } else {
@@ -252,28 +247,15 @@ pub async fn admin_auth(
     let exts: Option<&Driver> = req.extensions_mut().get();
     let uwrp = exts.expect("Tag lekérése sikertelen, ucp_auth megtörtént?");
     if uwrp.faction.is_some() {
-        let fact = match uwrp.faction.unwrap() {
-            Factions::SCKK => {
-                if uwrp
-                    .perms
-                    .contains(&get_perm(Permissions::SaesAdmin(Factions::SCKK)))
-                {
-                    true
-                } else {
-                    false
-                }
-            }
-            Factions::TOW => {
-                if uwrp
-                    .perms
-                    .contains(&get_perm(Permissions::SaesAdmin(Factions::TOW)))
-                {
-                    true
-                } else {
-                    false
-                }
-            }
+        let fact = if uwrp
+            .perms
+            .contains(&get_perm(Permissions::SaesAdmin(uwrp.faction.unwrap())))
+        {
+            true
+        } else {
+            false
         };
+
         if uwrp.admin || fact {
             return Ok(next.run(req).await);
         } else {
@@ -302,28 +284,14 @@ pub async fn faction_auth(
             "Frakciójelölés hiányzik!".to_string(),
         ));
     }
-    let fact = match uwrp.faction.unwrap() {
-        Factions::SCKK => {
-            if uwrp
-                .perms
-                .contains(&get_perm(Permissions::SaesAdminFaction(Factions::SCKK)))
-            {
-                true
-            } else {
-                false
-            }
-        }
-        Factions::TOW => {
-            if uwrp
-                .perms
-                .contains(&get_perm(Permissions::SaesAdminFaction(Factions::TOW)))
-            {
-                true
-            } else {
-                false
-            }
-        }
+    let fact = if uwrp.perms.contains(&get_perm(Permissions::SaesAdminFaction(
+        uwrp.faction.unwrap(),
+    ))) {
+        true
+    } else {
+        false
     };
+
     if !uwrp.admin && !fact {
         return Err((StatusCode::FORBIDDEN, "Nincs jogod! (saes.fm)".to_string()));
     }

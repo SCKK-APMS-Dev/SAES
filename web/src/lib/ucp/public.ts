@@ -1,3 +1,5 @@
+import { Factions } from '$lib/permissions';
+
 export function getRealText(text: string) {
 	switch (text) {
 		case 'pótlék_délelőtti':
@@ -37,27 +39,33 @@ export const pages = (fact: string) => {
 	return [
 		{
 			url: '/ucp',
-			display: 'Kezdőlap'
+			display: 'Kezdőlap',
+			faction: [Factions.Taxi, Factions.Apms, Factions.Tow]
 		},
 		{
 			url: '/ucp/segedlet',
-			display: 'Segédlet'
+			display: 'Segédlet',
+			faction: [Factions.Taxi, Factions.Apms, Factions.Tow]
 		},
 		{
 			url: '/ucp/links',
-			display: 'Hasznos linkek'
+			display: 'Hasznos linkek',
+			faction: [Factions.Taxi, Factions.Tow]
 		},
 		{
 			url: '/ucp/potlekok',
-			display: 'Pótlékok'
+			display: 'Pótlékok',
+			faction: [Factions.Taxi, Factions.Tow]
 		},
 		{
 			url: '/ucp/leintesek',
-			display: `Leintések${fact === 'TOW' ? ' / Bejelentések' : ''}`
+			display: `Leintések${fact === Factions.Tow ? ' / Bejelentések' : ''}`,
+			faction: [Factions.Taxi, Factions.Tow]
 		},
 		{
 			url: '/ucp/szamlak',
-			display: 'Szereltetési számlák'
+			display: 'Szereltetési számlák',
+			faction: [Factions.Taxi, Factions.Apms, Factions.Tow]
 		}
 	];
 };

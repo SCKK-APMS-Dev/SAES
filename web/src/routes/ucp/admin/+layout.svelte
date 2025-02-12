@@ -32,7 +32,11 @@
 		class="child:px-2 child:rounded-lg child:drop-shadow-xl lg:flex! col-span-2 hidden flex-col items-center justify-center text-center text-xl md:flex-row lg:z-auto lg:col-span-1 xl:mr-[10vw]"
 	>
 		<a href="/ucp/admin" class="transition-all duration-200 hover:bg-emerald-600">Főoldal</a>
-		<a href="/ucp/admin/tools" class="transition-all duration-200 hover:bg-emerald-600">Eszközök</a>
+		{#if allowPerms(data, [Permissions.SaesTaxiAdmin, Permissions.SaesTowAdmin])}
+			<a href="/ucp/admin/tools" class="transition-all duration-200 hover:bg-emerald-600"
+				>Eszközök</a
+			>
+		{/if}
 		<a href="/ucp/admin/items" class="transition-all duration-200 hover:bg-emerald-600"
 			>Feltöltött elemek</a
 		>

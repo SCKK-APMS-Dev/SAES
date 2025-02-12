@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { allowPerms, christmas } from '$lib/api';
+	import { allowPerms, christmas, countPerms } from '$lib/api';
 	import { pages } from './public';
 	import { page as statepage } from '$app/state';
 	import { Tooltip } from 'flowbite-svelte';
-	import { Permissions } from '$lib/permissions';
+	import { Factions, Permissions } from '$lib/permissions';
 
 	interface Props {
 		tip: any;
@@ -23,7 +23,8 @@
 	let { tip, isAdmin = false, faction = 'SCKK', data, nosocket }: Props = $props();
 
 	let multifact =
-		allowPerms(data, [Permissions.SaesTaxiUcp]) && allowPerms(data, [Permissions.SaesTowUcp]);
+		countPerms(data, [Permissions.SaesTaxiUcp, Permissions.SaesTowUcp, Permissions.SaesApmsUcp]) >=
+		2;
 
 	let pagesz = pages(faction);
 </script>
@@ -38,10 +39,14 @@
 					href={multifact ? '?clear_faction=true' : '/ucp'}
 				>
 					<div
-						class={`${faction === 'TOW' ? 'group-hover:border-tow' : 'group-hover:border-taxi'} pointer-events-none ml-5 rounded-full border-2 border-solid drop-shadow-xl duration-200`}
+						class={`${faction === Factions.Tow ? 'group-hover:border-tow' : faction === Factions.Taxi ? 'group-hover:border-taxi' : 'group-hover:border-apms'} pointer-events-none ml-5 rounded-full border-2 border-solid drop-shadow-xl duration-200`}
 					>
 						<img
-							src={faction === 'SCKK' || faction === 'TOW' ? '/sckk_icon.png' : '/favicon.png'}
+							src={faction === Factions.Taxi || faction === Factions.Tow
+								? '/sckk_icon.png'
+								: faction === Factions.Apms
+									? '/apms_icon.png'
+									: '/favicon.png'}
 							class="border-1 pointer-events-none rounded-full border-solid border-black"
 							width="40"
 							height="40"
@@ -50,7 +55,11 @@
 					</div>
 					<h1
 						class={`text-3xl font-bold drop-shadow-xl transition-colors duration-200 ${
-							faction === 'TOW' ? 'group-hover:text-tow' : 'group-hover:text-taxi'
+							faction === Factions.Tow
+								? 'group-hover:text-tow'
+								: faction === Factions.Taxi
+									? 'group-hover:text-taxi'
+									: 'group-hover:text-apms'
 						}`}
 					>
 						{tip}
@@ -86,14 +95,16 @@
 								class="flex flex-col items-center gap-5 pt-32 text-center text-gray-700 md:space-y-8 lg:flex-row lg:space-x-3 lg:space-y-0 lg:px-2 lg:pt-0 xl:space-x-12 xl:px-12"
 							>
 								{#each pagesz as page}
-									<li>
-										<a
-											href={page.url}
-											class={`${faction === 'TOW' ? 'before:bg-tow' : 'before:bg-taxi'} group relative text-white before:absolute before:inset-x-0 before:-bottom-1.5 before:h-2 before:origin-right before:scale-x-0 before:transition before:duration-200 hover:before:origin-left ${statepage.url.pathname === page.url ? 'before:scale-x-100' : 'hover:before:scale-x-100'}`}
-										>
-											<span class="relative" class:text-red-500={nosocket}>{page.display}</span>
-										</a>
-									</li>
+									{#if page.faction.includes(faction as Factions)}
+										<li>
+											<a
+												href={page.url}
+												class={`${faction === Factions.Tow ? 'before:bg-tow' : faction === Factions.Taxi ? 'before:bg-taxi' : 'before:bg-apms'} group relative text-white before:absolute before:inset-x-0 before:-bottom-1.5 before:h-2 before:origin-right before:scale-x-0 before:transition before:duration-200 hover:before:origin-left ${statepage.url.pathname === page.url ? 'before:scale-x-100' : 'hover:before:scale-x-100'}`}
+											>
+												<span class="relative" class:text-red-500={nosocket}>{page.display}</span>
+											</a>
+										</li>
+									{/if}
 								{/each}
 							</ul>
 
@@ -105,7 +116,7 @@
 										<a
 											href="/ucp/admin"
 											class:text-red-500={nosocket}
-											class={`${faction === 'TOW' ? 'from-tow via-blue-600 to-emerald-400' : 'from-taxi via-amber-600 to-red-500'} bg-linear-to-r block rounded-full bg-[size:200%] bg-[position:0] px-6 py-3 text-center font-bold drop-shadow-lg transition-all duration-500 hover:bg-[position:100%]`}
+											class={`${faction === Factions.Tow ? 'from-tow via-blue-600 to-emerald-400' : faction === Factions.Taxi ? 'from-taxi via-amber-600 to-red-500' : 'from-apms via-[#ad8447] to-[#d48613]'} bg-linear-to-r block rounded-full bg-[size:200%] bg-[position:0] px-6 py-3 text-center font-bold drop-shadow-lg transition-all duration-500 hover:bg-[position:100%]`}
 										>
 											Adminisztráció
 											{#if christmas}

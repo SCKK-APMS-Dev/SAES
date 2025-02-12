@@ -19,7 +19,7 @@ export const load = (async ({ cookies }) => {
 		});
 		if (aha.status === 400) {
 			return {
-				error: 'Központi API szerver elérése sikertelen'
+				error: 'SAES API elérése sikertelen: ' + (await aha.text())
 			};
 		}
 		if (aha.ok) {
@@ -37,7 +37,7 @@ export const load = (async ({ cookies }) => {
 		}
 	} catch {
 		return {
-			error: 'Weboldal API szervere elérése sikertelen'
+			error: 'SAES API elérése sikertelen'
 		};
 	}
 }) satisfies PageServerLoad;

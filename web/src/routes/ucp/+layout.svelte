@@ -21,6 +21,9 @@
 		if (data.faction === Factions.Taxi) {
 			tip = 'TAXI';
 		}
+		if (data.faction === Factions.Apms) {
+			tip = 'APMS';
+		}
 		if (data.faction === Factions.Tow) {
 			tip = 'TOW';
 		}
@@ -90,6 +93,9 @@
 	{/if}
 	{#if data.faction === Factions.Taxi || data.faction === Factions.Tow}
 		<link rel="icon" href="/sckk_icon.png" />
+	{/if}
+	{#if data.faction === Factions.Apms}
+		<link rel="icon" href="/apms_icon.png" />
 	{/if}
 </svelte:head>
 <Error {data}>
@@ -192,6 +198,28 @@
 							</h1>
 						</a>
 					{/if}
+					{#if allowPerms(data, [Permissions.SaesApmsUcp])}
+						<a
+							href="?select_faction=APMS"
+							data-sveltekit-reload
+							class="group m-auto items-center justify-center rounded-xl bg-black bg-opacity-60 p-5"
+						>
+							<div
+								class="group-hover:border-apms rounded-full border-4 border-solid border-white duration-300"
+							>
+								<img
+									src="/apms_icon.png"
+									class=" m-auto w-40 rounded-full border-2 border-solid border-black transition-colors"
+									alt="APMS Logo"
+								/>
+							</div>
+							<h1
+								class="group-hover:text-apms text-3xl font-bold tracking-wider transition-colors duration-300"
+							>
+								APMS
+							</h1>
+						</a>
+					{/if}
 				</div>
 			</div>
 		</main>
@@ -241,7 +269,9 @@
 						? allowPerms(data, [Permissions.SaesTaxiAdmin])
 						: data.faction === Factions.Tow
 							? allowPerms(data, [Permissions.SaesTowAdmin])
-							: false}
+							: data.faction === Factions.Apms
+								? allowPerms(data, [Permissions.SaesApmsAdmin])
+								: false}
 					{data}
 					{nosocket}
 				/>

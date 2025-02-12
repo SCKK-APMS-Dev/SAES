@@ -1,5 +1,5 @@
 import type { LayoutServerLoad } from './$types';
-import { allowPerms, apiUrl, apiUrlPublic, cdnUrl } from '$lib/api';
+import { allowPerms, apiUrl, apiUrlPublic, cdnUrl, countPerms } from '$lib/api';
 import { isRedirect, redirect } from '@sveltejs/kit';
 import { Factions, Permissions } from '$lib/permissions';
 
@@ -59,12 +59,25 @@ export const load = (async ({ cookies, request, url }) => {
 			if (jeson.name) {
 				if (url.searchParams.get('select_faction')) {
 					let sfact = url.searchParams.get('select_faction') as string;
-					if (['SCKK', 'TOW'].includes(sfact)) {
+					if (Object.values(Factions).includes(sfact as Factions)) {
 						if (
 							sfact === Factions.Taxi &&
 							allowPerms({ layout: jeson }, [Permissions.SaesTaxiUcp])
 						) {
 							cookies.set('selected_faction', Factions.Taxi, {
+								path: '/',
+								maxAge: 360 * 24 * 30,
+								secure: true,
+								sameSite: true,
+								httpOnly: true
+							});
+							throw redirect(303, url.pathname);
+						}
+						if (
+							sfact === Factions.Apms &&
+							allowPerms({ layout: jeson }, [Permissions.SaesApmsUcp])
+						) {
+							cookies.set('selected_faction', Factions.Apms, {
 								path: '/',
 								maxAge: 360 * 24 * 30,
 								secure: true,
@@ -91,8 +104,11 @@ export const load = (async ({ cookies, request, url }) => {
 				}
 				if (!cookies.get('selected_faction')) {
 					if (
-						allowPerms({ layout: jeson }, [Permissions.SaesTaxiUcp]) &&
-						allowPerms({ layout: jeson }, [Permissions.SaesTowUcp])
+						countPerms({ layout: jeson }, [
+							Permissions.SaesTaxiUcp,
+							Permissions.SaesTowUcp,
+							Permissions.SaesApmsUcp
+						]) >= 2
 					) {
 						return {
 							layout: jeson,
@@ -109,6 +125,9 @@ export const load = (async ({ cookies, request, url }) => {
 					if (allowPerms({ layout: jeson }, [Permissions.SaesTaxiUcp])) {
 						throw redirect(303, '?select_faction=SCKK');
 					}
+					if (allowPerms({ layout: jeson }, [Permissions.SaesApmsUcp])) {
+						throw redirect(303, '?select_faction=APMS');
+					}
 					if (allowPerms({ layout: jeson }, [Permissions.SaesTowUcp])) {
 						throw redirect(303, '?select_faction=TOW');
 					}
@@ -116,6 +135,11 @@ export const load = (async ({ cookies, request, url }) => {
 				switch (cookies.get('selected_faction')) {
 					case Factions.Taxi:
 						if (!allowPerms({ layout: jeson }, [Permissions.SaesTaxiUcp])) {
+							throw redirect(303, '?clear_faction=true');
+						}
+						break;
+					case Factions.Apms:
+						if (!allowPerms({ layout: jeson }, [Permissions.SaesApmsUcp])) {
 							throw redirect(303, '?clear_faction=true');
 						}
 						break;

@@ -85,9 +85,12 @@
 					</h2>
 				{/if}
 			{/if}
-			<h2 class="text-xl drop-shadow-lg md:text-2xl">
-				Elfogadott pótlékaid: délelőtti: {data.calls?.potlek.de}, éjszakai: {data.calls?.potlek.du}
-			</h2>
+			{#if data.faction === Factions.Taxi || data.faction === Factions.Tow}
+				<h2 class="text-xl drop-shadow-lg md:text-2xl">
+					Elfogadott pótlékaid: délelőtti: {data.calls?.potlek.de}, éjszakai: {data.calls?.potlek
+						.du}
+				</h2>
+			{/if}
 		</div>
 	{/if}
 </div>

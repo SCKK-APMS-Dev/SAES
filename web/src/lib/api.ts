@@ -39,3 +39,20 @@ export function allowPerms(
 	}
 	return false;
 }
+
+export function countPerms(
+	data: {
+		layout?: {
+			admin: boolean;
+			perms: string[];
+		};
+	},
+	perms: string[]
+) {
+	if (data.layout?.admin) return 99;
+	let i = 0;
+	for (const perm of perms) {
+		if (data.layout?.perms.includes(perm)) i++;
+	}
+	return i;
+}
