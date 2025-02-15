@@ -64,7 +64,7 @@ export const pages = (fact: string) => {
 		},
 		{
 			url: '/ucp/szamlak',
-			display: 'Szereltetési számlák',
+			display: fact === Factions.Apms ? 'SCKK Számlák' : 'Szereltetési számlák',
 			faction: [Factions.Taxi, Factions.Apms, Factions.Tow]
 		}
 	];

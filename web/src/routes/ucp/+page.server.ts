@@ -2,6 +2,7 @@
 // import { prisma } from '$lib/server/prisma';
 import type { PageServerLoad } from './$types';
 import { apiUrl } from '$lib/api';
+import { Factions } from '$lib/permissions';
 
 export const load = (async ({ cookies }) => {
 	if (!cookies.get('auth_token')) {
@@ -10,32 +11,47 @@ export const load = (async ({ cookies }) => {
 		};
 	}
 	try {
-		const aha = await fetch(`${apiUrl}/ucp/calls`, {
-			mode: 'no-cors',
-			headers: {
-				cookie: cookies.get('auth_token') as string,
-				faction: cookies.get('selected_faction') as string
+		const aha = await fetch(
+			cookies.get('selected_faction') === Factions.Apms
+				? `${apiUrl}/ucp/apms_calls`
+				: `${apiUrl}/ucp/calls`,
+			{
+				mode: 'no-cors',
+				headers: {
+					cookie: cookies.get('auth_token') as string,
+					faction: cookies.get('selected_faction') as string
+				}
 			}
-		});
+		);
 		if (aha.status === 400) {
 			return {
 				error: 'SAES API elérése sikertelen: ' + (await aha.text())
 			};
 		}
 		if (aha.ok) {
-			const text: {
-				app?: number;
-				leintes: number;
-				potlek: {
-					de: number;
-					du: number;
+			if (cookies.get('selected_faction') === Factions.Apms) {
+				const text: {
+					accepted?: number;
+					uploaded: number;
+				} = await aha.json();
+				return {
+					szamlak: text
 				};
-			} = await aha.json();
-			return {
-				calls: text
-			};
+			} else {
+				const text: {
+					app?: number;
+					leintes: number;
+					potlek: {
+						de: number;
+						du: number;
+					};
+				} = await aha.json();
+				return {
+					calls: text
+				};
+			}
 		}
-	} catch {
+	} catch (err) {
 		return {
 			error: 'SAES API elérése sikertelen'
 		};

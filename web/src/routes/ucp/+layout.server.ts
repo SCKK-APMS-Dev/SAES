@@ -55,6 +55,14 @@ export const load = (async ({ cookies, request, url }) => {
 					shiftid: number;
 					shiftname: string;
 				};
+				apms?: {
+					factionid: number;
+					factionname: string;
+					positionid: number;
+					positionname: string;
+					shiftid: number;
+					shiftname: string;
+				};
 			} = await aha.json();
 			if (jeson.name) {
 				if (url.searchParams.get('select_faction')) {

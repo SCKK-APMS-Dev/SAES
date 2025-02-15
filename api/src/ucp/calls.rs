@@ -25,7 +25,8 @@ pub struct Callz {
 }
 #[derive(Debug, Deserialize, Serialize)]
 pub struct ApmsCalls {
-    pub szamlak: usize,
+    pub uploaded: usize,
+    pub accepted: usize,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -126,16 +127,29 @@ pub async fn ucp_apms_calls(mut request: Request) -> Result<Json<ApmsCalls>, (St
         let statuses = get_statuses();
         let fridays: crate::utils::functions::Friday = get_fridays();
         let dbreturn_bills = bills::Entity::find()
-            .filter(hails::Column::Status.ne(statuses.rejected.id))
-            .filter(hails::Column::Date.gt(fridays.last_friday))
-            .filter(hails::Column::Faction.eq(get_faction_id(exts.unwrap().faction.unwrap())))
-            .filter(hails::Column::Date.lt(fridays.next_friday))
+            .filter(bills::Column::Status.ne(statuses.rejected.id))
+            .filter(bills::Column::Date.gt(fridays.last_friday))
+            .filter(bills::Column::Faction.eq(get_faction_id(exts.unwrap().faction.unwrap())))
+            .filter(bills::Column::Date.lt(fridays.next_friday))
             .all(db)
             .await
             .expect("Leintések lekérése sikertelen az adatbázisból");
 
+        let mut accepted = vec![];
+        let mut uploaded = vec![];
+
+        for bill in dbreturn_bills.iter() {
+            if bill.status == statuses.uploaded.id {
+                uploaded.push(bill)
+            }
+            if bill.status == statuses.accepted.id {
+                accepted.push(bill)
+            }
+        }
+
         Ok(Json(ApmsCalls {
-            szamlak: dbreturn_bills.len(),
+            accepted: accepted.len(),
+            uploaded: uploaded.len(),
         }))
     } else {
         return Err((

@@ -72,6 +72,14 @@
 					Műszakod: {data.layout.tow.shiftname}
 				</h2>
 			{/if}
+			{#if data.faction == Factions.Apms && data.layout?.apms}
+				<h2 class="text-xl drop-shadow-lg md:text-2xl">
+					Pozíciód: {data.layout.apms.positionname}
+				</h2>
+				<h2 class="text-xl drop-shadow-lg md:text-2xl">
+					Műszakod: {data.layout.apms.shiftname}
+				</h2>
+			{/if}
 			{#if data.faction === Factions.Taxi}
 				{#if data.calls?.app === null}
 					<h2 class="text-xl drop-shadow-lg md:text-2xl">
@@ -89,6 +97,12 @@
 				<h2 class="text-xl drop-shadow-lg md:text-2xl">
 					Elfogadott pótlékaid: délelőtti: {data.calls?.potlek.de}, éjszakai: {data.calls?.potlek
 						.du}
+				</h2>
+			{/if}
+			{#if data.faction === Factions.Apms && data.szamlak}
+				<h2 class="text-xl drop-shadow-lg md:text-2xl">
+					Kezelt számlák (feltöltött+elfogadott): {data.szamlak?.uploaded}+{data.szamlak
+						?.accepted}={Number(data.szamlak?.uploaded) + Number(data.szamlak?.accepted)}
 				</h2>
 			{/if}
 		</div>
