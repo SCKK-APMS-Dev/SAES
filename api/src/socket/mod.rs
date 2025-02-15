@@ -68,6 +68,11 @@ pub async fn on_connect(socket: SocketRef, data: InitialData) {
                         .iter()
                         .find(|fact| fact.factionid == 3)
                         .cloned(),
+                    apms: real_tag
+                        .factionrecords
+                        .iter()
+                        .find(|fact| fact.factionid == 2)
+                        .cloned(),
                 };
                 info!(
                     "Socket {} authenticated: {} / {} / {}",

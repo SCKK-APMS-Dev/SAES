@@ -19,7 +19,7 @@ use crate::{
         structs::SMGetItemsFull,
         types_statuses::{get_statuses_as_list, get_types, get_types_as_list},
     },
-    DB_CLIENT,
+    DB_CLIENT, MAIN_CONFIG,
 };
 
 #[derive(Debug, Deserialize)]
@@ -43,8 +43,16 @@ pub async fn admin_items_get(
     quer: Query<SMItemsQuery>,
 ) -> Result<impl IntoResponse, (StatusCode, String)> {
     let db = DB_CLIENT.get().unwrap();
+    let config = MAIN_CONFIG.get().unwrap();
     let types = get_types();
-    if quer.tipus == types.supplements.id {
+    if quer.tipus == types.supplements.id
+        && config
+            .factions
+            .get(&ext.faction.unwrap())
+            .unwrap()
+            .access
+            .supplements
+    {
         let statreturn = supplements::Entity::find()
             .filter(supplements::Column::Status.eq(quer.status.clone()))
             .order_by(supplements::Column::Date, Order::Desc)
@@ -72,7 +80,14 @@ pub async fn admin_items_get(
             })
             .collect();
         return Ok(Json(StatDBAll { items: ret }));
-    } else if quer.tipus == types.hails.id {
+    } else if quer.tipus == types.hails.id
+        && config
+            .factions
+            .get(&ext.faction.unwrap())
+            .unwrap()
+            .access
+            .hails
+    {
         let statreturn = hails::Entity::find()
             .filter(hails::Column::Status.eq(quer.status.clone()))
             .order_by(hails::Column::Date, Order::Desc)
@@ -100,7 +115,14 @@ pub async fn admin_items_get(
             })
             .collect();
         return Ok(Json(StatDBAll { items: ret }));
-    } else if quer.tipus == types.bills.id {
+    } else if quer.tipus == types.bills.id
+        && config
+            .factions
+            .get(&ext.faction.unwrap())
+            .unwrap()
+            .access
+            .bills
+    {
         let statreturn = bills::Entity::find()
             .filter(bills::Column::Status.eq(quer.status.clone()))
             .order_by(bills::Column::Date, Order::Desc)
@@ -142,11 +164,19 @@ pub async fn admin_items_post(
     extract::Json(body): extract::Json<SMPostItemsBody>,
 ) -> Result<impl IntoResponse, (StatusCode, String)> {
     let status_list = get_statuses_as_list();
+    let config = MAIN_CONFIG.get().unwrap();
     let types_list = get_types_as_list();
     if status_list.contains(&body.status) && types_list.contains(&body.tipus) {
         let types = get_types();
         let db = DB_CLIENT.get().unwrap();
-        if body.tipus == types.supplements.id {
+        if body.tipus == types.supplements.id
+            && config
+                .factions
+                .get(&ext.faction.unwrap())
+                .unwrap()
+                .access
+                .supplements
+        {
             let old_model = supplements::Entity::find()
                 .filter(supplements::Column::Id.eq(body.id))
                 .one(db)
@@ -243,7 +273,14 @@ pub async fn admin_items_post(
                 item_type: types.supplements.id,
             })
             .into_response())
-        } else if body.tipus == types.hails.id {
+        } else if body.tipus == types.hails.id
+            && config
+                .factions
+                .get(&ext.faction.unwrap())
+                .unwrap()
+                .access
+                .hails
+        {
             let old_model = hails::Entity::find()
                 .filter(hails::Column::Id.eq(body.id))
                 .one(db)
@@ -316,7 +353,14 @@ pub async fn admin_items_post(
                 item_type: types.hails.id,
             })
             .into_response())
-        } else if body.tipus == types.bills.id {
+        } else if body.tipus == types.bills.id
+            && config
+                .factions
+                .get(&ext.faction.unwrap())
+                .unwrap()
+                .access
+                .bills
+        {
             let old_model = bills::Entity::find()
                 .filter(bills::Column::Id.eq(body.id))
                 .one(db)

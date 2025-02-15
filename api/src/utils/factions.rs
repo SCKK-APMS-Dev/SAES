@@ -1,10 +1,10 @@
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Deserialize, Serialize, Clone, Copy)]
+#[derive(Debug, Deserialize, Serialize, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Factions {
     SCKK,
-    APMS,
     TOW,
+    APMS,
 }
 
 pub fn get_faction_id(faction: Factions) -> i8 {

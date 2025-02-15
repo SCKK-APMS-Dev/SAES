@@ -12,6 +12,7 @@ mod shift;
 pub fn routes() -> Router {
     Router::new()
         .route("/", get(base::ucp_home))
+        .route("/apms_calls", get(calls::ucp_apms_calls))
         .route("/calls", get(calls::ucp_calls))
         .nest("/admin", admin::routes())
         .nest("/items", items::routes())

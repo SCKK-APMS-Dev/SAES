@@ -2,7 +2,7 @@ use axum::{extract::Request, http::HeaderMap, middleware::Next, response::IntoRe
 use reqwest::StatusCode;
 use serde::{Deserialize, Serialize};
 
-use crate::{auth::get_discord_envs, WEB_CLIENT};
+use crate::{auth::get_discord_envs, MAIN_CONFIG, WEB_CLIENT};
 
 use super::{
     api::get_api_envs,
@@ -49,6 +49,7 @@ pub struct Driver {
     pub perms: Vec<String>,
     pub taxi: Option<FactionRecord>,
     pub tow: Option<FactionRecord>,
+    pub apms: Option<FactionRecord>,
     pub faction: Option<Factions>,
 }
 
@@ -123,6 +124,11 @@ pub async fn ucp_auth(
                                 .iter()
                                 .find(|fact| fact.factionid == 3)
                                 .cloned();
+                            let apms = real_tag
+                                .factionrecords
+                                .iter()
+                                .find(|fact| fact.factionid == 2)
+                                .cloned();
                             let fact = match faction {
                                 None => None,
                                 Some(val) => {
@@ -162,6 +168,58 @@ pub async fn ucp_auth(
                                     }
                                 }
                             };
+                            if fact.is_some() {
+                                match fact.unwrap() {
+                                    Factions::SCKK => {
+                                        let config = MAIN_CONFIG.get().unwrap();
+                                        if !config
+                                            .factions
+                                            .get(&Factions::SCKK)
+                                            .unwrap()
+                                            .site_access
+                                            .ucp
+                                        {
+                                            return Err((
+                                                StatusCode::FORBIDDEN,
+                                                "Frakciód nem rendelkezik ezzel a jogosultsággal!"
+                                                    .to_string(),
+                                            ));
+                                        }
+                                    }
+                                    Factions::TOW => {
+                                        let config = MAIN_CONFIG.get().unwrap();
+                                        if !config
+                                            .factions
+                                            .get(&Factions::TOW)
+                                            .unwrap()
+                                            .site_access
+                                            .ucp
+                                        {
+                                            return Err((
+                                                StatusCode::FORBIDDEN,
+                                                "Frakciód nem rendelkezik ezzel a jogosultsággal!"
+                                                    .to_string(),
+                                            ));
+                                        }
+                                    }
+                                    Factions::APMS => {
+                                        let config = MAIN_CONFIG.get().unwrap();
+                                        if !config
+                                            .factions
+                                            .get(&Factions::APMS)
+                                            .unwrap()
+                                            .site_access
+                                            .ucp
+                                        {
+                                            return Err((
+                                                StatusCode::FORBIDDEN,
+                                                "Frakciód nem rendelkezik ezzel a jogosultsággal!"
+                                                    .to_string(),
+                                            ));
+                                        }
+                                    }
+                                }
+                            }
                             let tag = Driver {
                                 discordid: real_user.id,
                                 name: real_tag.username,
@@ -171,6 +229,7 @@ pub async fn ucp_auth(
                                 faction: fact,
                                 taxi,
                                 tow,
+                                apms,
                             };
                             request.extensions_mut().insert(tag);
                             return Ok(next.run(request).await);
@@ -218,6 +277,7 @@ pub async fn shift_auth(
 ) -> Result<impl IntoResponse, (StatusCode, String)> {
     let exts: Option<&Driver> = req.extensions_mut().get();
     let uwrp = exts.expect("Tag lekérése sikertelen, ucp_auth megtörtént?");
+    let config = MAIN_CONFIG.get().unwrap();
     if uwrp.faction.is_some() {
         let fact = if uwrp.perms.contains(&get_perm(Permissions::SaesAdminShift(
             uwrp.faction.unwrap(),
@@ -227,7 +287,14 @@ pub async fn shift_auth(
             false
         };
 
-        if uwrp.admin || fact {
+        if (uwrp.admin || fact)
+            && config
+                .factions
+                .get(&uwrp.faction.unwrap())
+                .unwrap()
+                .site_access
+                .shift
+        {
             return Ok(next.run(req).await);
         } else {
             return Err((StatusCode::FORBIDDEN, "Nincs jogod! (saes.sm)".to_string()));
@@ -246,6 +313,7 @@ pub async fn admin_auth(
 ) -> Result<impl IntoResponse, (StatusCode, String)> {
     let exts: Option<&Driver> = req.extensions_mut().get();
     let uwrp = exts.expect("Tag lekérése sikertelen, ucp_auth megtörtént?");
+    let config = MAIN_CONFIG.get().unwrap();
     if uwrp.faction.is_some() {
         let fact = if uwrp
             .perms
@@ -256,7 +324,14 @@ pub async fn admin_auth(
             false
         };
 
-        if uwrp.admin || fact {
+        if (uwrp.admin || fact)
+            && config
+                .factions
+                .get(&uwrp.faction.unwrap())
+                .unwrap()
+                .site_access
+                .admin
+        {
             return Ok(next.run(req).await);
         } else {
             return Err((
@@ -277,6 +352,7 @@ pub async fn faction_auth(
     next: Next,
 ) -> Result<impl IntoResponse, (StatusCode, String)> {
     let exts: Option<&Driver> = req.extensions_mut().get();
+    let config = MAIN_CONFIG.get().unwrap();
     let uwrp = exts.expect("Tag lekérése sikertelen, ucp_auth megtörtént?");
     if uwrp.faction.is_none() {
         return Err((
@@ -292,7 +368,15 @@ pub async fn faction_auth(
         false
     };
 
-    if !uwrp.admin && !fact {
+    if !uwrp.admin
+        && !fact
+        && !config
+            .factions
+            .get(&uwrp.faction.unwrap())
+            .unwrap()
+            .site_access
+            .faction
+    {
         return Err((StatusCode::FORBIDDEN, "Nincs jogod! (saes.fm)".to_string()));
     }
     return Ok(next.run(req).await);

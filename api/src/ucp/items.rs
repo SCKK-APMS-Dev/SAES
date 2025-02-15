@@ -27,7 +27,7 @@ use crate::{
         queries::{UCPTypeExtraQuery, UCPTypeQuery},
         types_statuses::{get_statuses, get_types, get_types_as_list},
     },
-    DB_CLIENT,
+    DB_CLIENT, MAIN_CONFIG,
 };
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -57,8 +57,16 @@ pub async fn ucp_items_get(
 ) -> Result<impl IntoResponse, (StatusCode, String)> {
     let db = DB_CLIENT.get().unwrap();
     let types = get_types();
+    let config = MAIN_CONFIG.get().unwrap();
     if ext.faction.is_some() {
-        if cucc.tipus == types.supplements.id {
+        if cucc.tipus == types.supplements.id
+            && config
+                .factions
+                .get(&ext.faction.unwrap())
+                .unwrap()
+                .access
+                .supplements
+        {
             let items = supplements::Entity::find()
                 .filter(supplements::Column::Owner.eq(&ext.name))
                 .filter(supplements::Column::Faction.eq(get_faction_id(ext.faction.unwrap())))
@@ -83,7 +91,14 @@ pub async fn ucp_items_get(
                 })
                 .collect();
             return Ok(Json(another));
-        } else if cucc.tipus == types.hails.id {
+        } else if cucc.tipus == types.hails.id
+            && config
+                .factions
+                .get(&ext.faction.unwrap())
+                .unwrap()
+                .access
+                .hails
+        {
             let items = hails::Entity::find()
                 .filter(hails::Column::Owner.eq(&ext.name))
                 .filter(hails::Column::Faction.eq(get_faction_id(ext.faction.unwrap())))
@@ -108,7 +123,14 @@ pub async fn ucp_items_get(
                 })
                 .collect();
             return Ok(Json(another));
-        } else if cucc.tipus == types.bills.id {
+        } else if cucc.tipus == types.bills.id
+            && config
+                .factions
+                .get(&ext.faction.unwrap())
+                .unwrap()
+                .access
+                .bills
+        {
             let items = bills::Entity::find()
                 .filter(bills::Column::Owner.eq(&ext.name))
                 .filter(bills::Column::Faction.eq(get_faction_id(ext.faction.unwrap())))
@@ -158,6 +180,7 @@ pub async fn ucp_items_post(
     let dates = cucc.dates.clone();
     let ditas: Vec<&str> = dates.split(",").collect();
     let types = get_types();
+    let config = MAIN_CONFIG.get().unwrap();
     let statuses = get_statuses();
     let types_list = get_types_as_list();
     let mut i = 0;
@@ -203,7 +226,14 @@ pub async fn ucp_items_post(
                         if same_file.is_some() {
                             remove_file(real_file_name[0].clone()).await.unwrap();
                         }
-                        if cucc.tipus == types.hails.id {
+                        if cucc.tipus == types.hails.id
+                            && config
+                                .factions
+                                .get(&ext.faction.unwrap())
+                                .unwrap()
+                                .access
+                                .hails
+                        {
                             if files_for_leintes.len().eq(&1) {
                                 let img = images::ActiveModel {
                                     owner: Set(ext.name.clone()),
@@ -298,7 +328,14 @@ pub async fn ucp_items_post(
                                 };
                                 files_for_leintes.push(new_img)
                             }
-                        } else if cucc.tipus == types.supplements.id {
+                        } else if cucc.tipus == types.supplements.id
+                            && config
+                                .factions
+                                .get(&ext.faction.unwrap())
+                                .unwrap()
+                                .access
+                                .supplements
+                        {
                             let img = images::ActiveModel {
                                 owner: Set(ext.name.clone()),
                                 tmp: Set(1),
@@ -355,7 +392,14 @@ pub async fn ucp_items_post(
                             )
                             .await;
                             file_ids.push([new_img, 0])
-                        } else if cucc.tipus == types.bills.id {
+                        } else if cucc.tipus == types.bills.id
+                            && config
+                                .factions
+                                .get(&ext.faction.unwrap())
+                                .unwrap()
+                                .access
+                                .bills
+                        {
                             let img = images::ActiveModel {
                                 owner: Set(ext.name.clone()),
                                 faction: Set(get_faction_id(ext.faction.unwrap())),

@@ -1,11 +1,11 @@
 use axum::{debug_handler, extract::Request, Json};
 use http::StatusCode;
-use saes_shared::db::{hails, supplements};
+use saes_shared::db::{bills, hails, supplements};
 use sea_orm::{ColumnTrait, EntityTrait, QueryFilter};
 use serde::{Deserialize, Serialize};
 use serde_json::from_str;
 
-use crate::utils::factions::get_faction_id;
+use crate::utils::factions::{get_faction_id, Factions};
 use crate::utils::functions::get_fridays;
 use crate::utils::types_statuses::get_statuses;
 use crate::utils::{api::get_api_envs, middle::Driver};
@@ -22,6 +22,10 @@ pub struct Callz {
     pub app: Option<u32>,
     pub leintes: usize,
     pub potlek: Potlek,
+}
+#[derive(Debug, Deserialize, Serialize)]
+pub struct ApmsCalls {
+    pub szamlak: usize,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -105,6 +109,33 @@ pub async fn ucp_calls(mut request: Request) -> Result<Json<Callz>, (StatusCode,
                 de: de_potlek,
                 du: du_potlek,
             },
+        }))
+    } else {
+        return Err((
+            StatusCode::BAD_REQUEST,
+            "Frakciójelölés hiányzik!".to_string(),
+        ));
+    }
+}
+
+#[debug_handler]
+pub async fn ucp_apms_calls(mut request: Request) -> Result<Json<ApmsCalls>, (StatusCode, String)> {
+    let exts: Option<&Driver> = request.extensions_mut().get();
+    if exts.unwrap().faction.is_some() && exts.unwrap().faction.unwrap() == Factions::APMS {
+        let db = DB_CLIENT.get().unwrap();
+        let statuses = get_statuses();
+        let fridays: crate::utils::functions::Friday = get_fridays();
+        let dbreturn_bills = bills::Entity::find()
+            .filter(hails::Column::Status.ne(statuses.rejected.id))
+            .filter(hails::Column::Date.gt(fridays.last_friday))
+            .filter(hails::Column::Faction.eq(get_faction_id(exts.unwrap().faction.unwrap())))
+            .filter(hails::Column::Date.lt(fridays.next_friday))
+            .all(db)
+            .await
+            .expect("Leintések lekérése sikertelen az adatbázisból");
+
+        Ok(Json(ApmsCalls {
+            szamlak: dbreturn_bills.len(),
         }))
     } else {
         return Err((

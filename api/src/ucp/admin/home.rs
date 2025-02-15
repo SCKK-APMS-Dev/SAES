@@ -18,9 +18,9 @@ pub struct SMStat {
 }
 #[derive(Debug, Serialize)]
 pub struct SMStatReturn {
-    potlek: SMStat,
-    leintes: SMStat,
-    szamla: SMStat,
+    potlek: Option<SMStat>,
+    leintes: Option<SMStat>,
+    szamla: Option<SMStat>,
 }
 
 pub async fn admin_home_stat(
@@ -80,20 +80,20 @@ pub async fn admin_home_stat(
         }
     }
     Ok(Json(SMStatReturn {
-        potlek: SMStat {
+        potlek: Some(SMStat {
             elfogadva: potlekok[1],
             elutasitva: potlekok[2],
             feltoltve: potlekok[0],
-        },
-        leintes: SMStat {
+        }),
+        leintes: Some(SMStat {
             elfogadva: leintesek[1],
             elutasitva: leintesek[2],
             feltoltve: leintesek[0],
-        },
-        szamla: SMStat {
+        }),
+        szamla: Some(SMStat {
             elfogadva: szamlak[1],
             elutasitva: szamlak[2],
             feltoltve: szamlak[0],
-        },
+        }),
     }))
 }
