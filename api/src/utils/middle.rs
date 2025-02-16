@@ -381,3 +381,15 @@ pub async fn faction_auth(
     }
     return Ok(next.run(req).await);
 }
+
+pub async fn sysadmin_auth(
+    mut req: Request,
+    next: Next,
+) -> Result<impl IntoResponse, (StatusCode, String)> {
+    let exts: Option<&Driver> = req.extensions_mut().get();
+    let uwrp = exts.expect("Tag lekérése sikertelen, ucp_auth megtörtént?");
+    if uwrp.admin {
+        return Ok(next.run(req).await);
+    }
+    return Err((StatusCode::FORBIDDEN, "Nincs jogod!".to_string()));
+}

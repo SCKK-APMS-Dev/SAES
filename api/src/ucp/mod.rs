@@ -8,6 +8,7 @@ mod calls;
 mod faction;
 mod items;
 mod shift;
+mod sys;
 
 pub fn routes() -> Router {
     Router::new()
@@ -16,5 +17,6 @@ pub fn routes() -> Router {
         .route("/calls", get(calls::ucp_calls))
         .nest("/admin", admin::routes())
         .nest("/items", items::routes())
+        .nest("/sys", sys::routes())
         .layer(middleware::from_fn(ucp_auth))
 }

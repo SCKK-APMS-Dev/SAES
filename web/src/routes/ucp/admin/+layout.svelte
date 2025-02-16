@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/state';
 	import { allowPerms } from '$lib/api';
 	import { Permissions } from '$lib/permissions';
 
@@ -29,34 +30,50 @@
 	</button>
 	<div
 		bind:this={nav}
-		class="child:px-2 child:rounded-lg child:drop-shadow-xl lg:flex! col-span-2 hidden flex-col items-center justify-center text-center text-xl md:flex-row lg:z-auto lg:col-span-1 xl:mr-[10vw]"
+		class="child:px-2 child:rounded-lg child:drop-shadow-xl lg:flex! col-span-2 hidden flex-col items-center justify-center gap-2 text-center text-xl md:flex-row lg:z-auto lg:col-span-1 xl:mr-[10vw]"
 	>
-		<a href="/ucp/admin" class="transition-all duration-200 hover:bg-emerald-600">Főoldal</a>
+		<a
+			href="/ucp/admin"
+			class={`transition-all duration-200 hover:bg-emerald-600 ${page.url.pathname.endsWith('/admin') ? 'bg-emerald-600' : ''}`}
+			>Főoldal</a
+		>
 		{#if allowPerms(data, [Permissions.SaesTaxiAdmin, Permissions.SaesTowAdmin])}
-			<a href="/ucp/admin/tools" class="transition-all duration-200 hover:bg-emerald-600"
+			<a
+				href="/ucp/admin/tools"
+				class={`transition-all duration-200 hover:bg-emerald-600 ${page.url.pathname.endsWith('/admin/tools') ? 'bg-emerald-600' : ''}`}
 				>Eszközök</a
 			>
 		{/if}
-		<a href="/ucp/admin/items" class="transition-all duration-200 hover:bg-emerald-600"
+		<a
+			href="/ucp/admin/items"
+			class={`transition-all duration-200 hover:bg-emerald-600 ${page.url.pathname.startsWith('/ucp/admin/items') ? 'bg-emerald-600' : ''}`}
 			>Feltöltött elemek</a
 		>
 		{#if allowPerms( data, [Permissions.SaesTaxiAdminShift, Permissions.SaesTowAdminShift, Permissions.SaesTaxiAdminFaction, Permissions.SaesTowAdminFaction] )}
-			<a href="/ucp/admin/shift" class="transition-all duration-200 hover:bg-emerald-600"
+			<a
+				href="/ucp/admin/shift"
+				class={`transition-all duration-200 hover:bg-emerald-600 ${page.url.pathname.startsWith('/ucp/admin/shift') ? 'bg-emerald-600' : ''}`}
 				>Műszakvezetés</a
 			>
 		{/if}
 		{#if allowPerms( data, [Permissions.SaesTaxiAdminFleet, Permissions.SaesTowAdminFleet, Permissions.SaesTaxiAdminFaction, Permissions.SaesTowAdminFaction] )}
-			<a href="/ucp/admin/fleet" class="transition-all duration-200 hover:bg-emerald-600"
+			<a
+				href="/ucp/admin/fleet"
+				class={`transition-all duration-200 hover:bg-emerald-600 ${page.url.pathname.startsWith('/ucp/admin/fleet') ? 'bg-emerald-600' : ''}`}
 				>Flottakezelés</a
 			>
 		{/if}
 		{#if allowPerms(data, [Permissions.SaesTaxiAdminFaction, Permissions.SaesTowAdminFaction])}
-			<a href="/ucp/admin/faction" class="transition-all duration-200 hover:bg-emerald-600"
+			<a
+				href="/ucp/admin/faction"
+				class={`transition-all duration-200 hover:bg-emerald-600 ${page.url.pathname.startsWith('/ucp/admin/faction') ? 'bg-emerald-600' : ''}`}
 				>Frakciókezelés</a
 			>
 		{/if}
 		{#if allowPerms(data, [])}
-			<a href="/ucp/admin/sysadmin" class="transition-all duration-200 hover:bg-emerald-600"
+			<a
+				href="/ucp/admin/sys"
+				class={`transition-all duration-200 hover:bg-emerald-600 ${page.url.pathname.startsWith('/ucp/admin/sys') ? 'bg-emerald-600' : ''}`}
 				>Sysadmin</a
 			>
 		{/if}

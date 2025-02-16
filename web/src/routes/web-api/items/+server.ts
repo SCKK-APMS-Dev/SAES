@@ -35,7 +35,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 				faction: fact,
 				'Content-Type': 'application/json'
 			},
-			mode: 'no-cors',
+
 			body: JSON.stringify(body)
 		});
 		if (mama.ok) {

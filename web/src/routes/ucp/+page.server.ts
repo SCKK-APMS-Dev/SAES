@@ -16,7 +16,6 @@ export const load = (async ({ cookies }) => {
 				? `${apiUrl}/ucp/apms_calls`
 				: `${apiUrl}/ucp/calls`,
 			{
-				mode: 'no-cors',
 				headers: {
 					cookie: cookies.get('auth_token') as string,
 					faction: cookies.get('selected_faction') as string

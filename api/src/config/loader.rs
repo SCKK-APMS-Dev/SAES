@@ -33,3 +33,12 @@ pub fn check_config() {
     }
     MAIN_CONFIG.set(config.unwrap()).unwrap();
 }
+
+pub fn write_config(config: &MainConfig) {
+    let config_file = Path::new("./config/main.json");
+    let mut file = File::open(config_file).unwrap();
+    let json = to_string_pretty(config).unwrap();
+    let buf = json.as_bytes();
+    file.write(buf).unwrap();
+    check_config();
+}

@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::utils::factions::Factions;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub enum ShiftAccess {
     SameShift,
     OtherManager,
@@ -17,7 +17,7 @@ impl Default for ShiftAccess {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct GlobalConfig {
     pub maintenance: Option<String>,
     pub announcement: Option<String>,
@@ -32,21 +32,21 @@ impl Default for GlobalConfig {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct FactionConfig {
     pub shift_access: ShiftAccess,
     pub access: FactionAccessConfig,
     pub site_access: FactionSiteAccessConfig,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct FactionAccessConfig {
     pub supplements: bool,
     pub hails: bool,
     pub bills: bool,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct FactionSiteAccessConfig {
     pub ucp: bool,
     pub admin: bool,
@@ -75,7 +75,7 @@ impl Default for FactionConfig {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct MainConfig {
     pub global: GlobalConfig,
     pub factions: HashMap<Factions, FactionConfig>,

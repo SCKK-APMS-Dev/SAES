@@ -10,10 +10,9 @@ export const load = (async ({ cookies }) => {
 		};
 	}
 	try {
-		const aha = await fetch(`${apiUrl}/ucp/admin/shift`, {
+		const aha = await fetch(`${apiUrl}/ucp/sys`, {
 			headers: {
-				cookie: cookies.get('auth_token') as string,
-				faction: cookies.get('selected_faction') as string
+				cookie: cookies.get('auth_token') as string
 			}
 		});
 		if (aha.status === 404) {
